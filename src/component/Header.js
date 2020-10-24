@@ -9,7 +9,7 @@ const HeaderWrapper = styled.div`
       height: ${props => props.theme.widthRatio * 63}px;
       margin-right: -${props => props.theme.widthRatio * 30}px;
       text-align: center;
-      background-size: 100%;
+      background-size: 100% 100%;
 
       .menu-link {
         display: block;
