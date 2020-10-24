@@ -8,7 +8,7 @@ import { ThemeProvider } from "styled-components";
 import defaultTheme from "./theme";
 import Routes from "./Routes";
 
-import "./vendor/index.css";
+import "./vendor/index.scss";
 
 const App = () => {
   const [widthRatio, setWidthRatio] = useState(window.innerWidth / 1920);
