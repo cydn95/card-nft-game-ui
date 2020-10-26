@@ -6,7 +6,7 @@ import { NavLink } from "react-router-dom";
 const HeaderWrapper = styled.div`
   .menu-nav {
     .menu-item {
-      height: ${props => props.theme.widthRatio * 63}px;
+      height: ${props => props.theme.heightRatio * 63}px;
       margin-right: -${props => props.theme.widthRatio * 30}px;
       text-align: center;
       background-size: 100% 100%;
@@ -19,11 +19,15 @@ const HeaderWrapper = styled.div`
         .menu-text {
           color: #000000;
           font-size: ${props => props.theme.widthRatio * 26}px;
+          line-height: ${props => props.theme.heightRatio * 38}px
           font-family: Orbitron-Medium;
+          margin-left: -${props => props.theme.widthRatio * 5}px;
+    			padding-top: ${props => props.theme.heightRatio * 5}px;
+    			display: inline-block;
           text-shadow: ${props => props.theme.widthRatio * 5}px
            						 ${props => props.theme.heightRatio * 5}px
            						 ${props => props.theme.widthRatio * 3}px
-           						 #27787580;
+           						 ${props => props.theme.darken('#277875', 0.5)};
         }
       }
 
@@ -33,7 +37,6 @@ const HeaderWrapper = styled.div`
 
         &.active {
           background-image: url('/static/images/bg/components/header/menu-item-1-bg--active.png');
-          width: 239px;
         }
       }
       
@@ -66,6 +69,7 @@ const HeaderWrapper = styled.div`
           .menu-text {
             color: #fec100;
             font-weight: 900;
+            margin-left: -${props => props.theme.widthRatio * 28}px;
           }
         }
       }

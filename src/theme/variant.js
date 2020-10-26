@@ -2,10 +2,10 @@ const variant = {
   name: "default",
   palette: {
     primary: {
-      main: '#fec100',
+      main: '#80f1ed',
     },
     secondary: {
-      main: '#80f1ed',
+      main: '#fec100',
     }
   }
 };

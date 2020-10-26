@@ -16,7 +16,8 @@
     "react-redux": "latest",
     "redux": "latest",
     "@fullpage/react-fullpage": "latest",
-    "react-router": "latest"
+    "react-router": "latest",
+    "react-bootstrap": "latest"
   },
   "scripts": {
     "start": "react-scripts start",
