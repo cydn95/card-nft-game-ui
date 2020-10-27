@@ -208,7 +208,7 @@ const LandingPage = () => {
 									<div className="content-wrapper d-flex flex-column align-items-center">
 										<div className="animation-slideUp">
 											<h1 className='text-center'>Join the resistance and fight for the decentralised tomorrow</h1>
-											<p className='text-center'>It’s 2049, underground cyber partisans form a resistance alliance called Node Runners. Their main goal is to defeat the corporate autocracy that has taken over the world.</p>
+											<p className='text-center'>The year is 2074, underground cyber partisans form a resistance alliance called Node Runners. Their main goal is to defeat the corporate autocracy that has taken over the world.</p>
 											<p className='text-center'>Do you have what it takes to join them?</p>
 										</div>
 										<button className='hover-effect1 animation-bigEntrance'>GET CARDS</button>
