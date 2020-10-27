@@ -25,6 +25,11 @@ const CardWrapper = styled.div`
 			opacity: 0.5;
 		}
 		
+		.un-staked {
+			width: 420px;
+			height: 600px;
+		}
+		
 		.card-border {
 			position: absolute;
 			top: 0;
@@ -72,7 +77,7 @@ const CardWrapper = styled.div`
 	}
 `;
 
-const Card = ({ card, unObtained, marked, score, unStaked }) => {
+const Card = ({ card, unObtained, marked, score, unStaked, cardGrid }) => {
 	return (
 		<CardWrapper>
 			<div className="card">
@@ -85,11 +90,19 @@ const Card = ({ card, unObtained, marked, score, unStaked }) => {
 						/>
 						: ''
 				}
-				<img
-					src={`/static/images/cards/${card}.png`}
-					alt={`${card}`}
-					className={`card-image ${unObtained ? 'un-obtained' : ''}`}
-				/>
+				{
+					unStaked
+						? <img
+							src={`/static/images/bg/components/card/un-staked.png`}
+							alt="unStaked"
+							className="un-staked"
+						/>
+						: <img
+								src={`/static/images/cards/${card}.png`}
+								alt={`${card}`}
+								className={`card-image ${unObtained ? 'un-obtained' : ''}`}
+							/>
+				}
 				<img
 					src={`/static/images/bg/components/card/card-border.png`}
 					alt="card-border"
@@ -122,10 +135,14 @@ const Card = ({ card, unObtained, marked, score, unStaked }) => {
 									Obtain Card
 								</button>
 							: unStaked
-								? <button className='hover-effect3 un-obtained'>
+								? <button className='hover-effect3'>
 										Stake
 									</button>
-								: ''
+								: cardGrid
+									? ''
+									: <button className='hover-effect3'>
+											Unstake
+										</button>
 						}
 					</div>
 			}
