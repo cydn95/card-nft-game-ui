@@ -105,27 +105,27 @@ const Header = () => {
 		<HeaderWrapper className='header-menu d-flex justify-content-center animation-stretchRight'>
 			<ul className='menu-nav d-flex list-unstyled'>
 				<li className={`menu-item ${ getMenuItemActive('my-cards') } hover-effect2`}>
-					<NavLink className='menu-link' to="/my-cards">
+					<NavLink className='menu-link' to="#">
 						<span className="menu-text">My Cards</span>
 					</NavLink>
 				</li>
 				<li className={`menu-item ${ getMenuItemActive('stake') } hover-effect2`}>
-					<NavLink className='menu-link' to="/stake">
+					<NavLink className='menu-link' to="/#">
 						<span className="menu-text">Stake</span>
 					</NavLink>
 				</li>
 				<li className={`menu-item ${ getMenuItemActive('get-heroes') } hover-effect2`}>
-					<NavLink className='menu-link' to="/get-heroes">
+					<NavLink className='menu-link' to="/#">
 						<span className="menu-text">Get Heroes</span>
 					</NavLink>
 				</li>
 				<li className={`menu-item ${ getMenuItemActive('fight') } hover-effect2`}>
-					<NavLink className='menu-link' to="/fight">
+					<NavLink className='menu-link' to="/#">
 						<span className="menu-text">Fight Villains</span>
 					</NavLink>
 				</li>
 				<li className={`menu-item ${ getMenuItemActive('unlock-wallet') } hover-effect2`}>
-					<NavLink className='menu-link' to="/unlock-wallet">
+					<NavLink className='menu-link' to="/#">
 						<span className="menu-text">Unlock Wallet</span>
 					</NavLink>
 				</li>
