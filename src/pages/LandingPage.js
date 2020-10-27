@@ -32,6 +32,10 @@ const LandingPageWrapper = styled.div`
 										 ${props => props.theme.heightRatio * 7}px
 										 ${props => props.theme.widthRatio * 10}px;
 				line-height: 36px;
+				
+				a {
+					color: #80f1ed;
+				}
 			}
 	
 			img {
@@ -253,20 +257,20 @@ const LandingPage = () => {
 										with the resistance
 									</h1>
 									<div className='logos-wrapper d-flex align-items-center justify-content-between w-100'>
-										<a href='/' target='_blank'>
-											<img src={`/static/images/icons/logo1.png`} alt=""/>
+										<a href='https://t.me/noderunners_channel' target='_blank'>
+											<img src={`/static/images/icons/logo1.png`} alt="NodeRunners Telegram"/>
 										</a>
 										<a href='/' target='_blank'>
 											<img src={`/static/images/icons/logo2.png`} alt=""/>
 										</a>
-										<a href='/' target='_blank'>
-											<img src={`/static/images/icons/logo3.png`} alt=""/>
+										<a href='https://twitter.com/Node_Runners' target='_blank'>
+											<img src={`/static/images/icons/logo3.png`} alt="NodeRunners Twitter"/>
 										</a>
-										<a href='/' target='_blank'>
-											<img src={`/static/images/icons/logo4.png`} alt=""/>
+										<a href='https://noderunners.medium.com/' target='_blank'>
+											<img src={`/static/images/icons/logo4.png`} alt="NodeRunners Medium"/>
 										</a>
 									</div>
-									<p>Uniswap, Opensea, Etherscan address</p>
+									<p>Uniswap, Opensea, <a href='https://etherscan.io/token/0x739763a258640919981f9ba610ae65492455be53' target='_blank'>$NDR address</a></p>
 								</div>
 							</ReactFullpage.Wrapper>
 						)
