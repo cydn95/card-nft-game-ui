@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Tab, Nav } from "react-bootstrap";
 import SectionTitle from "../component/SectionTitle";
+import Card from "../component/Card";
 
 const MyCardsWrapper = styled.div`
 	.nav-pills {
@@ -150,18 +151,6 @@ const MyCardsWrapper = styled.div`
       }
     }
 
-    button {
-      width: 357px;
-      height: 78px;
-      background: url('/assets/images/bg/card-menu/button-bg.png');
-      border: none;
-      color: #161617;
-      font-size: 30px;
-      font-family: Orbitron-Medium;
-      text-shadow: 5px 5px 3px #27787580;
-      outline: none;
-    }
-
     .score {
       font-size: 30px;
       font-family: Orbitron-Black;
@@ -170,6 +159,46 @@ const MyCardsWrapper = styled.div`
     }
   }
 `;
+
+const Developers = [
+	{
+		card: 'card-1',
+		marked: true,
+		score: '02',
+
+	},
+	{
+		card: 'card-2',
+		unObtained: true
+	},
+	{
+		card: 'card-2',
+		score: '69'
+	},
+	{
+		card: 'card-2',
+		unObtained: true
+	}
+];
+
+const Influencers = [
+	{
+		card: 'card-1',
+		unObtained: true
+	},
+	{
+		card: 'card-2',
+		score: '23'
+	},
+	{
+		card: 'card-2',
+		unObtained: true
+	},
+	{
+		card: 'card-2',
+		unObtained: true
+	}
+];
 
 const MyCards = () => {
 	return (
@@ -191,186 +220,19 @@ const MyCards = () => {
 						<div className="section-title d-flex justify-content-center animation-fadeInRight">
 							<SectionTitle title={'Developers'} />
 						</div>
-						{/*<div className="d-flex justify-content-center">*/}
-						{/*	<div className="card-wrapper d-flex flex-column animation-hatch">*/}
-						{/*		<div className="card">*/}
-						{/*			<img src={`/assets/images/card/card-1.png`} alt="card-1"/>*/}
-						{/*			<img*/}
-						{/*				src={`/assets/images/bg/card-menu/card-bg--stake.png`}*/}
-						{/*				className='card-bg'*/}
-						{/*				alt="card-bg"*/}
-						{/*			/>*/}
-						{/*		</div>*/}
-						{/*		<div className="score">*/}
-						{/*			<img src={`/assets/images/icons/cards.png`} className="card-icon" alt="cards"/>*/}
-						{/*			<span>02</span>*/}
-						{/*		</div>*/}
-						{/*	</div>*/}
-						{/*	<div*/}
-						{/*		className={`card-wrapper d-flex invisible flex-column align-items-center animation-hatch animation-delay-1`}*/}
-						{/*		onLoad={(e) => {*/}
-						{/*			const elm = e.currentTarget;*/}
-						{/*			setTimeout(() => {*/}
-						{/*				elm.className = `visible ${elm.className}`;*/}
-						{/*			}, 600);*/}
-						{/*		}}*/}
-						{/*	>*/}
-						{/*		<div className="card">*/}
-						{/*			<img src={`/assets/images/card/card-1.png`} alt="card-1"/>*/}
-						{/*			/!*<img src={`/assets/images/bg/components/card/dark-overlay-bg.png`} alt="dark-overlay"/>*!/*/}
-						{/*			<img*/}
-						{/*				src={`/assets/images/bg/card-menu/card-bg--stake.png`}*/}
-						{/*				className='card-bg'*/}
-						{/*				alt="card-bg"*/}
-						{/*			/>*/}
-						{/*		</div>*/}
-						{/*		<button className='hover-effect3'>*/}
-						{/*			Obtain Card*/}
-						{/*		</button>*/}
-						{/*	</div>*/}
-						{/*	<div*/}
-						{/*		className="card-wrapper invisible d-flex flex-column animation-hatch animation-delay-2"*/}
-						{/*		onLoad={(e) => {*/}
-						{/*			const elm = e.currentTarget;*/}
-						{/*			setTimeout(() => {*/}
-						{/*				elm.className = `visible ${elm.className}`;*/}
-						{/*			}, 1100);*/}
-						{/*		}}*/}
-						{/*	>*/}
-						{/*		<div className="card">*/}
-						{/*			<img src={`/assets/images/card/card-1.png`} alt="card-1"/>*/}
-						{/*			<img*/}
-						{/*				src={`/assets/images/bg/card-menu/card-bg--stake.png`}*/}
-						{/*				className='card-bg'*/}
-						{/*				alt="card-bg"*/}
-						{/*			/>*/}
-						{/*		</div>*/}
-						{/*		<div className="score">*/}
-						{/*			<img src={`/assets/images/icons/cards.png`} className="card-icon" alt="cards"/>*/}
-						{/*			<span>69</span>*/}
-						{/*		</div>*/}
-						{/*	</div>*/}
-						{/*	<div*/}
-						{/*		className="card-wrapper unstake invisible d-flex flex-column align-items-center animation-hatch animation-delay-3"*/}
-						{/*		onLoad={(e) => {*/}
-						{/*			const elm = e.currentTarget;*/}
-						{/*			setTimeout(() => {*/}
-						{/*				elm.className = `visible ${elm.className}`;*/}
-						{/*			}, 1600);*/}
-						{/*		}}*/}
-						{/*	>*/}
-						{/*		<div className="card">*/}
-						{/*			<img src={`/assets/images/card/card-1.png`} alt="card-1"/>*/}
-						{/*			<img*/}
-						{/*				src={`/assets/images/bg/card-menu/card-bg--unstake.png`}*/}
-						{/*				className='card-bg'*/}
-						{/*				alt="card-bg"*/}
-						{/*			/>*/}
-						{/*			<img*/}
-						{/*				src={`/assets/images/bg/card-menu/unstake-layer.png`}*/}
-						{/*				className='unstake-layer'*/}
-						{/*				alt="unstake-layer"/>*/}
-						{/*		</div>*/}
-						{/*		<button className='hover-effect3'>*/}
-						{/*			Obtain Card*/}
-						{/*		</button>*/}
-						{/*	</div>*/}
-						{/*</div>*/}
-						{/*<div className="section-title d-flex justify-content-center animation-fadeInRight">*/}
-						{/*	<div className="title-wrapper d-flex">*/}
-						{/*		<div className="title">*/}
-						{/*			Influencers*/}
-						{/*		</div>*/}
-						{/*		<div className="title-line">*/}
-
-						{/*		</div>*/}
-						{/*	</div>*/}
-						{/*</div>*/}
-						{/*<div className="d-flex justify-content-center">*/}
-						{/*	<div className="card-wrapper d-flex flex-column animation-hatch">*/}
-						{/*		<div className="card">*/}
-						{/*			<img src={`/assets/images/card/card-1.png`} alt="card-1"/>*/}
-						{/*			<img*/}
-						{/*				src={`/assets/images/bg/card-menu/card-bg--stake.png`}*/}
-						{/*				className='card-bg'*/}
-						{/*				alt="card-bg"*/}
-						{/*			/>*/}
-						{/*		</div>*/}
-						{/*		<div className="score">*/}
-						{/*			<img src={`/assets/images/icons/cards.png`} className="card-icon" alt="cards"/>*/}
-						{/*			<span>02</span>*/}
-						{/*		</div>*/}
-						{/*	</div>*/}
-						{/*	<div*/}
-						{/*		className={`card-wrapper d-flex invisible flex-column align-items-center animation-hatch animation-delay-1`}*/}
-						{/*		onLoad={(e) => {*/}
-						{/*			const elm = e.currentTarget;*/}
-						{/*			setTimeout(() => {*/}
-						{/*				elm.className = `visible ${elm.className}`;*/}
-						{/*			}, 600);*/}
-						{/*		}}*/}
-						{/*	>*/}
-						{/*		<div className="card">*/}
-						{/*			<img src={`/assets/images/card/card-1.png`} alt="card-1"/>*/}
-						{/*			/!*<img src={`/assets/images/bg/components/card/dark-overlay-bg.png`} alt="dark-overlay"/>*!/*/}
-						{/*			<img*/}
-						{/*				src={`/assets/images/bg/card-menu/card-bg--stake.png`}*/}
-						{/*				className='card-bg'*/}
-						{/*				alt="card-bg"*/}
-						{/*			/>*/}
-						{/*		</div>*/}
-						{/*		<button className='hover-effect3'>*/}
-						{/*			Obtain Card*/}
-						{/*		</button>*/}
-						{/*	</div>*/}
-						{/*	<div*/}
-						{/*		className="card-wrapper invisible d-flex flex-column animation-hatch animation-delay-2"*/}
-						{/*		onLoad={(e) => {*/}
-						{/*			const elm = e.currentTarget;*/}
-						{/*			setTimeout(() => {*/}
-						{/*				elm.className = `visible ${elm.className}`;*/}
-						{/*			}, 1100);*/}
-						{/*		}}*/}
-						{/*	>*/}
-						{/*		<div className="card">*/}
-						{/*			<img src={`/assets/images/card/card-1.png`} alt="card-1"/>*/}
-						{/*			<img*/}
-						{/*				src={`/assets/images/bg/card-menu/card-bg--stake.png`}*/}
-						{/*				className='card-bg'*/}
-						{/*				alt="card-bg"*/}
-						{/*			/>*/}
-						{/*		</div>*/}
-						{/*		<div className="score">*/}
-						{/*			<img src={`/assets/images/icons/cards.png`} className="card-icon" alt="cards"/>*/}
-						{/*			<span>69</span>*/}
-						{/*		</div>*/}
-						{/*	</div>*/}
-						{/*	<div*/}
-						{/*		className="card-wrapper unstake invisible d-flex flex-column align-items-center animation-hatch animation-delay-3"*/}
-						{/*		onLoad={(e) => {*/}
-						{/*			const elm = e.currentTarget;*/}
-						{/*			setTimeout(() => {*/}
-						{/*				elm.className = `visible ${elm.className}`;*/}
-						{/*			}, 1600);*/}
-						{/*		}}*/}
-						{/*	>*/}
-						{/*		<div className="card">*/}
-						{/*			<img src={`/assets/images/card/card-1.png`} alt="card-1"/>*/}
-						{/*			<img*/}
-						{/*				src={`/assets/images/bg/card-menu/card-bg--unstake.png`}*/}
-						{/*				className='card-bg'*/}
-						{/*				alt="card-bg"*/}
-						{/*			/>*/}
-						{/*			<img*/}
-						{/*				src={`/assets/images/bg/card-menu/unstake-layer.png`}*/}
-						{/*				className='unstake-layer'*/}
-						{/*				alt="unstake-layer"/>*/}
-						{/*		</div>*/}
-						{/*		<button className='hover-effect3'>*/}
-						{/*			Obtain Card*/}
-						{/*		</button>*/}
-						{/*	</div>*/}
-						{/*</div>*/}
+						<div className="d-flex justify-content-center">
+							{
+								Developers.map(d => <Card marked={d.marked} card={d.card} score={d.score} unObtained={d.unObtained} />)
+							}
+						</div>
+						<div className="section-title d-flex justify-content-center animation-fadeInRight">
+							<SectionTitle title={'Influencers'} />
+						</div>
+						<div className="d-flex justify-content-center">
+							{
+								Influencers.map(d => <Card marked={d.marked} card={d.card} score={d.score} unObtained={d.unObtained} />)
+							}
+						</div>
 					</Tab.Pane>
 					<Tab.Pane eventKey="items">
 
