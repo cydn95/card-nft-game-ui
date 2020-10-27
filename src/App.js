@@ -6,7 +6,7 @@ import { StylesProvider } from "@material-ui/styles";
 import { ThemeProvider } from "styled-components";
 
 import defaultTheme from "./theme";
-import Routes from "./Routes";
+import Routes from "./routes/Routes";
 
 import "./vendor/index.scss";
 

@@ -5,29 +5,7 @@ import SectionTitle from "../component/SectionTitle";
 import Card from "../component/Card";
 
 const MyCardsWrapper = styled.div`
-	.nav-pills {
-    margin: -40px 0 19px;
-
-    .nav-item {
-      .nav-link {
-        color: #80f1ed;
-        font-size: 30px;
-        font-family: Orbitron-Medium;
-        padding: 8px;
-        outline: none;
-        text-shadow: 7px 7px 10px #80f1ed91;
-
-        &.active {
-          color: #fec100;
-          font-family: Orbitron-Black;
-          background: none;
-          text-shadow: 0 0 7px #fec10059;
-        }
-      }
-    }
-  }
-
-  .stake-stats {
+	.stake-stats {
     div {
       span {
         font-size: 20px;
