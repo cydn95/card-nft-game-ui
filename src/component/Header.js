@@ -19,7 +19,7 @@ const HeaderWrapper = styled.div`
         .menu-text {
           color: #000000;
           font-size: ${props => props.theme.widthRatio * 26}px;
-          line-height: ${props => props.theme.heightRatio * 38}px
+          line-height: ${props => props.theme.heightRatio * 38}px;
           font-family: Orbitron-Medium;
           margin-left: -${props => props.theme.widthRatio * 5}px;
     			padding-top: ${props => props.theme.heightRatio * 5}px;
