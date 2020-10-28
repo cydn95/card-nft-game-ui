@@ -130,8 +130,8 @@ const Header = () => {
 						<span className="menu-text">Get Heroes</span>
 					</NavLink>
 				</li>
-				<li className={`menu-item ${ getMenuItemActive('fight') } hover-effect2`}>
-					<NavLink className='menu-link' to="/fight">
+				<li className={`menu-item ${ getMenuItemActive('fight-villains') } hover-effect2`}>
+					<NavLink className='menu-link' to="/fight-villains">
 						<span className="menu-text">Fight Villains</span>
 					</NavLink>
 				</li>
