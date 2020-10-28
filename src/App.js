@@ -11,12 +11,17 @@ import Routes from "./routes/Routes";
 import "./vendor/index.scss";
 
 const App = () => {
-  const [widthRatio, setWidthRatio] = useState(window.innerWidth / 1920);
-  const [heightRatio, setHeightRatio] = useState(window.innerHeight / 1080);
+  const [widthRatio, setWidthRatio] = useState(window.innerWidth <= 1080 ? window.innerWidth / 1080 : window.innerWidth / 1920);
+  const [heightRatio, setHeightRatio] = useState(window.innerWidth <= 1080 ? window.innerWidth / 1920 : window.innerHeight / 1080);
 
   const setRatioFunction = () => {
-    setWidthRatio(window.innerWidth / 1920);
-    setHeightRatio(window.innerHeight / 1080);
+    if (window.innerWidth <= 1080) {
+      setWidthRatio(window.innerWidth / 1080);
+      setHeightRatio(window.innerHeight / 1920);
+    } else {
+      setWidthRatio(window.innerWidth / 1920);
+      setHeightRatio(window.innerHeight / 1080);
+    }
   };
 
   useEffect(() => {

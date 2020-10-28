@@ -5,6 +5,8 @@ import { NavLink } from "react-router-dom";
 
 const HeaderWrapper = styled.div`
   .menu-nav {
+  	margin-left: -18px;
+  
     .menu-item {
       height: ${props => props.theme.heightRatio * 63}px;
       margin-right: -${props => props.theme.widthRatio * 30}px;
@@ -83,6 +85,33 @@ const HeaderWrapper = styled.div`
             font-weight: 900;
           }
         }
+      }
+      
+      @media(max-width: 1080px) {
+      	&:nth-of-type(1) {
+					background-image: url('/static/images/bg/components/header/menu-item-1-bg.png');
+					width: ${props => props.theme.widthRatio * 211}px;
+				}
+				
+				&:nth-of-type(2) {
+					background-image: url('/static/images/bg/components/header/menu-item-2-bg.png');
+					width: ${props => props.theme.widthRatio * 190}px;
+				}
+				
+				&:nth-of-type(3) {
+					background-image: url('/static/images/bg/components/header/menu-item-3-bg.png');
+					width: ${props => props.theme.widthRatio * 237}px;
+				}
+				
+				&:nth-of-type(4) {
+					background-image: url('/static/images/bg/components/header/menu-item-4-bg.png');
+					width: ${props => props.theme.widthRatio * 261}px;
+				}
+				
+				&:nth-of-type(5) {
+					background-image: url('/static/images/bg/components/header/menu-item-5-bg.png');
+					width: ${props => props.theme.widthRatio * 307}px;
+				}
       }
     }
   }
