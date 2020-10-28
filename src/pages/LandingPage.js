@@ -103,6 +103,14 @@ const LandingPageWrapper = styled.div`
 			p {
 				max-width: ${props => props.theme.widthRatio * 635}px;
 			}
+			
+			.cards {
+				position: absolute;
+				width: ${props => props.theme.widthRatio * 944}px;
+				height: ${props => props.theme.heightRatio * 795}px;
+				top: ${props => props.theme.heightRatio * 143}px;
+    		right: ${props => props.theme.widthRatio * 193}px;
+			}
 	
 			button {
 				margin-top: ${props => props.theme.heightRatio * 197}px;
@@ -131,10 +139,25 @@ const LandingPageWrapper = styled.div`
 			button {
 				margin-left: -${props => props.theme.widthRatio * 20}px;
 			}
+			
+			.battle {
+				position: absolute;
+				
+				bottom: -${props => props.theme.heightRatio * 150}px;
+				right: -${props => props.theme.widthRatio * 150}px;
+			}
 		}
 	
 		.section-4 {
 			background-image: url("/static/images/bg/pages/landing-page/landing-page-section-4-bg.png");
+			
+			.battle {
+				position: absolute;
+				width: ${props => props.theme.widthRatio * 1558}px;
+        height: ${props => props.theme.heightRatio * 953}px;
+				top: -${props => props.theme.heightRatio * 772}px;
+    		right: -${props => props.theme.widthRatio * 115}px;
+			}
 	
 			.fp-tableCell {
 				display: flex;
@@ -220,18 +243,33 @@ const LandingPage = () => {
 										<h1>Get hero cards that will kick  villain’s ass</h1>
 										<p>Don’t forget the genesis heroes that have brought the decentralised world. With their help you will be able to fight and defeat the corporate villains.</p>
 									</div>
+									<img
+										src={`/static/images/pages/landing-page/cards.png`}
+										alt="cards"
+										className="cards"
+									/>
 									<button className='hover-effect1'>GET CARDS</button>
 								</div>
 
-								<div className={`section-3 section 'd-flex' flex-column`}>
+								<div className={`section-3 section 'd-flex' flex-column position-relative`}>
 									<div>
 										<h1>Stake Heroes, Lock Villains, Earn NDR </h1>
 										<p>Get rewarded for your hard work. Stake your Hero cards or Lock up defeated villains and get rewarded with NDR tokens. That's how justice is served.</p>
 									</div>
 									<button className='hover-effect1'>GET CARDS</button>
+									{/*<img*/}
+									{/*	src={`/static/images/pages/landing-page/battle.png`}*/}
+									{/*	alt="battle"*/}
+									{/*	className="battle"*/}
+									{/*/>*/}
 								</div>
 
-								<div className={`section-4 section`}>
+								<div className={`section-4 section position-relative`}>
+									<img
+										src={`/static/images/pages/landing-page/battle.png`}
+										alt="battle"
+										className="battle"
+									/>
 									<div className='icons-wrapper d-flex align-items-start w-100 justify-content-between'>
 										<div className='d-flex flex-column align-items-center'>
 											<img src={`/static/images/icons/inflationary.png`} alt='inflationary'/>
