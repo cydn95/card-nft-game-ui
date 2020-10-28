@@ -52,16 +52,28 @@ const HeaderWrapper = styled.div`
       &:nth-of-type(3) {
         background-image: url('/static/images/bg/components/header/menu-item-3-bg.png');
         width: ${props => props.theme.widthRatio * 250}px;
+        
+        &.active {
+          background-image: url('/static/images/bg/components/header/menu-item-3-bg--active.png');
+        }
       }
       
       &:nth-of-type(4) {
         background-image: url('/static/images/bg/components/header/menu-item-4-bg.png');
         width: ${props => props.theme.widthRatio * 292}px;
+        
+        &.active {
+          background-image: url('/static/images/bg/components/header/menu-item-4-bg--active.png');
+        }
       }
       
       &:nth-of-type(5) {
         background-image: url('/static/images/bg/components/header/menu-item-5-bg.png');
         width: ${props => props.theme.widthRatio * 339}px;
+        
+        &.active {
+          background-image: url('/static/images/bg/components/header/menu-item-5-bg--active.png');
+        }
       }
 
       &.active {
@@ -69,7 +81,6 @@ const HeaderWrapper = styled.div`
           .menu-text {
             color: #fec100;
             font-weight: 900;
-            margin-left: -${props => props.theme.widthRatio * 28}px;
           }
         }
       }

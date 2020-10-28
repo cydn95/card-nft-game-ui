@@ -62,6 +62,73 @@ const CardWrapper = styled.div`
 	
 	.button-wrapper {
 		margin-top: -17px;
+		
+		.card-grid {
+			width: 466px;
+			padding: 0 22px;
+			margin-top: 30px;
+			text-shadow: 7px 7px 10px ${props => props.theme.darken(props.theme.palette.primary.main, 0.57)};
+		
+			h4 {
+				font-size: 30px;
+				font-family: Orbitron-Black;
+				color: ${props => props.theme.palette.primary.main};
+				border-bottom: 2px solid ${props => props.theme.palette.primary.main};
+				padding-bottom: 4px;
+				margin-bottom: 5px;
+			}
+			
+			label {
+				font-size: 20px;
+				font-family: Orbitron-Medium;
+				color: ${props => props.theme.palette.primary.main};
+				margin-bottom: 0;
+			}
+			
+			span {
+				font-size: 20px;
+				font-family: Orbitron-Black;
+				color: ${props => props.theme.palette.secondary.main};
+				padding-left: 7px;
+			}
+			
+			.text-wrapper {
+				line-height: 24px;
+			}
+		
+			.grid-button-wrapper {
+				display: flex;
+				align-items: flex-end;
+				justify-content: space-between;
+				
+				button {
+					padding-bottom: -7px;
+				
+					&.hash-button {
+						width: 229px;
+						height: 53px;
+						background-image: url('/static/images/bg/components/card/hash-button-bg.png'); 
+						background-size: 100% 100%;
+						margin-left: -5px;
+						padding-bottom: 7px;
+					}
+					&.eth-button {
+						width: 223px;
+						height: 58px;
+						background-image: url('/static/images/bg/components/card/eth-button-bg.png');
+						background-size: 100% 100%;
+						margin-right: -13px;
+						padding-bottom: 7px;
+					}
+					&.buy-button {
+						width: 436px;
+						height: 58px;
+						background-image: url('/static/images/bg/components/card/buy-button-bg.png');
+						background-size: 100% 100%;
+					}	
+				}
+			}
+		}
 	
 		button {
 			width: 357px;
@@ -98,10 +165,10 @@ const Card = ({ card, unObtained, marked, score, unStaked, cardGrid }) => {
 							className="un-staked"
 						/>
 						: <img
-								src={`/static/images/cards/${card}.png`}
-								alt={`${card}`}
-								className={`card-image ${unObtained ? 'un-obtained' : ''}`}
-							/>
+							src={`/static/images/cards/${card}.png`}
+							alt={`${card}`}
+							className={`card-image ${unObtained ? 'un-obtained' : ''}`}
+						/>
 				}
 				<img
 					src={`/static/images/bg/components/card/card-border.png`}
@@ -131,18 +198,60 @@ const Card = ({ card, unObtained, marked, score, unStaked, cardGrid }) => {
 					: <div className="button-wrapper text-center">
 						{
 							unObtained
-							? <button className='hover-effect3 un-obtained'>
+								? <button className='hover-effect3 un-obtained'>
 									Obtain Card
 								</button>
-							: unStaked
+								: unStaked
 								? <button className='hover-effect3'>
-										Stake
-									</button>
+									Stake
+								</button>
 								: cardGrid
-									? ''
+									? <div className="card-grid">
+										<h4 className="text-left">{ cardGrid.name }</h4>
+										<div className="d-flex">
+											<div className="w-50 text-wrapper">
+												<div className="text-left">
+													<label>Strength:</label>
+													<span>{ cardGrid.strength }</span>
+												</div>
+												<div className="text-left">
+													<label>Minted:</label>
+													<span>{ `${cardGrid.hash}/${cardGrid.eth}` }</span>
+												</div>
+											</div>
+											<div className="w-50 text-wrapper">
+												<div className="text-right">
+													<label>Defense:</label>
+													<span>{ cardGrid.defense }</span>
+												</div>
+												<div className="text-right">
+													<label>Rarity:</label>
+													<span>{ cardGrid.rarity }</span>
+												</div>
+											</div>
+										</div>
+										<div className="grid-button-wrapper">
+											{
+												cardGrid.payed
+													? (
+														<>
+															<button className="hash-button hover-effect2">
+																{ cardGrid.hash } Hash
+															</button>
+															<button className="eth-button hover-effect2">
+																{ cardGrid.eth } Eth
+															</button>
+														</>
+													)
+													: <button className="buy-button hover-effect2">
+														Buy on Opensea
+													</button>
+											}
+										</div>
+									</div>
 									: <button className='hover-effect3'>
-											Unstake
-										</button>
+										Unstake
+									</button>
 						}
 					</div>
 			}
