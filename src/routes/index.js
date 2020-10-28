@@ -1,10 +1,10 @@
-
 import async from "../component/Async";
 
 const MyCards = async(() => import("../pages/MyCardsPage"));
 const Stake = async(() => import("../pages/StakePage"));
 const GetHeroes = async(() => import("../pages/GetHeroesPage"));
 const FightVillains = async(() => import("../pages/FightVillainsPage"));
+const UnlockWallet = async(() => import("../pages/UnlockWalletPage"));
 
 const menuRoutes = [
 	{
@@ -22,6 +22,10 @@ const menuRoutes = [
 	{
 		path: '/fight-villains',
 		component: FightVillains
+	},
+	{
+		path: '/unlock-wallet',
+		component: UnlockWallet
 	}
 ];
 
