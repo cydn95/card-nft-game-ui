@@ -13,12 +13,13 @@ const Routes = () => {
 			<Switch>
 				<Route path='/' exact component={ LandingPage } />
 				{
-					menuRoutes.map(({ path, component: Component }, index) =>
+					menuRoutes.map(({ path, component: Component, layout }, index) =>
 						<Route
 							key={ index }
 							path={ path }
+							exact
 							render={ props => (
-								<Layout>
+								<Layout bg={layout}>
 									<Component {...props} />
 								</Layout>
 							)}

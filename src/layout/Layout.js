@@ -5,9 +5,13 @@ import Header from "../component/Header";
 const LayoutWrapper = styled.div`
  	width: 100vw;
   height: 100vh;
-  background: url('/static/images/bg/layout/layout-bg.png');
+  background-image: url('/static/images/bg/layout/layout-bg.png');
   background-size: 100vw 100vh;
   overflow: auto;
+  
+  &.battle {
+ 	  background-image: url('/static/images/bg/layout/battle-bg.png');
+  }
   
   .nav-pills {
     margin: -40px 0 19px;
@@ -32,9 +36,9 @@ const LayoutWrapper = styled.div`
   }
 `;
 
-const Layout = ({ children }) => {
+const Layout = ({ children, bg }) => {
 	return (
-		<LayoutWrapper>
+		<LayoutWrapper className={bg}>
 			<Header />
 			{ children }
 		</LayoutWrapper>

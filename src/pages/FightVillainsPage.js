@@ -91,7 +91,9 @@ const Villains = [
 			rarity: 'common',
 			hash: 100,
 			eth: 10,
-			payed: true
+			payed: true,
+			isHero: false,
+			health: 100
 		}
 	},
 	{
@@ -103,7 +105,9 @@ const Villains = [
 			rarity: 'common',
 			hash: 100,
 			eth: 10,
-			payed: true
+			payed: true,
+			isHero: false,
+			health: 100
 		}
 	},
 	{
@@ -115,7 +119,9 @@ const Villains = [
 			rarity: 'common',
 			hash: 100,
 			eth: 10,
-			payed: true
+			payed: true,
+			isHero: false,
+			health: 100
 		}
 	},
 	{
@@ -127,7 +133,9 @@ const Villains = [
 			rarity: 'common',
 			hash: 100,
 			eth: 10,
-			payed: false
+			payed: false,
+			isHero: false,
+			health: 100
 		}
 	},
 	{
@@ -139,7 +147,9 @@ const Villains = [
 			rarity: 'common',
 			hash: 100,
 			eth: 10,
-			payed: true
+			payed: true,
+			isHero: false,
+			health: 100
 		}
 	},
 	{
@@ -151,7 +161,9 @@ const Villains = [
 			rarity: 'common',
 			hash: 100,
 			eth: 10,
-			payed: true
+			payed: true,
+			isHero: false,
+			health: 100
 		}
 	},
 	{
@@ -163,7 +175,9 @@ const Villains = [
 			rarity: 'common',
 			hash: 100,
 			eth: 10,
-			payed: true
+			payed: true,
+			isHero: false,
+			health: 100
 		}
 	},
 	{
@@ -175,7 +189,9 @@ const Villains = [
 			rarity: 'common',
 			hash: 100,
 			eth: 10,
-			payed: false
+			payed: false,
+			isHero: false,
+			health: 100
 		}
 	}
 ];

@@ -97,7 +97,8 @@ const Heroes = [
 			rarity: 'common',
 			hash: 100,
 			eth: 10,
-			payed: true
+			payed: true,
+			isHero: true
 		}
 	},
 	{
@@ -109,7 +110,8 @@ const Heroes = [
 			rarity: 'common',
 			hash: 100,
 			eth: 10,
-			payed: true
+			payed: true,
+			isHero: true
 		}
 	},
 	{
@@ -121,7 +123,8 @@ const Heroes = [
 			rarity: 'common',
 			hash: 100,
 			eth: 10,
-			payed: true
+			payed: true,
+			isHero: true
 		}
 	},
 	{
@@ -133,7 +136,8 @@ const Heroes = [
 			rarity: 'common',
 			hash: 100,
 			eth: 10,
-			payed: false
+			payed: false,
+			isHero: true
 		}
 	}
 ];
