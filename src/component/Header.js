@@ -21,7 +21,7 @@ const HeaderWrapper = styled.div`
         .menu-text {
           color: #000000;
           font-size: ${props => props.theme.widthRatio * 26}px;
-          line-height: ${props => props.theme.heightRatio * 38}px
+          line-height: ${props => props.theme.heightRatio * 38}px;
           font-family: Orbitron-Medium;
           margin-left: -${props => props.theme.widthRatio * 5}px;
     			padding-top: ${props => props.theme.heightRatio * 5}px;
@@ -145,27 +145,27 @@ const Header = () => {
 		<HeaderWrapper className='header-menu d-flex justify-content-center animation-stretchRight'>
 			<ul className='menu-nav d-flex list-unstyled'>
 				<li className={`menu-item ${ getMenuItemActive('my-cards') } hover-effect2`}>
-					<NavLink className='menu-link' to="/my-cards">
+					<NavLink className='menu-link' to="#">
 						<span className="menu-text">My Cards</span>
 					</NavLink>
 				</li>
 				<li className={`menu-item ${ getMenuItemActive('stake') } hover-effect2`}>
-					<NavLink className='menu-link' to="/stake">
+					<NavLink className='menu-link' to="/#">
 						<span className="menu-text">Stake</span>
 					</NavLink>
 				</li>
 				<li className={`menu-item ${ getMenuItemActive('get-heroes') } hover-effect2`}>
-					<NavLink className='menu-link' to="/get-heroes">
+					<NavLink className='menu-link' to="/#">
 						<span className="menu-text">Get Heroes</span>
 					</NavLink>
 				</li>
 				<li className={`menu-item ${ getMenuItemActive('fight-villains') } hover-effect2`}>
-					<NavLink className='menu-link' to="/fight-villains">
+					<NavLink className='menu-link' to="/#">
 						<span className="menu-text">Fight Villains</span>
 					</NavLink>
 				</li>
 				<li className={`menu-item ${ getMenuItemActive('unlock-wallet') } hover-effect2`}>
-					<NavLink className='menu-link' to="/unlock-wallet">
+					<NavLink className='menu-link' to="/#">
 						<span className="menu-text">Unlock Wallet</span>
 					</NavLink>
 				</li>

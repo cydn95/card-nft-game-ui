@@ -84,7 +84,7 @@ const Stake = () => {
 			<Tab.Container id="left-tabs-example" defaultActiveKey="heroes">
 				<Nav variant="pills" className="justify-content-center animation-fadeIn">
 					<Nav.Item>
-						<Nav.Link eventKey="heroes">Stock Heroes</Nav.Link>
+						<Nav.Link eventKey="heroes">Stake Heroes</Nav.Link>
 					</Nav.Item>
 					<Nav.Item>
 						<Nav.Link eventKey="villains">Lock Villains</Nav.Link>
