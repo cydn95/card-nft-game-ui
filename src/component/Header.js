@@ -14,9 +14,11 @@ const HeaderWrapper = styled.div`
       background-size: 100% 100%;
 
       .menu-link {
-        display: block;
         height: 100%;
         text-decoration: none;
+        display: flex;
+    		align-items: center;
+    		justify-content: center;
 
         .menu-text {
           color: #000000;
@@ -24,7 +26,7 @@ const HeaderWrapper = styled.div`
           line-height: ${props => props.theme.heightRatio * 38}px;
           font-family: Orbitron-Medium;
           margin-left: -${props => props.theme.widthRatio * 5}px;
-    			padding-top: ${props => props.theme.heightRatio * 5}px;
+    			margin-top: -${props => props.theme.heightRatio * 5}px;
     			display: inline-block;
           text-shadow: ${props => props.theme.widthRatio * 5}px
            						 ${props => props.theme.heightRatio * 5}px
