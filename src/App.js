@@ -12,7 +12,7 @@ import "./vendor/index.scss";
 
 const App = () => {
   const [widthRatio, setWidthRatio] = useState(window.innerWidth <= 1080 ? window.innerWidth / 1080 : window.innerWidth / 1920);
-  const [heightRatio, setHeightRatio] = useState(window.innerWidth <= 1080 ? window.innerWidth / 1920 : window.innerHeight / 1080);
+  const [heightRatio, setHeightRatio] = useState(window.innerWidth <= 1080 ? window.innerHeight / 1920 : window.innerHeight / 1080);
 
   const setRatioFunction = () => {
     if (window.innerWidth <= 1080) {

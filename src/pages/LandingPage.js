@@ -31,7 +31,7 @@ const LandingPageWrapper = styled.div`
 				text-shadow: ${props => props.theme.widthRatio * 7}px
 										 ${props => props.theme.heightRatio * 7}px
 										 ${props => props.theme.widthRatio * 10}px;
-				line-height: 36px;
+				line-height: ${props => props.theme.heightRatio * 36}px;
 			}
 	
 			img {
@@ -40,7 +40,7 @@ const LandingPageWrapper = styled.div`
 	
 			button {
 				background-image: url("/static/images/bg/pages/landing-page/button-bg.png");
-				background-size: 100%;
+				background-size: 100% 100%;
 				background-color: transparent;
 				width: ${props => props.theme.widthRatio * 330}px;
 				height: ${props => props.theme.widthRatio * 88}px;
@@ -55,6 +55,23 @@ const LandingPageWrapper = styled.div`
 				padding-top: ${props => props.theme.heightRatio * 7}px;
 				outline: none;
 			}
+			
+			@media(max-width: 1080px) {
+				h1 {
+					font-size: ${props => props.theme.widthRatio * 50}px;
+					line-height: ${props => props.theme.heightRatio * 60}px;
+				}
+				p {
+					font-size: ${props => props.theme.widthRatio * 40}px;
+					line-height: ${props => props.theme.heightRatio * 48}px;
+				}
+				button {
+					width: ${props => props.theme.widthRatio * 577}px;
+          height: ${props => props.theme.heightRatio * 153}px;
+          font-size: ${props => props.theme.widthRatio * 65}px;
+          padding-top: ${props => props.theme.heightRatio * 12}px;
+				}
+			}
 		}
 		
 		.section {
@@ -63,7 +80,7 @@ const LandingPageWrapper = styled.div`
 	
 		.section-1 {
 			background-image: url("/static/images/bg/pages/landing-page/landing-page-section-1-bg.png");
-	
+			
 			.logo {
 				width: ${props => props.theme.widthRatio * 540}px;
 				height: ${props => props.theme.heightRatio * 182}px;
@@ -85,11 +102,42 @@ const LandingPageWrapper = styled.div`
 			button {
 				margin-top: ${props => props.theme.heightRatio * 33}px;
 			}
+			
+			@media(max-width: 1080px) {
+				background-image: url("/static/images/bg/pages/landing-page/landing-page-section-1-mobile-bg.png");
+				
+				.logo {
+					width: ${props => props.theme.widthRatio * 730}px;
+					height: ${props => props.theme.heightRatio * 245}px;
+					margin-left: ${props => props.theme.widthRatio * 60}px;
+					margin-top: ${props => props.theme.heightRatio * 118}px;
+        }
+        
+        h1 {
+					margin-top: ${props => props.theme.heightRatio * 130}px;
+					margin-bottom: ${props => props.theme.heightRatio * 90}px;
+					max-width: ${props => props.theme.widthRatio * 798}px;
+				}
+
+				p:first-of-type {
+					max-width: ${props => props.theme.widthRatio * 872}px;
+					margin-bottom: ${props => props.theme.heightRatio * 45}px;
+				}
+				
+				p:nth-of-type(2) {
+				  max-width: ${props => props.theme.widthRatio * 796}px;
+				  margin-bottom: ${props => props.theme.heightRatio * 53}px;
+				}
+
+				button {
+					margin-top: ${props => props.theme.heightRatio * 190}px;
+				}
+			}
 		}
 	
 		.section-2 {
 			background-image: url("/static/images/bg/pages/landing-page/landing-page-section-2-bg.png");
-	
+			
 			.fp-tableCell {
 				padding-left: ${props => props.theme.widthRatio * 99}px;
 				padding-top: ${props => props.theme.heightRatio * 305}px;
@@ -116,11 +164,55 @@ const LandingPageWrapper = styled.div`
 				margin-top: ${props => props.theme.heightRatio * 197}px;
 				margin-left: -${props => props.theme.widthRatio * 17}px;
 			}
+			
+			@media(max-width: 1080px) {
+				background-image: url("/static/images/bg/pages/landing-page/landing-page-section-2-mobile-bg.png");
+				
+				.fp-tableCell {
+					padding-left: 0;
+					padding-top: ${props => props.theme.heightRatio * 106}px;
+				}
+				
+				.text-wrapper {
+					display: flex;
+					flex-flow: column;
+					align-items: center;
+				}
+			
+				h1 {
+					text-align: center;
+					max-width: ${props => props.theme.widthRatio * 521}px;
+					margin-bottom: ${props => props.theme.heightRatio * 64}px;
+				}
+			
+				p {
+					text-align: center;
+					max-width: ${props => props.theme.widthRatio * 927}px;
+					margin-bottom: ${props => props.theme.heightRatio * 46}px;
+				}
+				
+				.cards {
+					position: relative;
+					width: ${props => props.theme.widthRatio * 944}px;
+					height: ${props => props.theme.heightRatio * 795}px;
+					top: ${props => props.theme.heightRatio * 18}px;
+					right: -${props => props.theme.widthRatio * 54}px;
+				}
+				
+				.button-wrapper {
+					text-align: center;
+				}
+
+				button {
+					margin-top: ${props => props.theme.heightRatio * 114}px;
+					margin-left: 0;
+				}
+			}
 		}
 	
 		.section-3 {
 			background-image: url("/static/images/bg/pages/landing-page/landing-page-section-3-bg.png");
-	
+			
 			.fp-tableCell {
 				padding-left: ${props => props.theme.widthRatio * 71}px;
 				padding-top: ${props => props.theme.heightRatio * 91}px;
@@ -135,34 +227,77 @@ const LandingPageWrapper = styled.div`
 				max-width: ${props => props.theme.widthRatio * 880}px;
 				margin-bottom: ${props => props.theme.heightRatio * 103}px;
 			}
+			
+			.battle {
+				display: none;
+			}
 	
 			button {
 				margin-left: -${props => props.theme.widthRatio * 20}px;
 			}
 			
-			.battle {
-				position: absolute;
+			@media(max-width: 1080px) {
+				background-image: url("/static/images/bg/pages/landing-page/landing-page-section-3-mobile-bg.png");
 				
-				bottom: -${props => props.theme.heightRatio * 150}px;
-				right: -${props => props.theme.widthRatio * 150}px;
+				.fp-tableCell {
+					padding-left: 0;
+					padding-top: ${props => props.theme.heightRatio * 101}px;
+				}
+				
+				.text-wrapper {
+					display: flex;
+					align-items: center;
+					flex-flow: column;
+				}
+
+				h1 {
+					text-align: center;
+					max-width: ${props => props.theme.widthRatio * 471}px;
+					margin-bottom: ${props => props.theme.heightRatio * 78}px;
+				}
+
+				p {
+					text-align: center;
+					max-width: ${props => props.theme.widthRatio * 880}px;
+					margin-bottom: ${props => props.theme.heightRatio * 47}px;
+				}
+				
+				.battle {
+					display: block;
+				  margin-top: ${props => props.theme.heightRatio * 83}px;
+    			margin-left: -${props => props.theme.widthRatio * 162}px;
+    			width: ${props => props.theme.widthRatio * 1558}px;
+    			height: ${props => props.theme.heightRatio * 953}px;
+				}
+				
+				.button-wrapper {
+					text-align: center;
+					margin-top: -${props => props.theme.heightRatio * 144}px;
+				}
+
+				button {
+					margin-left: 0;
+					margin-top: 0;
+				}
 			}
 		}
 	
 		.section-4 {
 			background-image: url("/static/images/bg/pages/landing-page/landing-page-section-4-bg.png");
-			
-			.battle {
-				position: absolute;
-				width: ${props => props.theme.widthRatio * 1558}px;
-        height: ${props => props.theme.heightRatio * 953}px;
-				top: -${props => props.theme.heightRatio * 772}px;
-    		right: -${props => props.theme.widthRatio * 115}px;
-			}
 	
 			.fp-tableCell {
 				display: flex;
 				flex-flow: column;
-				align-items: center;justify-content: center;
+				align-items: center;
+				justify-content: center;
+			}
+			
+			.battle {
+				position: absolute;
+				width: ${props => props.theme.widthRatio * 1558}px;
+				height: ${props => props.theme.heightRatio * 953}px;
+				top: -${props => props.theme.heightRatio * 772}px;
+				right: -${props => props.theme.widthRatio * 115}px;
 			}
 	
 			.icons-wrapper {
@@ -188,11 +323,68 @@ const LandingPageWrapper = styled.div`
 			button {
 				margin-top: ${props => props.theme.heightRatio * 39}px;
 			}
+			
+			@media(max-width: 1080px) {
+				background-image: url("/static/images/bg/pages/landing-page/landing-page-section-4-mobile-bg.png");
+				
+				.fp-tableCell {
+					display: flex;
+					flex-flow: column;
+					align-items: center;
+					justify-content: center;
+				}
+				
+				.battle {
+					display: none;
+				}
+		
+				.icons-wrapper {
+					flex-flow: column;
+					align-items: center !important;
+					max-width: ${props => props.theme.widthRatio * 1416}px;
+		
+					div:first-of-type {
+						max-width: ${props => props.theme.widthRatio * 634}px;
+						margin-bottom: ${props => props.theme.heightRatio * 90}px;
+						
+						img {
+							width: ${props => props.theme.widthRatio * 469}px;
+							height: ${props => props.theme.heightRatio * 320}px;
+						}
+					}
+		
+					div:last-of-type {
+						max-width: ${props => props.theme.widthRatio * 724}px;
+						
+						img {
+							width: ${props => props.theme.widthRatio * 324}px;
+							height: ${props => props.theme.heightRatio * 320}px;
+							margin-bottom: ${props => props.theme.heightRatio * 55}px;
+						}
+						
+						p {
+							max-width: ${props => props.theme.widthRatio * 590}px;
+						}
+					}
+				}
+		
+				img {
+					margin-bottom: ${props => props.theme.heightRatio * 24}px;
+				}
+		
+				h1 {
+					margin-bottom: ${props => props.theme.heightRatio * 34}px;
+				}
+		
+				button {
+					margin-top: ${props => props.theme.heightRatio * 58}px;
+				}
+			}
 		}
 	
 		.section-5 {
 			background-image: url("/static/images/bg/pages/landing-page/landing-page-section-5-bg.png");
-	
+			
 			.fp-tableCell {
 				display: flex;
 				flex-flow: column;
@@ -210,11 +402,29 @@ const LandingPageWrapper = styled.div`
 					height: ${props => props.theme.heightRatio * 143}px;
 				}
 			}
+			
+			@media(max-width: 1080px) {
+				background-image: url("/static/images/bg/pages/landing-page/landing-page-section-5-mobile-bg.png");
+				
+				.logos-wrapper {
+					flex-flow: column;
+					
+					a {
+						margin-bottom: ${props => props.theme.heightRatio * 24}px;
+					}
+					
+					img {
+						width: ${props => props.theme.widthRatio * 265}px;
+						height: ${props => props.theme.heightRatio * 265}px;
+					}
+				}
+			}
 		}
 	}
 `;
 
 const LandingPage = () => {
+
 	return (
 		<LandingPageWrapper>
 			<ReactFullpage
@@ -229,9 +439,16 @@ const LandingPage = () => {
 									<Header />
 									<img src={`/static/images/logo/logo-color.png`} className='logo animation-fadeIn' alt="logo"/>
 									<div className="content-wrapper d-flex flex-column align-items-center">
-										<div className="animation-slideUp">
+										<div className="d-flex flex-column align-items-center animation-slideUp">
 											<h1 className='text-center'>Join the resistance and fight for the decentralised tomorrow</h1>
-											<p className='text-center'>It’s 2049, underground cyber partisans form a resistance alliance called Node Runners. Their main goal is to defeat the corporate autocracy that has taken over the world.</p>
+											{
+												window.innerWidth <= 1080
+													? <>
+														<p className='text-center'>It’s 2049, underground cyber partisans form a resistance alliance called Node Runners.</p>
+														<p className='text-center'>Their main goal is to defeat the corporate autocracy that has taken over the world.</p>
+													</>
+													: <p className='text-center'>It’s 2049, underground cyber partisans form a resistance alliance called Node Runners. Their main goal is to defeat the corporate autocracy that has taken over the world.</p>
+											}
 											<p className='text-center'>Do you have what it takes to join them?</p>
 										</div>
 										<button className='hover-effect1 animation-bigEntrance'>GET CARDS</button>
@@ -239,29 +456,48 @@ const LandingPage = () => {
 								</div>
 
 								<div className={`section-2 section 'd-flex' flex-column`}>
-									<div className=''>
+									<div className='text-wrapper'>
 										<h1>Get hero cards that will kick  villain’s ass</h1>
-										<p>Don’t forget the genesis heroes that have brought the decentralised world. With their help you will be able to fight and defeat the corporate villains.</p>
+										{
+											window.innerWidth > 1080
+												? <p>Don’t forget the genesis heroes that have brought the decentralised world. With their help you will be able to fight and defeat the corporate villains.</p>
+												: <>
+														<p>Don’t forget the genesis heroes that have brought the decentralised world.</p>
+														<p> With their help you will be able to fight and defeat the corporate villains.</p>
+													</>
+										}
 									</div>
 									<img
 										src={`/static/images/pages/landing-page/cards.png`}
 										alt="cards"
 										className="cards"
 									/>
-									<button className='hover-effect1'>GET CARDS</button>
+									<div className="button-wrapper">
+										<button className='hover-effect1'>GET CARDS</button>
+									</div>
 								</div>
 
 								<div className={`section-3 section 'd-flex' flex-column position-relative`}>
-									<div>
+									<div className='text-wrapper'>
 										<h1>Stake Heroes, Lock Villains, Earn NDR </h1>
-										<p>Get rewarded for your hard work. Stake your Hero cards or Lock up defeated villains and get rewarded with NDR tokens. That's how justice is served.</p>
+										{
+											window.innerWidth > 1080
+												? <p>Get rewarded for your hard work. Stake your Hero cards or Lock up defeated villains and get rewarded with NDR tokens. That's how justice is served.</p>
+												: <>
+														<p>Get rewarded for your hard work.</p>
+														<p>Stake your Hero cards or Lock up defeated villains and get rewarded with NDR tokens.</p>
+														<p>That's how justice is served.</p>
+													</>
+										}
 									</div>
-									<button className='hover-effect1'>GET CARDS</button>
-									{/*<img*/}
-									{/*	src={`/static/images/pages/landing-page/battle.png`}*/}
-									{/*	alt="battle"*/}
-									{/*	className="battle"*/}
-									{/*/>*/}
+									<img
+										src={`/static/images/pages/landing-page/battle.png`}
+										alt="battle"
+										className="battle"
+									/>
+									<div className="button-wrapper">
+										<button className='hover-effect1'>GET CARDS</button>
+									</div>
 								</div>
 
 								<div className={`section-4 section position-relative`}>
@@ -295,10 +531,10 @@ const LandingPage = () => {
 											<img src={`/static/images/icons/logo1.png`} alt=""/>
 										</a>
 										<a href='/' target='_blank'>
-											<img src={`/static/images/icons/logo2.png`} alt=""/>
+											<img src={`/static/images/icons/logo3.png`} alt=""/>
 										</a>
 										<a href='/' target='_blank'>
-											<img src={`/static/images/icons/logo3.png`} alt=""/>
+											<img src={`/static/images/icons/logo2.png`} alt=""/>
 										</a>
 										<a href='/' target='_blank'>
 											<img src={`/static/images/icons/logo4.png`} alt=""/>
