@@ -531,16 +531,16 @@ const LandingPage = () => {
 										with the resistance
 									</h1>
 									<div className='logos-wrapper d-flex align-items-center justify-content-between w-100'>
-										<a href='https://t.me/noderunners_channel' target='_blank'>
+										<a href='https://t.me/noderunners_channel'>
 											<img src={`/static/images/icons/logo1.png`} alt="NodeRunners Telegram"/>
 										</a>
-										<a href='/' target='_blank'>
+										<a href='https://twitter.com/Node_Runners'>
 											<img src={`/static/images/icons/logo3.png`} alt=""/>
 										</a>
-										<a href='/https://twitter.com/Node_Runners' target='_blank'>
+										<a href='/'>
 											<img src={`/static/images/icons/logo2.png`} alt=""/>
 										</a>
-										<a href='https://noderunners.medium.com/' target='_blank'>
+										<a href='https://noderunners.medium.com/'>
 											<img src={`/static/images/icons/logo4.png`} alt="NodeRunners Medium"/>
 										</a>
 									</div>
