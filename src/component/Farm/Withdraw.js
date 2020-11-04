@@ -48,7 +48,6 @@ const Withdraw = ({ lpBalance, onClose, onWithdraw }) => {
             </span>
           </div>
           <input type="text" value={amount} onChange={handleChangeAmount} />
-          <small>Increase number size</small>
         </div>
         <div className="action" onClick={(e) => onWithdraw(amount)}>
           <DoubleArrow />
@@ -131,9 +130,6 @@ const WithdrawWrapper = styled.div`
           text-shadow: none;
           font-size: 14px;
           color: #fec100;
-          small {
-            color: #fff;
-          }
         }
 
         .buttons {
@@ -148,16 +144,14 @@ const WithdrawWrapper = styled.div`
         input {
           width: 140px;
           text-align: center;
-          // margin-top: 10px;
           background: none;
           border: none;
           outline: none;
           color: #fec100;
           font-weight: 600;
-        }
-
-        small {
-          color: #fff;
+          height: 32px;
+          font-size: 2rem;
+          line-height: 2rem;
         }
       }
 
