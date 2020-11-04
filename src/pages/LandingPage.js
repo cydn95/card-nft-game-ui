@@ -1,4 +1,5 @@
 import React from "react";
+import { withRouter } from "react-router";
 import styled from "styled-components";
 import ReactFullpage from "@fullpage/react-fullpage";
 import Header from "../component/Header";
@@ -427,7 +428,7 @@ const LandingPageWrapper = styled.div`
 	}
 `;
 
-const LandingPage = () => {
+const LandingPage = ({history}) => {
 
 	return (
 		<LandingPageWrapper>
@@ -438,120 +439,209 @@ const LandingPage = () => {
 				render={
 					() => {
 						return (
-							<ReactFullpage.Wrapper>
-								<div className={`section-1 section 'd-flex' flex-column`}>
-									<Header />
-									<img src={`/static/images/logo/logo-color.png`} className='logo animation-fadeIn' alt="logo"/>
-									<div className="content-wrapper d-flex flex-column align-items-center">
-										<div className="d-flex flex-column align-items-center animation-slideUp">
-											<h1 className='text-center'>Join the resistance and fight for the decentralised tomorrow</h1>
-											{
-												window.innerWidth <= 1080
-													? <>
-														<p className='text-center'>The year is 2074, underground cyber partisans form a resistance alliance called Node Runners.</p>
-														<p className='text-center'>Their main goal is to defeat the corporate autocracy that has taken over the world.</p>
-													</>
-													: <p className='text-center'>The year is 2074, underground cyber partisans form a resistance alliance called Node Runners. Their main goal is to defeat the corporate autocracy that has taken over the world.</p>
-											}
-											<p className='text-center'>Do you have what it takes to join them?</p>
-										</div>
-										<button className='hover-effect1 animation-bigEntrance'>GET CARDS</button>
-									</div>
-								</div>
+              <ReactFullpage.Wrapper>
+                <div className={`section-1 section 'd-flex' flex-column`}>
+                  <Header />
+                  <img
+                    src={`/static/images/logo/logo-color.png`}
+                    className="logo animation-fadeIn"
+                    alt="logo"
+                  />
+                  <div className="content-wrapper d-flex flex-column align-items-center">
+                    <div className="d-flex flex-column align-items-center animation-slideUp">
+                      <h1 className="text-center">
+                        Join the resistance and fight for the decentralised
+                        tomorrow
+                      </h1>
+                      {window.innerWidth <= 1080 ? (
+                        <>
+                          <p className="text-center">
+                            The year is 2074, underground cyber partisans form a
+                            resistance alliance called Node Runners.
+                          </p>
+                          <p className="text-center">
+                            Their main goal is to defeat the corporate autocracy
+                            that has taken over the world.
+                          </p>
+                        </>
+                      ) : (
+                        <p className="text-center">
+                          The year is 2074, underground cyber partisans form a
+                          resistance alliance called Node Runners. Their main
+                          goal is to defeat the corporate autocracy that has
+                          taken over the world.
+                        </p>
+                      )}
+                      <p className="text-center">
+                        Do you have what it takes to join them?
+                      </p>
+                    </div>
+                    <button
+                      className="hover-effect1 animation-bigEntrance"
+                      onClick={(e) => history.push("/get-heroes")}
+                    >
+                      GET CARDS
+                    </button>
+                  </div>
+                </div>
 
-								<div className={`section-2 section 'd-flex' flex-column`}>
-									<div className='text-wrapper'>
-										<h1>Get hero cards that will kick  villain’s ass</h1>
-										{
-											window.innerWidth > 1080
-												? <p>Don’t forget the genesis heroes that have brought the decentralised world. With their help you will be able to fight and defeat the corporate villains.</p>
-												: <>
-														<p>Don’t forget the genesis heroes that have brought the decentralised world.</p>
-														<p> With their help you will be able to fight and defeat the corporate villains.</p>
-													</>
-										}
-									</div>
-									<img
-										src={`/static/images/pages/landing-page/cards.png`}
-										alt="cards"
-										className="cards"
-									/>
-									<div className="button-wrapper">
-										<button className='hover-effect1'>GET CARDS</button>
-									</div>
-								</div>
+                <div className={`section-2 section 'd-flex' flex-column`}>
+                  <div className="text-wrapper">
+                    <h1>Get hero cards that will kick villain’s ass</h1>
+                    {window.innerWidth > 1080 ? (
+                      <p>
+                        Don’t forget the genesis heroes that have brought the
+                        decentralised world. With their help you will be able to
+                        fight and defeat the corporate villains.
+                      </p>
+                    ) : (
+                      <>
+                        <p>
+                          Don’t forget the genesis heroes that have brought the
+                          decentralised world.
+                        </p>
+                        <p>
+                          {" "}
+                          With their help you will be able to fight and defeat
+                          the corporate villains.
+                        </p>
+                      </>
+                    )}
+                  </div>
+                  <img
+                    src={`/static/images/pages/landing-page/cards.png`}
+                    alt="cards"
+                    className="cards"
+                  />
+                  <div className="button-wrapper">
+                    <button
+                      className="hover-effect1"
+                      onClick={(e) => history.push("/get-heroes")}
+                    >
+                      GET CARDS
+                    </button>
+                  </div>
+                </div>
 
-								<div className={`section-3 section 'd-flex' flex-column position-relative`}>
-									<div className='text-wrapper'>
-										<h1>Stake Heroes, Lock Villains, Earn NDR </h1>
-										{
-											window.innerWidth > 1080
-												? <p>Get rewarded for your hard work. Stake your Hero cards or Lock up defeated villains and get rewarded with NDR tokens. That's how justice is served.</p>
-												: <>
-														<p>Get rewarded for your hard work.</p>
-														<p>Stake your Hero cards or Lock up defeated villains and get rewarded with NDR tokens.</p>
-														<p>That's how justice is served.</p>
-													</>
-										}
-									</div>
-									<img
-										src={`/static/images/pages/landing-page/battle.png`}
-										alt="battle"
-										className="battle"
-									/>
-									<div className="button-wrapper">
-										<button className='hover-effect1'>GET CARDS</button>
-									</div>
-								</div>
+                <div
+                  className={`section-3 section 'd-flex' flex-column position-relative`}
+                >
+                  <div className="text-wrapper">
+                    <h1>Stake Heroes, Lock Villains, Earn NDR </h1>
+                    {window.innerWidth > 1080 ? (
+                      <p>
+                        Get rewarded for your hard work. Stake your Hero cards
+                        or Lock up defeated villains and get rewarded with NDR
+                        tokens. That's how justice is served.
+                      </p>
+                    ) : (
+                      <>
+                        <p>Get rewarded for your hard work.</p>
+                        <p>
+                          Stake your Hero cards or Lock up defeated villains and
+                          get rewarded with NDR tokens.
+                        </p>
+                        <p>That's how justice is served.</p>
+                      </>
+                    )}
+                  </div>
+                  <img
+                    src={`/static/images/pages/landing-page/battle.png`}
+                    alt="battle"
+                    className="battle"
+                  />
+                  <div className="button-wrapper">
+                    <button
+                      className="hover-effect1"
+                      onClick={(e) => history.push("/get-heroes")}
+                    >
+                      GET CARDS
+                    </button>
+                  </div>
+                </div>
 
-								<div className={`section-4 section position-relative`}>
-									<img
-										src={`/static/images/pages/landing-page/battle.png`}
-										alt="battle"
-										className="battle"
-									/>
-									<div className='icons-wrapper d-flex align-items-start w-100 justify-content-between'>
-										<div className='d-flex flex-column align-items-center'>
-											<img src={`/static/images/icons/inflationary.png`} alt='inflationary'/>
-											<h1>Non inflationary </h1>
-											<p className='text-center'>Every token transaction has a 2% fee which is used for NFT staking rewards.</p>
-										</div>
-										<div className='d-flex flex-column align-items-center'>
-											<img src={`/static/images/icons/autopilot.png`} className='fit-content' alt="autopilot"/>
-											<h1>Liquidity on autopilot</h1>
-											<p className='text-center'>When you obtain cards for Ether, it is used to buy NDR from the market and provide liquidity to the NOR/ETH pool.</p>
-										</div>
-									</div>
-									<button className='hover-effect1'>GET CARDS</button>
-								</div>
+                <div className={`section-4 section position-relative`}>
+                  <img
+                    src={`/static/images/pages/landing-page/battle.png`}
+                    alt="battle"
+                    className="battle"
+                  />
+                  <div className="icons-wrapper d-flex align-items-start w-100 justify-content-between">
+                    <div className="d-flex flex-column align-items-center">
+                      <img
+                        src={`/static/images/icons/inflationary.png`}
+                        alt="inflationary"
+                      />
+                      <h1>Non inflationary </h1>
+                      <p className="text-center">
+                        Every token transaction has a 2% fee which is used for
+                        NFT staking rewards.
+                      </p>
+                    </div>
+                    <div className="d-flex flex-column align-items-center">
+                      <img
+                        src={`/static/images/icons/autopilot.png`}
+                        className="fit-content"
+                        alt="autopilot"
+                      />
+                      <h1>Liquidity on autopilot</h1>
+                      <p className="text-center">
+                        When you obtain cards for Ether, it is used to buy NDR
+                        from the market and provide liquidity to the NOR/ETH
+                        pool.
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    className="hover-effect1"
+                    onClick={(e) => history.push("/get-heroes")}
+                  >
+                    GET CARDS
+                  </button>
+                </div>
 
-								<div className={`section-5 section`}>
-									<h1 className='text-center'>
-										Stay connected<br />
-										with the resistance
-									</h1>
-									<div className='logos-wrapper d-flex align-items-center justify-content-between w-100'>
-										<a href='https://t.me/noderunners_channel'>
-											<img src={`/static/images/icons/logo1.png`} alt="NodeRunners Telegram"/>
-										</a>
-										<a href='https://twitter.com/Node_Runners'>
-											<img src={`/static/images/icons/logo3.png`} alt=""/>
-										</a>
-										<a href='/'>
-											<img src={`/static/images/icons/logo2.png`} alt=""/>
-										</a>
-										<a href='https://noderunners.medium.com/'>
-											<img src={`/static/images/icons/logo4.png`} alt="NodeRunners Medium"/>
-										</a>
-									</div>
-									<p>Uniswap, Opensea, <a href='https://etherscan.io/token/0x739763a258640919981f9ba610ae65492455be53' target='_blank'>$NDR address</a></p>
-								</div>
-							</ReactFullpage.Wrapper>
-						)
+                <div className={`section-5 section`}>
+                  <h1 className="text-center">
+                    Stay connected
+                    <br />
+                    with the resistance
+                  </h1>
+                  <div className="logos-wrapper d-flex align-items-center justify-content-between w-100">
+                    <a href="https://t.me/noderunners_channel">
+                      <img
+                        src={`/static/images/icons/logo1.png`}
+                        alt="NodeRunners Telegram"
+                      />
+                    </a>
+                    <a href="https://twitter.com/Node_Runners">
+                      <img src={`/static/images/icons/logo3.png`} alt="" />
+                    </a>
+                    <a href="/">
+                      <img src={`/static/images/icons/logo2.png`} alt="" />
+                    </a>
+                    <a href="https://noderunners.medium.com/">
+                      <img
+                        src={`/static/images/icons/logo4.png`}
+                        alt="NodeRunners Medium"
+                      />
+                    </a>
+                  </div>
+                  <p>
+                    Uniswap, Opensea,{" "}
+                    <a
+                      href="https://etherscan.io/token/0x739763a258640919981f9ba610ae65492455be53"
+                      target="_blank"
+                    >
+                      $NDR address
+                    </a>
+                  </p>
+                </div>
+              </ReactFullpage.Wrapper>
+            );
 					}
 				}/>
 		</LandingPageWrapper>
 	)
 };
 
-export default LandingPage;
+export default withRouter(LandingPage);

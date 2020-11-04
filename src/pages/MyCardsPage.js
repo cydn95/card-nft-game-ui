@@ -180,48 +180,57 @@ const Influencers = [
 
 const MyCards = () => {
 	return (
-		<MyCardsWrapper>
-			<Tab.Container id="my-cards-page" defaultActiveKey="heroes">
-				<Nav variant="pills" className="justify-content-center animation-fadeIn">
-					<Nav.Item>
-						<Nav.Link eventKey="heroes">Heroes</Nav.Link>
-					</Nav.Item>
-					<Nav.Item>
-						<Nav.Link eventKey="items">Items</Nav.Link>
-					</Nav.Item>
-					<Nav.Item>
-						<Nav.Link eventKey="villains">Villains</Nav.Link>
-					</Nav.Item>
-				</Nav>
-				<Tab.Content>
-					<Tab.Pane eventKey="heroes">
-						<div className="section-title d-flex justify-content-center animation-fadeInRight">
-							<SectionTitle title={'Developers'} />
-						</div>
-						<div className="d-flex justify-content-center">
-							{
-								Developers.map(d => <Card marked={d.marked} card={d.card} score={d.score} unObtained={d.unObtained} />)
-							}
-						</div>
-						<div className="section-title d-flex justify-content-center animation-fadeInRight">
-							<SectionTitle title={'Influencers'} />
-						</div>
-						<div className="d-flex justify-content-center">
-							{
-								Influencers.map(d => <Card marked={d.marked} card={d.card} score={d.score} unObtained={d.unObtained} />)
-							}
-						</div>
-					</Tab.Pane>
-					<Tab.Pane eventKey="items">
-
-					</Tab.Pane>
-					<Tab.Pane eventKey="villains">
-
-					</Tab.Pane>
-				</Tab.Content>
-			</Tab.Container>
-		</MyCardsWrapper>
-	);
+    <MyCardsWrapper>
+      <Tab.Container id="my-cards-page" defaultActiveKey="heroes">
+        <Nav
+          variant="pills"
+          className="justify-content-center animation-fadeIn"
+        >
+          <Nav.Item>
+            <Nav.Link eventKey="heroes">Heroes</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link eventKey="items">Items</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link eventKey="villains">Villains</Nav.Link>
+          </Nav.Item>
+        </Nav>
+        <Tab.Content>
+          <Tab.Pane eventKey="heroes">
+            <div className="section-title d-flex justify-content-center animation-fadeInRight">
+              <SectionTitle title={"Developers"} />
+            </div>
+            <div className="d-flex justify-content-center">
+              {Developers.map((d) => (
+                <Card
+                  marked={d.marked}
+                  card={d.card}
+                  score={d.score}
+                  unObtained={d.unObtained}
+                />
+              ))}
+            </div>
+            <div className="section-title d-flex justify-content-center animation-fadeInRight">
+              <SectionTitle title={"Influencers"} />
+            </div>
+            <div className="d-flex flex-wrap justify-content-center">
+              {Influencers.map((d) => (
+                <Card
+                  marked={d.marked}
+                  card={d.card}
+                  score={d.score}
+                  unObtained={d.unObtained}
+                />
+              ))}
+            </div>
+          </Tab.Pane>
+          <Tab.Pane eventKey="items"></Tab.Pane>
+          <Tab.Pane eventKey="villains"></Tab.Pane>
+        </Tab.Content>
+      </Tab.Container>
+    </MyCardsWrapper>
+  );
 };
 
 export default MyCards;
