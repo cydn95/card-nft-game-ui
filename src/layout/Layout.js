@@ -14,7 +14,7 @@ const LayoutWrapper = styled.div`
   }
   
   .nav-pills {
-    margin: -40px 0 19px;
+    margin: -30px 0 19px;
 
     .nav-item {
       .nav-link {

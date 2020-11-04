@@ -93,6 +93,7 @@ const Header = () => {
 const HeaderWrapper = styled.div`
   .menu-nav {
     margin-left: -18px;
+    margin-bottom: 15px;
 
     .menu-item {
       height: ${(props) => props.theme.heightRatio * 63}px;
