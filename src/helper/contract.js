@@ -22,17 +22,17 @@ import PROD_UNISWAPV2PAIR_ABI from "./json/UniswapV2Pair_abi_prod.json";
 import DEV_NDR_ABI from "./json/NDR_abi_dev.json";
 import PROD_NDR_ABI from "./json/NDR_abi_prod.json";
 
-// LpStaking
+// LpStaking (lp pool)
 export const DEV_LPSTAKING_ADDRESS = "0xb7709fe03262bad4ef1976ce3ffd927d9861d9c2";
 export const PROD_LPSTAKING_ADDRESS = "0x7ECE965a34fA67c9647B4030fF3BDf1160c6163C";
 export { DEV_LPSTAKING_ABI, PROD_LPSTAKING_ABI };
 
-// UniswapV2Pair
+// UniswapV2Pair (lp token)
 export const DEV_UNISWAPV2PAIR_ADDRESS = "0x14c8177245407380d93c501b3e5bec4f228bcc69";
 export const PROD_UNISWAPV2PAIR_ADDRESS = "0x65d0A154D2425CE2Fd5fED3BdaE94D9a9aFE55CE";
 export { DEV_UNISWAPV2PAIR_ABI, PROD_UNISWAPV2PAIR_ABI };
 
-// NDR
+// NDR (ndr token)
 export const DEV_NDR_ADDRESS = "0x29326F9050Be6DF0eC285d55476dF4906c82DA1e";
 export const PROD_NDR_ADDRESS = "0x739763a258640919981F9bA610AE65492455bE53";
 export { DEV_NDR_ABI, PROD_NDR_ABI };

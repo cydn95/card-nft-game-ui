@@ -1,30 +1,47 @@
 import React, { useState } from "react";
 
 import styled from "styled-components";
-import { DoubleArrow, Close } from "@material-ui/icons";
+import { ArrowBack, Done, DoubleArrow } from "@material-ui/icons";
 
 import { STAKE_MIN_LIMIT, STAKE_MAX_LIMIT } from "../../helper/constant";
 
-const Deposit = ({ uniBalance, onClose, onDeposit }) => {
-  const [amount, setAmount] = useState('');
+const Deposit = ({
+  loading,
+  balance,
+  staked,
+  onClose,
+  onApprove,
+  onDeposit,
+}) => {
+  const [amount, setAmount] = useState("0.0000");
 
   const handleChangeAmount = (e) => {
     setAmount(e.target.value);
-  }
+  };
+
+  const setMax = () => {
+    if (balance > STAKE_MAX_LIMIT) {
+      setAmount(STAKE_MAX_LIMIT);
+    } else {
+      setAmount(balance);
+    }
+  };
 
   return (
     <DepositWrapper>
       <div className="deposit-wrapper d-flex justify-content-center animation-slideDown">
-        <div className="action" role="button" onClick={onClose}>
-          <Close />
-          <span>CANCEL</span>
+        <div className="action button" role="button" onClick={onClose}>
+          <ArrowBack />
+          <span>Back</span>
         </div>
         <div className="credit">
           <div>
-            <label>Your UNI-LP Balance</label>
+            <label>UNI-LP Staked:</label>
+            <span>{staked}</span>
           </div>
           <div>
-            <span>{(uniBalance / Math.pow(10, 18)).toFixed(4)}</span>
+            <label>UNI-LP Balance:</label>
+            <span>{balance}</span>
           </div>
         </div>
         <div className="input">
@@ -38,11 +55,7 @@ const Deposit = ({ uniBalance, onClose, onDeposit }) => {
               <br />
               <small>2.25</small>
             </span>
-            <span
-              role="button"
-              onClick={(e) => setAmount(STAKE_MAX_LIMIT)}
-              className="max"
-            >
+            <span role="button" onClick={(e) => setMax()} className="max">
               MAX
               <br />
               <small>22.5</small>
@@ -50,10 +63,24 @@ const Deposit = ({ uniBalance, onClose, onDeposit }) => {
           </div>
           <input type="text" value={amount} onChange={handleChangeAmount} />
         </div>
-        <div className="action" onClick={(e) => onDeposit(amount)}>
-          <DoubleArrow />
-          <span>DEPOSIT</span>
-        </div>
+        {loading && (
+          <div className="action button">
+            <img src="/static/images/icons/loading.gif" height="35" alt="" />
+            <span>LOADING...</span>
+          </div>
+        )}
+        {!loading && (
+          <div className="action button" onClick={(e) => onApprove()}>
+            <Done />
+            <span>APPROVE</span>
+          </div>
+        )}
+        {!loading && (
+          <div className="action button" onClick={(e) => onDeposit(amount)}>
+            <DoubleArrow />
+            <span>STAKE</span>
+          </div>
+        )}
       </div>
     </DepositWrapper>
   );
@@ -78,7 +105,7 @@ const DepositWrapper = styled.div`
       &.action {
         background-image: url("/static/images/bg/pages/get-heroes/credit-button-bg.png");
         background-size: 100% 100%;
-        width: 180px;
+        width: 200px;
         height: 100px;
         margin-right: -13px;
         padding: 0 17px 22px 0;
@@ -88,25 +115,16 @@ const DepositWrapper = styled.div`
         justify-content: center;
         cursor: pointer;
 
-        &:first-child {
-          background: url("/static/images/bg/pages/get-heroes/credit-first-button-bg.png");
-          background-size: 100% 100%;
-          width: 140px;
-          height: 100px;
-        }
-
-        &:last-child {
-          background: url("/static/images/bg/pages/get-heroes/credit-last-button-bg.png");
-          background-size: 100% 100%;
-          width: 140px;
-          height: 100px;
-        }
-
         &:hover {
           background-image: url("/static/images/bg/pages/get-heroes/credit-button-bg--active.png");
+          color: #fec100;
         }
 
-        &:nth-child(4) {
+        &.button {
+          width: 150px;
+        }
+
+        &:nth-child(5) {
           .MuiSvgIcon-root {
             transform: rotate(90deg);
           }
@@ -114,10 +132,10 @@ const DepositWrapper = styled.div`
       }
 
       &.input {
-        background-image: url("/static/images/bg/pages/get-heroes/credit-button-bg--active.png");
+        background-image: url("/static/images/bg/pages/get-heroes/credit-button-bg-long--active.png");
         background-size: 100% 100%;
-        width: 180px;
-        height: 100px;
+        width: 300px;
+        height: 98px;
         margin-right: -13px;
         padding: 0 17px 22px 0;
         display: flex;
@@ -131,6 +149,7 @@ const DepositWrapper = styled.div`
           text-shadow: none;
           font-size: 14px;
           color: #fec100;
+          text-shadow: 5px 5px 3px #27787580;
         }
 
         .buttons {
@@ -140,6 +159,10 @@ const DepositWrapper = styled.div`
           padding-left: 5px;
           padding-right: 10px;
           box-sizing: border-box;
+
+          span {
+            font-size: 16px;
+          }
         }
 
         input {
@@ -153,6 +176,7 @@ const DepositWrapper = styled.div`
           height: 32px;
           font-size: 2rem;
           line-height: 2rem;
+          text-shadow: 5px 5px 3px #27787580;
         }
       }
 
@@ -160,9 +184,10 @@ const DepositWrapper = styled.div`
         background: url("/static/images/bg/pages/get-heroes/credit-bg.png");
         background-size: 100% 100%;
         margin-right: -13px;
-        padding: 6px 22px 26px 10px;
+        padding: 15px 22px 26px 10px;
         min-width: 405px;
         text-shadow: 10px 10px 10px #80f1ed91;
+        box-sizing: border-box;
 
         > div:first-child {
           margin-bottom: 4px;
@@ -170,7 +195,7 @@ const DepositWrapper = styled.div`
 
         label {
           color: #80f1ed;
-          font-size: 30px;
+          font-size: 20px;
           font-family: Orbitron-Medium;
           line-height: 1;
           margin: 0;
@@ -178,7 +203,7 @@ const DepositWrapper = styled.div`
 
         span {
           color: #fec100;
-          font-size: 30px;
+          font-size: 20px;
           font-family: Orbitron-Black;
           line-height: 1;
           padding-left: 9px;

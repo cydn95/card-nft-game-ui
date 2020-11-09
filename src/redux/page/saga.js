@@ -164,10 +164,7 @@ const approveAsync = async (instance, web3, amount, address, spender) => {
   };
 
   return await instance.methods
-    .approve(
-      spender,
-      new BigNumber(amount).times(new BigNumber(10).pow(18)).toString()
-    )
+    .approve(spender, new BigNumber(amount).toString())
     .send({
       from: address,
       gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
@@ -250,6 +247,45 @@ export function* buyHeroCardEth() {
   });
 }
 
+// Get LPToken Allowance
+export function* getLPTokenAllowance() {
+  yield takeLatest(actions.GET_ALLOWANCE_LP_TOKEN, function* ({ payload }) {
+    let abi;
+    let instance;
+    const web3 = yield call(getWeb3);
+
+    let lpStakingPoolAddress;
+
+    if (REACT_APP_BUILD_MODE === "development") {
+      abi = DEV_UNISWAPV2PAIR_ABI;
+      instance = new web3.eth.Contract(abi, DEV_UNISWAPV2PAIR_ADDRESS);
+
+      lpStakingPoolAddress = DEV_LPSTAKING_ADDRESS;
+    } else if (REACT_APP_BUILD_MODE === "production") {
+      abi = PROD_UNISWAPV2PAIR_ABI;
+      instance = new web3.eth.Contract(abi, PROD_UNISWAPV2PAIR_ADDRESS);
+
+      lpStakingPoolAddress = PROD_LPSTAKING_ADDRESS;
+    }
+
+    // Get Wallet Account
+    const accounts = yield call(web3.eth.getAccounts);
+
+    const allowance = yield call(
+      getAllowanceAsync,
+      instance,
+      accounts[0],
+      lpStakingPoolAddress
+    );
+
+    yield put({
+      type: actions.GET_ALLOWANCE_LP_TOKEN_SUCCESS,
+      allowance: allowance,
+    });
+  });
+}
+
+// NDR balanec
 export function* getNDRBalance() {
   yield takeLatest(actions.GET_NDR_BALANCE, function* ({ payload }) {
     let abi;
@@ -276,6 +312,7 @@ export function* getNDRBalance() {
   });
 }
 
+// LPToken Balance
 export function* getUNIBalance() {
   yield takeLatest(actions.GET_UNI_BALANCE, function* ({ payload }) {
     let abi;
@@ -302,6 +339,7 @@ export function* getUNIBalance() {
   });
 }
 
+// Get Staked Amound
 export function* getLPBalance() {
   yield takeLatest(actions.GET_LP_BALANCE, function* ({ payload }) {
     let abi;
@@ -328,6 +366,7 @@ export function* getLPBalance() {
   });
 }
 
+// Get Earning
 export function* getLPEarning() {
   yield takeLatest(actions.GET_LP_EARNING, function* ({ payload }) {
     let abi;
@@ -351,6 +390,57 @@ export function* getLPEarning() {
       type: actions.GET_LP_EARNING_SUCCESS,
       lpEarning: lpEarning,
     });
+  });
+}
+
+export function* approveLP() {
+  yield takeLatest(actions.APPROVE_LP, function* ({ payload }) {
+    const { callback } = payload;
+    let abi;
+    let instance;
+    const web3 = yield call(getWeb3);
+
+    let lpPoolAddress;
+
+    if (REACT_APP_BUILD_MODE === "development") {
+      abi = DEV_UNISWAPV2PAIR_ABI;
+      instance = new web3.eth.Contract(abi, DEV_UNISWAPV2PAIR_ADDRESS);
+
+      lpPoolAddress = DEV_LPSTAKING_ADDRESS;
+    } else if (REACT_APP_BUILD_MODE === "production") {
+      abi = PROD_UNISWAPV2PAIR_ABI;
+      instance = new web3.eth.Contract(abi, PROD_UNISWAPV2PAIR_ADDRESS);
+
+      lpPoolAddress = PROD_LPSTAKING_ADDRESS;
+    }
+
+    // Get Wallet Account
+    const accounts = yield call(web3.eth.getAccounts);
+
+    // Check balance
+    const lpBalance = yield call(getBalanceAsync, instance, accounts[0]);
+
+    if (lpBalance <= 0) {
+      callback(STAKE_RESPONSE.INSUFFICIENT);
+      return;
+    }
+
+    // Approve
+    const approveResult = yield call(
+      approveAsync,
+      instance,
+      web3,
+      lpBalance,
+      accounts[0],
+      lpPoolAddress
+    );
+
+    console.log("approve result", approveResult);
+    if (approveResult.status) {
+      callback(STAKE_RESPONSE.SUCCESS);
+    } else {
+      callback(STAKE_RESPONSE.ERROR);
+    }
   });
 }
 
@@ -405,46 +495,24 @@ export function* depositLP() {
       lpStakingAddress
     );
 
-    let depositResult;
+    if (uniAllowance < parseFloat(amount) * Math.pow(10, 18)) {
+      callback(STAKE_RESPONSE.SHOULD_APPROVE);
+      return;
+    }
 
-    if (uniAllowance >= parseFloat(amount) * Math.pow(10, 18)) {
-      // Stake
-      depositResult = yield call(
-        depositAsync,
-        lpStakingInstance,
-        web3,
-        amount,
-        accounts[0]
-      );
+    const depositResult = yield call(
+      depositAsync,
+      lpStakingInstance,
+      web3,
+      amount,
+      accounts[0]
+    );
+
+    console.log("deposit Result", depositResult);
+    if (depositResult.status) {
+      callback(STAKE_RESPONSE.SUCCESS);
     } else {
-      // Approve
-      const approveResult = yield call(
-        approveAsync,
-        instance,
-        web3,
-        amount,
-        accounts[0],
-        lpStakingAddress
-      );
-
-      if (approveResult.status) {
-        depositResult = yield call(
-          depositAsync,
-          lpStakingInstance,
-          web3,
-          amount,
-          accounts[0]
-        );
-      } else {
-        callback(STAKE_RESPONSE.ERROR);
-      }
-
-      console.log("deposit Result", depositResult);
-      if (depositResult.status) {
-        callback(STAKE_RESPONSE.SUCCESS);
-      } else {
-        callback(STAKE_RESPONSE.ERROR);
-      }
+      callback(STAKE_RESPONSE.ERROR);
     }
   });
 }
@@ -456,49 +524,27 @@ export function* withdrawLP() {
     let instance;
     const web3 = yield call(getWeb3);
 
-    let lpStakingAddress;
-    let lpStakingAbi;
-    let lpStakingInstance;
-
     if (REACT_APP_BUILD_MODE === "development") {
-      abi = DEV_UNISWAPV2PAIR_ABI;
-      instance = new web3.eth.Contract(abi, DEV_UNISWAPV2PAIR_ADDRESS);
-
-      lpStakingAbi = DEV_LPSTAKING_ABI;
-      lpStakingAddress = DEV_LPSTAKING_ADDRESS;
-      lpStakingInstance = new web3.eth.Contract(
-        lpStakingAbi,
-        DEV_LPSTAKING_ADDRESS
-      );
+      abi = DEV_LPSTAKING_ABI;
+      instance = new web3.eth.Contract(abi, DEV_LPSTAKING_ADDRESS);
     } else if (REACT_APP_BUILD_MODE === "production") {
-      abi = PROD_UNISWAPV2PAIR_ABI;
-      instance = new web3.eth.Contract(abi, PROD_UNISWAPV2PAIR_ADDRESS);
-
-      lpStakingAbi = PROD_LPSTAKING_ABI;
-      lpStakingAddress = PROD_LPSTAKING_ADDRESS;
-      lpStakingInstance = new web3.eth.Contract(
-        lpStakingAbi,
-        PROD_LPSTAKING_ADDRESS
-      );
+      abi = PROD_LPSTAKING_ABI;
+      instance = new web3.eth.Contract(abi, PROD_LPSTAKING_ADDRESS);
     }
 
     // Get Wallet Account
     const accounts = yield call(web3.eth.getAccounts);
 
     // Check staked amount
-    const lpBalance = yield call(
-      getBalanceAsync,
-      lpStakingInstance,
-      accounts[0]
-    );
+    const lpBalance = yield call(getBalanceAsync, instance, accounts[0]);
     if (lpBalance < parseFloat(amount) * Math.pow(10, 18)) {
-      callback(STAKE_RESPONSE.INSUFFICIENT);
+      callback(STAKE_RESPONSE.SHOULD_STAKE);
       return;
     }
 
     const withdrawResult = yield call(
       withdrawAsync,
-      lpStakingInstance,
+      instance,
       web3,
       amount,
       accounts[0]
@@ -516,10 +562,12 @@ export default function* rootSaga() {
   yield all([
     fork(buyHeroCardEth),
     fork(getNDRBalance),
+    fork(approveLP),
     fork(depositLP),
     fork(withdrawLP),
     fork(getLPBalance),
     fork(getLPEarning),
     fork(getUNIBalance),
+    fork(getLPTokenAllowance),
   ]);
 }

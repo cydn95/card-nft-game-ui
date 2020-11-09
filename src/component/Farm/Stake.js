@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import { ShoppingCart, Reply } from "@material-ui/icons";
 
-const Stake = ({ hashes, staked, onOpenDeposit, onOpenWithdraw }) => {
+const Stake = ({ balance, hashes, staked, onOpenDeposit, onOpenWithdraw }) => {
   const handleOpenDeposit = (e) => {
     e.preventDefault();
     onOpenDeposit();
@@ -19,11 +19,15 @@ const Stake = ({ hashes, staked, onOpenDeposit, onOpenWithdraw }) => {
         <div className="credit">
           <div>
             <label>Hashes:</label>
-            <span>{hashes ? parseFloat(hashes / Math.pow(10, 18)).toFixed(4) : "0.0000"}</span>
+            <span>{hashes}</span>
           </div>
           <div>
-            <label>Staked:</label>
-            <span>{staked ? parseFloat(staked / Math.pow(10, 18)).toFixed(4) : "0.0000"}</span>
+            <label>NDR/ETH UNI-LP Staked:</label>
+            <span>{staked}</span>
+          </div>
+          <div>
+            <label>NDR/ETH UNI-LP Balance:</label>
+            <span>{balance}</span>
           </div>
         </div>
         <a
@@ -68,7 +72,7 @@ const StakeWrapper = styled.div`
         background-image: url("/static/images/bg/pages/get-heroes/credit-button-bg.png");
         background-size: 100% 100%;
         width: 180px;
-        height: 100px;
+        height: 110px;
         margin-right: -13px;
         padding: 0 17px 22px 0;
         display: flex;
@@ -77,12 +81,11 @@ const StakeWrapper = styled.div`
         justify-content: center;
         cursor: pointer;
 
-        &:last-child {
-          background: url("/static/images/bg/pages/get-heroes/credit-last-button-bg.png");
-          background-size: 100% 100%;
-          width: 140px;
-          height: 100px;
-        }
+        // &:last-child {
+        //   background: url("/static/images/bg/pages/get-heroes/credit-last-button-bg.png");
+        //   background-size: 100% 100%;
+        //   width: 140px;
+        // }
 
         &:hover {
           background-image: url("/static/images/bg/pages/get-heroes/credit-button-bg--active.png");
@@ -100,7 +103,7 @@ const StakeWrapper = styled.div`
         background-size: 100% 100%;
         margin-right: -13px;
         padding: 6px 22px 26px 10px;
-        min-width: 405px;
+        min-width: 500px;
         text-shadow: 10px 10px 10px #80f1ed91;
 
         > div:first-child {
@@ -109,7 +112,7 @@ const StakeWrapper = styled.div`
 
         label {
           color: #80f1ed;
-          font-size: 30px;
+          font-size: 20px;
           font-family: Orbitron-Medium;
           line-height: 1;
           margin: 0;
@@ -117,7 +120,7 @@ const StakeWrapper = styled.div`
 
         span {
           color: #fec100;
-          font-size: 30px;
+          font-size: 20px;
           font-family: Orbitron-Black;
           line-height: 1;
           padding-left: 9px;

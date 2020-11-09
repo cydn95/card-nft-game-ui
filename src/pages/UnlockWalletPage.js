@@ -1,21 +1,11 @@
 import React, { useEffect } from "react";
 import { withRouter } from "react-router";
-// import { useSelector, useDispatch } from "react-redux";
 import { useWallet } from "use-wallet";
-
-import pageActions from "../redux/page/actions";
 
 import styled from "styled-components";
 
 const UnlockWallet = ({ history }) => {
-  // const dispatch = useDispatch();
   const { account, connect } = useWallet();
-
-  // const ndrBalance = useSelector((state) => state.Page.ndrBalance);
-
-  // useEffect(() => {
-  //   dispatch(pageActions.getNDRBalance());
-  // }, [dispatch]);
 
   useEffect(() => {
     if (account) {
@@ -52,30 +42,10 @@ const UnlockWallet = ({ history }) => {
           </div>
         </UnlockWalletWrapper>
       )}
-      {/* {account && (
-        <BalanceWrapper>
-          <div
-            role="button"
-            className="d-flex flex-column align-items-center justify-content-center"
-          >
-            <h1>NDR BALANCE</h1>
-            <h2>{(ndrBalance / Math.pow(10, 18)).toFixed(4)}</h2>
-          </div>
-        </BalanceWrapper>
-      )} */}
     </>
   );
 };
 
-const BalanceWrapper = styled.div`
-  margin-top: 180px;
-  color: #fff;
-  font-weight: 700;
-
-  h2 {
-    font-size: 4rem;
-  }
-`;
 const UnlockWalletWrapper = styled.div`
   width: 100vw;
   height: 100vh;

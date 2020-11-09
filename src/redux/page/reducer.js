@@ -1,9 +1,10 @@
 import actions from "./actions";
 const initState = {
   ndrBalance: 0,
-  uniBalance: 0,
-  lpBalance: 0,
-  lpEarning: 0,
+  uniBalance: 0,  // lptoken amount
+  lpBalance: 0,   // staked amount
+  lpEarning: 0,   // earning
+  allowance: 0 
 };
 
 export default function pageReducer(state = initState, action) {
@@ -27,6 +28,11 @@ export default function pageReducer(state = initState, action) {
       return {
         ...state,
         uniBalance: action.uniBalance,
+      };
+    case actions.GET_ALLOWANCE_LP_TOKEN_SUCCESS:
+      return {
+        ...state,
+        allowance: action.allowance,
       };
     default:
       return state;

@@ -1,29 +1,37 @@
 import React, { useState } from "react";
 
 import styled from "styled-components";
-import { DoubleArrow, Close } from "@material-ui/icons";
+import { DoubleArrow, ArrowBack } from "@material-ui/icons";
 import { STAKE_MIN_LIMIT, STAKE_MAX_LIMIT } from "../../helper/constant";
 
-const Withdraw = ({ lpBalance, onClose, onWithdraw }) => {
-  const [amount, setAmount] = useState("");
+const Withdraw = ({ loading, staked, onClose, onWithdraw }) => {
+  const [amount, setAmount] = useState("0.0000");
 
   const handleChangeAmount = (e) => {
     setAmount(e.target.value);
   };
 
+  const setMax = () => {
+    if (staked > STAKE_MAX_LIMIT) {
+      setAmount(STAKE_MAX_LIMIT);
+    } else {
+      setAmount(staked);
+    }
+  };
+
   return (
     <WithdrawWrapper>
       <div className="withdraw-wrapper d-flex justify-content-center animation-slideDown">
-        <div className="action" role="button" onClick={onClose}>
-          <Close />
-          <span>CANCEL</span>
+        <div className="action button" role="button" onClick={onClose}>
+          <ArrowBack />
+          <span>Back</span>
         </div>
         <div className="credit">
           <div>
-            <label>Your Staked Balance</label>
+            <label>UNI-LP Staked:</label>
           </div>
           <div>
-            <span>{(lpBalance / Math.pow(10, 18)).toFixed(4)}</span>
+            <span>{staked}</span>
           </div>
         </div>
         <div className="input">
@@ -37,11 +45,7 @@ const Withdraw = ({ lpBalance, onClose, onWithdraw }) => {
               <br />
               <small>2.25</small>
             </span>
-            <span
-              role="button"
-              onClick={(e) => setAmount(STAKE_MAX_LIMIT)}
-              className="max"
-            >
+            <span role="button" onClick={(e) => setMax()} className="max">
               MAX
               <br />
               <small>22.5</small>
@@ -49,10 +53,18 @@ const Withdraw = ({ lpBalance, onClose, onWithdraw }) => {
           </div>
           <input type="text" value={amount} onChange={handleChangeAmount} />
         </div>
-        <div className="action" onClick={(e) => onWithdraw(amount)}>
-          <DoubleArrow />
-          <span>WITHDRAW</span>
-        </div>
+        {loading && (
+          <div className="action button">
+            <img src="/static/images/icons/loading.gif" height="35" alt="" />
+            <span>LOADING...</span>
+          </div>
+        )}
+        {!loading && (
+          <div className="action button" onClick={(e) => onWithdraw(amount)}>
+            <DoubleArrow />
+            <span>WITHDRAW</span>
+          </div>
+        )}
       </div>
     </WithdrawWrapper>
   );
@@ -87,36 +99,27 @@ const WithdrawWrapper = styled.div`
         justify-content: center;
         cursor: pointer;
 
-        &:first-child {
-          background: url("/static/images/bg/pages/get-heroes/credit-first-button-bg.png");
-          background-size: 100% 100%;
-          width: 140px;
-          height: 100px;
-        }
-
-        &:last-child {
-          background: url("/static/images/bg/pages/get-heroes/credit-last-button-bg.png");
-          background-size: 100% 100%;
-          width: 180px;
-          height: 100px;
-        }
-
         &:hover {
           background-image: url("/static/images/bg/pages/get-heroes/credit-button-bg--active.png");
+          color: #fec100;
+        }
+
+        &.button {
+          width: 160px;
         }
 
         &:nth-child(4) {
           .MuiSvgIcon-root {
-            transform: rotate(90deg);
+            transform: rotate(-90deg);
           }
         }
       }
 
       &.input {
-        background-image: url("/static/images/bg/pages/get-heroes/credit-button-bg--active.png");
+        background-image: url("/static/images/bg/pages/get-heroes/credit-button-bg-long--active.png");
         background-size: 100% 100%;
-        width: 180px;
-        height: 100px;
+        width: 300px;
+        height: 98px;
         margin-right: -13px;
         padding: 0 17px 22px 0;
         display: flex;
