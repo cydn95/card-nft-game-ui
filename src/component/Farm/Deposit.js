@@ -173,10 +173,11 @@ const DepositWrapper = styled.div`
           outline: none;
           color: #fec100;
           font-weight: 600;
-          height: 32px;
-          font-size: 2rem;
-          line-height: 2rem;
+          height: 40px;
+          font-size: 30px;
+          line-height: 30px;
           text-shadow: 5px 5px 3px #27787580;
+          font-family: Orbitron-Black;
         }
       }
 
