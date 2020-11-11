@@ -26,3 +26,15 @@ export const STAKE_RESPONSE = {
   SHOULD_APPROVE: 400,
   SHOULD_STAKE: 500,
 };
+
+export const CARD_HASH_PRICE_UNIT = 100;
+
+export const CARD_SERIES = {
+  PEOPLE: "People",
+  SUPPORT: "Support",
+};
+
+export const CARD_TYPE = {
+  HERO: [CARD_SERIES.PEOPLE],
+  SUPPORT: [CARD_SERIES.SUPPORT],
+};

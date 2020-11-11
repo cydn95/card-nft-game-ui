@@ -14,7 +14,7 @@ import {
   STAKE_MAX_LIMIT,
   STAKE_RESPONSE,
 } from "../helper/constant";
-import { convertFromWei } from "../helper/utils"
+import { convertFromWei } from "../helper/utils";
 
 import UnlockWalletPage from "./UnlockWalletPage";
 import Stake from "../component/Farm/Stake";
@@ -22,6 +22,7 @@ import Deposit from "../component/Farm/Deposit";
 import Withdraw from "../component/Farm/Withdraw";
 
 import pageActions from "../redux/page/actions";
+import cardsActions from "../redux/cards/actions";
 
 const DLG_STAKE = 0;
 const DLG_DEPOSIT = 1;
@@ -38,16 +39,20 @@ const GetHeroes = () => {
   const balance = useSelector((state) => state.Page.uniBalance);
   const stakedAmount = useSelector((state) => state.Page.lpBalance);
   const earningAmount = useSelector((state) => state.Page.lpEarning);
-  const allowance = useSelector((state) => state.Page.allowance);
+
+  const cards = useSelector((state) => state.Cards.cards);
 
   const init = useCallback(() => {
     dispatch(pageActions.getUNIBalance());
     dispatch(pageActions.getLPBalance());
     dispatch(pageActions.getLPEarning());
-    dispatch(pageActions.getLPTokenAllowance());
   }, [dispatch]);
 
   init();
+
+  useEffect(() => {
+    dispatch(cardsActions.getCards());
+  }, [dispatch]);
 
   const handleBuyCardEth = (cardId, hash) => {};
 
@@ -148,7 +153,39 @@ const GetHeroes = () => {
   if (!account) {
     return <UnlockWalletPage />;
   }
-    
+
+  const StakingBoard = () => (
+    <>
+      {openStatus === DLG_STAKE && (
+        <Stake
+          hashes={convertFromWei(earningAmount)}
+          staked={convertFromWei(stakedAmount)}
+          balance={convertFromWei(balance)}
+          onOpenDeposit={handleOpenDeposit}
+          onOpenWithdraw={handleOpenWithdraw}
+        />
+      )}
+      {openStatus === DLG_DEPOSIT && (
+        <Deposit
+          loading={loading}
+          balance={convertFromWei(balance)}
+          staked={convertFromWei(stakedAmount)}
+          onClose={handleOpenStake}
+          onApprove={handleApprove}
+          onDeposit={handleDeposit}
+        />
+      )}
+      {openStatus === DLG_WITHDRAW && (
+        <Withdraw
+          loading={loading}
+          staked={convertFromWei(stakedAmount)}
+          onClose={handleOpenStake}
+          onWithdraw={handleWithdraw}
+        />
+      )}
+    </>
+  );
+
   return (
     <>
       <Tab.Container id="left-tabs-example" defaultActiveKey="heroes">
@@ -165,50 +202,47 @@ const GetHeroes = () => {
         </Nav>
         <Tab.Content>
           <Tab.Pane eventKey="heroes">
-            {openStatus === DLG_STAKE && (
-              <Stake
-                hashes={convertFromWei(earningAmount)}
-                staked={convertFromWei(stakedAmount)}
-                balance={convertFromWei(balance)}
-                onOpenDeposit={handleOpenDeposit}
-                onOpenWithdraw={handleOpenWithdraw}
-              />
-            )}
-            {openStatus === DLG_DEPOSIT && (
-              <Deposit
-                loading={loading}
-                balance={convertFromWei(balance)}
-                staked={convertFromWei(stakedAmount)}
-                onClose={handleOpenStake}
-                onApprove={handleApprove}
-                onDeposit={handleDeposit}
-              />
-            )}
-            {openStatus === DLG_WITHDRAW && (
-              <Withdraw
-                loading={loading}
-                staked={convertFromWei(stakedAmount)}
-                onClose={handleOpenStake}
-                onWithdraw={handleWithdraw}
-              />
-            )}
+            <StakingBoard />
             <div className="section-title d-flex justify-content-center animation-fadeInRight">
               <SectionTitle title={"Heroes"} />
             </div>
-            <div className="d-flex flex-wrap justify-content-center">
-              {Heroes.map((c) => (
-                <Card
-                  key={`card_${c.id}`}
-                  card={c.card}
-                  cardId={c.id}
-                  cardGrid={c.cardGrid}
-                  onBuyCardEth={handleBuyCardEth}
-                  onBuyCardHash={handleBuyCardHash}
-                />
-              ))}
+            <div className="d-flex flex-wrap justify-content-center pb-3">
+              {cards
+                .filter((c) => c.series === "People")
+                .map((c) => (
+                  <Card
+                    key={`card_${c.id}`}
+                    card={c}
+                    onBuyCardEth={handleBuyCardEth}
+                    onBuyCardHash={handleBuyCardHash}
+                    isHero={true}
+                    payed={true}
+                    eth={0.5}
+                  />
+                ))}
             </div>
           </Tab.Pane>
-          <Tab.Pane eventKey="items"></Tab.Pane>
+          <Tab.Pane eventKey="items">
+            <StakingBoard />
+            <div className="section-title d-flex justify-content-center animation-fadeInRight">
+              <SectionTitle title={"Support"} />
+            </div>
+            <div className="d-flex flex-wrap justify-content-center pb-3">
+              {cards
+                .filter((c) => c.series === "Support")
+                .map((c) => (
+                  <Card
+                    key={`card_${c.id}`}
+                    card={c}
+                    onBuyCardEth={handleBuyCardEth}
+                    onBuyCardHash={handleBuyCardHash}
+                    isHero={true}
+                    payed={true}
+                    eth={0.5}
+                  />
+                ))}
+            </div>
+          </Tab.Pane>
         </Tab.Content>
       </Tab.Container>
     </>

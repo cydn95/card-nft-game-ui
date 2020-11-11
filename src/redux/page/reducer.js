@@ -4,7 +4,7 @@ const initState = {
   uniBalance: 0,  // lptoken amount
   lpBalance: 0,   // staked amount
   lpEarning: 0,   // earning
-  allowance: 0 
+  allowance: 0,
 };
 
 export default function pageReducer(state = initState, action) {

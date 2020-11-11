@@ -45,7 +45,7 @@ const actions = {
 
   approveLP: (callback) => ({
     type: actions.APPROVE_LP,
-    payload: { callback }
+    payload: { callback },
   }),
   depositLP: (amount, callback) => ({
     type: actions.DEPOSIT_LP,
