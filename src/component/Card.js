@@ -179,7 +179,7 @@ const Card = ({
                   </div>
                 </div>
               </div>
-              <div className="grid-button-wrapper">
+              {/* <div className="grid-button-wrapper">
                 {payed? (
                   isHero ? (
                     <>
@@ -206,7 +206,7 @@ const Card = ({
                     Buy on Opensea
                   </button>
                 )}
-              </div>
+              </div> */}
             </div>
           ) : empty ? (
             ""
