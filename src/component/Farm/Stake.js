@@ -3,7 +3,14 @@ import React from "react";
 import styled from "styled-components";
 import { ShoppingCart, Reply } from "@material-ui/icons";
 
-const Stake = ({ balance, hashes, staked, onOpenDeposit, onOpenWithdraw }) => {
+const Stake = ({
+  balance,
+  hashes,
+  staked,
+  onOpenDeposit,
+  onOpenWithdraw,
+  onOpenOldWithdraw,
+}) => {
   const handleOpenDeposit = (e) => {
     e.preventDefault();
     onOpenDeposit();
@@ -13,6 +20,12 @@ const Stake = ({ balance, hashes, staked, onOpenDeposit, onOpenWithdraw }) => {
     e.preventDefault();
     onOpenWithdraw();
   };
+
+  const handleOpenOldWithdraw = (e) => {
+    e.preventDefault();
+    onOpenOldWithdraw();
+  };
+
   return (
     <StakeWrapper>
       <div className="stake-wrapper d-flex justify-content-center animation-slideDown">
@@ -46,6 +59,10 @@ const Stake = ({ balance, hashes, staked, onOpenDeposit, onOpenWithdraw }) => {
         <a className="action" href="/" onClick={(e) => handleOpenWithdraw(e)}>
           <Reply />
           <span>UNSTAKE</span>
+        </a>
+        <a className="action" href="/" onClick={(e) => handleOpenOldWithdraw(e)}>
+          <span>Exit Old</span>
+          <span>Pool</span>
         </a>
       </div>
     </StakeWrapper>

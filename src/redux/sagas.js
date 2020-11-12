@@ -1,8 +1,8 @@
 import { all } from "redux-saga/effects";
 
-import pageSagas from "./page/saga";
+import lpstakingSagas from "./lpstaking/saga";
 import cardsSagas from "./cards/saga";
 
 export default function* rootSaga(getState) {
-  yield all([pageSagas(), cardsSagas()]);
+  yield all([lpstakingSagas(), cardsSagas()]);
 }

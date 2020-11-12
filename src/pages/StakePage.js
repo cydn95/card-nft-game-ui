@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Tab, Nav } from "react-bootstrap";
 
 import SectionTitle from "../component/SectionTitle";
-import Card from "../component/Card";
+import Card2 from "../component/Card_2";
 
 const StakeWrapper = styled.div`
 	.stake-stats {
@@ -117,7 +117,7 @@ const Stake = () => {
 						</div>
 						<div className="d-flex justify-content-center">
 							{
-								Cards.map((c) => <Card card={c.card} unStaked={c.unStaked}/>)
+								Cards.map((c) => <Card2 card={c.card} unStaked={c.unStaked}/>)
 							}
 						</div>
 					</Tab.Pane>

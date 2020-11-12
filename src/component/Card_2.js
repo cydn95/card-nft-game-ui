@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const Card = ({
+const Card2 = ({
   cardId,
   card,
   unObtained,
@@ -405,4 +405,4 @@ const CardWrapper = styled.div`
   }
 `;
 
-export default Card;
+export default Card2;

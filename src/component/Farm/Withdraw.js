@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { DoubleArrow, ArrowBack } from "@material-ui/icons";
 import { STAKE_MIN_LIMIT, STAKE_MAX_LIMIT } from "../../helper/constant";
 
-const Withdraw = ({ loading, staked, onClose, onWithdraw }) => {
+const Withdraw = ({ loading, old, staked, onClose, onWithdraw }) => {
   const [amount, setAmount] = useState("0.0000");
 
   const handleChangeAmount = (e) => {
@@ -28,7 +28,7 @@ const Withdraw = ({ loading, staked, onClose, onWithdraw }) => {
         </div>
         <div className="credit">
           <div>
-            <label>UNI-LP Staked:</label>
+            <label>{old ? "OLD" : ""} UNI-LP Staked:</label>
           </div>
           <div>
             <span>{staked}</span>

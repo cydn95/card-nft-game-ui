@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation } from "react-router";
 import { useWallet } from "use-wallet";
 import styled from "styled-components";
-import pageActions from "../redux/page/actions";
+import lpstakingActions from "../redux/lpstaking/actions";
 import { NavLink } from "react-router-dom";
 
 const Header = () => {
@@ -30,12 +30,12 @@ const Header = () => {
   };
 
   const dispatch = useDispatch();
-  const { account, connect } = useWallet();
+  const { account } = useWallet();
 
-  const ndrBalance = useSelector((state) => state.Page.ndrBalance);
+  const ndrBalance = useSelector((state) => state.LpStaking.ndrBalance);
 
   useEffect(() => {
-    dispatch(pageActions.getNDRBalance());
+    dispatch(lpstakingActions.getNDRBalance());
   }, [dispatch, account]);
 
   return (

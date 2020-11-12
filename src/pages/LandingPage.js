@@ -607,19 +607,35 @@ const LandingPage = ({history}) => {
                     with the resistance
                   </h1>
                   <div className="logos-wrapper d-flex align-items-center justify-content-between w-100">
-                    <a href="https://t.me/noderunners_channel">
+                    <a
+                      href="https://t.me/noderunners_channel"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <img
                         src={`/static/images/icons/logo1.png`}
                         alt="NodeRunners Telegram"
                       />
                     </a>
-                    <a href="https://twitter.com/Node_Runners">
+                    <a
+                      href="https://twitter.com/Node_Runners"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <img src={`/static/images/icons/logo3.png`} alt="" />
                     </a>
-                    <a href="/">
+                    <a
+                      href="https://discord.com/invite/KXRHQKMtmN"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <img src={`/static/images/icons/logo2.png`} alt="" />
                     </a>
-                    <a href="https://noderunners.medium.com/">
+                    <a
+                      href="https://noderunners.medium.com/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <img
                         src={`/static/images/icons/logo4.png`}
                         alt="NodeRunners Medium"
@@ -627,10 +643,18 @@ const LandingPage = ({history}) => {
                     </a>
                   </div>
                   <p>
-                    Uniswap, Opensea,{" "}
+                    <a
+                      href="https://info.uniswap.org/pair/0x65d0a154d2425ce2fd5fed3bdae94d9a9afe55ce"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Uniswap
+                    </a>
+                    , Opensea,{" "}
                     <a
                       href="https://etherscan.io/token/0x739763a258640919981f9ba610ae65492455be53"
                       target="_blank"
+                      rel="noopener noreferrer"
                     >
                       $NDR address
                     </a>

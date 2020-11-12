@@ -1,6 +1,5 @@
-import React, { useEffect, Suspense } from "react";
-import { withRouter } from "react-router";
-import { Redirect, Switch, Route } from "react-router-dom";
+import React, { Suspense } from "react";
+import { Switch, Route } from "react-router-dom";
 
 import Loader from "../component/Loader";
 import Layout from "../layout/Layout";

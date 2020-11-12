@@ -1,9 +1,9 @@
-import Page from "./page/reducer";
+import LpStaking from "./lpstaking/reducer";
 import Cards from "./cards/reducer";
 import Theme from "./theme/reducer";
 
 export default {
-  Page,
+  LpStaking,
   Cards,
   Theme,
 };
