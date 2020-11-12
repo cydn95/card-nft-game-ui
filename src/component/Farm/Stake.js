@@ -56,11 +56,20 @@ const Stake = ({
           <Reply />
           <span>STAKE</span>
         </a>
-        <a className="action" href="/" onClick={(e) => handleOpenWithdraw(e)}>
+        <a
+          className="action"
+          href="/"
+          onClick={(e) => handleOpenWithdraw(e)}
+          title="There is a 2% LP withdrawal fee."
+        >
           <Reply />
           <span>UNSTAKE</span>
         </a>
-        <a className="action" href="/" onClick={(e) => handleOpenOldWithdraw(e)}>
+        <a
+          className="action"
+          href="/"
+          onClick={(e) => handleOpenOldWithdraw(e)}
+        >
           <span>Exit Old</span>
           <span>Pool</span>
         </a>
