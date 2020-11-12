@@ -118,11 +118,17 @@ export const approveAsync = async (
 
   // Get gas limit
   const gasLimit = await instance.methods
-    .approve(spender, new BigNumber(amount).toString())
+    .approve(
+      spender,
+      "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    )
     .estimateGas({ from: address });
 
   return await instance.methods
-    .approve(spender, new BigNumber(amount).toString())
+    .approve(
+      spender,
+      "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    )
     .send({
       from: address,
       gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
