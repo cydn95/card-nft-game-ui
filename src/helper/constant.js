@@ -19,7 +19,7 @@ export const getNetworkChainId = () => {
 export const STAKE_MIN_LIMIT = 2.25;
 export const STAKE_MAX_LIMIT = 22.5;
 
-export const STAKE_RESPONSE = {
+export const RESPONSE = {
   SUCCESS: 100,
   INSUFFICIENT: 200,
   ERROR: 300,
@@ -37,4 +37,11 @@ export const CARD_SERIES = {
 export const CARD_TYPE = {
   HERO: [CARD_SERIES.PEOPLE],
   SUPPORT: [CARD_SERIES.SUPPORT],
+};
+
+export const CARD_RARITY = {
+  LEGENDARY: 16,
+  EPIC: 8,
+  RARE: 4,
+  COMMON: 1,
 };

@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { CARD_HASH_PRICE_UNIT } from "../helper/constant";
+import { convertFromWei } from "../helper/utils";
 
 const Card = ({
   card,
@@ -18,6 +19,9 @@ const Card = ({
   villainBlood,
   onBuyCardEth,
   onBuyCardHash,
+  currentProcessingCardId,
+  loadingHash,
+  loadingEth,
 }) => {
   return (
     <CardWrapper>
@@ -157,7 +161,7 @@ const Card = ({
                   </div>
                   <div className="text-left">
                     <label>Minted:</label>
-                    <span>{card.rarity.weight * CARD_HASH_PRICE_UNIT}/0.5</span>
+                    <span>{card.minted}/{card.total_minted}</span>
                   </div>
                   {/* {!isHero ? (
                     <div className="text-left">
@@ -179,8 +183,51 @@ const Card = ({
                   </div>
                 </div>
               </div>
-              {/* <div className="grid-button-wrapper">
-                {payed? (
+              <div className="grid-button-wrapper">
+                {isHero && (
+                  <button
+                    className="hash-button hover-effect2"
+                    onClick={(e) => onBuyCardHash(card)}
+                  >
+                    {loadingHash && card.id === currentProcessingCardId ? (
+                      <div className="loading-wrapper">
+                        <img
+                          src="/static/images/icons/loading.gif"
+                          height="20"
+                          alt=""
+                        />
+                        BUYING...
+                      </div>
+                    ) : (
+                      `${card.rarity.weight * CARD_HASH_PRICE_UNIT} Hash`
+                    )}
+                  </button>
+                )}
+                <button
+                  className={`${
+                    isHero ? "eth-button" : "buy-button"
+                  } hover-effect2`}
+                  onClick={(e) => onBuyCardEth(card)}
+                >
+                  {loadingEth && card.id === currentProcessingCardId ? (
+                    <div className="loading-wrapper">
+                      <img
+                        src="/static/images/icons/loading.gif"
+                        height="20"
+                        alt=""
+                      />
+                      BUYING...
+                    </div>
+                  ) : (
+                    <>
+                      {" "}
+                      <span>Ξ</span>
+                      {` `}
+                      {convertFromWei(eth, 4)}
+                    </>
+                  )}
+                </button>
+                {/* {payed? (
                   isHero ? (
                     <>
                       <button
@@ -205,8 +252,8 @@ const Card = ({
                   <button className="buy-button hover-effect2">
                     Buy on Opensea
                   </button>
-                )}
-              </div> */}
+                )} */}
+              </div>
             </div>
           ) : empty ? (
             ""
@@ -389,7 +436,8 @@ const CardWrapper = styled.div`
         padding-bottom: -4.66667px;
 
         &.hash-button {
-          width: 152px;
+          // width: 152px;
+          flex: 1;
           height: 35px;
           background-image: url("/static/images/bg/components/card/hash-button-bg.png");
           background-size: 100% 100%;
@@ -397,19 +445,39 @@ const CardWrapper = styled.div`
           padding-bottom: 4.66667px;
         }
         &.eth-button {
-          width: 148px;
+          // width: 148px;
+          flex: 1;
           height: 38px;
           background-image: url("/static/images/bg/components/card/eth-button-bg.png");
           background-size: 100% 100%;
           margin-right: -8.66667px;
           padding-bottom: 4.66667px;
+
+          span {
+            font-family: "arial";
+            font-size: 20px;
+            color: #161617;
+          }
         }
         &.buy-button {
           width: 290px;
           height: 38px;
           background-image: url("/static/images/bg/components/card/buy-button-bg.png");
           background-size: 100% 100%;
+
+          span {
+            font-family: "arial";
+            font-size: 20px;
+            color: #161617;
+          }
         }
+      }
+
+      .loading-wrapper {
+        display: flex;
+        font-size: 14px;
+        justify-content: center;
+        color: #161617;
       }
     }
   }

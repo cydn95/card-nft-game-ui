@@ -14,11 +14,12 @@ const Header = () => {
 
   const checkIsActive = (location, url) => {
     const current = getCurrentUrl(location);
+
     if (!current || !url) {
       return false;
     }
 
-    if (current === url) {
+    if (current === url || (current === "/" && url === "home")) {
       return true;
     }
 
@@ -41,12 +42,32 @@ const Header = () => {
   return (
     <HeaderWrapper className="header-menu d-flex justify-content-center animation-stretchRight">
       <ul className="menu-nav d-flex list-unstyled">
-        {/* <li className={`menu-item ${ getMenuItemActive('my-cards') } hover-effect2`}>
-					<NavLink className='menu-link' to="my-cards">
-						<span className="menu-text">My Cards</span>
-					</NavLink>
-				</li>
-				<li className={`menu-item ${ getMenuItemActive('stake') } hover-effect2`}>
+        <li className={`menu-item ${getMenuItemActive("home")} hover-effect2`}>
+          <NavLink className="menu-link" to="home">
+            <span className="menu-text">Home</span>
+          </NavLink>
+        </li>
+        <li
+          className={`menu-item ${getMenuItemActive("my-cards")} hover-effect2`}
+        >
+          <a
+            className="menu-link"
+            href="https://opensea.io/account?search=%7B%22query%22%3A%22noderunners%22%2C%22resultModel%22%3A%22ASSETS%22%2C%22sortBy%22%3A%22LAST_TRANSFER_DATE%22%7D"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span className="menu-text">My Cards</span>
+          </a>
+          {/* <a
+            className="menu-link"
+            href="https://rinkeby.opensea.io/accounts/0x1Ca43437430d1845F5Ff43bf73d36568d00740C7?search=%7B%22query%22%3A%22noderunners%22%2C%22sortBy%22%3A%22LISTING_DATE%22%7D "
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span className="menu-text">My Cards</span>
+          </a> */}
+        </li>
+        {/* <li className={`menu-item ${ getMenuItemActive('stake') } hover-effect2`}>
 					<NavLink className='menu-link' to="/stake">
 						<span className="menu-text">Stake</span>
 					</NavLink>
@@ -133,6 +154,24 @@ const HeaderWrapper = styled.div`
       }
 
       &:nth-of-type(2) {
+        background-image: url("/static/images/bg/components/header/menu-item-2-bg.png");
+        width: ${(props) => props.theme.widthRatio * 339}px;
+
+        &.active {
+          background-image: url("/static/images/bg/components/header/menu-item-2-bg--active.png");
+        }
+      }
+
+      &:nth-of-type(3) {
+        background-image: url("/static/images/bg/components/header/menu-item-3-bg.png");
+        width: ${(props) => props.theme.widthRatio * 339}px;
+
+        &.active {
+          background-image: url("/static/images/bg/components/header/menu-item-3-bg--active.png");
+        }
+      }
+
+      &:nth-of-type(4) {
         background-image: url("/static/images/bg/components/header/menu-item-5-bg.png");
         width: ${(props) => props.theme.widthRatio * 339}px;
 

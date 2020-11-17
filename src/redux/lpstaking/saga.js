@@ -20,7 +20,7 @@ import {
   DEV_UNISWAPV2PAIR_ABI,
   PROD_UNISWAPV2PAIR_ABI,
 } from "../../helper/contract";
-import { STAKE_RESPONSE } from "../../helper/constant";
+import { RESPONSE } from "../../helper/constant";
 
 import { getWeb3 } from "../../services/web3";
 import {
@@ -234,7 +234,7 @@ export function* approveLP() {
     const lpBalance = yield call(getBalanceAsync, instance, accounts[0]);
 
     if (lpBalance <= 0) {
-      callback(STAKE_RESPONSE.INSUFFICIENT);
+      callback(RESPONSE.INSUFFICIENT);
       return;
     }
 
@@ -250,9 +250,9 @@ export function* approveLP() {
 
     console.log("approve result", approveResult);
     if (approveResult.status) {
-      callback(STAKE_RESPONSE.SUCCESS);
+      callback(RESPONSE.SUCCESS);
     } else {
-      callback(STAKE_RESPONSE.ERROR);
+      callback(RESPONSE.ERROR);
     }
   });
 }
@@ -296,7 +296,7 @@ export function* depositLP() {
     // Check balance
     const lpTokenBalance = yield call(getBalanceAsync, instance, accounts[0]);
     if (lpTokenBalance < parseFloat(amount) * Math.pow(10, 18)) {
-      callback(STAKE_RESPONSE.INSUFFICIENT);
+      callback(RESPONSE.INSUFFICIENT);
       return;
     }
 
@@ -309,7 +309,7 @@ export function* depositLP() {
     );
 
     if (uniAllowance < parseFloat(amount) * Math.pow(10, 18)) {
-      callback(STAKE_RESPONSE.SHOULD_APPROVE);
+      callback(RESPONSE.SHOULD_APPROVE);
       return;
     }
 
@@ -323,9 +323,9 @@ export function* depositLP() {
 
     console.log("deposit Result", depositResult);
     if (depositResult.status) {
-      callback(STAKE_RESPONSE.SUCCESS);
+      callback(RESPONSE.SUCCESS);
     } else {
-      callback(STAKE_RESPONSE.ERROR);
+      callback(RESPONSE.ERROR);
     }
   });
 }
@@ -351,7 +351,7 @@ export function* withdrawLP() {
     // Check staked amount
     const lpBalance = yield call(getBalanceAsync, instance, accounts[0]);
     if (lpBalance < parseFloat(amount) * Math.pow(10, 18)) {
-      callback(STAKE_RESPONSE.SHOULD_STAKE);
+      callback(RESPONSE.SHOULD_STAKE);
       return;
     }
 
@@ -364,9 +364,9 @@ export function* withdrawLP() {
     );
 
     if (withdrawResult.status) {
-      callback(STAKE_RESPONSE.SUCCESS);
+      callback(RESPONSE.SUCCESS);
     } else {
-      callback(STAKE_RESPONSE.ERROR);
+      callback(RESPONSE.ERROR);
     }
   });
 }
@@ -392,7 +392,7 @@ export function* withdrawOldLP() {
     // Check staked amount
     const lpBalance = yield call(getBalanceAsync, instance, accounts[0]);
     if (lpBalance < parseFloat(amount) * Math.pow(10, 18)) {
-      callback(STAKE_RESPONSE.SHOULD_STAKE);
+      callback(RESPONSE.SHOULD_STAKE);
       return;
     }
 
@@ -405,9 +405,9 @@ export function* withdrawOldLP() {
     );
 
     if (withdrawResult.status) {
-      callback(STAKE_RESPONSE.SUCCESS);
+      callback(RESPONSE.SUCCESS);
     } else {
-      callback(STAKE_RESPONSE.ERROR);
+      callback(RESPONSE.ERROR);
     }
   });
 }

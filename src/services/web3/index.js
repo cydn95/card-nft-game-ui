@@ -1,4 +1,5 @@
 import Web3 from "web3";
+import axios from "axios";
 
 /**
  * Load Web3.js
@@ -34,3 +35,16 @@ export const getWeb3 = () =>
       resolve(web3);
     }
   });
+
+export const getGasPrice = async () => {
+  const response = await axios.get(
+    "https://ethgasstation.info/json/ethgasAPI.json"
+  );
+  let prices = {
+    low: response.data.safeLow / 10,
+    medium: response.data.average / 10,
+    high: response.data.fast / 10,
+    fastest: Math.round(response.data.fastest / 10),
+  };
+  return prices;
+};

@@ -13,6 +13,18 @@ export const getEarningAsync = async (instance, address) => {
     });
 };
 
+export const getRewardAsync = async (instance, address) => {
+  return await instance.methods
+    .rewards(address)
+    .call()
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
 export const getBalanceAsync = async (instance, address) => {
   return await instance.methods
     .balanceOf(address)

@@ -1,5 +1,4 @@
 import { all, takeLatest, call, put, fork } from "redux-saga/effects";
-import axios from "axios";
 
 import actions from "./actions";
 
@@ -8,10 +7,26 @@ import {
   PROD_LPSTAKING_ADDRESS,
   DEV_LPSTAKING_ABI,
   PROD_LPSTAKING_ABI,
+  DEV_NFT_ADDRESS,
+  PROD_NFT_ADDRESS,
+  DEV_NFT_ABI,
+  PROD_NFT_ABI,
 } from "../../helper/contract";
 
-import { getWeb3 } from "../../services/web3";
+import { getWeb3, getGasPrice } from "../../services/web3";
+import {
+  getHeroPriceAsync,
+  getSupportPriceAsync,
+  getCirculatingSupply,
+} from "../../services/web3/cards";
+import { getEarningAsync } from "../../services/web3/lpStaking";
 
+import {
+  CARD_RARITY,
+  CARD_HASH_PRICE_UNIT,
+  CARD_TYPE,
+  RESPONSE,
+} from "../../helper/constant";
 import { getCardsAPI } from "../../services/axios/api";
 
 const { REACT_APP_BUILD_MODE } = process.env;
@@ -26,17 +41,134 @@ export function* getCards() {
     const res = yield call(getCardsAsync);
 
     if (res.status === 200) {
+      const cards = [];
+      res.data.cards.forEach((element) => {
+        cards.push({ ...element, minted: 0 });
+      });
       yield put({
-        type: actions.GET_CARDS_SUCCESS,
-        cards: res.data.cards,
+        type: actions.GET_MINTED_COUNT,
+        payload: { cards },
       });
     }
   });
 }
 
+export function* getCardsPrice() {
+  yield takeLatest(actions.GET_CARDS_PRICE, function* () {
+    let abi;
+    let instance;
+    const web3 = yield call(getWeb3);
+
+    if (REACT_APP_BUILD_MODE === "development") {
+      abi = DEV_LPSTAKING_ABI;
+      instance = new web3.eth.Contract(abi, DEV_LPSTAKING_ADDRESS);
+    } else if (REACT_APP_BUILD_MODE === "production") {
+      abi = PROD_LPSTAKING_ABI;
+      instance = new web3.eth.Contract(abi, PROD_LPSTAKING_ADDRESS);
+    }
+
+    const cardPrice = {
+      [CARD_RARITY.COMMON]: {
+        hero: 0,
+        support: 0,
+      },
+      [CARD_RARITY.RARE]: {
+        hero: 0,
+        support: 0,
+      },
+      [CARD_RARITY.EPIC]: {
+        hero: 0,
+        support: 0,
+      },
+      [CARD_RARITY.LEGENDARY]: {
+        hero: 0,
+        support: 0,
+      },
+    };
+
+    cardPrice[CARD_RARITY.COMMON].hero = yield call(
+      getHeroPriceAsync,
+      instance,
+      CARD_RARITY.COMMON
+    );
+    cardPrice[CARD_RARITY.COMMON].support = yield call(
+      getSupportPriceAsync,
+      instance,
+      CARD_RARITY.COMMON
+    );
+
+    cardPrice[CARD_RARITY.RARE].hero = yield call(
+      getHeroPriceAsync,
+      instance,
+      CARD_RARITY.RARE
+    );
+    cardPrice[CARD_RARITY.RARE].support = yield call(
+      getSupportPriceAsync,
+      instance,
+      CARD_RARITY.RARE
+    );
+
+    cardPrice[CARD_RARITY.EPIC].hero = yield call(
+      getHeroPriceAsync,
+      instance,
+      CARD_RARITY.EPIC
+    );
+    cardPrice[CARD_RARITY.EPIC].support = yield call(
+      getSupportPriceAsync,
+      instance,
+      CARD_RARITY.EPIC
+    );
+
+    cardPrice[CARD_RARITY.LEGENDARY].hero = yield call(
+      getHeroPriceAsync,
+      instance,
+      CARD_RARITY.LEGENDARY
+    );
+    cardPrice[CARD_RARITY.LEGENDARY].support = yield call(
+      getSupportPriceAsync,
+      instance,
+      CARD_RARITY.LEGENDARY
+    );
+
+    yield put({
+      type: actions.GET_CARDS_PRICE_SUCCESS,
+      cardPrice: cardPrice,
+    });
+  });
+}
+
+export function* getMintedCount() {
+  yield takeLatest(actions.GET_MINTED_COUNT, function* ({ payload }) {
+    const { cards } = payload;
+
+    let abi;
+    let instance;
+    const web3 = yield call(getWeb3);
+
+    if (REACT_APP_BUILD_MODE === "development") {
+      abi = DEV_NFT_ABI;
+      instance = new web3.eth.Contract(abi, DEV_NFT_ADDRESS);
+    } else if (REACT_APP_BUILD_MODE === "production") {
+      abi = PROD_NFT_ABI;
+      instance = new web3.eth.Contract(abi, PROD_NFT_ADDRESS);
+    }
+
+    const newCards = [...cards];
+    cards.forEach(async (c, index) => {
+      const mintedCount = await getCirculatingSupply(instance, c.id);
+      newCards[index].minted = mintedCount;
+    });
+
+    yield put({
+      type: actions.GET_CARDS_SUCCESS,
+      cards: newCards,
+    });
+  });
+}
+
 export function* buyHeroCardEth() {
   yield takeLatest(actions.BUY_HERO_CARD_ETH, function* ({ payload }) {
-    const { cardId, cardPrice, callback } = payload;
+    const { card, callback } = payload;
 
     let abi;
     let instance;
@@ -52,54 +184,136 @@ export function* buyHeroCardEth() {
 
     // Get Wallet Account
     const accounts = yield call(web3.eth.getAccounts);
-    console.log("address", accounts[0]);
+    const ethBalance = yield call(web3.eth.getBalance, accounts[0]);
 
-    console.log(instance);
+    let cardPriceEth;
+    if (CARD_TYPE.HERO.includes(card.series)) {
+      cardPriceEth = yield call(
+        getHeroPriceAsync,
+        instance,
+        card.rarity.weight
+      );
+    } else if (CARD_TYPE.SUPPORT.includes(card.series)) {
+      cardPriceEth = yield call(
+        getSupportPriceAsync,
+        instance,
+        card.rarity.weight
+      );
+    } else {
+      callback(RESPONSE.error);
+      return;
+    }
+
+    if (Number(ethBalance) < Number(cardPriceEth)) {
+      callback(RESPONSE.INSUFFICIENT);
+      return;
+    }
 
     const buyCardAsync = async (cardId, cardPrice, address) => {
-      console.log(cardId, cardPrice, address);
-      const response = await axios.get(
-        "https://ethgasstation.info/json/ethgasAPI.json"
-      );
-      let prices = {
-        low: response.data.safeLow / 10,
-        medium: response.data.average / 10,
-        high: response.data.fast / 10,
-        fastest: Math.round(response.data.fastest / 10),
-      };
+      const prices = await getGasPrice();
+
+      const gasLimit = await instance.methods.buy(cardId).estimateGas({
+        from: address,
+        value: cardPrice.toString(),
+      });
 
       return await instance.methods
         .buy(cardId)
         .send({
           from: address,
-          value: web3.utils.toWei(cardPrice.toString(), "ether"),
+          value: cardPrice.toString(),
           gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
-          gas: 160000,
+          gas: gasLimit * 2,
         })
         .then((data) => {
-          console.log("Buy Card Success Response", data);
           return data;
         })
         .catch((error) => {
-          console.log("Buy Card Error Response", error);
           return error;
         });
     };
 
     const buyCardResponse = yield call(
       buyCardAsync,
-      cardId,
-      cardPrice,
+      card.id,
+      cardPriceEth,
       accounts[0]
     );
 
-    console.log("buyCardResponse", buyCardResponse);
-
-    if (callback) {
-      callback(buyCardResponse.status);
+    if (buyCardResponse.status) {
+      callback(RESPONSE.SUCCESS);
+    } else {
+      callback(RESPONSE.ERROR);
     }
   });
 }
+
+export function* buyHeroCardHash() {
+  yield takeLatest(actions.BUY_HERO_CARD_HASH, function* ({ payload }) {
+    const { card, callback } = payload;
+
+    let abi;
+    let instance;
+    const web3 = yield call(getWeb3);
+
+    if (REACT_APP_BUILD_MODE === "development") {
+      abi = DEV_LPSTAKING_ABI;
+      instance = new web3.eth.Contract(abi, DEV_LPSTAKING_ADDRESS);
+    } else if (REACT_APP_BUILD_MODE === "production") {
+      abi = PROD_LPSTAKING_ABI;
+      instance = new web3.eth.Contract(abi, PROD_LPSTAKING_ADDRESS);
+    }
+
+    // Get Wallet Account
+    const accounts = yield call(web3.eth.getAccounts);
+
+    const earning = yield call(getEarningAsync, instance, accounts[0]);
+    const cardHashPrice =
+      card.rarity.weight * CARD_HASH_PRICE_UNIT * Math.pow(10, 18);
+
+    if (Number(earning) < Number(cardHashPrice)) {
+      callback(RESPONSE.INSUFFICIENT);
+      return;
+    }
+
+    const buyCardAsync = async (cardId, address) => {
+      const gasLimit = await instance.methods
+        .redeem(cardId)
+        .estimateGas({ from: address });
+
+      const prices = await getGasPrice();
+
+      return await instance.methods
+        .redeem(cardId)
+        .send({
+          from: address,
+          gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
+          gas: gasLimit * 2,
+        })
+        .then((data) => {
+          return data;
+        })
+        .catch((error) => {
+          return error;
+        });
+    };
+
+    const buyCardResponse = yield call(buyCardAsync, card.id, accounts[0]);
+
+    if (buyCardResponse.status) {
+      callback(RESPONSE.SUCCESS);
+    } else {
+      callback(RESPONSE.error);
+    }
+  });
+}
+
 export default function* rootSaga() {
-  yield all([fork(buyHeroCardEth), fork(getCards)]);
+  yield all([
+    fork(buyHeroCardEth),
+    fork(buyHeroCardHash),
+    fork(getCards),
+    fork(getCardsPrice),
+    fork(getMintedCount),
+  ]);
 }

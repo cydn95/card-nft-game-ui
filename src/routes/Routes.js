@@ -12,6 +12,7 @@ const Routes = () => {
     <Suspense fallback={Loader}>
       <Switch>
         <Route path="/" exact component={LandingPage} />
+        <Route path="/home" exact component={LandingPage} />
         {menuRoutes.map(({ path, component: Component, layout }, index) => (
           <Route
             key={index}

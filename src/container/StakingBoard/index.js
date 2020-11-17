@@ -10,7 +10,7 @@ import Withdraw from "../../component/Farm/Withdraw";
 import {
   STAKE_MIN_LIMIT,
   STAKE_MAX_LIMIT,
-  STAKE_RESPONSE,
+  RESPONSE,
 } from "../../helper/constant";
 import { convertFromWei } from "../../helper/utils";
 
@@ -31,13 +31,13 @@ const StakingBoard = () => {
 
   const balance = useSelector((state) => state.LpStaking.lpTokenBalance);
   const stakedAmount = useSelector((state) => state.LpStaking.stakedAmount);
-  const oldStakedAmount = useSelector((state) => state.LpStaking.oldStakedAmount);
+  // const oldStakedAmount = useSelector((state) => state.LpStaking.oldStakedAmount);
   const earningAmount = useSelector((state) => state.LpStaking.earningAmount);
 
   const init = useCallback(() => {
     dispatch(lpstakingActions.getLPTokenBalance());
     dispatch(lpstakingActions.getStakedAmount());
-    dispatch(lpstakingActions.getOldStakedAmount());
+    // dispatch(lpstakingActions.getOldStakedAmount());
     dispatch(lpstakingActions.getEarningAmount());
   }, [dispatch]);
 
@@ -61,18 +61,20 @@ const StakingBoard = () => {
   };
 
   const callbackDeposit = (status) => {
-    console.log("callback deposit");
     setLoading(false);
-    if (status === STAKE_RESPONSE.INSUFFICIENT) {
+    if (status === RESPONSE.INSUFFICIENT) {
       toast.error("Insufficient balance...");
-    } else if (status === STAKE_RESPONSE.SHOULD_APPROVE) {
+    } else if (status === RESPONSE.SHOULD_APPROVE) {
       toast.error("You should approve first");
-    } else if (status === STAKE_RESPONSE.SHOULD_STAKE) {
+    } else if (status === RESPONSE.SHOULD_STAKE) {
       toast.error("Staked amount is not enough");
-    } else if (status === STAKE_RESPONSE.SUCCESS) {
+    } else if (status === RESPONSE.SUCCESS) {
       toast.success("Success");
       setOpenStatus(DLG_STAKE);
-      init();
+      dispatch(lpstakingActions.getLPTokenBalance());
+      dispatch(lpstakingActions.getStakedAmount());
+      // dispatch(lpstakingActions.getOldStakedAmount());
+      dispatch(lpstakingActions.getEarningAmount());
     } else {
       toast.error("Unexpected error...");
     }
@@ -83,9 +85,9 @@ const StakingBoard = () => {
     dispatch(
       lpstakingActions.approveLP((status) => {
         setLoading(false);
-        if (status === STAKE_RESPONSE.SUCCESS) {
+        if (status === RESPONSE.SUCCESS) {
           toast.success("Approved successfully");
-        } else if (status === STAKE_RESPONSE.INSUFFICIENT) {
+        } else if (status === RESPONSE.INSUFFICIENT) {
           toast.error("Failed. No balance...");
         } else {
           toast.error("Failed...");
@@ -113,12 +115,12 @@ const StakingBoard = () => {
     }
   };
 
-  const handleOldWithdraw = (amount) => {
-    if (checkAmount(amount)) {
-      setLoading(true);
-      dispatch(lpstakingActions.withdrawOldLP(amount, callbackDeposit));
-    }
-  };
+  // const handleOldWithdraw = (amount) => {
+  //   if (checkAmount(amount)) {
+  //     setLoading(true);
+  //     dispatch(lpstakingActions.withdrawOldLP(amount, callbackDeposit));
+  //   }
+  // };
 
   // ***********************************************************
   const handleOpenStake = () => {
@@ -173,7 +175,7 @@ const StakingBoard = () => {
           onWithdraw={handleWithdraw}
         />
       )}
-      {openStatus === DLG_OLD_WITHDRAW && (
+      {/* {openStatus === DLG_OLD_WITHDRAW && (
         <Withdraw
           old
           loading={loading}
@@ -181,7 +183,7 @@ const StakingBoard = () => {
           onClose={handleOpenStake}
           onWithdraw={handleOldWithdraw}
         />
-      )}
+      )} */}
     </>
   );
 };

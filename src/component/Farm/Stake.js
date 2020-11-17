@@ -1,7 +1,7 @@
 import React from "react";
 
 import styled from "styled-components";
-import { ShoppingCart, Reply } from "@material-ui/icons";
+import { Reply } from "@material-ui/icons";
 
 const Stake = ({
   balance,
@@ -21,10 +21,10 @@ const Stake = ({
     onOpenWithdraw();
   };
 
-  const handleOpenOldWithdraw = (e) => {
-    e.preventDefault();
-    onOpenOldWithdraw();
-  };
+  // const handleOpenOldWithdraw = (e) => {
+  //   e.preventDefault();
+  //   onOpenOldWithdraw();
+  // };
 
   return (
     <StakeWrapper>
@@ -45,11 +45,18 @@ const Stake = ({
         </div>
         <a
           className="action"
+          href="https://info.uniswap.org/pair/0x65d0a154d2425ce2fd5fed3bdae94d9a9afe55ce"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span>GET NDR</span>
+        </a>
+        <a
+          className="action"
           href="https://app.uniswap.org/#/add/0x739763a258640919981f9ba610ae65492455be53/ETH"
           target="_blank"
           rel="noopener noreferrer"
         >
-          <ShoppingCart />
           <span>GET UNI-LP</span>
         </a>
         <a className="action" href="/" onClick={(e) => handleOpenDeposit(e)}>
@@ -65,14 +72,14 @@ const Stake = ({
           <Reply />
           <span>UNSTAKE</span>
         </a>
-        <a
+        {/* <a  
           className="action"
           href="/"
           onClick={(e) => handleOpenOldWithdraw(e)}
         >
           <span>Exit Old</span>
           <span>Pool</span>
-        </a>
+        </a> */}
       </div>
     </StakeWrapper>
   );
@@ -106,6 +113,7 @@ const StakeWrapper = styled.div`
         align-items: center;
         justify-content: center;
         cursor: pointer;
+        text-align: center;
 
         // &:last-child {
         //   background: url("/static/images/bg/pages/get-heroes/credit-last-button-bg.png");
@@ -117,7 +125,7 @@ const StakeWrapper = styled.div`
           background-image: url("/static/images/bg/pages/get-heroes/credit-button-bg--active.png");
         }
 
-        &:nth-child(3) {
+        &:nth-child(4) {
           .MuiSvgIcon-root {
             transform: rotateY(180deg);
           }
