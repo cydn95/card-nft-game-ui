@@ -5,8 +5,77 @@ import { Tab, Nav } from "react-bootstrap";
 import SectionTitle from "../component/SectionTitle";
 import Card2 from "../component/Card_2";
 
+const Cards = [
+  {
+    card: "card-1",
+  },
+  {
+    card: "card-2",
+  },
+  {
+    card: "card-2",
+  },
+  {
+    card: "card-2",
+    unStaked: true,
+  },
+];
+
+const Stake = () => {
+  return (
+    <StakeWrapper>
+      <Tab.Container id="left-tabs-example" defaultActiveKey="heroes">
+        <Nav
+          variant="pills"
+          className="justify-content-center animation-fadeIn"
+        >
+          <Nav.Item>
+            <Nav.Link eventKey="heroes">Stake Heroes</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link eventKey="villains">Lock Villains</Nav.Link>
+          </Nav.Item>
+        </Nav>
+        <div className="stake-stats d-flex justify-content-center animation-slideDown">
+          <div>
+            <span className="d-block text-center">unstake all</span>
+          </div>
+          <div className="stat">
+            <h6>My Staked Strength</h6>
+            <p>16</p>
+          </div>
+          <div className="stat">
+            <h6>Total Staked Strength</h6>
+            <p>3219</p>
+          </div>
+          <div className="stat">
+            <h6>Claimable NDR</h6>
+            <p>1.83</p>
+          </div>
+          <div>
+            <span className="d-block text-center">claim ndr</span>
+          </div>
+        </div>
+        <Tab.Content>
+          <Tab.Pane eventKey="heroes">
+            <div className="section-title d-flex justify-content-start animation-fadeInRight">
+              <SectionTitle title={"3/4 Card Staked"} long />
+            </div>
+            <div className="d-flex justify-content-center">
+              {Cards.map((c) => (
+                <Card2 card={c.card} unStaked={c.unStaked} />
+              ))}
+            </div>
+          </Tab.Pane>
+          <Tab.Pane eventKey="villains"></Tab.Pane>
+        </Tab.Content>
+      </Tab.Container>
+    </StakeWrapper>
+  );
+};
+
 const StakeWrapper = styled.div`
-	.stake-stats {
+  .stake-stats {
     div {
       span {
         font-size: 20px;
@@ -18,7 +87,7 @@ const StakeWrapper = styled.div`
       }
 
       &:first-child {
-        background: url('/static/images/bg/card-menu/stats-first-bg.png');
+        background: url("/static/images/bg/card-menu/stats-first-bg.png");
         background-size: cover;
         width: 150px;
         height: 100px;
@@ -27,7 +96,7 @@ const StakeWrapper = styled.div`
       }
 
       &:last-child {
-        background: url('/static/images/bg/card-menu/stats-last-bg.png');
+        background: url("/static/images/bg/card-menu/stats-last-bg.png");
         background-size: cover;
         width: 150px;
         height: 100px;
@@ -36,7 +105,7 @@ const StakeWrapper = styled.div`
       }
 
       &.stat {
-        background: url('/static/images/bg/card-menu/stat-bg.png');
+        background: url("/static/images/bg/card-menu/stat-bg.png");
         background-size: cover;
         margin: 0 -7px;
         padding: 10px 12px 0px;
@@ -61,72 +130,5 @@ const StakeWrapper = styled.div`
     }
   }
 `;
-
-const Cards = [
-	{
-		card: 'card-1',
-	},
-	{
-		card: 'card-2',
-	},
-	{
-		card: 'card-2',
-	},
-	{
-		card: 'card-2',
-		unStaked: true
-	}
-];
-
-const Stake = () => {
-	return (
-		<StakeWrapper>
-			<Tab.Container id="left-tabs-example" defaultActiveKey="heroes">
-				<Nav variant="pills" className="justify-content-center animation-fadeIn">
-					<Nav.Item>
-						<Nav.Link eventKey="heroes">Stake Heroes</Nav.Link>
-					</Nav.Item>
-					<Nav.Item>
-						<Nav.Link eventKey="villains">Lock Villains</Nav.Link>
-					</Nav.Item>
-				</Nav>
-				<div className="stake-stats d-flex justify-content-center animation-slideDown">
-					<div>
-						<span className='d-block text-center'>unstake all</span>
-					</div>
-					<div className="stat">
-						<h6>My Staked Strength</h6>
-						<p>16</p>
-					</div>
-					<div className="stat">
-						<h6>Total Staked Strength</h6>
-						<p>3219</p>
-					</div>
-					<div className="stat">
-						<h6>Claimable NDR</h6>
-						<p>1.83</p>
-					</div>
-					<div>
-						<span className='d-block text-center'>claim ndr</span>
-					</div>
-				</div>
-				<Tab.Content>
-					<Tab.Pane eventKey="heroes">
-						<div className="section-title d-flex justify-content-center animation-fadeInRight">
-							<SectionTitle title={'3/4 Card Staked'} long />
-						</div>
-						<div className="d-flex justify-content-center">
-							{
-								Cards.map((c) => <Card2 card={c.card} unStaked={c.unStaked}/>)
-							}
-						</div>
-					</Tab.Pane>
-					<Tab.Pane eventKey="villains">
-					</Tab.Pane>
-				</Tab.Content>
-			</Tab.Container>
-		</StakeWrapper>
-	);
-};
 
 export default Stake;
