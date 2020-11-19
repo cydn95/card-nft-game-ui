@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { Nav, Tab } from "react-bootstrap";
 
 import SectionTitle from "../component/SectionTitle";
-import Card from "../component/Card";
+import CardBuying from "../component/Card/CardBuying";
 import StakingBoard from "../container/StakingBoard";
 
 import UnlockWalletPage from "./UnlockWalletPage";
@@ -113,13 +113,12 @@ const GetHeroes = () => {
               {cards
                 .filter((c) => CARD_TYPE.HERO.includes(c.series))
                 .map((c) => (
-                  <Card
+                  <CardBuying
                     key={`card_${c.id}`}
                     card={c}
                     onBuyCardEth={handleBuyCardEth}
                     onBuyCardHash={handleBuyCardHash}
                     isHero={true}
-                    payed={true}
                     eth={cardPrice[c.rarity.weight].hero}
                     currentProcessingCardId={selectedCardId}
                     loadingHash={isBuyingHash}
@@ -140,13 +139,12 @@ const GetHeroes = () => {
               {cards
                 .filter((c) => CARD_TYPE.SUPPORT.includes(c.series))
                 .map((c) => (
-                  <Card
+                  <CardBuying
                     key={`card_${c.id}`}
                     card={c}
                     onBuyCardEth={handleBuyCardEth}
                     onBuyCardHash={handleBuyCardHash}
                     isHero={false}
-                    payed={true}
                     eth={cardPrice[c.rarity.weight].support}
                     currentProcessingCardId={selectedCardId}
                     loadingHash={isBuyingHash}
