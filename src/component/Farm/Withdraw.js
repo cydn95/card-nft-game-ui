@@ -43,12 +43,12 @@ const Withdraw = ({ loading, old, staked, onClose, onWithdraw }) => {
             >
               MIN
               <br />
-              <small>2.25</small>
+              <small>{STAKE_MIN_LIMIT}</small>
             </span>
             <span role="button" onClick={(e) => setMax()} className="max">
               MAX
               <br />
-              <small>22.5</small>
+              <small>{STAKE_MAX_LIMIT}</small>
             </span>
           </div>
           <input type="text" value={amount} onChange={handleChangeAmount} />

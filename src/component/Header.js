@@ -146,7 +146,7 @@ const HeaderWrapper = styled.div`
 
       &:nth-of-type(1) {
         background-image: url("/static/images/bg/components/header/menu-item-1-bg.png");
-        width: ${(props) => props.theme.widthRatio * 250}px;
+        width: ${(props) => props.theme.widthRatio * 236}px;
 
         &.active {
           background-image: url("/static/images/bg/components/header/menu-item-1-bg--active.png");
@@ -155,7 +155,7 @@ const HeaderWrapper = styled.div`
 
       &:nth-of-type(2) {
         background-image: url("/static/images/bg/components/header/menu-item-2-bg.png");
-        width: ${(props) => props.theme.widthRatio * 339}px;
+        width: ${(props) => props.theme.widthRatio * 212}px;
 
         &.active {
           background-image: url("/static/images/bg/components/header/menu-item-2-bg--active.png");
@@ -164,7 +164,7 @@ const HeaderWrapper = styled.div`
 
       &:nth-of-type(3) {
         background-image: url("/static/images/bg/components/header/menu-item-3-bg.png");
-        width: ${(props) => props.theme.widthRatio * 339}px;
+        width: ${(props) => props.theme.widthRatio * 250}px;
 
         &.active {
           background-image: url("/static/images/bg/components/header/menu-item-3-bg--active.png");
@@ -172,6 +172,15 @@ const HeaderWrapper = styled.div`
       }
 
       &:nth-of-type(4) {
+        background-image: url("/static/images/bg/components/header/menu-item-5-bg.png");
+        width: ${(props) => props.theme.widthRatio * 292}px;
+
+        &.active {
+          background-image: url("/static/images/bg/components/header/menu-item-5-bg--active.png");
+        }
+      }
+
+      &:nth-of-type(5) {
         background-image: url("/static/images/bg/components/header/menu-item-5-bg.png");
         width: ${(props) => props.theme.widthRatio * 339}px;
 

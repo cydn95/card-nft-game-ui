@@ -21,10 +21,10 @@ const Stake = ({
     onOpenWithdraw();
   };
 
-  // const handleOpenOldWithdraw = (e) => {
-  //   e.preventDefault();
-  //   onOpenOldWithdraw();
-  // };
+  const handleOpenOldWithdraw = (e) => {
+    e.preventDefault();
+    onOpenOldWithdraw();
+  };
 
   return (
     <StakeWrapper>
@@ -72,14 +72,14 @@ const Stake = ({
           <Reply />
           <span>UNSTAKE</span>
         </a>
-        {/* <a  
+        <a  
           className="action"
           href="/"
           onClick={(e) => handleOpenOldWithdraw(e)}
         >
           <span>Exit Old</span>
           <span>Pool</span>
-        </a> */}
+        </a>
       </div>
     </StakeWrapper>
   );

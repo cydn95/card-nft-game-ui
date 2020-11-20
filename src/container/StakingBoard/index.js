@@ -31,13 +31,13 @@ const StakingBoard = () => {
 
   const balance = useSelector((state) => state.LpStaking.lpTokenBalance);
   const stakedAmount = useSelector((state) => state.LpStaking.stakedAmount);
-  // const oldStakedAmount = useSelector((state) => state.LpStaking.oldStakedAmount);
+  const oldStakedAmount = useSelector((state) => state.LpStaking.oldStakedAmount);
   const earningAmount = useSelector((state) => state.LpStaking.earningAmount);
 
   const init = useCallback(() => {
     dispatch(lpstakingActions.getLPTokenBalance());
     dispatch(lpstakingActions.getStakedAmount());
-    // dispatch(lpstakingActions.getOldStakedAmount());
+    dispatch(lpstakingActions.getOldStakedAmount());
     dispatch(lpstakingActions.getEarningAmount());
   }, [dispatch]);
 
@@ -115,12 +115,12 @@ const StakingBoard = () => {
     }
   };
 
-  // const handleOldWithdraw = (amount) => {
-  //   if (checkAmount(amount)) {
-  //     setLoading(true);
-  //     dispatch(lpstakingActions.withdrawOldLP(amount, callbackDeposit));
-  //   }
-  // };
+  const handleOldWithdraw = (amount) => {
+    if (checkAmount(amount)) {
+      setLoading(true);
+      dispatch(lpstakingActions.withdrawOldLP(amount, callbackDeposit));
+    }
+  };
 
   // ***********************************************************
   const handleOpenStake = () => {
@@ -175,7 +175,7 @@ const StakingBoard = () => {
           onWithdraw={handleWithdraw}
         />
       )}
-      {/* {openStatus === DLG_OLD_WITHDRAW && (
+      {openStatus === DLG_OLD_WITHDRAW && (
         <Withdraw
           old
           loading={loading}
@@ -183,7 +183,7 @@ const StakingBoard = () => {
           onClose={handleOpenStake}
           onWithdraw={handleOldWithdraw}
         />
-      )} */}
+      )}
     </>
   );
 };

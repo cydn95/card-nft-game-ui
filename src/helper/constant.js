@@ -16,7 +16,7 @@ export const getNetworkChainId = () => {
   }
 };
 
-export const STAKE_MIN_LIMIT = 2.25;
+export const STAKE_MIN_LIMIT = 1;
 export const STAKE_MAX_LIMIT = 22.5;
 
 export const RESPONSE = {

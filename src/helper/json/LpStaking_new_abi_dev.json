@@ -239,6 +239,15 @@
   },
   {
     "inputs": [
+      { "internalType": "uint256", "name": "_divider", "type": "uint256" }
+    ],
+    "name": "changeDivider",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
       { "internalType": "uint256", "name": "_feeRate", "type": "uint256" }
     ],
     "name": "changeFeeRate",
@@ -297,6 +306,13 @@
   {
     "inputs": [],
     "name": "deadline",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "divider",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
