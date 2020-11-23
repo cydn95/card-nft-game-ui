@@ -67,8 +67,8 @@ const NFTStakingBoard = () => {
     setClaimNDRLoading(true);
     dispatch(
       cardsActions.claimNDR((status) => {
+        setClaimNDRLoading(false);
         if (status) {
-          setClaimNDRLoading(false);
           toast.success("Sucess");
           dispatch(cardsActions.getClaimableNDR());
         } else {
