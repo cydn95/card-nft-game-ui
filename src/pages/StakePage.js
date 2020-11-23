@@ -1,29 +1,100 @@
-import React from "react";
+import React, { useEffect, useState, useMemo } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useWallet } from "use-wallet";
+import { toast } from "react-toastify";
 import styled from "styled-components";
+
 import { Tab, Nav } from "react-bootstrap";
 
+import UnlockWalletPage from "./UnlockWalletPage";
 import SectionTitle from "../component/SectionTitle";
-import Card2 from "../component/Card_2";
+import CardStaking from "../component/Card/CardStaking";
+import NFTStakingBoard from "../container/NFTStakingBoard";
+import NFTStakingModal from "../container/NFTStakingModal";
 
-const Cards = [
-  {
-    card: "card-1",
-  },
-  {
-    card: "card-2",
-  },
-  {
-    card: "card-2",
-  },
-  {
-    card: "card-2",
-    unStaked: true,
-  },
-];
+import cardsActions from "../redux/cards/actions";
+
+import { MAX_STAKED_CARD_COUNT } from "../helper/constant";
 
 const Stake = () => {
+  const dispatch = useDispatch();
+  
+  const [unStakeLoading, setUnStakeLoading] = useState(false);
+  const [stakeDlgOpen, setStakeDlgOpen] = useState(false);
+  const [selectedCardId, setSelectedCardId] = useState(0);
+
+  const cards = useSelector((state) => state.Cards.cards);
+  const stakedCardTokens = useSelector((state) => state.Cards.stakedCardTokens);
+
+  const stakeCards = useMemo(() => {
+    const ret = [];
+    for (let i = 0; i < 4; i++) {
+      ret.push({
+        card: null,
+        unStaked: true,
+      });
+    }
+
+    let cnt = 0;
+    for (let i = 0; i < stakedCardTokens.length; i++) {
+      const cardIndex = cards.findIndex(
+        (e) => Number(e.id) === Number(stakedCardTokens[i])
+      );
+      if (cardIndex >= 0) {
+        ret[cnt].card = { ...cards[cardIndex] };
+        ret[cnt].unStaked = false;
+        cnt++;
+      }
+    }
+    return ret;
+  }, [cards, stakedCardTokens]);
+
+  useEffect(() => {
+    dispatch(cardsActions.getCards());
+    dispatch(cardsActions.getStakedCards());
+  }, [dispatch]);
+
+  const handleUnStake = (cardId) => {
+    setSelectedCardId(cardId);
+    setUnStakeLoading(true);
+    dispatch(
+      cardsActions.unStakeCard(cardId, (status) => {
+        setSelectedCardId(0);
+        setUnStakeLoading(false);
+        if (status) {
+          toast.success("Sucess");
+          dispatch(cardsActions.getStakedCards());
+          dispatch(cardsActions.getMyStakedStrength());
+          dispatch(cardsActions.getTotalStakedStrength());
+          dispatch(cardsActions.getClaimableNDR());
+        } else {
+          toast.error("Failed...");
+        }
+      })
+    );
+  };
+
+  const handleOpenStakeModal = () => {
+    setStakeDlgOpen(true);
+  };
+
+  const handleCloseStakeModal = () => {
+    setStakeDlgOpen(false);
+  };
+
+  const { account } = useWallet();
+  if (!account) {
+    return <UnlockWalletPage />;
+  }
+
   return (
-    <StakeWrapper>
+    <>
+      {stakeDlgOpen && (
+        <div className="modal-container">
+          <NFTStakeModalMask />
+          <NFTStakingModal onClose={handleCloseStakeModal} />
+        </div>
+      )}
       <Tab.Container id="left-tabs-example" defaultActiveKey="heroes">
         <Nav
           variant="pills"
@@ -36,99 +107,50 @@ const Stake = () => {
             <Nav.Link eventKey="villains">Lock Villains</Nav.Link>
           </Nav.Item>
         </Nav>
-        <div className="stake-stats d-flex justify-content-center animation-slideDown">
-          <div>
-            <span className="d-block text-center">unstake all</span>
-          </div>
-          <div className="stat">
-            <h6>My Staked Strength</h6>
-            <p>16</p>
-          </div>
-          <div className="stat">
-            <h6>Total Staked Strength</h6>
-            <p>3219</p>
-          </div>
-          <div className="stat">
-            <h6>Claimable NDR</h6>
-            <p>1.83</p>
-          </div>
-          <div>
-            <span className="d-block text-center">claim ndr</span>
-          </div>
-        </div>
+        <NFTStakingBoard />
         <Tab.Content>
           <Tab.Pane eventKey="heroes">
-            <div className="section-title d-flex justify-content-start animation-fadeInRight">
-              <SectionTitle title={"3/4 Card Staked"} long />
+            <div className="section-title d-flex justify-content-center animation-fadeInRight">
+              <SectionTitle
+                title={`${stakedCardTokens.length}/${MAX_STAKED_CARD_COUNT} Card Staked`}
+                long
+              />
             </div>
-            <div className="d-flex justify-content-center">
-              {Cards.map((c) => (
-                <Card2 card={c.card} unStaked={c.unStaked} />
-              ))}
+            <div
+              className="d-flex flex-wrap justify-content-center"
+              style={{ paddingBottom: 100 }}
+            >
+              {stakeCards.length > 0 &&
+                stakeCards.map((c, index) => (
+                  <CardStaking
+                    key={`card_${index}`}
+                    card={c.card}
+                    unStaked={c.unStaked}
+                    currentProcessingCardId={selectedCardId}
+                    onUnStake={handleUnStake}
+                    onStake={handleOpenStakeModal}
+                    loadingUnStake={unStakeLoading}
+                  />
+                ))}
             </div>
           </Tab.Pane>
           <Tab.Pane eventKey="villains"></Tab.Pane>
         </Tab.Content>
       </Tab.Container>
-    </StakeWrapper>
+    </>
   );
 };
 
-const StakeWrapper = styled.div`
-  .stake-stats {
-    div {
-      span {
-        font-size: 20px;
-        max-width: 127px;
-        font-family: Orbitron-Black;
-        text-transform: uppercase;
-        text-shadow: 5px 5px 3px #27787580;
-        line-height: 1.2;
-      }
-
-      &:first-child {
-        background: url("/static/images/bg/card-menu/stats-first-bg.png");
-        background-size: cover;
-        width: 150px;
-        height: 100px;
-        margin-right: -8px;
-        padding: 15px 0 0 2px;
-      }
-
-      &:last-child {
-        background: url("/static/images/bg/card-menu/stats-last-bg.png");
-        background-size: cover;
-        width: 150px;
-        height: 100px;
-        margin-left: -8px;
-        padding: 15px 0 0 2px;
-      }
-
-      &.stat {
-        background: url("/static/images/bg/card-menu/stat-bg.png");
-        background-size: cover;
-        margin: 0 -7px;
-        padding: 10px 12px 0px;
-        min-width: 293px;
-        text-shadow: 15px 15px 10px #80f1ed91;
-
-        h6 {
-          color: #80f1ed;
-          font-size: 20px;
-          line-height: 1;
-          margin: 0 0 7px;
-        }
-
-        p {
-          color: #fec100;
-          font-size: 30px;
-          font-family: Orbitron-Black;
-          line-height: 1;
-          margin: 0;
-        }
-      }
-    }
-  }
+const NFTStakeModalMask = styled.div`
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  max-width: 100%;
+  min-height: 100vh;
+  background: #000;
+  opacity: 0.9;
+  z-index: 100;
 `;
 
 export default Stake;

@@ -7,7 +7,7 @@ import { Nav, Tab } from "react-bootstrap";
 
 import SectionTitle from "../component/SectionTitle";
 import CardBuying from "../component/Card/CardBuying";
-import StakingBoard from "../container/StakingBoard";
+import LPStakingBoard from "../container/LPStakingBoard";
 
 import UnlockWalletPage from "./UnlockWalletPage";
 
@@ -102,7 +102,7 @@ const GetHeroes = () => {
         </Nav>
         <Tab.Content>
           <Tab.Pane eventKey="heroes">
-            <StakingBoard />
+            <LPStakingBoard />
             <div className="section-title d-flex justify-content-center animation-fadeInRight">
               <SectionTitle title={"Heroes"} />
             </div>
@@ -128,7 +128,7 @@ const GetHeroes = () => {
             </div>
           </Tab.Pane>
           <Tab.Pane eventKey="items">
-            <StakingBoard />
+            <LPStakingBoard />
             <div className="section-title d-flex justify-content-center animation-fadeInRight">
               <SectionTitle title={"Support"} />
             </div>

@@ -21,7 +21,7 @@ const DLG_DEPOSIT = 1;
 const DLG_WITHDRAW = 2;
 const DLG_OLD_WITHDRAW = 3;
 
-const StakingBoard = () => {
+const LPStakingBoard = () => {
   const dispatch = useDispatch();
 
   // 0: stake 1: deposit 2: withdraw
@@ -188,4 +188,4 @@ const StakingBoard = () => {
   );
 };
 
-export default StakingBoard;
+export default LPStakingBoard;

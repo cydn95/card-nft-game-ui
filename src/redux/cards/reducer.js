@@ -21,6 +21,10 @@ const initState = {
       support: 0,
     },
   },
+  myStakedStrength: 0,
+  totalStakedStrength: 0,
+  claimableNDR: 0,
+  stakedCardTokens: [],
 };
 
 export default function pageReducer(state = initState, action) {
@@ -34,6 +38,26 @@ export default function pageReducer(state = initState, action) {
       return {
         ...state,
         cardPrice: action.cardPrice,
+      };
+    case actions.GET_MY_STAKED_STRENGTH_SUCCESS:
+      return {
+        ...state,
+        myStakedStrength: action.myStakedStrength,
+      };
+    case actions.GET_TOTAL_STAKED_STRENGTH_SUCCESS:
+      return {
+        ...state,
+        totalStakedStrength: action.totalStakedStrength,
+      };
+    case actions.GET_CLAIMABLE_NDR_SUCCESS:
+      return {
+        ...state,
+        claimableNDR: action.claimableNDR,
+      };
+    case actions.GET_STAKED_CARDS_SUCCESS:
+      return {
+        ...state,
+        stakedCardTokens: [...action.stakedCardTokens],
       };
     default:
       return state;

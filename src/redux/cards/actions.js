@@ -10,6 +10,24 @@ const actions = {
 
   GET_MINTED_COUNT: "GET_MINTED_COUNT",
 
+  GET_MY_STAKED_STRENGTH: "GET_MY_STAKED_STRENGTH",
+  GET_MY_STAKED_STRENGTH_SUCCESS: "GET_MY_STAKED_STRENGTH_SUCCESS",
+
+  GET_TOTAL_STAKED_STRENGTH: "GET_TOTAL_STAKED_STRENGTH",
+  GET_TOTAL_STAKED_STRENGTH_SUCCESS: "GET_TOTAL_STAKED_STRENGTH_SUCCESS",
+
+  GET_CLAIMABLE_NDR: "GET_CLAIMABLE_NDR",
+  GET_CLAIMABLE_NDR_SUCCESS: "GET_CLAIMABLE_NDR_SUCCESS",
+
+  GET_STAKED_CARDS: "GET_STAKED_CARDS",
+  GET_STAKED_CARDS_SUCCESS: "GET_STAKED_CARDS_SUCCESS",
+
+  UNSTAKE_CARD: "UNSTAKE_CARD",
+  UNSTAKE_ALL_CARDS: "UNSTAKE_ALL_CARDS",
+  CLAIM_NDR: "CLAIM_NDR",
+  STAKE_CARD: "STAKE_CARD",
+  APPROVE_ALL: "APPROVE_ALL",
+
   getCards: () => ({
     type: actions.GET_CARDS,
   }),
@@ -27,6 +45,40 @@ const actions = {
   buyHeroCardHash: (card, callback) => ({
     type: actions.BUY_HERO_CARD_HASH,
     payload: { card, callback },
+  }),
+
+  getMyStakedStrength: () => ({
+    type: actions.GET_MY_STAKED_STRENGTH,
+  }),
+  getTotalStakedStrength: () => ({
+    type: actions.GET_TOTAL_STAKED_STRENGTH,
+  }),
+  getClaimableNDR: () => ({
+    type: actions.GET_CLAIMABLE_NDR,
+  }),
+  getStakedCards: () => ({
+    type: actions.GET_STAKED_CARDS,
+  }),
+
+  approveAll: (approved, callback) => ({
+    type: actions.APPROVE_ALL,
+    payload: { approved, callback },
+  }),
+  unStakeCard: (cardId, callback) => ({
+    type: actions.UNSTAKE_CARD,
+    payload: { cardId, callback },
+  }),
+  unStakeAllCards: (callback) => ({
+    type: actions.UNSTAKE_ALL_CARDS,
+    payload: { callback },
+  }),
+  stakeCard: (cardId, callback) => ({
+    type: actions.STAKE_CARD,
+    payload: { cardId, callback },
+  }),
+  claimNDR: (callback) => ({
+    type: actions.CLAIM_NDR,
+    payload: { callback },
   }),
 };
 
