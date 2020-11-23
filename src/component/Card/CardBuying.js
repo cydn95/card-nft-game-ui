@@ -60,7 +60,7 @@ const CardBuying = ({
               //   onClick={(e) => onBuyCardHash(card)}
               // >
               <button
-                className="buy-button hover-effect2"
+                className="hash-button hover-effect2"
                 onClick={(e) => onBuyCardHash(card)}
               >
                 {loadingHash && card.id === currentProcessingCardId ? (
@@ -77,7 +77,7 @@ const CardBuying = ({
                 )}
               </button>
             )}
-            {/* <button
+            <button
               className={`${
                 isHero ? "eth-button" : "buy-button"
               } hover-effect2`}
@@ -100,7 +100,7 @@ const CardBuying = ({
                   {convertFromWei(eth, 4)}
                 </>
               )}
-            </button> */}
+            </button>
           </div>
         </div>
       </div>
