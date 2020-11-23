@@ -16,6 +16,7 @@ import {
 import { convertFromWei } from "../../helper/utils";
 
 import cardsActions from "../../redux/cards/actions";
+import lpstakingActions from "../../redux/lpstaking/actions";
 
 const DLG_STAKE = 0;
 const DLG_DEPOSIT = 1;
@@ -71,6 +72,7 @@ const NFTStakingBoard = () => {
         if (status) {
           toast.success("Sucess");
           dispatch(cardsActions.getClaimableNDR());
+          dispatch(lpstakingActions.getNDRBalance());
         } else {
           toast.error("Failed...");
         }
