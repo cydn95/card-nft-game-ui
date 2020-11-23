@@ -72,28 +72,29 @@ const NFTStakingModal = ({ onClose }) => {
   return (
     <NFTStakeModalContainer>
       <div className="header">
-        <div
-          role="button"
-          className="approve-all-button"
-          onClick={handleApproveAll}
-        >
-          {approveLoading ? (
-            <>
-              <img
-                src="/static/images/icons/loading.gif"
-                height="25"
-                alt=""
-                style={{ marginTop: 3, marginRight: 5 }}
-              />{" "}
-              Approving...
-            </>
-          ) : (
-            <>
-              {`Approve`}
-              <br /> {`All`}
-            </>
-          )}
-        </div>
+        {approveLoading ? (
+          <div
+            role="button"
+            className="approve-all-button"
+          >
+            <img
+              src="/static/images/icons/loading.gif"
+              height="25"
+              alt=""
+              style={{ marginTop: 3, marginRight: 5 }}
+            />{" "}
+            Approving...
+          </div>
+        ) : (
+          <div
+            role="button"
+            className="approve-all-button"
+            onClick={handleApproveAll}
+          >
+            {`Approve`}
+            <br /> {`All`}
+          </div>
+        )}
         <div role="button" className="close-button" onClick={(e) => onClose()}>
           <CloseIcon />
         </div>
