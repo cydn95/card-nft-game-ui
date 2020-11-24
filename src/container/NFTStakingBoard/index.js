@@ -147,7 +147,7 @@ const NFTStakeWrapper = styled.div`
         padding: 10px 12px 0px;
         min-width: 293px;
         text-shadow: 15px 15px 10px #80f1ed91;
-
+        font-family: Orbitron-Black;
         h6 {
           color: #80f1ed;
           font-size: 20px;
@@ -158,7 +158,6 @@ const NFTStakeWrapper = styled.div`
         p {
           color: #fec100;
           font-size: 30px;
-          font-family: Orbitron-Black;
           line-height: 1;
           margin: 0;
         }
