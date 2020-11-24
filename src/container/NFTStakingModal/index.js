@@ -28,11 +28,13 @@ const NFTStakingModal = ({ onClose }) => {
         ret.push({ ...cards[i] });
       }
     }
-    console.log(ret);
     return ret;
   }, [cards, stakedCardTokens]);
 
-  const handleStake = (cardId) => {
+  const handleStake = (e, cardId) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     setSelectedCardId(cardId);
     setStakeLoading(true);
     dispatch(
@@ -48,14 +50,19 @@ const NFTStakingModal = ({ onClose }) => {
           dispatch(cardsActions.getClaimableNDR());
           onClose();
         } else {
-          toast.success("Staked failed");
+          toast.error("Staked failed");
         }
       })
     );
   };
 
+  const handlePreventClose = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
   return (
-    <NFTStakeModalContainer>
+    <NFTStakeModalContainer onClick={(e) => onClose()}>
       <div className="header">
         <h2>Stake your Card</h2>
         <div role="button" className="close-button" onClick={(e) => onClose()}>
@@ -75,11 +82,17 @@ const NFTStakingModal = ({ onClose }) => {
                   alt={`${card.name}`}
                   className="card-image"
                 />
-                <div className="card-border"></div>
+                <div
+                  className="card-border"
+                  onClick={(e) => handlePreventClose(e)}
+                ></div>
               </div>
               <div className="button-wrapper text-center">
                 {stakeLoading && card.id === selectedCardId ? (
-                  <button className="hover-effect3">
+                  <button
+                    className="hover-effect3"
+                    onClick={(e) => handlePreventClose(e)}
+                  >
                     <div className="loading-wrapper">
                       <img
                         src="/static/images/icons/loading.gif"
@@ -93,7 +106,7 @@ const NFTStakingModal = ({ onClose }) => {
                 ) : (
                   <button
                     className="hover-effect3"
-                    onClick={(e) => handleStake(card.id)}
+                    onClick={(e) => handleStake(e, card.id)}
                   >
                     Stake
                   </button>
@@ -163,6 +176,7 @@ const CardWrapper = styled.div`
     position: relative;
     padding: 17px 14px;
     background: transparent;
+    z-index: 400;
 
     .card-image {
       width: 290px;
@@ -187,11 +201,6 @@ const CardWrapper = styled.div`
       height: 443px;
       background: url("/static/images/bg/components/card/card-border.png");
       background-size: cover;
-
-      &:hover {
-        background: url("/static/images/bg/components/card/card-border--active.png");
-        background-size: cover;
-      }
     }
 
     .marked {
@@ -216,11 +225,6 @@ const CardWrapper = styled.div`
       outline: none;
       box-sizing: border-box;
       padding-top: 15px;
-
-      &:hover {
-        background: url("/static/images/bg/components/card/button-bg--active.png");
-        color: #fec100;
-      }
     }
     .loading-wrapper {
       display: flex;
@@ -229,6 +233,21 @@ const CardWrapper = styled.div`
       font-family: Orbitron-Medium;
       text-shadow: 5px 5px 3px #27787580;
       color: #161617;
+    }
+  }
+
+  &:hover {
+    .card {
+      .card-border {
+        background: url("/static/images/bg/components/card/card-border--active.png");
+        background-size: cover;
+      }
+    }
+    .button-wrapper {
+      button {
+        background: url("/static/images/bg/components/card/button-bg--active.png");
+        color: #fec100;
+      }
     }
   }
 `;

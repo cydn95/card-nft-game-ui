@@ -145,7 +145,7 @@ const Stake = () => {
           <Tab.Pane eventKey="heroes">
             <div className="section-title d-flex justify-content-center animation-fadeInRight">
               <SectionTitle
-                title={`${stakedCardTokens.length}/${MAX_STAKED_CARD_COUNT} Card Staked`}
+                title={`${stakedCardTokens.length}/${MAX_STAKED_CARD_COUNT} Cards Staked`}
                 long
               />
             </div>

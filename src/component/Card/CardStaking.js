@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { toast } from "react-toastify";
 
 const CardStaking = ({
   card,
@@ -12,6 +13,16 @@ const CardStaking = ({
   approved,
   onApprove,
 }) => {
+  const handleClickBlankCard = () => {
+    if (!unStaked) return;
+
+    if (approved) {
+      onStake();
+    } else {
+      toast.info("You should approve cards first");
+    }
+  };
+
   return (
     <CardWrapper>
       <div className="card position-relative">
@@ -24,7 +35,10 @@ const CardStaking = ({
         ) : (
           <img src={card.image} alt={`${card}`} className="card-image" />
         )}
-        <div className="card-border"></div>
+        <div
+          className="card-border"
+          onClick={(e) => handleClickBlankCard()}
+        ></div>
       </div>
       <div className="button-wrapper text-center">
         {unStaked ? (
@@ -92,6 +106,7 @@ const CardWrapper = styled.div`
     .un-staked {
       width: 290px;
       height: 410px;
+      cursor: pointer;
     }
 
     .card-border {
@@ -102,11 +117,7 @@ const CardWrapper = styled.div`
       height: 443px;
       background: url("/static/images/bg/components/card/card-border.png");
       background-size: cover;
-
-      &:hover {
-        background: url("/static/images/bg/components/card/card-border--active.png");
-        background-size: cover;
-      }
+      cursor: pointer;
     }
 
     .marked {
@@ -131,11 +142,6 @@ const CardWrapper = styled.div`
       outline: none;
       box-sizing: border-box;
       padding-top: 15px;
-
-      &:hover {
-        background: url("/static/images/bg/components/card/button-bg--active.png");
-        color: #fec100;
-      }
     }
     .loading-wrapper {
       display: flex;
@@ -144,6 +150,21 @@ const CardWrapper = styled.div`
       font-family: Orbitron-Medium;
       text-shadow: 5px 5px 3px #27787580;
       color: #161617;
+    }
+  }
+
+  &:hover {
+    .card {
+      .card-border {
+        background: url("/static/images/bg/components/card/card-border--active.png");
+        background-size: cover;
+      }
+    }
+    .button-wrapper {
+      button {
+        background: url("/static/images/bg/components/card/button-bg--active.png");
+        color: #fec100;
+      }
     }
   }
 `;
