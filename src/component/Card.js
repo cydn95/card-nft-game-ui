@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 
 import { CARD_HASH_PRICE_UNIT } from "../helper/constant";
-import { convertFromWei } from "../helper/utils";
 
 const Card = ({
   card,

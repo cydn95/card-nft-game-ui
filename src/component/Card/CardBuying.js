@@ -54,16 +54,9 @@ const CardBuying = ({
             </div>
           </div>
           <div className="grid-button-wrapper">
-            {isHero && (
-              // <button
-              //   className="hash-button hover-effect2"
-              //   onClick={(e) => onBuyCardHash(card)}
-              // >
-              <button
-                className="buy-button hover-effect2"
-                onClick={(e) => onBuyCardHash(card)}
-              >
-                {loadingHash && card.id === currentProcessingCardId ? (
+            {isHero &&
+              (loadingHash && card.id === currentProcessingCardId ? (
+                <button className="hash-button hover-effect2">
                   <div className="loading-wrapper">
                     <img
                       src="/static/images/icons/loading.gif"
@@ -72,18 +65,22 @@ const CardBuying = ({
                     />
                     BUYING...
                   </div>
-                ) : (
-                  `${card.rarity.weight * CARD_HASH_PRICE_UNIT} Hash`
-                )}
-              </button>
-            )}
-            {/* <button
-              className={`${
-                isHero ? "eth-button" : "buy-button"
-              } hover-effect2`}
-              onClick={(e) => onBuyCardEth(card)}
-            >
-              {loadingEth && card.id === currentProcessingCardId ? (
+                </button>
+              ) : (
+                <button
+                  className="hash-button hover-effect2"
+                  onClick={(e) => onBuyCardHash(card)}
+                >
+                  {card.rarity.weight * CARD_HASH_PRICE_UNIT} Hash
+                </button>
+              ))}
+
+            {loadingEth && card.id === currentProcessingCardId ? (
+              <button
+                className={`${
+                  isHero ? "eth-button" : "buy-button"
+                } hover-effect2`}
+              >
                 <div className="loading-wrapper">
                   <img
                     src="/static/images/icons/loading.gif"
@@ -92,15 +89,20 @@ const CardBuying = ({
                   />
                   BUYING...
                 </div>
-              ) : (
-                <>
-                  {" "}
-                  <span>Ξ</span>
-                  {` `}
-                  {convertFromWei(eth, 4)}
-                </>
-              )}
-            </button> */}
+              </button>
+            ) : (
+              <button
+                className={`${
+                  isHero ? "eth-button" : "buy-button"
+                } hover-effect2`}
+                onClick={(e) => onBuyCardEth(card)}
+              >
+                {" "}
+                <span>Ξ</span>
+                {` `}
+                {convertFromWei(eth, 4)}
+              </button>
+            )}
           </div>
         </div>
       </div>

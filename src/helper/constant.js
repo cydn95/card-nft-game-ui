@@ -19,6 +19,8 @@ export const getNetworkChainId = () => {
 export const STAKE_MIN_LIMIT = 1;
 export const STAKE_MAX_LIMIT = 22.5;
 
+export const MAX_STAKED_CARD_COUNT = 4;
+
 export const RESPONSE = {
   SUCCESS: 100,
   INSUFFICIENT: 200,

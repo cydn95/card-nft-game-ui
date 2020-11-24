@@ -15,10 +15,27 @@ import {
 
 import { getWeb3, getGasPrice } from "../../services/web3";
 import {
+  getNFTInstance,
+  getNFTStakingInstance,
+} from "../../services/web3/instance";
+
+import {
   getHeroPriceAsync,
   getSupportPriceAsync,
-  getCirculatingSupply,
+  getCirculatingSupplyAsync,
+  getOwnedCardsCountAsync,
+  getStakedStrengthByAddressAsync,
+  getTotalStakedStrengthAsync,
+  getClaimableNDRAsync,
+  getStakedCardsAsync,
+  isApprovedAllAsync,
+  approveAllCardsAsync,
+  unStakeCardAsync,
+  unStakeAllCardsAsync,
+  stakeCardAsync,
+  claimNDRAsync,
 } from "../../services/web3/cards";
+
 import { getEarningAsync } from "../../services/web3/lpStaking";
 
 import {
@@ -43,7 +60,7 @@ export function* getCards() {
     if (res.status === 200) {
       const cards = [];
       res.data.cards.forEach((element) => {
-        cards.push({ ...element, minted: 0 });
+        cards.push({ ...element, minted: 0, owned: 0 });
       });
       yield put({
         type: actions.GET_MINTED_COUNT,
@@ -155,13 +172,134 @@ export function* getMintedCount() {
 
     const newCards = [...cards];
     cards.forEach(async (c, index) => {
-      const mintedCount = await getCirculatingSupply(instance, c.id);
+      const mintedCount = await getCirculatingSupplyAsync(instance, c.id);
       newCards[index].minted = mintedCount;
     });
 
     yield put({
       type: actions.GET_CARDS_SUCCESS,
       cards: newCards,
+    });
+  });
+}
+
+export function* getMyCardsCount() {
+  yield takeLatest(actions.GET_MY_CARDS_COUNT, function* ({ payload }) {
+    const { cards } = payload;
+
+    const web3 = yield call(getWeb3);
+    const nft = getNFTInstance(web3);
+
+    const accounts = yield call(web3.eth.getAccounts);
+
+    const newCards = [...cards];
+    cards.forEach(async (c, index) => {
+      const ownedCount = await getOwnedCardsCountAsync(
+        nft.instance,
+        accounts[0],
+        c.id
+      );
+      newCards[index].owned = ownedCount;
+    });
+
+    yield put({
+      type: actions.GET_CARDS_SUCCESS,
+      cards: newCards,
+    });
+  });
+}
+
+export function* getApprovedStatus() {
+  yield takeLatest(actions.GET_APPROVED_STATUS, function* ({ payload }) {
+    const { callback } = payload;
+
+    const web3 = yield call(getWeb3);
+    const nft = getNFTInstance(web3);
+    const nftStaking = getNFTStakingInstance(web3);
+
+    const accounts = yield call(web3.eth.getAccounts);
+
+    const approvedStatusResponse = yield call(
+      isApprovedAllAsync,
+      nft.instance,
+      accounts[0],
+      nftStaking.address
+    );
+
+    callback(approvedStatusResponse);
+  });
+}
+
+export function* getMyStakedStrength() {
+  yield takeLatest(actions.GET_MY_STAKED_STRENGTH, function* () {
+    const web3 = yield call(getWeb3);
+    const nftStaking = getNFTStakingInstance(web3);
+
+    // Get Wallet Account
+    const accounts = yield call(web3.eth.getAccounts);
+
+    const ret = yield call(
+      getStakedStrengthByAddressAsync,
+      nftStaking.instance,
+      accounts[0]
+    );
+
+    yield put({
+      type: actions.GET_MY_STAKED_STRENGTH_SUCCESS,
+      myStakedStrength: ret,
+    });
+  });
+}
+
+export function* getTotalStakedStrength() {
+  yield takeLatest(actions.GET_TOTAL_STAKED_STRENGTH, function* () {
+    const web3 = yield call(getWeb3);
+    const nftStaking = getNFTStakingInstance(web3);
+
+    // Get Wallet Account
+    const ret = yield call(getTotalStakedStrengthAsync, nftStaking.instance);
+
+    yield put({
+      type: actions.GET_TOTAL_STAKED_STRENGTH_SUCCESS,
+      totalStakedStrength: ret,
+    });
+  });
+}
+
+export function* getClaimableNDR() {
+  yield takeLatest(actions.GET_CLAIMABLE_NDR, function* () {
+    const web3 = yield call(getWeb3);
+    const nftStaking = getNFTStakingInstance(web3);
+
+    const accounts = yield call(web3.eth.getAccounts);
+    const ret = yield call(
+      getClaimableNDRAsync,
+      nftStaking.instance,
+      accounts[0]
+    );
+
+    yield put({
+      type: actions.GET_CLAIMABLE_NDR_SUCCESS,
+      claimableNDR: ret,
+    });
+  });
+}
+
+export function* getStakedCards() {
+  yield takeLatest(actions.GET_STAKED_CARDS, function* () {
+    const web3 = yield call(getWeb3);
+    const nftStaking = getNFTStakingInstance(web3);
+
+    const accounts = yield call(web3.eth.getAccounts);
+    const ret = yield call(
+      getStakedCardsAsync,
+      nftStaking.instance,
+      accounts[0]
+    );
+
+    yield put({
+      type: actions.GET_STAKED_CARDS_SUCCESS,
+      stakedCardTokens: ret,
     });
   });
 }
@@ -308,6 +446,136 @@ export function* buyHeroCardHash() {
   });
 }
 
+export function* unStakeCard() {
+  yield takeLatest(actions.UNSTAKE_CARD, function* ({ payload }) {
+    const { cardId, callback } = payload;
+
+    const web3 = yield call(getWeb3);
+    const nftStaking = getNFTStakingInstance(web3);
+
+    // Get Wallet Account
+    const accounts = yield call(web3.eth.getAccounts);
+
+    const unstakeCardResponse = yield call(
+      unStakeCardAsync,
+      nftStaking.instance,
+      web3,
+      cardId,
+      accounts[0]
+    );
+
+    if (unstakeCardResponse.status) {
+      callback(RESPONSE.SUCCESS);
+    } else {
+      callback(RESPONSE.error);
+    }
+  });
+}
+
+export function* unStakeAllCards() {
+  yield takeLatest(actions.UNSTAKE_ALL_CARDS, function* ({ payload }) {
+    const { callback } = payload;
+
+    const web3 = yield call(getWeb3);
+    const nftStaking = getNFTStakingInstance(web3);
+
+    // Get Wallet Account
+    const accounts = yield call(web3.eth.getAccounts);
+
+    const unstakeAllCardsResponse = yield call(
+      unStakeAllCardsAsync,
+      nftStaking.instance,
+      web3,
+      accounts[0]
+    );
+
+    if (unstakeAllCardsResponse.status) {
+      callback(RESPONSE.SUCCESS);
+    } else {
+      callback(RESPONSE.error);
+    }
+  });
+}
+
+export function* claimNDR() {
+  yield takeLatest(actions.CLAIM_NDR, function* ({ payload }) {
+    const { callback } = payload;
+
+    const web3 = yield call(getWeb3);
+    const nftStaking = getNFTStakingInstance(web3);
+
+    // Get Wallet Account
+    const accounts = yield call(web3.eth.getAccounts);
+
+    const claimNDRResponse = yield call(
+      claimNDRAsync,
+      nftStaking.instance,
+      web3,
+      accounts[0]
+    );
+
+    if (claimNDRResponse.status) {
+      callback(RESPONSE.SUCCESS);
+    } else {
+      callback(RESPONSE.error);
+    }
+  });
+}
+
+export function* approveAll() {
+  yield takeLatest(actions.APPROVE_ALL, function* ({ payload }) {
+    const { approved, callback } = payload;
+
+    const web3 = yield call(getWeb3);
+    const nft = getNFTInstance(web3);
+    const nftStaking = getNFTStakingInstance(web3);
+
+    // Get Wallet Account
+    const accounts = yield call(web3.eth.getAccounts);
+
+    const approveResponse = yield call(
+      approveAllCardsAsync,
+      nft.instance,
+      web3,
+      nftStaking.address,
+      approved,
+      accounts[0]
+    );
+
+    if (approveResponse.status) {
+      callback(RESPONSE.SUCCESS);
+    } else {
+      callback(RESPONSE.error);
+    }
+  });
+}
+
+export function* stakeCard() {
+  yield takeLatest(actions.STAKE_CARD, function* ({ payload }) {
+    const { cardId, callback } = payload;
+
+    const web3 = yield call(getWeb3);
+    const nftStaking = getNFTStakingInstance(web3);
+
+    // Get Wallet Account
+    const accounts = yield call(web3.eth.getAccounts);
+
+    const stakeCardResponse = yield call(
+      stakeCardAsync,
+      nftStaking.instance,
+      web3,
+      cardId,
+      accounts[0]
+    );
+
+    if (stakeCardResponse.status) {
+      callback(RESPONSE.SUCCESS);
+    } else {
+      callback(RESPONSE.error);
+    }
+  });
+}
+
 export default function* rootSaga() {
   yield all([
     fork(buyHeroCardEth),
@@ -315,5 +583,16 @@ export default function* rootSaga() {
     fork(getCards),
     fork(getCardsPrice),
     fork(getMintedCount),
+    fork(getMyCardsCount),
+    fork(getMyStakedStrength),
+    fork(getTotalStakedStrength),
+    fork(getClaimableNDR),
+    fork(getStakedCards),
+    fork(unStakeCard),
+    fork(unStakeAllCards),
+    fork(claimNDR),
+    fork(approveAll),
+    fork(getApprovedStatus),
+    fork(stakeCard),
   ]);
 }

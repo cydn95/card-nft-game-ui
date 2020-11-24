@@ -23,7 +23,7 @@ const SectionTitleWrapper = styled.div`
       
       &.long {
       	background-image: url('/static/images/bg/components/section-title/section-title-bg--long.png');
-      	width: ${props => props.theme.widthRatio * 352}px;
+      	width: ${props => props.theme.widthRatio * 422}px;
       	margin-right: -${props => props.theme.widthRatio * 10}px;
       	padding-top: ${props => props.theme.heightRatio * 10}px;
       }
