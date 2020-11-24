@@ -36,6 +36,18 @@ export const getCirculatingSupplyAsync = async (instance, tokenId) => {
     });
 };
 
+export const getOwnedCardsCountAsync = async (instance, address, tokenId) => {
+  return await instance.methods
+    .balanceOf(address, tokenId)
+    .call()
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
 export const getStakedStrengthByAddressAsync = async (instance, address) => {
   return await instance.methods
     .strengthWeight(address)
@@ -75,6 +87,18 @@ export const getClaimableNDRAsync = async (instance, address) => {
 export const getStakedCardsAsync = async (instance, address) => {
   return await instance.methods
     .stakedOf(address)
+    .call()
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
+export const isApprovedAllAsync = async (instance, address, spenderAddress) => {
+  return await instance.methods
+    .isApprovedForAll(address, spenderAddress)
     .call()
     .then((data) => {
       return data;

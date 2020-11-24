@@ -14,16 +14,21 @@ import {
 } from "../../helper/contract";
 
 import { getWeb3, getGasPrice } from "../../services/web3";
-import { getNFTInstance, getNFTStakingInstance } from "../../services/web3/instance";
+import {
+  getNFTInstance,
+  getNFTStakingInstance,
+} from "../../services/web3/instance";
 
 import {
   getHeroPriceAsync,
   getSupportPriceAsync,
   getCirculatingSupplyAsync,
+  getOwnedCardsCountAsync,
   getStakedStrengthByAddressAsync,
   getTotalStakedStrengthAsync,
   getClaimableNDRAsync,
   getStakedCardsAsync,
+  isApprovedAllAsync,
   approveAllCardsAsync,
   unStakeCardAsync,
   unStakeAllCardsAsync,
@@ -55,7 +60,7 @@ export function* getCards() {
     if (res.status === 200) {
       const cards = [];
       res.data.cards.forEach((element) => {
-        cards.push({ ...element, minted: 0 });
+        cards.push({ ...element, minted: 0, owned: 0 });
       });
       yield put({
         type: actions.GET_MINTED_COUNT,
@@ -175,6 +180,53 @@ export function* getMintedCount() {
       type: actions.GET_CARDS_SUCCESS,
       cards: newCards,
     });
+  });
+}
+
+export function* getMyCardsCount() {
+  yield takeLatest(actions.GET_MY_CARDS_COUNT, function* ({ payload }) {
+    const { cards } = payload;
+
+    const web3 = yield call(getWeb3);
+    const nft = getNFTInstance(web3);
+
+    const accounts = yield call(web3.eth.getAccounts);
+
+    const newCards = [...cards];
+    cards.forEach(async (c, index) => {
+      const ownedCount = await getOwnedCardsCountAsync(
+        nft.instance,
+        accounts[0],
+        c.id
+      );
+      newCards[index].owned = ownedCount;
+    });
+
+    yield put({
+      type: actions.GET_CARDS_SUCCESS,
+      cards: newCards,
+    });
+  });
+}
+
+export function* getApprovedStatus() {
+  yield takeLatest(actions.GET_APPROVED_STATUS, function* ({ payload }) {
+    const { callback } = payload;
+
+    const web3 = yield call(getWeb3);
+    const nft = getNFTInstance(web3);
+    const nftStaking = getNFTStakingInstance(web3);
+
+    const accounts = yield call(web3.eth.getAccounts);
+
+    const approvedStatusResponse = yield call(
+      isApprovedAllAsync,
+      nft.instance,
+      accounts[0],
+      nftStaking.address
+    );
+
+    callback(approvedStatusResponse);
   });
 }
 
@@ -531,6 +583,7 @@ export default function* rootSaga() {
     fork(getCards),
     fork(getCardsPrice),
     fork(getMintedCount),
+    fork(getMyCardsCount),
     fork(getMyStakedStrength),
     fork(getTotalStakedStrength),
     fork(getClaimableNDR),
@@ -539,6 +592,7 @@ export default function* rootSaga() {
     fork(unStakeAllCards),
     fork(claimNDR),
     fork(approveAll),
+    fork(getApprovedStatus),
     fork(stakeCard),
   ]);
 }

@@ -11,7 +11,6 @@ import cardsActions from "../../redux/cards/actions";
 const NFTStakingModal = ({ onClose }) => {
   const dispatch = useDispatch();
 
-  const [approveLoading, setApproveLoading] = useState(false);
   const [stakeLoading, setStakeLoading] = useState(false);
   const [selectedCardId, setSelectedCardId] = useState(0);
 
@@ -25,27 +24,13 @@ const NFTStakingModal = ({ onClose }) => {
       const idx = stakedCardTokens.findIndex(
         (e) => Number(e) === Number(cards[i].id)
       );
-      if (idx < 0 && Number(cards[i].minted) > 0) {
+      if (idx < 0 && Number(cards[i].owned) > 0) {
         ret.push({ ...cards[i] });
       }
     }
     console.log(ret);
     return ret;
   }, [cards, stakedCardTokens]);
-
-  const handleApproveAll = () => {
-    setApproveLoading(true);
-    dispatch(
-      cardsActions.approveAll(true, (status) => {
-        setApproveLoading(false);
-        if (status) {
-          toast.success("Approved successfully");
-        } else {
-          toast.success("Approved failed");
-        }
-      })
-    );
-  };
 
   const handleStake = (cardId) => {
     setSelectedCardId(cardId);
@@ -72,29 +57,7 @@ const NFTStakingModal = ({ onClose }) => {
   return (
     <NFTStakeModalContainer>
       <div className="header">
-        {approveLoading ? (
-          <div
-            role="button"
-            className="approve-all-button"
-          >
-            <img
-              src="/static/images/icons/loading.gif"
-              height="25"
-              alt=""
-              style={{ marginTop: 3, marginRight: 5 }}
-            />{" "}
-            Approving...
-          </div>
-        ) : (
-          <div
-            role="button"
-            className="approve-all-button"
-            onClick={handleApproveAll}
-          >
-            {`Approve`}
-            <br /> {`All`}
-          </div>
-        )}
+        <h2>Stake your Card</h2>
         <div role="button" className="close-button" onClick={(e) => onClose()}>
           <CloseIcon />
         </div>
@@ -159,36 +122,19 @@ const NFTStakeModalContainer = styled.div`
   .header {
     width: 100%;
     box-sizing: border-box;
-    padding: 150px 10% 30px;
+    padding: 100px 10% 30px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
-    div {
-      font-size: 20px;
+    h2 {
+      font-size: 2.5rem;
       font-family: Orbitron-Black;
       text-transform: uppercase;
       text-shadow: 5px 5px 3px #27787580;
-      line-height: 1.2;
+      line-height: 2.5rem;
       text-align: center;
-    }
-
-    .approve-all-button {
-      background-image: url("/static/images/bg/pages/get-heroes/credit-button-bg.png");
-      background-size: 100% 100%;
-      width: 200px;
-      height: 100px;
-      margin-right: -7px;
-      padding: 15px 17px 32px 0;
-      display: flex;
-      flex-flow: column;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-
-      &:hover {
-        background-image: url("/static/images/bg/pages/get-heroes/credit-button-bg--active.png");
-        color: #fec100;
-      }
+      color: #fec100;
     }
 
     .close-button {

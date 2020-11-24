@@ -51,9 +51,9 @@ export { DEV_NFT_ABI, PROD_NFT_ABI };
 // export const DEV_NFT_STAKING_ADDRESS = "0xe98563c792055e1b28a29ee0375a363b8a8ed107";
 // export const PROD_NFT_STAKING_ADDRESS = "0xe98563c792055e1b28a29ee0375a363b8a8ed107";
 export const DEV_NFT_STAKING_ADDRESS = "0x8E5008C3b6EF2F5813795E2db013027e6f630643";
-export const PROD_NFT_STAKING_ADDRESS = "0x8E5008C3b6EF2F5813795E2db013027e6f630643";
+export const PROD_NFT_STAKING_ADDRESS = "0xF2e2e4B672c117Cbb97eDb9eF092cd5938cd5130";
 export { DEV_NFT_STAKING_ABI, PROD_NFT_STAKING_ABI };
 
-// web3 provider (not used for now)
+// web3 provider (not using for now)
 export const DEV_WEB3_WEBSOCKET_PROVIDER = "wss://kovan.infura.io/ws/v3/235035a10d0a4a9eadc71fff0c1240dc";
 export const PROD_WEB3_WEBSOCKET_PROVIDER = "wss://mainnet.infura.io/ws/v3/235035a10d0a4a9eadc71fff0c1240dc";

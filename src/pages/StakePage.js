@@ -18,10 +18,13 @@ import { MAX_STAKED_CARD_COUNT } from "../helper/constant";
 
 const Stake = () => {
   const dispatch = useDispatch();
-  
+
   const [unStakeLoading, setUnStakeLoading] = useState(false);
   const [stakeDlgOpen, setStakeDlgOpen] = useState(false);
   const [selectedCardId, setSelectedCardId] = useState(0);
+
+  const [approveLoading, setApproveLoading] = useState(false);
+  const [approved, setApproved] = useState(false);
 
   const cards = useSelector((state) => state.Cards.cards);
   const stakedCardTokens = useSelector((state) => state.Cards.stakedCardTokens);
@@ -52,7 +55,18 @@ const Stake = () => {
   useEffect(() => {
     dispatch(cardsActions.getCards());
     dispatch(cardsActions.getStakedCards());
+    dispatch(
+      cardsActions.getApprovedStatus((status) => {
+        setApproved(status);
+      })
+    );
   }, [dispatch]);
+
+  useEffect(() => {
+    if (cards.length > 0) {
+      dispatch(cardsActions.getMyCardsCount(cards));
+    }
+  }, [dispatch, cards]);
 
   const handleUnStake = (cardId) => {
     setSelectedCardId(cardId);
@@ -80,6 +94,25 @@ const Stake = () => {
 
   const handleCloseStakeModal = () => {
     setStakeDlgOpen(false);
+  };
+
+  const handleApproveAll = () => {
+    setApproveLoading(true);
+    dispatch(
+      cardsActions.approveAll(true, (status) => {
+        setApproveLoading(false);
+        if (status) {
+          toast.success("Approved successfully");
+          dispatch(
+            cardsActions.getApprovedStatus((status) => {
+              setApproved(status);
+            })
+          );
+        } else {
+          toast.success("Approved failed");
+        }
+      })
+    );
   };
 
   const { account } = useWallet();
@@ -130,6 +163,9 @@ const Stake = () => {
                     onUnStake={handleUnStake}
                     onStake={handleOpenStakeModal}
                     loadingUnStake={unStakeLoading}
+                    approved={approved}
+                    loadingApprove={approveLoading}
+                    onApprove={handleApproveAll}
                   />
                 ))}
             </div>

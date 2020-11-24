@@ -8,6 +8,9 @@ const CardStaking = ({
   loadingUnStake,
   onUnStake,
   onStake,
+  loadingApprove,
+  approved,
+  onApprove,
 }) => {
   return (
     <CardWrapper>
@@ -25,9 +28,25 @@ const CardStaking = ({
       </div>
       <div className="button-wrapper text-center">
         {unStaked ? (
-          <button className="hover-effect3" onClick={onStake}>
-            Stake
-          </button>
+          approved ? (
+            <button className="hover-effect3" onClick={onStake}>
+              Stake
+            </button>
+          ) : loadingApprove ? (
+            <button className="hover-effect3">
+              <img
+                src="/static/images/icons/loading.gif"
+                height="25"
+                alt=""
+                style={{ marginTop: 3, marginRight: 5 }}
+              />{" "}
+              Approving...
+            </button>
+          ) : (
+            <button className="hover-effect3" onClick={onApprove}>
+              Approve All
+            </button>
+          )
         ) : (
           <button className="hover-effect3" onClick={(e) => onUnStake(card.id)}>
             {loadingUnStake && card.id === currentProcessingCardId ? (

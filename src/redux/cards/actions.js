@@ -8,6 +8,7 @@ const actions = {
   BUY_HERO_CARD_ETH: "BUY_HERO_CARD_ETH",
   BUY_HERO_CARD_HASH: "BUY_HERO_CARD_HASH",
 
+  GET_MY_CARDS_COUNT: "GET_MY_CARDS_COUNT",
   GET_MINTED_COUNT: "GET_MINTED_COUNT",
 
   GET_MY_STAKED_STRENGTH: "GET_MY_STAKED_STRENGTH",
@@ -21,6 +22,8 @@ const actions = {
 
   GET_STAKED_CARDS: "GET_STAKED_CARDS",
   GET_STAKED_CARDS_SUCCESS: "GET_STAKED_CARDS_SUCCESS",
+
+  GET_APPROVED_STATUS: "GET_APPROVED_STATUS",
 
   UNSTAKE_CARD: "UNSTAKE_CARD",
   UNSTAKE_ALL_CARDS: "UNSTAKE_ALL_CARDS",
@@ -38,6 +41,10 @@ const actions = {
     type: actions.GET_MINTED_COUNT,
     payload: { cards },
   }),
+  getMyCardsCount: (cards) => ({
+    type: actions.GET_MY_CARDS_COUNT,
+    payload: { cards },
+  }),
   buyHeroCardEth: (card, callback) => ({
     type: actions.BUY_HERO_CARD_ETH,
     payload: { card, callback },
@@ -47,6 +54,10 @@ const actions = {
     payload: { card, callback },
   }),
 
+  getApprovedStatus: (callback) => ({
+    type: actions.GET_APPROVED_STATUS,
+    payload: { callback },
+  }),
   getMyStakedStrength: () => ({
     type: actions.GET_MY_STAKED_STRENGTH,
   }),
