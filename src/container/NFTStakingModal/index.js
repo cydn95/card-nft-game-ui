@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useWallet } from "use-wallet";
 import { toast } from "react-toastify";
 import styled from "styled-components";
 
@@ -34,6 +33,8 @@ const NFTStakingModal = ({ onClose }) => {
   const handleStake = (e, cardId) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (stakeLoading) return;
 
     setSelectedCardId(cardId);
     setStakeLoading(true);
@@ -84,7 +85,7 @@ const NFTStakingModal = ({ onClose }) => {
                 />
                 <div
                   className="card-border"
-                  onClick={(e) => handlePreventClose(e)}
+                  onClick={(e) => handleStake(e, card.id)}
                 ></div>
               </div>
               <div className="button-wrapper text-center">
@@ -182,15 +183,6 @@ const CardWrapper = styled.div`
       width: 290px;
       height: 410px;
       position: absolute;
-
-      &.un-obtained {
-        opacity: 0.3;
-      }
-    }
-
-    .un-staked {
-      width: 290px;
-      height: 410px;
     }
 
     .card-border {
@@ -201,6 +193,7 @@ const CardWrapper = styled.div`
       height: 443px;
       background: url("/static/images/bg/components/card/card-border.png");
       background-size: cover;
+      cursor: pointer;
     }
 
     .marked {

@@ -4,24 +4,9 @@ import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { toast } from "react-toastify";
 
-import Stake from "../../component/Farm/Stake";
-import Deposit from "../../component/Farm/Deposit";
-import Withdraw from "../../component/Farm/Withdraw";
-
-import {
-  STAKE_MIN_LIMIT,
-  STAKE_MAX_LIMIT,
-  RESPONSE,
-} from "../../helper/constant";
 import { convertFromWei } from "../../helper/utils";
-
 import cardsActions from "../../redux/cards/actions";
 import lpstakingActions from "../../redux/lpstaking/actions";
-
-const DLG_STAKE = 0;
-const DLG_DEPOSIT = 1;
-const DLG_WITHDRAW = 2;
-const DLG_OLD_WITHDRAW = 3;
 
 const NFTStakingBoard = () => {
   const dispatch = useDispatch();
