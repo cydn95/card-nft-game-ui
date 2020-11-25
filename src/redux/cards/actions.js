@@ -20,6 +20,9 @@ const actions = {
   GET_CLAIMABLE_NDR: "GET_CLAIMABLE_NDR",
   GET_CLAIMABLE_NDR_SUCCESS: "GET_CLAIMABLE_NDR_SUCCESS",
 
+  GET_NDR_PER_DAY: "GET_NDR_PER_DAY",
+  GET_NDR_PER_DAY_SUCCESS: "GET_NDR_PER_DAY_SUCCESS",
+
   GET_STAKED_CARDS: "GET_STAKED_CARDS",
   GET_STAKED_CARDS_SUCCESS: "GET_STAKED_CARDS_SUCCESS",
 
@@ -66,6 +69,9 @@ const actions = {
   }),
   getClaimableNDR: () => ({
     type: actions.GET_CLAIMABLE_NDR,
+  }),
+  getNDRPerDay: () => ({
+    type: actions.GET_NDR_PER_DAY,
   }),
   getStakedCards: () => ({
     type: actions.GET_STAKED_CARDS,
