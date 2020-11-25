@@ -24,6 +24,7 @@ const initState = {
   myStakedStrength: 0,
   totalStakedStrength: 0,
   claimableNDR: 0,
+  ndrPerDay: 0,
   stakedCardTokens: [],
 };
 
@@ -53,6 +54,11 @@ export default function pageReducer(state = initState, action) {
       return {
         ...state,
         claimableNDR: action.claimableNDR,
+      };
+    case actions.GET_NDR_PER_DAY_SUCCESS:
+      return {
+        ...state,
+        ndrPerDay: action.ndrPerDay,
       };
     case actions.GET_STAKED_CARDS_SUCCESS:
       return {

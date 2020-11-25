@@ -27,6 +27,7 @@ import {
   getStakedStrengthByAddressAsync,
   getTotalStakedStrengthAsync,
   getClaimableNDRAsync,
+  getRewardRateAsync,
   getStakedCardsAsync,
   isApprovedAllAsync,
   approveAllCardsAsync,
@@ -281,6 +282,26 @@ export function* getClaimableNDR() {
     yield put({
       type: actions.GET_CLAIMABLE_NDR_SUCCESS,
       claimableNDR: ret,
+    });
+  });
+}
+
+export function* getNDRPerDay() {
+  yield takeLatest(actions.GET_NDR_PER_DAY, function* () {
+    const web3 = yield call(getWeb3);
+    const nftStaking = getNFTStakingInstance(web3);
+
+    const accounts = yield call(web3.eth.getAccounts);
+    
+    const rewardRate = yield call(getRewardRateAsync, nftStaking.instance);
+    const myStrength = yield call(getStakedStrengthByAddressAsync, nftStaking.instance, accounts[0]);
+    const totalStrength = yield call(getTotalStakedStrengthAsync, nftStaking.instance);
+
+    const ndrPerDay = ((rewardRate * myStrength) / totalStrength) * 86400;
+
+    yield put({
+      type: actions.GET_NDR_PER_DAY_SUCCESS,
+      ndrPerDay: ndrPerDay,
     });
   });
 }
@@ -587,6 +608,7 @@ export default function* rootSaga() {
     fork(getMyStakedStrength),
     fork(getTotalStakedStrength),
     fork(getClaimableNDR),
+    fork(getNDRPerDay),
     fork(getStakedCards),
     fork(unStakeCard),
     fork(unStakeAllCards),

@@ -84,6 +84,18 @@ export const getClaimableNDRAsync = async (instance, address) => {
     });
 };
 
+export const getRewardRateAsync = async (instance, address) => {
+  return await instance.methods
+    .rewardRate()
+    .call()
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
 export const getStakedCardsAsync = async (instance, address) => {
   return await instance.methods
     .stakedOf(address)

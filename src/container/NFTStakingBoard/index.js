@@ -19,11 +19,24 @@ const NFTStakingBoard = () => {
     (state) => state.Cards.totalStakedStrength
   );
   const claimableNDR = useSelector((state) => state.Cards.claimableNDR);
+  const ndrPerDay = useSelector((state) => state.Cards.ndrPerDay);
 
   const init = useCallback(() => {
     dispatch(cardsActions.getMyStakedStrength());
     dispatch(cardsActions.getTotalStakedStrength());
     dispatch(cardsActions.getClaimableNDR());
+    dispatch(cardsActions.getNDRPerDay());
+  }, [dispatch]);
+
+  // Timer to get <NDR Per Day>
+  useEffect(() => {
+    let interval = null;
+
+    interval = setInterval(() => {
+      dispatch(cardsActions.getClaimableNDR());
+      dispatch(cardsActions.getNDRPerDay());
+    }, 30000);
+    return () => clearInterval(interval);
   }, [dispatch]);
 
   useEffect(() => {
@@ -91,8 +104,14 @@ const NFTStakingBoard = () => {
           <p>{totalStakedStrength}</p>
         </div>
         <div className="stat">
-          <h6>Claimable NDR</h6>
-          <p>{convertFromWei(claimableNDR)}</p>
+          <div>
+            <label>Claimable NDR:</label>
+            <span>{convertFromWei(claimableNDR)}</span>
+          </div>
+          <div>
+            <label>NDR per day:</label>
+            <span>{convertFromWei(ndrPerDay)}</span>
+          </div>
         </div>
         {claimNDRLoading ? (
           <div className="action button">
@@ -148,6 +167,31 @@ const NFTStakeWrapper = styled.div`
         min-width: 293px;
         text-shadow: 15px 15px 10px #80f1ed91;
         font-family: Orbitron-Black;
+
+        > div:first-child {
+          margin-bottom: 4px;
+        }
+
+        div {
+          label {
+            color: #80f1ed;
+            font-size: 1rem;
+            // font-family: Orbitron-Medium;
+            line-height: 1rem;
+            margin: 0;
+          }
+
+          span {
+            color: #fec100;
+            font-size: 1.125rem;
+            // font-family: Orbitron-Black;
+            line-height: 1rem;
+            padding-left: 9px;
+            margin: 0;
+            text-shadow: inherit;
+          }
+        }
+
         h6 {
           color: #80f1ed;
           font-size: 20px;
