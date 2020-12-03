@@ -179,7 +179,7 @@ const CardWrapper = styled.div`
     }
 
     label {
-      font-size: 13.6667px;
+      font-size: 12.6667px;
       font-family: Orbitron-Medium;
       color: ${(props) => props.theme.palette.primary.main};
       margin-bottom: 0;
@@ -200,6 +200,7 @@ const CardWrapper = styled.div`
       display: flex;
       align-items: flex-end;
       justify-content: space-between;
+      font-size: 1.125rem;
 
       button {
         padding-bottom: -4.66667px;

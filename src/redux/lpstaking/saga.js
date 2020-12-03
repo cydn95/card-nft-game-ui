@@ -19,6 +19,7 @@ import {
   PROD_UNISWAPV2PAIR_ADDRESS,
   DEV_UNISWAPV2PAIR_ABI,
   PROD_UNISWAPV2PAIR_ABI,
+  WETH_TOKEN,
 } from "../../helper/contract";
 import { RESPONSE } from "../../helper/constant";
 
@@ -30,7 +31,17 @@ import {
   depositAsync,
   withdrawAsync,
   approveAsync,
+  getTotalSupply,
 } from "../../services/web3/lpStaking";
+
+import { getTokenInfo, getPairInfo } from "../../services/graphql";
+import { lookUpPrices } from "../../services/web3";
+
+import {
+  getLPStakingInstance,
+  getNDRInstance,
+  getUniInstance,
+} from "../../services/web3/instance";
 
 const { REACT_APP_BUILD_MODE } = process.env;
 
@@ -412,6 +423,55 @@ export function* withdrawOldLP() {
   });
 }
 
+export function* getStatistics() {
+  yield takeLatest(actions.GET_STATISTICS, function* () {
+    const web3 = yield call(getWeb3);
+    const uni = getUniInstance(web3);
+    const lp = getLPStakingInstance(web3);
+
+    const ethPrice = (yield call(lookUpPrices, ["ethereum"])).ethereum.usd;
+
+    const pairtokenInfo = yield call(getPairInfo, PROD_UNISWAPV2PAIR_ADDRESS);
+
+    const uniTotalSupply = yield call(getTotalSupply, uni.instance);
+
+    const stakingTokenPriceEth =
+      (pairtokenInfo.token0.derivedETH * pairtokenInfo.reserve0 +
+        pairtokenInfo.token1.derivedETH * pairtokenInfo.reserve1) /
+      (Number(uniTotalSupply) / Math.pow(10, 18));
+    const stakingTokenPriceNDR =
+      (stakingTokenPriceEth * pairtokenInfo.reserve0) / pairtokenInfo.reserve1;
+
+    // console.log(
+    //   ethPrice,
+    //   pairtokenInfo,
+    //   uniTotalSupply,
+    //   stakingTokenPriceEth,
+    //   stakingTokenPriceNDR
+    // );
+
+    // Get TVL
+    const lockedAmount = yield call(getBalanceAsync, uni.instance, lp.address);
+    const stakingTokenPrice =
+      (pairtokenInfo.token0.derivedETH * ethPrice * pairtokenInfo.reserve0 +
+        pairtokenInfo.token1.derivedETH * ethPrice * pairtokenInfo.reserve1) /
+      (Number(uniTotalSupply) / Math.pow(10, 18));
+
+    const tvl = (stakingTokenPrice * lockedAmount) / Math.pow(10, 18);
+
+    // console.log(lockedAmount, tvl);
+
+    yield put({
+      type: actions.GET_STATISTICS_SUCCESS,
+      stat: {
+        tvl: tvl.toLocaleString('en-US', { maximumFractionDigits: 2 }),
+        lpPriceNDR: stakingTokenPriceNDR.toFixed(2),
+        lpPriceETH: stakingTokenPriceEth.toFixed(2),
+      },
+    });
+  });
+}
+
 export default function* rootSaga() {
   yield all([
     fork(getNDRBalance),
@@ -424,5 +484,6 @@ export default function* rootSaga() {
     fork(getEarningAmount),
     fork(getLPTokenBalance),
     fork(getLPTokenAllowance),
+    fork(getStatistics),
   ]);
 }

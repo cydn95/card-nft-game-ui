@@ -14,7 +14,7 @@ import PROD_UNISWAPV2PAIR_ABI from "./json/UniswapV2Pair_abi_prod.json";
 import DEV_NDR_ABI from "./json/NDR_abi_dev.json";
 import PROD_NDR_ABI from "./json/NDR_abi_prod.json";
 
-// NDR
+// NFT
 import DEV_NFT_ABI from "./json/NFT_abi_dev.json";
 import PROD_NFT_ABI from "./json/NFT_abi_prod.json";
 
@@ -57,3 +57,6 @@ export { DEV_NFT_STAKING_ABI, PROD_NFT_STAKING_ABI };
 // web3 provider (not using for now)
 export const DEV_WEB3_WEBSOCKET_PROVIDER = "wss://kovan.infura.io/ws/v3/235035a10d0a4a9eadc71fff0c1240dc";
 export const PROD_WEB3_WEBSOCKET_PROVIDER = "wss://mainnet.infura.io/ws/v3/235035a10d0a4a9eadc71fff0c1240dc";
+
+// WETH (MainNet)
+export const WETH_TOKEN = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"

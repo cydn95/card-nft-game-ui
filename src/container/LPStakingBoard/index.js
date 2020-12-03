@@ -33,12 +33,14 @@ const LPStakingBoard = () => {
   const stakedAmount = useSelector((state) => state.LpStaking.stakedAmount);
   const oldStakedAmount = useSelector((state) => state.LpStaking.oldStakedAmount);
   const earningAmount = useSelector((state) => state.LpStaking.earningAmount);
+  const stat = useSelector((state) => state.LpStaking.stat)
 
   const init = useCallback(() => {
     dispatch(lpstakingActions.getLPTokenBalance());
     dispatch(lpstakingActions.getStakedAmount());
     dispatch(lpstakingActions.getOldStakedAmount());
     dispatch(lpstakingActions.getEarningAmount());
+    dispatch(lpstakingActions.getStatistics());
   }, [dispatch]);
 
   useEffect(() => {
@@ -75,6 +77,7 @@ const LPStakingBoard = () => {
       dispatch(lpstakingActions.getStakedAmount());
       // dispatch(lpstakingActions.getOldStakedAmount());
       dispatch(lpstakingActions.getEarningAmount());
+      dispatch(lpstakingActions.getStatistics());
     } else {
       toast.error("Unexpected error...");
     }
@@ -146,12 +149,13 @@ const LPStakingBoard = () => {
   };
 
   return (
-    <>
+    <div style={{ marginTop: 20 }}>
       {openStatus === DLG_STAKE && (
         <Stake
-          hashes={convertFromWei(earningAmount)}
+          hashes={convertFromWei(earningAmount, 2)}
           staked={convertFromWei(stakedAmount)}
           balance={convertFromWei(balance)}
+          stat={stat}
           onOpenDeposit={handleOpenDeposit}
           onOpenWithdraw={handleOpenWithdraw}
           onOpenOldWithdraw={handleOpenOldWithdraw}
@@ -184,7 +188,7 @@ const LPStakingBoard = () => {
           onWithdraw={handleOldWithdraw}
         />
       )}
-    </>
+    </div>
   );
 };
 

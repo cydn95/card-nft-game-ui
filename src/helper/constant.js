@@ -36,6 +36,11 @@ export const CARD_SERIES = {
   SUPPORT: "Support",
 };
 
+export const CARD_SUB_SERIES = {
+  HERO: ['Devs', 'Influencers', 'Artists'],
+  SUPPORT: ['Wisdom', 'Attack']
+}
+
 export const CARD_TYPE = {
   HERO: [CARD_SERIES.PEOPLE],
   SUPPORT: [CARD_SERIES.SUPPORT],

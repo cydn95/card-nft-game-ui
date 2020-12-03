@@ -45,6 +45,7 @@ import {
   CARD_TYPE,
   RESPONSE,
 } from "../../helper/constant";
+import { cardCompare } from "../../helper/utils";
 import { getCardsAPI } from "../../services/axios/api";
 
 const { REACT_APP_BUILD_MODE } = process.env;
@@ -63,6 +64,9 @@ export function* getCards() {
       res.data.cards.forEach((element) => {
         cards.push({ ...element, minted: 0, owned: 0 });
       });
+
+      cards.sort(cardCompare);
+
       yield put({
         type: actions.GET_MINTED_COUNT,
         payload: { cards },
@@ -292,7 +296,7 @@ export function* getNDRPerDay() {
     const nftStaking = getNFTStakingInstance(web3);
 
     const accounts = yield call(web3.eth.getAccounts);
-    
+
     const rewardRate = yield call(getRewardRateAsync, nftStaking.instance);
     const myStrength = yield call(getStakedStrengthByAddressAsync, nftStaking.instance, accounts[0]);
     const totalStrength = yield call(getTotalStakedStrengthAsync, nftStaking.instance);

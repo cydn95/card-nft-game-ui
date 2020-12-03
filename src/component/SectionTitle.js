@@ -1,6 +1,17 @@
 import React from "react";
 import styled from "styled-components";
 
+const SectionTitle = ({ title, long }) => {
+	return (
+		<SectionTitleWrapper>
+			<div className={`title ${long && 'long'}`}>
+				{ title }
+			</div>
+			<div className="title-line" />
+		</SectionTitleWrapper>
+	);
+};
+
 const SectionTitleWrapper = styled.div`
 	display: flex;
 
@@ -37,16 +48,5 @@ const SectionTitleWrapper = styled.div`
       height: ${props => props.theme.heightRatio * 69}px;
     }
 `;
-
-const SectionTitle = ({ title, long }) => {
-	return (
-		<SectionTitleWrapper>
-			<div className={`title ${long && 'long'}`}>
-				{ title }
-			</div>
-			<div className="title-line" />
-		</SectionTitleWrapper>
-	);
-};
 
 export default SectionTitle;

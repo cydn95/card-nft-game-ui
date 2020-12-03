@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
+import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { useWallet } from "use-wallet";
 import { toast } from "react-toastify";
 
-import { Nav, Tab } from "react-bootstrap";
-
-import SectionTitle from "../component/SectionTitle";
+import SectionTitleMenu from "../component/SectionTitleMenu";
 import CardBuying from "../component/Card/CardBuying";
 import LPStakingBoard from "../container/LPStakingBoard";
 
@@ -13,7 +12,9 @@ import UnlockWalletPage from "./UnlockWalletPage";
 
 import cardsActions from "../redux/cards/actions";
 import lpstakingActions from "../redux/lpstaking/actions";
-import { RESPONSE, CARD_TYPE } from "../helper/constant";
+import { RESPONSE, CARD_TYPE, CARD_SUB_SERIES } from "../helper/constant";
+
+import cx from "classnames";
 
 const GetHeroes = () => {
   const dispatch = useDispatch();
@@ -24,6 +25,9 @@ const GetHeroes = () => {
   const [isBuyingHash, setBuyingHash] = useState(false);
   const [isBuyingEth, setBuyingEth] = useState(false);
   const [selectedCardId, setSelectedCardId] = useState(0);
+
+  const [cardFilter, setCardFilter] = useState("All");
+  const [subCardFilter, setSubCardFilter] = useState("All");
 
   // Timer to get price and minted count frequently - 30s
   useEffect(() => {
@@ -82,81 +86,120 @@ const GetHeroes = () => {
 
   const { account } = useWallet();
 
+  const filteredCardList = useMemo(() => {
+    let ret = [...cards];
+
+    if (cardFilter === "Heroes") {
+      ret = ret.filter((c) => CARD_TYPE.HERO.includes(c.series));
+    }
+    if (cardFilter === "Support") {
+      ret = ret.filter((c) => CARD_TYPE.SUPPORT.includes(c.series));
+    }
+    if (subCardFilter !== "All") {
+      ret = ret.filter((c) => c.sub_series === subCardFilter);
+    }
+
+    return ret;
+  }, [cardFilter, subCardFilter, cards]);
+
+  const subMenuList = useMemo(() => {
+    if (cardFilter === "Heroes") {
+      return ["All", ...CARD_SUB_SERIES.HERO];
+    }
+    if (cardFilter === "Support") {
+      return ["All", ...CARD_SUB_SERIES.SUPPORT];
+    }
+    return ["All", ...CARD_SUB_SERIES.HERO, ...CARD_SUB_SERIES.SUPPORT];
+  }, [cardFilter]);
+
   if (!account) {
     return <UnlockWalletPage />;
   }
 
   return (
     <>
-      <Tab.Container id="left-tabs-example" defaultActiveKey="heroes">
-        <Nav
-          variant="pills"
-          className="justify-content-center animation-fadeIn"
-        >
-          <Nav.Item>
-            <Nav.Link eventKey="heroes">Heroes</Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link eventKey="items">Support</Nav.Link>
-          </Nav.Item>
-        </Nav>
-        <Tab.Content>
-          <Tab.Pane eventKey="heroes">
-            <LPStakingBoard />
-            <div className="section-title d-flex justify-content-center animation-fadeInRight">
-              <SectionTitle title={"Heroes"} />
-            </div>
-            <div
-              className="d-flex flex-wrap justify-content-center"
-              style={{ paddingBottom: 100 }}
-            >
-              {cards
-                .filter((c) => CARD_TYPE.HERO.includes(c.series))
-                .map((c) => (
-                  <CardBuying
-                    key={`card_${c.id}`}
-                    card={c}
-                    onBuyCardEth={handleBuyCardEth}
-                    onBuyCardHash={handleBuyCardHash}
-                    isHero={true}
-                    eth={cardPrice[c.rarity.weight].hero}
-                    currentProcessingCardId={selectedCardId}
-                    loadingHash={isBuyingHash}
-                    loadingEth={isBuyingEth}
-                  />
-                ))}
-            </div>
-          </Tab.Pane>
-          <Tab.Pane eventKey="items">
-            <LPStakingBoard />
-            <div className="section-title d-flex justify-content-center animation-fadeInRight">
-              <SectionTitle title={"Support"} />
-            </div>
-            <div
-              className="d-flex flex-wrap justify-content-center"
-              style={{ paddingBottom: 100 }}
-            >
-              {cards
-                .filter((c) => CARD_TYPE.SUPPORT.includes(c.series))
-                .map((c) => (
-                  <CardBuying
-                    key={`card_${c.id}`}
-                    card={c}
-                    onBuyCardEth={handleBuyCardEth}
-                    onBuyCardHash={handleBuyCardHash}
-                    isHero={false}
-                    eth={cardPrice[c.rarity.weight].support}
-                    currentProcessingCardId={selectedCardId}
-                    loadingHash={isBuyingHash}
-                    loadingEth={isBuyingEth}
-                  />
-                ))}
-            </div>
-          </Tab.Pane>
-        </Tab.Content>
-      </Tab.Container>
+      <LPStakingBoard />
+      <MenuWrapper className="animation-fadeInRight">
+        <SectionTitleMenu
+          data={[{ title: "All" }, { title: "Heroes" }, { title: "Support" }]}
+          selected={cardFilter}
+          onChangeMenu={(selected) => {
+            setCardFilter(selected);
+            setSubCardFilter("All");
+          }}
+        />
+      </MenuWrapper>
+      <MenuWrapper className="animation-fadeInRight">
+        {subMenuList.map((menu, index) => (
+          <SubMenuLink
+            key={index}
+            className={cx({ active: menu === subCardFilter })}
+            onClick={(e) => {
+              e.preventDefault();
+              setSubCardFilter(menu);
+            }}
+          >
+            {menu}
+          </SubMenuLink>
+        ))}
+      </MenuWrapper>
+      <CardContainer>
+        {filteredCardList.map((c) => (
+          <CardBuying
+            key={`card_${c.id}`}
+            card={c}
+            onBuyCardEth={handleBuyCardEth}
+            onBuyCardHash={handleBuyCardHash}
+            isHero={true}
+            eth={cardPrice[c.rarity.weight].hero}
+            currentProcessingCardId={selectedCardId}
+            loadingHash={isBuyingHash}
+            loadingEth={isBuyingEth}
+          />
+        ))}
+      </CardContainer>
     </>
   );
 };
 
+const CardContainer = styled.div`
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: start;
+  padding-bottom: 100px;
+  max-width: 1350px;
+  margin-left: auto;
+  margin-right: auto;
+`;
+const MenuWrapper = styled.div`
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: start;
+  max-width: 1350px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 15px;
+`;
+
+const SubMenuLink = styled.a`
+  color: #417977;
+  font-size: 2rem;
+  font-family: Orbitron-Black;
+  text-shadow: 4px 4px 2.7px #27787580;
+  padding-right: 40px;
+  cursor: pointer;
+
+  &:first-child {
+    padding-left: 80px;
+  }
+
+  &:hover {
+    color: #80f1ed;
+    text-decoration: none;
+  }
+
+  &.active {
+    color: #80f1ed;
+  }
+`;
 export default GetHeroes;

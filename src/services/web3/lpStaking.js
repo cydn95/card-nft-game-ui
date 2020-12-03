@@ -49,6 +49,18 @@ export const getAllowanceAsync = async (instance, owner, sender) => {
     });
 };
 
+export const getTotalSupply = async (instance) => {
+  return await instance.methods
+    .totalSupply()
+    .call()
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
 export const depositAsync = async (instance, web3, amount, address) => {
   const response = await axios.get(
     "https://ethgasstation.info/json/ethgasAPI.json"

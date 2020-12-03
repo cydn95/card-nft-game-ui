@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import SectionTitle from "../component/SectionTitle";
-import Card from "../component/Card";
+import Card_2 from "../component/Card_2";
 
 const GetHeroesWrapper = styled.div`
 	.card-credit {
@@ -204,7 +204,7 @@ const GetHeroes = () => {
 			</div>
 			<div className="d-flex justify-content-center flex-wrap">
 				{
-					Villains.map((c) => <Card card={c.card} cardGrid={c.cardGrid} />)
+					Villains.map((c, index) => <Card_2 key={index} card={c.card} cardGrid={c.cardGrid} />)
 				}
 			</div>
 		</GetHeroesWrapper>

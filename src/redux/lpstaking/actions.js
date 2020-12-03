@@ -26,6 +26,9 @@ const actions = {
   WITHDRAW_LP: "WITHDRAW_LP",
   WITHDRAW_OLD_LP: "WITHDRAW_OLD_LP",
 
+  GET_STATISTICS: "GET_STATISTICS",
+  GET_STATISTICS_SUCCESS: "GET_STATISTICS_SUCCESS",
+
   getLPTokenAllowance: () => ({
     type: actions.GET_ALLOWANCE_LP_TOKEN,
   }),
@@ -61,6 +64,10 @@ const actions = {
     type: actions.WITHDRAW_OLD_LP,
     payload: { amount, callback },
   }),
+
+  getStatistics: () => ({
+    type: actions.GET_STATISTICS
+  })
 };
 
 export default actions;
