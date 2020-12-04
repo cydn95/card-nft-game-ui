@@ -115,7 +115,7 @@ const GetHeroes = () => {
     if (cardFilter === "Badges") {
       return ["All", ...CARD_SUB_SERIES.BADGE];
     }
-    return ["All", ...CARD_SUB_SERIES.HERO, ...CARD_SUB_SERIES.SUPPORT];
+    return ["All", ...CARD_SUB_SERIES.HERO, ...CARD_SUB_SERIES.SUPPORT, ...CARD_SUB_SERIES.BADGE];
   }, [cardFilter]);
 
   if (!account) {
