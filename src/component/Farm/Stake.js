@@ -43,22 +43,22 @@ const Stake = ({
         <ModalMask onClose={() => setShowHelp(false)} />
       }
       <div className="stake-wrapper d-flex justify-content-center align-items-end animation-slideDown">
-        <a className="action" href="/" onClick={(e) => handleOpenHelp(e)} style={{ zIndex: 200 }}>
+        <a className="b-control b-help action" href="/" onClick={(e) => handleOpenHelp(e)} style={{ zIndex: 200 }}>
           {showHelp ? <span>X</span> : <span>?</span>}
         </a>
         <div className="stat">
           <div className="section top">
-            <div className="credit" style={{ height: 70, marginRight: -22 }}>
+            <div className="b-control credit" style={{ height: 70, marginRight: -22 }}>
               <label className="stat-info">TVL:</label>
               <span className="stat-info">{`$ ${stat.tvl}`}</span>
             </div>
-            <div className="credit" style={{ width: 550, height: 70 }}>
+            <div className="b-control credit" style={{ width: 550, height: 70 }}>
               <label className="stat-info">1 UNI-LP</label>
               <span className="stat-info">{`${stat.lpPriceNDR} NDR ${stat.lpPriceETH} ETH`}</span>
             </div>
           </div>
           <div className="section">
-            <div className="credit" style={{ marginRight: -22 }}>
+            <div className="b-control credit" style={{ marginRight: -22 }}>
               <div>
                 <label>Hashes</label>
                 <span>{hashes}</span>
@@ -68,7 +68,7 @@ const Stake = ({
                 <span>{(staked / 2.25 * 10).toFixed(2)}</span>
               </div>
             </div>
-            <div className="credit" style={{ width: 550 }}>
+            <div className="b-control credit" style={{ width: 550 }}>
               <div>
                 <label>UNI-LP Staked</label>
                 <span>{staked}</span>
@@ -86,38 +86,40 @@ const Stake = ({
             the sable cloud beneath was dished out, and the car seemed to float in the
             middle of an immense dark sphere, whose upper half was strewn with silver.
           </div>}
+          <div className="section">
+            <a
+              className="b-control action"
+              href="https://app.uniswap.org/#/add/0x739763a258640919981f9ba610ae65492455be53/ETH"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <ShoppingCart />
+              <span>GET UNI-LP</span>
+            </a>
+            <a
+              className="b-control action"
+              href="https://info.uniswap.org/pair/0x65d0a154d2425ce2fd5fed3bdae94d9a9afe55ce"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <ShoppingCart />
+              <span>BUY NDR</span>
+            </a>
+            <a className="b-control action" href="/" onClick={(e) => handleOpenDeposit(e)}>
+              <Reply />
+              <span>STAKE</span>
+            </a>
+            <a
+              className="b-control action"
+              href="/"
+              onClick={(e) => handleOpenWithdraw(e)}
+              title="There is a 2% LP withdrawal fee."
+            >
+              <Reply />
+              <span>UNSTAKE</span>
+            </a>
+          </div>
         </div>
-        <a
-          className="action"
-          href="https://app.uniswap.org/#/add/0x739763a258640919981f9ba610ae65492455be53/ETH"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <ShoppingCart />
-          <span>GET UNI-LP</span>
-        </a>
-        <a
-          className="action"
-          href="https://info.uniswap.org/pair/0x65d0a154d2425ce2fd5fed3bdae94d9a9afe55ce"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <ShoppingCart />
-          <span>BUY NDR</span>
-        </a>
-        <a className="action" href="/" onClick={(e) => handleOpenDeposit(e)}>
-          <Reply />
-          <span>STAKE</span>
-        </a>
-        <a
-          className="action"
-          href="/"
-          onClick={(e) => handleOpenWithdraw(e)}
-          title="There is a 2% LP withdrawal fee."
-        >
-          <Reply />
-          <span>UNSTAKE</span>
-        </a>
         {/* <a
           className="action"
           href="/"
@@ -154,8 +156,7 @@ const StakeWrapper = styled.div`
       z-index: 300;
     }
 
-    > a,
-    div {
+    .b-control {
       color: #212529;
       text-decoration: none;
 
@@ -171,9 +172,9 @@ const StakeWrapper = styled.div`
       &.action {
         background-image: url("/static/images/bg/pages/get-heroes/credit-button-bg.png");
         background-size: 100% 100%;
-        width: 170px;
+        width: 252px;
         height: 110px;
-        margin-right: -13px;
+        margin-right: -24px;
         padding: 0 17px 22px 0;
         display: flex;
         flex-flow: column;
@@ -188,7 +189,7 @@ const StakeWrapper = styled.div`
           height: 36px;
         }
 
-        &:first-child {
+        &.b-help {
           background: url("/static/images/bg/pages/get-heroes/credit-button-bg--active.png");
           background-size: 100% 100%;
           width: 80px;

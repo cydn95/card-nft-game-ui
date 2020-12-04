@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { CARD_HASH_PRICE_UNIT } from "../../helper/constant";
+import { CARD_HASH_PRICE_UNIT, OPENSEA_BUY_LINK } from "../../helper/constant";
 import { convertFromWei } from "../../helper/utils";
 
 const CardBuying = ({
@@ -53,10 +53,35 @@ const CardBuying = ({
               </div>
             </div>
           </div>
-          <div className="grid-button-wrapper">
-            {isHero &&
-              (loadingHash && card.id === currentProcessingCardId ? (
-                <button className="hash-button hover-effect2">
+          {Number(card.minted) < Number(card.total_minted) ? (
+            <div className="grid-button-wrapper">
+              {isHero &&
+                (loadingHash && card.id === currentProcessingCardId ? (
+                  <button className="hash-button hover-effect2">
+                    <div className="loading-wrapper">
+                      <img
+                        src="/static/images/icons/loading.gif"
+                        height="20"
+                        alt=""
+                      />
+                      BUYING...
+                    </div>
+                  </button>
+                ) : (
+                  <button
+                    className="hash-button hover-effect2"
+                    onClick={(e) => onBuyCardHash(card)}
+                  >
+                    {card.rarity.weight * CARD_HASH_PRICE_UNIT} Hash
+                  </button>
+                ))}
+
+              {loadingEth && card.id === currentProcessingCardId ? (
+                <button
+                  className={`${
+                    isHero ? "eth-button" : "buy-button"
+                  } hover-effect2`}
+                >
                   <div className="loading-wrapper">
                     <img
                       src="/static/images/icons/loading.gif"
@@ -68,42 +93,30 @@ const CardBuying = ({
                 </button>
               ) : (
                 <button
-                  className="hash-button hover-effect2"
-                  onClick={(e) => onBuyCardHash(card)}
+                  className={`${
+                    isHero ? "eth-button" : "buy-button"
+                  } hover-effect2`}
+                  onClick={(e) => onBuyCardEth(card)}
                 >
-                  {card.rarity.weight * CARD_HASH_PRICE_UNIT} Hash
+                  {" "}
+                  <span>Ξ</span>
+                  {` `}
+                  {convertFromWei(eth, 4)}
                 </button>
-              ))}
-
-            {loadingEth && card.id === currentProcessingCardId ? (
-              <button
-                className={`${
-                  isHero ? "eth-button" : "buy-button"
-                } hover-effect2`}
+              )}
+            </div>
+          ) : (
+            <div className="grid-button-wrapper">
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                className="buy-button hover-effect2"
+                href={`${OPENSEA_BUY_LINK}${card.id}`}
               >
-                <div className="loading-wrapper">
-                  <img
-                    src="/static/images/icons/loading.gif"
-                    height="20"
-                    alt=""
-                  />
-                  BUYING...
-                </div>
-              </button>
-            ) : (
-              <button
-                className={`${
-                  isHero ? "eth-button" : "buy-button"
-                } hover-effect2`}
-                onClick={(e) => onBuyCardEth(card)}
-              >
-                {" "}
-                <span>Ξ</span>
-                {` `}
-                {convertFromWei(eth, 4)}
-              </button>
-            )}
-          </div>
+                Buy on Opensea
+              </a>
+            </div>
+          )}
         </div>
       </div>
     </CardWrapper>
@@ -148,7 +161,7 @@ const CardWrapper = styled.div`
   .button-wrapper {
     margin-top: -11.666px;
 
-    button {
+    a, button {
       width: 238px;
       height: 52px;
       background: url("/static/images/bg/components/card/button-bg.png");
@@ -158,6 +171,11 @@ const CardWrapper = styled.div`
       font-family: Orbitron-Medium;
       text-shadow: 5px 5px 3px #27787580;
       outline: none;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: none;
+      }
     }
   }
 
@@ -202,7 +220,7 @@ const CardWrapper = styled.div`
       justify-content: space-between;
       font-size: 1.125rem;
 
-      button {
+      a, button {
         padding-bottom: -4.66667px;
 
         &.hash-button {

@@ -23,6 +23,8 @@ const SectionTitleMenu = ({ data, selected, onChangeMenu }) => {
 
 const SectionTitleWrapper = styled.div`
   display: flex;
+  margin-left: 20px;
+  margin-top: 20px;
 
   .title {
     background-image: url("/static/images/bg/components/section-title/section-title-last-bg.png");
@@ -60,7 +62,7 @@ const SectionTitleWrapper = styled.div`
     background-position: bottom;
     background-size: 100% 18px;
     margin-left: 30px;
-    width: 500px;
+    width: 300px;
     height: 65px;
   }
 `;

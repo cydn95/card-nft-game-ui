@@ -12,7 +12,7 @@ import UnlockWalletPage from "./UnlockWalletPage";
 
 import cardsActions from "../redux/cards/actions";
 import lpstakingActions from "../redux/lpstaking/actions";
-import { RESPONSE, CARD_TYPE, CARD_SUB_SERIES } from "../helper/constant";
+import { RESPONSE, CARD_TYPE, CARD_SERIES, CARD_SUB_SERIES } from "../helper/constant";
 
 import cx from "classnames";
 
@@ -95,6 +95,9 @@ const GetHeroes = () => {
     if (cardFilter === "Support") {
       ret = ret.filter((c) => CARD_TYPE.SUPPORT.includes(c.series));
     }
+    if (cardFilter === "Badges") {
+      ret = ret.filter((c) => CARD_TYPE.BADGE.includes(c.series));
+    }
     if (subCardFilter !== "All") {
       ret = ret.filter((c) => c.sub_series === subCardFilter);
     }
@@ -109,6 +112,9 @@ const GetHeroes = () => {
     if (cardFilter === "Support") {
       return ["All", ...CARD_SUB_SERIES.SUPPORT];
     }
+    if (cardFilter === "Badges") {
+      return ["All", ...CARD_SUB_SERIES.BADGE];
+    }
     return ["All", ...CARD_SUB_SERIES.HERO, ...CARD_SUB_SERIES.SUPPORT];
   }, [cardFilter]);
 
@@ -121,7 +127,7 @@ const GetHeroes = () => {
       <LPStakingBoard />
       <MenuWrapper className="animation-fadeInRight">
         <SectionTitleMenu
-          data={[{ title: "All" }, { title: "Heroes" }, { title: "Support" }]}
+          data={[{ title: "All" }, { title: "Heroes" }, { title: "Support" }, { title: "Badges" }]}
           selected={cardFilter}
           onChangeMenu={(selected) => {
             setCardFilter(selected);
@@ -150,7 +156,7 @@ const GetHeroes = () => {
             card={c}
             onBuyCardEth={handleBuyCardEth}
             onBuyCardHash={handleBuyCardHash}
-            isHero={true}
+            isHero={CARD_TYPE.HERO.includes(c.series)}
             eth={cardPrice[c.rarity.weight].hero}
             currentProcessingCardId={selectedCardId}
             loadingHash={isBuyingHash}
