@@ -47,17 +47,17 @@ const Stake = ({
         </a>
         <div className="stat">
           <div className="section top">
-            <div className="b-control credit" style={{ height: 70, marginRight: -22 }}>
+            <div className="b-control credit" style={{ height: 56, marginRight: -17.6 }}>
               <label className="stat-info">TVL:</label>
               <span className="stat-info">{`$ ${stat.tvl}`}</span>
             </div>
-            <div className="b-control credit" style={{ width: 550, height: 70 }}>
+            <div className="b-control credit" style={{ width: 440, height: 56 }}>
               <label className="stat-info">1 UNI-LP</label>
               <span className="stat-info">{`${stat.lpPriceNDR} NDR ${stat.lpPriceETH} ETH`}</span>
             </div>
           </div>
           <div className="section">
-            <div className="b-control credit" style={{ marginRight: -22 }}>
+            <div className="b-control credit" style={{ marginRight: -17.6 }}>
               <div>
                 <label>Hashes</label>
                 <span>{hashes}</span>
@@ -67,7 +67,7 @@ const Stake = ({
                 <span>{(staked / 2.25 * 10).toFixed(2)}</span>
               </div>
             </div>
-            <div className="b-control credit" style={{ width: 550 }}>
+            <div className="b-control credit" style={{ width: 440 }}>
               <div>
                 <label>UNI-LP Staked</label>
                 <span>{staked}</span>
@@ -133,6 +133,9 @@ const Stake = ({
 };
 
 const StakeWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+
   .stake-wrapper {
     .section {
       display: flex;
@@ -146,7 +149,7 @@ const StakeWrapper = styled.div`
     .help {
       position: absolute;
       border: 6px solid #cd3ed5;
-      width: 905px;
+      width: 724px;
       margin-top: -20px;
       padding: 16px;
       color: #fff;
@@ -160,7 +163,7 @@ const StakeWrapper = styled.div`
       text-decoration: none;
 
       span {
-        font-size: 20px;
+        font-size: 16px;
         // max-width: 157px;
         font-family: Orbitron-Black;
         text-transform: uppercase;
@@ -171,10 +174,10 @@ const StakeWrapper = styled.div`
       &.action {
         background-image: url("/static/images/bg/pages/get-heroes/credit-button-bg.png");
         background-size: 100% 100%;
-        width: 252px;
-        height: 110px;
-        margin-right: -24px;
-        padding: 0 17px 22px 0;
+        width: 201.6px;
+        height: 80.4px;
+        margin-right: -19.2px;
+        padding: 0 13.6px 17.6px 0;
         display: flex;
         flex-flow: column;
         align-items: center;
@@ -218,7 +221,7 @@ const StakeWrapper = styled.div`
         background-size: 100% 100%;
         margin-right: -13px;
         padding: 6px 22px 26px 10px;
-        min-width: 400px;
+        min-width: 320px;
         text-shadow: 10px 10px 10px #80f1ed91;
         display: flex;
         height: 110px;
@@ -238,7 +241,7 @@ const StakeWrapper = styled.div`
 
         label {
           color: #80f1ed;
-          font-size: 1.5rem;
+          font-size: 1.2rem;
           font-family: Orbitron-Medium;
           line-height: 1;
           margin-bottom: 8px;
@@ -252,7 +255,7 @@ const StakeWrapper = styled.div`
 
         span {
           color: #fec100;
-          font-size: 1.75rem;
+          font-size: 1.4rem;
           font-family: Orbitron-Black;
           line-height: 1;
           padding-left: 9px;

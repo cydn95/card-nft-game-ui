@@ -21,8 +21,8 @@ const CardBuying = ({
         <img src={card.image} alt={card.name} className={`card-image`} />
         <img
           src={`/static/images/bg/components/card/card-border.png`}
-          width="320"
-          height="443"
+          width="256"
+          height="354.4"
           alt="card-border"
           className="card-border"
         />
@@ -128,15 +128,15 @@ const CardWrapper = styled.div`
   margin: 8px;
 
   .card {
-    width: 310px;
-    height: 432px;
+    width: 248px;
+    height: 345.6px;
     position: relative;
-    padding: 17px 14px;
+    padding: 13.6px 11.2px;
     background: transparent;
 
     .card-image {
-      width: 290px;
-      height: 410px;
+      width: 232px;
+      height: 328px;
       position: absolute;
 
       &.un-obtained {
@@ -163,12 +163,12 @@ const CardWrapper = styled.div`
     margin-top: -11.666px;
 
     a, button {
-      width: 238px;
-      height: 52px;
+      width: 190.4px;
+      height: 41.6px;
       background: url("/static/images/bg/components/card/button-bg.png");
       border: none;
       color: #161617;
-      font-size: 20px;
+      font-size: 1rem;
       font-family: Orbitron-Medium;
       text-shadow: 5px 5px 3px #27787580;
       outline: none;
@@ -181,8 +181,8 @@ const CardWrapper = styled.div`
   }
 
   .card-grid {
-    width: 310px;
-    padding: 0 22px;
+    width: 248px;
+    padding: 0 9px;
     margin-top: 20px;
     text-shadow: 4.66667px 4.66667px 6.66667px
       ${(props) => props.theme.darken(props.theme.palette.primary.main, 0.57)};
@@ -249,14 +249,14 @@ const CardWrapper = styled.div`
           }
         }
         &.buy-button {
-          width: 290px;
-          height: 38px;
+          width: 232px;
+          height: 30.4px;
           background-image: url("/static/images/bg/components/card/buy-button-bg.png");
           background-size: 100% 100%;
 
           span {
             font-family: "arial";
-            font-size: 20px;
+            font-size: 1rem;
             color: #161617;
           }
         }

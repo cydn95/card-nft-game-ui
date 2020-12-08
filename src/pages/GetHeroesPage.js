@@ -209,7 +209,7 @@ const CardContainer = styled.div`
   flex-flow: row wrap;
   justify-content: center;
   padding-bottom: 100px;
-  max-width: 1350px;
+  max-width: 1100px;
   margin-left: auto;
   margin-right: auto;
 `;
@@ -217,7 +217,7 @@ const MenuWrapper = styled.div`
   display: flex;
   flex-flow: row wrap;
   justify-content: start;
-  max-width: 1350px;
+  max-width: 1100px;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 15px;
@@ -225,7 +225,7 @@ const MenuWrapper = styled.div`
 
 const SubMenuLink = styled.a`
   color: #417977;
-  font-size: 2rem;
+  font-size: 1.4rem;
   font-family: Orbitron-Black;
   text-shadow: 4px 4px 2.7px #27787580;
   padding-right: 40px;

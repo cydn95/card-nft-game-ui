@@ -29,13 +29,13 @@ const SectionTitleWrapper = styled.div`
   .title {
     background-image: url("/static/images/bg/components/section-title/section-title-last-bg.png");
     background-size: 100% 100%;
-    width: 240px;
-    height: 53px;
+    width: 192px;
+    height: 42.4px;
     text-align: right;
     color: ${(props) => props.theme.palette.secondary.main};
-    font-size: 28px;
+    font-size: 22.4px;
     line-height: 34px;
-    padding: 7px 45px 0 0;
+    padding: 4px 45px 0 0;
     font-family: Orbitron-Black;
     text-shadow: 4px 4px 2.7px #27787580;
     margin-right: -23px;
@@ -63,7 +63,7 @@ const SectionTitleWrapper = styled.div`
     background-size: 100% 18px;
     margin-left: 30px;
     width: 300px;
-    height: 65px;
+    height: 55px;
   }
 `;
 
