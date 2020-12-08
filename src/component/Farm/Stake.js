@@ -52,7 +52,7 @@ const Stake = ({
               <span className="stat-info">{`$ ${stat.tvl}`}</span>
             </div>
             <div className="b-control credit" style={{ width: 440, height: 56 }}>
-              <label className="stat-info">1 UNI-LP</label>
+              <label className="stat-info">1 UNI-LP:</label>
               <span className="stat-info">{`${stat.lpPriceNDR} NDR ${stat.lpPriceETH} ETH`}</span>
             </div>
           </div>
@@ -139,7 +139,7 @@ const StakeWrapper = styled.div`
   .stake-wrapper {
     .section {
       display: flex;
-      margin-top: -20px;
+      margin-top: -16px;
       
       &.top {
         margin-top: 0px;

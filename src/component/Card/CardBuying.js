@@ -49,7 +49,7 @@ const CardBuying = ({
                 <span>{card.defense}</span>
               </div>
               <div className="text-right">
-                <label>Apy:</label>
+                <label>APY:</label>
                 <span>{`${apy}%`}</span>
               </div>
             </div>
