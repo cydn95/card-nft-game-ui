@@ -14,9 +14,11 @@ const Deposit = ({
   onDeposit,
 }) => {
   const [amount, setAmount] = useState("0.0000");
+  const [isMax, setIsMax] = useState(false);
 
   const handleChangeAmount = (e) => {
     setAmount(e.target.value);
+    setIsMax(false)
   };
 
   const setMax = () => {
@@ -24,6 +26,7 @@ const Deposit = ({
       setAmount(STAKE_MAX_LIMIT);
     } else {
       setAmount(balance);
+      setIsMax(true);
     }
   };
 
@@ -76,7 +79,7 @@ const Deposit = ({
           </div>
         )}
         {!loading && (
-          <div className="action button" onClick={(e) => onDeposit(amount)}>
+          <div className="action button" onClick={(e) => onDeposit(amount, isMax)}>
             <DoubleArrow />
             <span>STAKE</span>
           </div>

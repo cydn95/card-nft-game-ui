@@ -6,9 +6,11 @@ import { STAKE_MIN_LIMIT, STAKE_MAX_LIMIT } from "../../helper/constant";
 
 const Withdraw = ({ loading, old, staked, onClose, onWithdraw }) => {
   const [amount, setAmount] = useState("0.0000");
+  const [isMax, setIsMax] = useState(false);
 
   const handleChangeAmount = (e) => {
     setAmount(e.target.value);
+    setIsMax(false);
   };
 
   const setMax = () => {
@@ -16,6 +18,7 @@ const Withdraw = ({ loading, old, staked, onClose, onWithdraw }) => {
       setAmount(STAKE_MAX_LIMIT);
     } else {
       setAmount(staked);
+      setIsMax(true)
     }
   };
 
@@ -52,6 +55,7 @@ const Withdraw = ({ loading, old, staked, onClose, onWithdraw }) => {
             </span>
           </div>
           <input type="text" value={amount} onChange={handleChangeAmount} />
+          <span className="unstake-fee">Unstake fee 2%</span>
         </div>
         {loading && (
           <div className="action button">
@@ -60,9 +64,9 @@ const Withdraw = ({ loading, old, staked, onClose, onWithdraw }) => {
           </div>
         )}
         {!loading && (
-          <div className="action button" onClick={(e) => onWithdraw(amount)}>
+          <div className="action button" onClick={(e) => onWithdraw(amount, isMax)}>
             <DoubleArrow />
-            <span>WITHDRAW</span>
+            <span>UNSTAKE</span>
           </div>
         )}
       </div>
@@ -157,6 +161,15 @@ const WithdrawWrapper = styled.div`
           line-height: 30px;
           text-shadow: 5px 5px 3px #27787580;
           font-family: Orbitron-Black;
+        }
+
+        .unstake-fee {
+          position: absolute;
+          font-size: 1rem;
+          font-family: Orbitron-Black;
+          color: #fec100;
+          margin-top: 120px;
+          max-width: 300px;
         }
       }
 

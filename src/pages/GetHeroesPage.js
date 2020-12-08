@@ -12,15 +12,18 @@ import UnlockWalletPage from "./UnlockWalletPage";
 
 import cardsActions from "../redux/cards/actions";
 import lpstakingActions from "../redux/lpstaking/actions";
-import { RESPONSE, CARD_TYPE, CARD_SERIES, CARD_SUB_SERIES } from "../helper/constant";
+import { RESPONSE, CARD_TYPE, CARD_SUB_SERIES } from "../helper/constant";
+import { getCardType } from "../helper/utils";
 
 import cx from "classnames";
+import { getCardsApy } from "../redux/cards/saga";
 
 const GetHeroes = () => {
   const dispatch = useDispatch();
 
   const cards = useSelector((state) => state.Cards.cards);
   const cardPrice = useSelector((state) => state.Cards.cardPrice);
+  const cardsApy = useSelector((state) => state.Cards.cardsApy);
 
   const [isBuyingHash, setBuyingHash] = useState(false);
   const [isBuyingEth, setBuyingEth] = useState(false);
@@ -44,6 +47,12 @@ const GetHeroes = () => {
     dispatch(cardsActions.getCards());
     dispatch(cardsActions.getCardsPrice());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (cards.length > 0) {
+      dispatch(cardsActions.getCardsApy(cards, cardPrice));
+    }
+  }, [cards, cardPrice, dispatch]);
 
   const handleBuyCardEth = (card) => {
     setBuyingEth(true);
@@ -115,8 +124,29 @@ const GetHeroes = () => {
     if (cardFilter === "Badges") {
       return ["All", ...CARD_SUB_SERIES.BADGE];
     }
-    return ["All", ...CARD_SUB_SERIES.HERO, ...CARD_SUB_SERIES.SUPPORT, ...CARD_SUB_SERIES.BADGE];
+    return [
+      "All",
+      ...CARD_SUB_SERIES.HERO,
+      ...CARD_SUB_SERIES.SUPPORT,
+      ...CARD_SUB_SERIES.BADGE,
+    ];
   }, [cardFilter]);
+
+  const getCardApyValue = (card) => {
+    const cardType = getCardType(card);
+    const index = cardsApy.findIndex(
+      (element) =>
+        element.type === cardType &&
+        element.rarity === card.rarity.weight &&
+        element.strength === card.strength
+    );
+    
+    if (index === -1) {
+      return 0
+    } else {
+      return cardsApy[index].apy;
+    }
+  };
 
   if (!account) {
     return <UnlockWalletPage />;
@@ -127,7 +157,12 @@ const GetHeroes = () => {
       <LPStakingBoard />
       <MenuWrapper className="animation-fadeInRight">
         <SectionTitleMenu
-          data={[{ title: "All" }, { title: "Heroes" }, { title: "Support" }, { title: "Badges" }]}
+          data={[
+            { title: "All" },
+            { title: "Heroes" },
+            { title: "Support" },
+            { title: "Badges" },
+          ]}
           selected={cardFilter}
           onChangeMenu={(selected) => {
             setCardFilter(selected);
@@ -161,6 +196,7 @@ const GetHeroes = () => {
             currentProcessingCardId={selectedCardId}
             loadingHash={isBuyingHash}
             loadingEth={isBuyingEth}
+            apy={getCardApyValue(c)}
           />
         ))}
       </CardContainer>
@@ -171,7 +207,7 @@ const GetHeroes = () => {
 const CardContainer = styled.div`
   display: flex;
   flex-flow: row wrap;
-  justify-content: start;
+  justify-content: center;
   padding-bottom: 100px;
   max-width: 1350px;
   margin-left: auto;

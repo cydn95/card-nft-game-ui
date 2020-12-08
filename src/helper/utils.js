@@ -18,3 +18,18 @@ export const cardCompare = (a, b) => {
 
   return 0;
 };
+
+export const getCardType = (card) => {
+  let cardType = "";
+  if (
+    CARD_TYPE.HERO.includes(card.series) ||
+    CARD_TYPE.BADGE.includes(card.series)
+  ) {
+    cardType = "hero";
+  }
+  if (CARD_TYPE.SUPPORT.includes(card.series)) {
+    cardType = "support";
+  }
+
+  return cardType;
+}

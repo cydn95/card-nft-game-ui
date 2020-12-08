@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { Reply, ShoppingCart } from "@material-ui/icons";
 
 import ModalMask from "../../component/ModalMask";
-import { convertFromWei } from "../../helper/utils";
 
 const Stake = ({
   balance,
@@ -207,7 +206,7 @@ const StakeWrapper = styled.div`
           color: #fec100;
         }
 
-        &:nth-child(5) {
+        &:nth-child(3) {
           .MuiSvgIcon-root {
             transform: rotateY(180deg);
           }

@@ -52,13 +52,13 @@ const actions = {
     type: actions.APPROVE_LP,
     payload: { callback },
   }),
-  depositLP: (amount, callback) => ({
+  depositLP: (amount, isMax, callback) => ({
     type: actions.DEPOSIT_LP,
-    payload: { amount, callback },
+    payload: { amount, isMax, callback },
   }),
-  withdrawLP: (amount, callback) => ({
+  withdrawLP: (amount, isMax, callback) => ({
     type: actions.WITHDRAW_LP,
-    payload: { amount, callback },
+    payload: { amount, isMax, callback },
   }),
   withdrawOldLP: (amount, callback) => ({
     type: actions.WITHDRAW_OLD_LP,

@@ -55,10 +55,10 @@ const LPStakingBoard = () => {
     setOpenStatus(DLG_DEPOSIT);
   };
 
-  const handleDeposit = (amount) => {
+  const handleDeposit = (amount, isMax) => {
     if (checkAmount(amount)) {
       setLoading(true);
-      dispatch(lpstakingActions.depositLP(amount, callbackDeposit));
+      dispatch(lpstakingActions.depositLP(amount, isMax, callbackDeposit));
     }
   };
 
@@ -111,17 +111,17 @@ const LPStakingBoard = () => {
     setOpenStatus(DLG_OLD_WITHDRAW);
   };
 
-  const handleWithdraw = (amount) => {
+  const handleWithdraw = (amount, isMax) => {
     if (checkAmount(amount)) {
       setLoading(true);
-      dispatch(lpstakingActions.withdrawLP(amount, callbackDeposit));
+      dispatch(lpstakingActions.withdrawLP(amount, isMax, callbackDeposit));
     }
   };
 
-  const handleOldWithdraw = (amount) => {
+  const handleOldWithdraw = (amount, isMax) => {
     if (checkAmount(amount)) {
       setLoading(true);
-      dispatch(lpstakingActions.withdrawOldLP(amount, callbackDeposit));
+      dispatch(lpstakingActions.withdrawOldLP(amount, isMax, callbackDeposit));
     }
   };
 

@@ -8,6 +8,7 @@ const CardBuying = ({
   card,
   isHero,
   eth,
+  apy,
   onBuyCardEth,
   onBuyCardHash,
   currentProcessingCardId,
@@ -48,8 +49,8 @@ const CardBuying = ({
                 <span>{card.defense}</span>
               </div>
               <div className="text-right">
-                <label>Rarity:</label>
-                <span>{card.rarity.text}</span>
+                <label>Apy:</label>
+                <span>{`${apy}%`}</span>
               </div>
             </div>
           </div>
