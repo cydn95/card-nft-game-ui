@@ -34,40 +34,43 @@ const Stake = ({
   const handleOpenHelp = (e) => {
     e.preventDefault();
     setShowHelp(!showHelp);
-  }
+  };
 
   return (
     <StakeWrapper>
-      {showHelp &&
-        <ModalMask onClose={() => setShowHelp(false)} />
-      }
-      <div className="stake-wrapper d-flex justify-content-center align-items-end animation-slideDown">
-        <a className="b-control b-help action" href="/" onClick={(e) => handleOpenHelp(e)} style={{ zIndex: 200 }}>
+      {showHelp && <ModalMask onClose={() => setShowHelp(false)} />}
+      <div className="stake-wrapper animation-slideDown">
+        <a
+          className="b-control b-help action"
+          href="/"
+          onClick={(e) => handleOpenHelp(e)}
+          style={{ zIndex: 200 }}
+        >
           {showHelp ? <span>X</span> : <span>?</span>}
         </a>
         <div className="stat">
           <div className="section top">
-            <div className="b-control credit" style={{ height: 56, marginRight: -17.6 }}>
+            <div id="tvl" className="b-control credit">
               <label className="stat-info">TVL:</label>
               <span className="stat-info">{`$ ${stat.tvl}`}</span>
             </div>
-            <div className="b-control credit" style={{ width: 440, height: 56 }}>
+            <div id="uni_lp" className="b-control credit">
               <label className="stat-info">1 UNI-LP:</label>
               <span className="stat-info">{`${stat.lpPriceNDR} NDR ${stat.lpPriceETH} ETH`}</span>
             </div>
           </div>
           <div className="section">
-            <div className="b-control credit" style={{ marginRight: -17.6 }}>
+            <div id="ndr" className="b-control credit">
               <div>
                 <label>Hashes</label>
                 <span>{hashes}</span>
               </div>
               <div>
                 <label>Per Day</label>
-                <span>{(staked / 2.25 * 10).toFixed(2)}</span>
+                <span>{((staked / 2.25) * 10).toFixed(2)}</span>
               </div>
             </div>
-            <div className="b-control credit" style={{ width: 440 }}>
+            <div id="stake" className="b-control credit">
               <div>
                 <label>UNI-LP Staked</label>
                 <span>{staked}</span>
@@ -78,13 +81,16 @@ const Stake = ({
               </div>
             </div>
           </div>
-          {showHelp && <div className="help">
-            Apparently we had reached a great height in the atmosphere, for the sky
-            was a dead black, and the stars had ceased to twinkle. By the same illusion
-            which lifts the horizon of the sea to the level of the spectator on a hillside,
-            the sable cloud beneath was dished out, and the car seemed to float in the
-            middle of an immense dark sphere, whose upper half was strewn with silver.
-          </div>}
+          {showHelp && (
+            <div className="help" onClick={e => setShowHelp(false)}>
+              Apparently we had reached a great height in the atmosphere, for
+              the sky was a dead black, and the stars had ceased to twinkle. By
+              the same illusion which lifts the horizon of the sea to the level
+              of the spectator on a hillside, the sable cloud beneath was dished
+              out, and the car seemed to float in the middle of an immense dark
+              sphere, whose upper half was strewn with silver.
+            </div>
+          )}
           <div className="section">
             <a
               className="b-control action"
@@ -104,7 +110,11 @@ const Stake = ({
               <ShoppingCart />
               <span>BUY NDR</span>
             </a>
-            <a className="b-control action" href="/" onClick={(e) => handleOpenDeposit(e)}>
+            <a
+              className="b-control action"
+              href="/"
+              onClick={(e) => handleOpenDeposit(e)}
+            >
               <Reply />
               <span>STAKE</span>
             </a>
@@ -137,12 +147,89 @@ const StakeWrapper = styled.div`
   justify-content: center;
 
   .stake-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
+
+    @media screen and (max-width: 840px) {
+      flex-direction: column-reverse;
+      align-items: center;
+      width: 100%;
+      padding: 0px 20px;
+
+      .stat {
+        width: 100%;
+      }
+    }
+
     .section {
       display: flex;
+      flex-direction: row;
       margin-top: -16px;
-      
+
+      @media screen and (max-width: 840px) {
+        flex-flow: row wrap;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        margin-top: -4px;
+      }
+
       &.top {
         margin-top: 0px;
+      }
+
+      #tvl {
+        height: 56px;
+        margin-right: -17.6px;
+
+        @media screen and (max-width: 840px) {
+          margin-right: 0px;
+          width: 80%;
+        }
+
+        @media screen and (max-width: 600px) {
+          width: 100%;
+        }
+      }
+
+      #uni_lp {
+        width: 440px;
+        height: 56px;
+
+        @media screen and (max-width: 840px) {
+          margin-top: -4px;
+          width: 425px;
+          width: 80%;
+        }
+        @media screen and (max-width: 600px) {
+          width: 100%;
+          height: 70px;
+        }
+      }
+
+      #ndr {
+        margin-right: -17.6px;
+        @media screen and (max-width: 840px) {
+          width: 80%;
+          margin-right: 0px;
+        }
+        @media screen and (max-width: 600px) {
+          width: 100%;
+        }
+      }
+
+      #stake {
+        width: 440px;
+        @media screen and (max-width: 840px) {
+          width: 80%;
+          margin-top: -4px;
+          margin-bottom: 20px;
+        }
+        @media screen and (max-width: 600px) {
+          width: 100%;
+        }
       }
     }
 
@@ -155,7 +242,20 @@ const StakeWrapper = styled.div`
       color: #fff;
       font-family: Orbitron-Medium;
       font-size: 1rem;
-      z-index: 300;
+      z-index: 1000;
+
+      @media screen and (max-width: 840px) {
+        width: 100vw;
+        max-width: 100%;
+        height: 100vh;
+        opacity: 0.9;
+        left: 0px;
+        top: 0px;
+        margin-top: 0px;
+        background: #1e1e1e;
+        font-size: 1.2rem;
+        line-height: 2rem;
+      }
     }
 
     .b-control {
@@ -179,12 +279,51 @@ const StakeWrapper = styled.div`
         margin-right: -19.2px;
         padding: 0 13.6px 17.6px 0;
         display: flex;
-        flex-flow: column;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
         align-content: center;
         cursor: pointer;
         text-align: center;
+
+        @media screen and (max-width: 840px) {
+          background-image: none;
+          background: #80f1ed;
+          margin-right: 0px;
+          width: calc(40% - 5px);
+          height: 80px;
+          padding: 0px 0px 0px 0px;
+          box-shadow: 0px 10px 10px #80f1ed91;
+          box-sizing: border-box;
+          margin-bottom: 20px;
+
+          &:nth-child(1), &:nth-child(3) {
+            margin-right: 5px;
+          }
+
+          &:nth-child(2), &:nth-child(4) {
+            margin-left: 5px;
+          }
+        }
+
+        @media screen and (max-width: 600px) {
+          width: calc(50% - 5px);
+          flex-direction: row;
+        }
+
+        @media screen and (max-width: 400px) {
+          width: 100%;
+          height: 50px;
+          margin-bottom: 10px;
+
+          &:nth-child(1), &:nth-child(3) {
+            margin-right: 0px;
+          }
+
+          &:nth-child(2), &:nth-child(4) {
+            margin-left: 0px;
+          }
+        }
 
         svg {
           width: 36px;
@@ -198,6 +337,22 @@ const StakeWrapper = styled.div`
           color: #fec100;
           margin-right: -3px;
 
+          @media screen and (max-width: 840px) {
+            width: 80%;
+            background: #db34ce;
+            box-shadow: 0px 10px 10px #db34ce91;
+            height: 65px;
+            margin-right: 0px;
+          }
+
+          @media screen and (max-width: 600px) {
+            width: 100%;
+          }
+
+          @media screen and (max-width: 400px) {
+            height: 50px;
+          }
+
           span {
             font-size: 2.5rem;
             padding-left: 5px;
@@ -207,6 +362,11 @@ const StakeWrapper = styled.div`
         &:hover {
           background-image: url("/static/images/bg/pages/get-heroes/credit-button-bg--active.png");
           color: #fec100;
+
+          @media screen and (max-width: 840px) {
+            background-image: none;
+            color: #000;
+          }
         }
 
         &:nth-child(3) {
@@ -230,6 +390,17 @@ const StakeWrapper = styled.div`
         align-items: center;
         align-content: center;
 
+        @media screen and (max-width: 840px) {
+          margin-right: 0px;
+          background: none;
+          border: 4px solid #80f1ed;
+          padding: 0px 8px 0px 8px;
+        }
+
+        @media screen and (max-width: 470px) {
+          height: 80px;
+        }
+
         div {
           flex: 1;
           display: flex;
@@ -245,6 +416,14 @@ const StakeWrapper = styled.div`
           font-family: Orbitron-Medium;
           line-height: 1;
           margin-bottom: 8px;
+
+          @media screen and (max-width: 470px) {
+            font-size: 1rem;
+          }
+
+          @media screen and (max-width: 400px) {
+            font-size: 0.8rem;
+          }
 
           &.stat-info {
             margin-bottom: 0px;
@@ -262,6 +441,15 @@ const StakeWrapper = styled.div`
           padding-top: 4px;
           margin: 0;
           text-shadow: inherit;
+
+          @media screen and (max-width: 470px) {
+            font-size: 1.2rem;
+          }
+          
+          @media screen and (max-width: 400px) {
+            font-size: 1rem;
+          }
+
 
           &.stat-info {
             padding-top: 3px;

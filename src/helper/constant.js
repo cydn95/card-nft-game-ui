@@ -38,7 +38,7 @@ export const CARD_SERIES = {
 };
 
 export const CARD_SUB_SERIES = {
-  HERO: ['Devs'],
+  HERO: ['Devs', 'Limited'],
   SUPPORT: ['Wisdom', 'Attack'],
   BADGE: ['Generic']
 }

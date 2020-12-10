@@ -436,6 +436,7 @@ const LandingPage = ({history}) => {
 				scrollingSpeed={1000}
 				scrollHorizontally={true}
 				className='landing-page'
+				autoScrolling={true}
 				render={
 					() => {
 						return (
@@ -478,7 +479,7 @@ const LandingPage = ({history}) => {
                     </div>
                     <button
                       className="hover-effect1 animation-bigEntrance"
-                      onClick={(e) => history.push("/get-heroes")}
+                      onClick={(e) => history.push("/get-cards")}
                     >
                       GET CARDS
                     </button>
@@ -516,7 +517,7 @@ const LandingPage = ({history}) => {
                   <div className="button-wrapper">
                     <button
                       className="hover-effect1"
-                      onClick={(e) => history.push("/get-heroes")}
+                      onClick={(e) => history.push("/get-cards")}
                     >
                       GET CARDS
                     </button>
@@ -553,7 +554,7 @@ const LandingPage = ({history}) => {
                   <div className="button-wrapper">
                     <button
                       className="hover-effect1"
-                      onClick={(e) => history.push("/get-heroes")}
+                      onClick={(e) => history.push("/get-cards")}
                     >
                       GET CARDS
                     </button>
@@ -594,7 +595,7 @@ const LandingPage = ({history}) => {
                   </div>
                   <button
                     className="hover-effect1"
-                    onClick={(e) => history.push("/get-heroes")}
+                    onClick={(e) => history.push("/get-cards")}
                   >
                     GET CARDS
                   </button>

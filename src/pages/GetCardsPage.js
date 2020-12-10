@@ -16,7 +16,6 @@ import { RESPONSE, CARD_TYPE, CARD_SUB_SERIES } from "../helper/constant";
 import { getCardType } from "../helper/utils";
 
 import cx from "classnames";
-import { getCardsApy } from "../redux/cards/saga";
 
 const GetHeroes = () => {
   const dispatch = useDispatch();
@@ -140,7 +139,7 @@ const GetHeroes = () => {
         element.rarity === card.rarity.weight &&
         element.strength === card.strength
     );
-    
+
     if (index === -1) {
       return 0
     } else {
@@ -221,6 +220,13 @@ const MenuWrapper = styled.div`
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 15px;
+  box-sizing: border-box;
+  padding-left: 15px;
+  padding-right: 15px;
+
+  @media screen and (max-width: 768px) {
+    justify-content: center;
+  }
 `;
 
 const SubMenuLink = styled.a`
@@ -231,8 +237,17 @@ const SubMenuLink = styled.a`
   padding-right: 40px;
   cursor: pointer;
 
+  @media screen and (max-width: 768px) {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
   &:first-child {
     padding-left: 80px;
+
+    @media screen and (max-width: 768px) {
+      padding-left: 0px;
+    }
   }
 
   &:hover {

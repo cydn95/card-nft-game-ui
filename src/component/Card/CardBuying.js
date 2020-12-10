@@ -30,12 +30,22 @@ const CardBuying = ({
       <div className="button-wrapper text-center">
         <div className="card-grid">
           <h4 className="text-left">{card.name}</h4>
-          <div className="d-flex">
-            <div className="w-50 text-wrapper">
-              <div className="text-left">
-                <label>Strength:</label>
-                <span>{card.strength}</span>
+          <div className="d-flex flex-column">
+            <div className="d-flex">
+              <div className="w-50 text-wrapper">
+                <div className="text-left">
+                  <label>Strength:</label>
+                  <span>{card.strength}</span>
+                </div>
               </div>
+              <div className="w-50 text-wrapper">
+                <div className="text-right">
+                  <label>Defense:</label>
+                  <span>{card.defense}</span>
+                </div>
+              </div>
+            </div>
+            <div className="text-wrapper">
               <div className="text-left">
                 <label>Minted:</label>
                 <span>
@@ -43,12 +53,8 @@ const CardBuying = ({
                 </span>
               </div>
             </div>
-            <div className="w-50 text-wrapper">
-              <div className="text-right">
-                <label>Defense:</label>
-                <span>{card.defense}</span>
-              </div>
-              <div className="text-right">
+            <div className="text-wrapper">
+              <div className="text-left">
                 <label>APY:</label>
                 <span>{`${apy}%`}</span>
               </div>
@@ -73,7 +79,7 @@ const CardBuying = ({
                     className="hash-button hover-effect2"
                     onClick={(e) => onBuyCardHash(card)}
                   >
-                    {card.rarity.weight * CARD_HASH_PRICE_UNIT} Hash
+                    {card.hash ? card.hash : card.rarity.weight * CARD_HASH_PRICE_UNIT} Hash
                   </button>
                 ))}
 
@@ -188,7 +194,7 @@ const CardWrapper = styled.div`
       ${(props) => props.theme.darken(props.theme.palette.primary.main, 0.57)};
 
     h4 {
-      font-size: 20px;
+      font-size: 16px;
       font-family: Orbitron-Black;
       color: ${(props) => props.theme.palette.primary.main};
       border-bottom: 1.333px solid
