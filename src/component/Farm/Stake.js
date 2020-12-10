@@ -101,13 +101,6 @@ const Stake = ({
                     provided here.
                   </a>{` `}
                 </strong>
-                <a
-                  href="https://app.uniswap.org/#/add/0x739763a258640919981f9ba610ae65492455be53/ETH"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  https://app.uniswap.org/#/add/0x739763a258640919981f9ba610ae65492455be53/ETH.
-                </a>
                 . You will then obtain at least 1 NDR/ETH UNI-LP token, that can
                 be staked on this page to earn "Hashes". 1 LP value is shown on
                 this page.
@@ -124,7 +117,7 @@ const Stake = ({
                   href="https://bit.ly/ndr-guide"
                   target="_blank"
                 >
-                  Read the full guide here. https://bit.ly/ndr-guide
+                  Read the full guide here.
                 </a>
               </p>
             </div>
