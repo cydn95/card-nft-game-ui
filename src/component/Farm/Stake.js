@@ -82,13 +82,51 @@ const Stake = ({
             </div>
           </div>
           {showHelp && (
-            <div className="help" onClick={e => setShowHelp(false)}>
-              Apparently we had reached a great height in the atmosphere, for
-              the sky was a dead black, and the stars had ceased to twinkle. By
-              the same illusion which lifts the horizon of the sea to the level
-              of the spectator on a hillside, the sable cloud beneath was dished
-              out, and the car seemed to float in the middle of an immense dark
-              sphere, whose upper half was strewn with silver.
+            <div className="help" onClick={(e) => setShowHelp(false)}>
+              <p>
+                On this page you can purchase Node Runners cards which you can
+                later stake to earn NDR tokens. You can buy a card with ETH or
+                purchase it for “Hashes”. When you buy it with ETH, 90% of funds
+                are used to buyback NDR and lock liquidity in 1 transaction.
+              </p>
+              <p>
+                To obtain “Hashes” you need to provide liquidity by adding
+                tokens to Uniswap NDR/ETH pair. Liquidity on Uniswap can be{" "}
+                <strong>
+                  <a
+                    href="https://app.uniswap.org/#/add/0x739763a258640919981f9ba610ae65492455be53/ETH"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    provided here.
+                  </a>{` `}
+                </strong>
+                <a
+                  href="https://app.uniswap.org/#/add/0x739763a258640919981f9ba610ae65492455be53/ETH"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  https://app.uniswap.org/#/add/0x739763a258640919981f9ba610ae65492455be53/ETH.
+                </a>
+                . You will then obtain at least 1 NDR/ETH UNI-LP token, that can
+                be staked on this page to earn "Hashes". 1 LP value is shown on
+                this page.
+              </p>
+              <p>
+                Once you have 1 UNI-LP token, click stake, input desired amount,
+                approve and click stake again. 1 LP token will yield you 4.44
+                “Hashes” per day. Maximum amount to stake is 22.5 LP tokens.
+                Once you farmed “Hashes” you can use them to purchase cards.
+              </p>
+              <p>
+                <a
+                  rel="noopener noreferrer"
+                  href="https://bit.ly/ndr-guide"
+                  target="_blank"
+                >
+                  Read the full guide here. https://bit.ly/ndr-guide
+                </a>
+              </p>
             </div>
           )}
           <div className="section">
@@ -244,6 +282,14 @@ const StakeWrapper = styled.div`
       font-size: 1rem;
       z-index: 1000;
 
+      p {
+        word-break: break-all;
+
+        a {
+          color: #80f1ed;
+        }
+      }
+
       @media screen and (max-width: 840px) {
         width: 100vw;
         max-width: 100%;
@@ -255,6 +301,7 @@ const StakeWrapper = styled.div`
         background: #1e1e1e;
         font-size: 1.2rem;
         line-height: 2rem;
+        overflow-y: auto;
       }
     }
 
@@ -297,11 +344,13 @@ const StakeWrapper = styled.div`
           box-sizing: border-box;
           margin-bottom: 20px;
 
-          &:nth-child(1), &:nth-child(3) {
+          &:nth-child(1),
+          &:nth-child(3) {
             margin-right: 5px;
           }
 
-          &:nth-child(2), &:nth-child(4) {
+          &:nth-child(2),
+          &:nth-child(4) {
             margin-left: 5px;
           }
         }
@@ -316,11 +365,13 @@ const StakeWrapper = styled.div`
           height: 50px;
           margin-bottom: 10px;
 
-          &:nth-child(1), &:nth-child(3) {
+          &:nth-child(1),
+          &:nth-child(3) {
             margin-right: 0px;
           }
 
-          &:nth-child(2), &:nth-child(4) {
+          &:nth-child(2),
+          &:nth-child(4) {
             margin-left: 0px;
           }
         }
@@ -445,11 +496,10 @@ const StakeWrapper = styled.div`
           @media screen and (max-width: 470px) {
             font-size: 1.2rem;
           }
-          
+
           @media screen and (max-width: 400px) {
             font-size: 1rem;
           }
-
 
           &.stat-info {
             padding-top: 3px;
