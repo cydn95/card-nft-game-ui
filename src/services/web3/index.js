@@ -48,3 +48,13 @@ export const getGasPrice = async () => {
   };
   return prices;
 };
+
+export const lookUpPrices = async function (id_array) {
+  let ids = id_array.join('%2C')
+  let res = await fetch(
+    'https://api.coingecko.com/api/v3/simple/price?ids=' +
+    ids +
+    '&vs_currencies=usd',
+  )
+  return res.json()
+}

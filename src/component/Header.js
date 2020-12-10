@@ -1,12 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation } from "react-router";
 import { useWallet } from "use-wallet";
 import styled from "styled-components";
+
+import MenuIcon from "@material-ui/icons/Menu";
+import CloseIcon from "@material-ui/icons/Close";
+
 import lpstakingActions from "../redux/lpstaking/actions";
 import { NavLink } from "react-router-dom";
 
 const Header = () => {
+  const [mobileMenu, setMobileMenu] = useState(false);
+
   const location = useLocation();
   const getCurrentUrl = (location) => {
     return location.pathname.split(/[?#]/)[0];
@@ -30,6 +36,22 @@ const Header = () => {
     return checkIsActive(location, url) ? "active" : "";
   };
 
+  const getMenuName = () => {
+    if (getMenuItemActive("home")) {
+      return "Home";
+    }
+
+    if (getMenuItemActive("stake")) {
+      return "Stake";
+    }
+
+    if (getMenuItemActive("get-heroes")) {
+      return "Get Cards";
+    }
+
+    return "";
+  };
+
   const dispatch = useDispatch();
   const { account } = useWallet();
 
@@ -41,7 +63,7 @@ const Header = () => {
 
   return (
     <HeaderWrapper className="header-menu d-flex justify-content-center animation-stretchRight">
-      <ul className="menu-nav d-flex list-unstyled">
+      <ul className="desktop-menu-nav list-unstyled">
         <li className={`menu-item ${getMenuItemActive("home")} hover-effect2`}>
           <NavLink className="menu-link" to="home">
             <span className="menu-text">Home</span>
@@ -67,18 +89,18 @@ const Header = () => {
             <span className="menu-text">My Cards</span>
           </a> */}
         </li>
-        <li className={`menu-item ${ getMenuItemActive('stake') } hover-effect2`}>
-					<NavLink className='menu-link' to="/stake">
-						<span className="menu-text">Stake</span>
-					</NavLink>
-				</li>
+        <li className={`menu-item ${getMenuItemActive("stake")} hover-effect2`}>
+          <NavLink className="menu-link" to="/stake">
+            <span className="menu-text">Stake</span>
+          </NavLink>
+        </li>
         <li
           className={`menu-item ${getMenuItemActive(
             "get-heroes"
           )} hover-effect2`}
         >
           <NavLink className="menu-link" to="/get-heroes">
-            <span className="menu-text">Get Heroes</span>
+            <span className="menu-text">Get Cards</span>
           </NavLink>
         </li>
         {/* <li className={`menu-item ${ getMenuItemActive('fight-villains') } hover-effect2`}>
@@ -107,46 +129,111 @@ const Header = () => {
           </NavLink>
         </li>
       </ul>
+      <ul className="mobile-menu-nav list-unstyled">
+        <li className="menu-item">
+          <div className="menu-link">
+            {!mobileMenu ? (
+              <MenuIcon onClick={(e) => setMobileMenu(true)} />
+            ) : (
+              <CloseIcon onClick={(e) => setMobileMenu(false)} />
+            )}
+            <span className="menu-text">{getMenuName()}</span>
+          </div>
+        </li>
+        <li
+          className={`menu-item ${getMenuItemActive(
+            "unlock-wallet"
+          )} hover-effect2`}
+        >
+          <NavLink className="menu-link" to={account ? "#" : "/unlock-wallet"}>
+            <span className="menu-text">
+              {account ? (
+                <span className="menu-text">
+                  <strong>{`${(ndrBalance / Math.pow(10, 18)).toFixed(
+                    4
+                  )} `}</strong>
+                  NDR
+                </span>
+              ) : (
+                "Unlock Wallet"
+              )}
+            </span>
+          </NavLink>
+        </li>
+        {mobileMenu && (
+          <div className="mobile-menu" onClick={(e) => setMobileMenu(false)}>
+            <NavLink
+              className={`${getMenuItemActive("home")}`}
+              to="/home"
+            >
+              Home
+            </NavLink>
+            <a
+              href="https://opensea.io/account?search=%7B%22query%22%3A%22noderunners%22%2C%22resultModel%22%3A%22ASSETS%22%2C%22sortBy%22%3A%22LAST_TRANSFER_DATE%22%7D"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              My Cards
+            </a>
+            <NavLink className={`${getMenuItemActive("stake")}`} to="/stake">Stake</NavLink>
+            <NavLink className={`${getMenuItemActive("get-heroes")}`} to="/get-heroes">Get Cards</NavLink>
+          </div>
+        )}
+      </ul>
     </HeaderWrapper>
   );
 };
 
 const HeaderWrapper = styled.div`
-  .menu-nav {
-    margin-left: -18px;
-    margin-bottom: 15px;
+  .menu-item {
+    height: 58.73px;
+    margin-right: -17.5px;
+    text-align: center;
+    background-size: 100% 100%;
 
-    .menu-item {
-      height: ${(props) => props.theme.heightRatio * 63}px;
-      margin-right: -${(props) => props.theme.widthRatio * 30}px;
-      text-align: center;
-      background-size: 100% 100%;
+    .menu-link {
+      height: 100%;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
+      .menu-text {
+        color: #000000;
+        font-size: 1rem;
+        line-height: 2rem;
+        font-family: Orbitron-Medium;
+        margin-left: -3.17px;
+        margin-top: -4.66px;
+        display: inline-block;
+        text-shadow: 3.5px 4.67px 2.1px
+          ${(props) => props.theme.darken("#277875", 0.5)};
+      }
+    }
+
+    &.active {
       .menu-link {
-        height: 100%;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
         .menu-text {
-          color: #000000;
-          font-size: ${(props) => props.theme.widthRatio * 26}px;
-          line-height: ${(props) => props.theme.heightRatio * 38}px;
-          font-family: Orbitron-Medium;
-          margin-left: -${(props) => props.theme.widthRatio * 5}px;
-          margin-top: -${(props) => props.theme.heightRatio * 5}px;
-          display: inline-block;
-          text-shadow: ${(props) => props.theme.widthRatio * 5}px
-            ${(props) => props.theme.heightRatio * 5}px
-            ${(props) => props.theme.widthRatio * 3}px
-            ${(props) => props.theme.darken("#277875", 0.5)};
+          color: #fec100;
+          font-weight: 900;
         }
       }
+    }
+  }
 
+  .desktop-menu-nav {
+    margin-left: -18px;
+    margin-bottom: 15px;
+    display: flex;
+
+    @media screen and (max-width: 780px) {
+      display: none;
+    }
+
+    .menu-item {
       &:nth-of-type(1) {
         background-image: url("/static/images/bg/components/header/menu-item-1-bg.png");
-        width: ${(props) => props.theme.widthRatio * 236}px;
+        width: 145.53px;
 
         &.active {
           background-image: url("/static/images/bg/components/header/menu-item-1-bg--active.png");
@@ -155,7 +242,7 @@ const HeaderWrapper = styled.div`
 
       &:nth-of-type(2) {
         background-image: url("/static/images/bg/components/header/menu-item-2-bg.png");
-        width: ${(props) => props.theme.widthRatio * 242}px;
+        width: 149.22px;
 
         &.active {
           background-image: url("/static/images/bg/components/header/menu-item-2-bg--active.png");
@@ -164,7 +251,7 @@ const HeaderWrapper = styled.div`
 
       &:nth-of-type(3) {
         background-image: url("/static/images/bg/components/header/menu-item-3-bg.png");
-        width: ${(props) => props.theme.widthRatio * 250}px;
+        width: 154.16px;
 
         &.active {
           background-image: url("/static/images/bg/components/header/menu-item-3-bg--active.png");
@@ -173,7 +260,7 @@ const HeaderWrapper = styled.div`
 
       &:nth-of-type(4) {
         background-image: url("/static/images/bg/components/header/menu-item-4-bg.png");
-        width: ${(props) => props.theme.widthRatio * 292}px;
+        width: 180.06px;
 
         &.active {
           background-image: url("/static/images/bg/components/header/menu-item-4-bg--active.png");
@@ -182,31 +269,82 @@ const HeaderWrapper = styled.div`
 
       &:nth-of-type(5) {
         background-image: url("/static/images/bg/components/header/menu-item-5-bg.png");
-        width: ${(props) => props.theme.widthRatio * 339}px;
+        width: 209.05px;
 
         &.active {
           background-image: url("/static/images/bg/components/header/menu-item-5-bg--active.png");
         }
       }
+    }
+  }
 
-      &.active {
-        .menu-link {
-          .menu-text {
-            color: #fec100;
-            font-weight: 900;
-          }
+  .mobile-menu-nav {
+    display: none;
+    padding: 10px 20px 5px 10px;
+    height: 50px;
+    box-sizing: border-box;
+
+    @media screen and (max-width: 780px) {
+      display: flex;
+      flex-direction: row;
+      width: 100vw;
+      max-width: 100%;
+    }
+
+    .menu-item {
+      flex: 1;
+
+      svg {
+        margin-top: -10px;
+      }
+
+      .menu-text {
+        margin-top: -10px;
+      }
+
+      &:nth-of-type(1) {
+        background-image: url("/static/images/bg/components/header/menu-item-1-bg.png");
+        padding-left: 15px;
+
+        .menu-text {
+          flex: 1;
         }
       }
 
-      @media (max-width: 1080px) {
-        &:nth-of-type(1) {
-          background-image: url("/static/images/bg/components/header/menu-item-1-bg.png");
-          width: ${(props) => props.theme.widthRatio * 237}px;
+      &:nth-of-type(2) {
+        background-image: url("/static/images/bg/components/header/menu-item-5-bg.png");
+        &.active {
+          background-image: url("/static/images/bg/components/header/menu-item-5-bg--active.png");
         }
+      }
+    }
 
-        &:nth-of-type(2) {
-          background-image: url("/static/images/bg/components/header/menu-item-5-bg.png");
-          width: ${(props) => props.theme.widthRatio * 307}px;
+    .mobile-menu {
+      position: absolute;
+      width: 100vw;
+      max-width: 100%;
+      height: calc(100vh - 60px);
+      background: #000;
+      opacity: 0.9;
+      z-index: 500;
+      left: 0px;
+      top: 55px;
+      display: flex;
+      flex-direction: column;
+      align-content: center;
+      align-items: center;
+      padding-top: 100px;
+
+      a {
+        font-size: 2rem;
+        line-height: 3rem;
+        color: #80f1ed;
+        font-family: Orbitron-Black;
+        text-shadow: 4px 4px 2.7px #27787580;
+        margin-top: 10px;
+
+        &.active {
+          color: #fec100;
         }
       }
     }

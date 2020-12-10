@@ -2,7 +2,7 @@ import async from "../component/Async";
 
 const MyCards = async(() => import("../pages/MyCardsPage"));
 const Stake = async(() => import("../pages/StakePage"));
-const GetHeroes = async(() => import("../pages/GetHeroesPage"));
+const GetCards = async(() => import("../pages/GetCardsPage"));
 const FightVillains = async(() => import("../pages/FightVillainsPage"));
 const FightStart = async(() => import("../pages/FightStartPage"));
 const UnlockWallet = async(() => import("../pages/UnlockWalletPage"));
@@ -20,7 +20,7 @@ const menuRoutes = [
 	},
 	{
 		path: '/get-heroes',
-		component: GetHeroes,
+		component: GetCards,
 		layout: 'cardMenu'
 	},
 	{

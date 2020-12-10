@@ -33,12 +33,14 @@ const LPStakingBoard = () => {
   const stakedAmount = useSelector((state) => state.LpStaking.stakedAmount);
   const oldStakedAmount = useSelector((state) => state.LpStaking.oldStakedAmount);
   const earningAmount = useSelector((state) => state.LpStaking.earningAmount);
+  const stat = useSelector((state) => state.LpStaking.stat)
 
   const init = useCallback(() => {
     dispatch(lpstakingActions.getLPTokenBalance());
     dispatch(lpstakingActions.getStakedAmount());
     dispatch(lpstakingActions.getOldStakedAmount());
     dispatch(lpstakingActions.getEarningAmount());
+    dispatch(lpstakingActions.getStatistics());
   }, [dispatch]);
 
   useEffect(() => {
@@ -53,10 +55,10 @@ const LPStakingBoard = () => {
     setOpenStatus(DLG_DEPOSIT);
   };
 
-  const handleDeposit = (amount) => {
+  const handleDeposit = (amount, isMax) => {
     if (checkAmount(amount)) {
       setLoading(true);
-      dispatch(lpstakingActions.depositLP(amount, callbackDeposit));
+      dispatch(lpstakingActions.depositLP(amount, isMax, callbackDeposit));
     }
   };
 
@@ -75,6 +77,7 @@ const LPStakingBoard = () => {
       dispatch(lpstakingActions.getStakedAmount());
       // dispatch(lpstakingActions.getOldStakedAmount());
       dispatch(lpstakingActions.getEarningAmount());
+      dispatch(lpstakingActions.getStatistics());
     } else {
       toast.error("Unexpected error...");
     }
@@ -108,17 +111,17 @@ const LPStakingBoard = () => {
     setOpenStatus(DLG_OLD_WITHDRAW);
   };
 
-  const handleWithdraw = (amount) => {
+  const handleWithdraw = (amount, isMax) => {
     if (checkAmount(amount)) {
       setLoading(true);
-      dispatch(lpstakingActions.withdrawLP(amount, callbackDeposit));
+      dispatch(lpstakingActions.withdrawLP(amount, isMax, callbackDeposit));
     }
   };
 
-  const handleOldWithdraw = (amount) => {
+  const handleOldWithdraw = (amount, isMax) => {
     if (checkAmount(amount)) {
       setLoading(true);
-      dispatch(lpstakingActions.withdrawOldLP(amount, callbackDeposit));
+      dispatch(lpstakingActions.withdrawOldLP(amount, isMax, callbackDeposit));
     }
   };
 
@@ -146,12 +149,13 @@ const LPStakingBoard = () => {
   };
 
   return (
-    <>
+    <div style={{ marginTop: 20 }}>
       {openStatus === DLG_STAKE && (
         <Stake
-          hashes={convertFromWei(earningAmount)}
+          hashes={convertFromWei(earningAmount, 2)}
           staked={convertFromWei(stakedAmount)}
           balance={convertFromWei(balance)}
+          stat={stat}
           onOpenDeposit={handleOpenDeposit}
           onOpenWithdraw={handleOpenWithdraw}
           onOpenOldWithdraw={handleOpenOldWithdraw}
@@ -184,7 +188,7 @@ const LPStakingBoard = () => {
           onWithdraw={handleOldWithdraw}
         />
       )}
-    </>
+    </div>
   );
 };
 

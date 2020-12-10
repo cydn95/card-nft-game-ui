@@ -26,6 +26,9 @@ const actions = {
   WITHDRAW_LP: "WITHDRAW_LP",
   WITHDRAW_OLD_LP: "WITHDRAW_OLD_LP",
 
+  GET_STATISTICS: "GET_STATISTICS",
+  GET_STATISTICS_SUCCESS: "GET_STATISTICS_SUCCESS",
+
   getLPTokenAllowance: () => ({
     type: actions.GET_ALLOWANCE_LP_TOKEN,
   }),
@@ -49,18 +52,22 @@ const actions = {
     type: actions.APPROVE_LP,
     payload: { callback },
   }),
-  depositLP: (amount, callback) => ({
+  depositLP: (amount, isMax, callback) => ({
     type: actions.DEPOSIT_LP,
-    payload: { amount, callback },
+    payload: { amount, isMax, callback },
   }),
-  withdrawLP: (amount, callback) => ({
+  withdrawLP: (amount, isMax, callback) => ({
     type: actions.WITHDRAW_LP,
-    payload: { amount, callback },
+    payload: { amount, isMax, callback },
   }),
   withdrawOldLP: (amount, callback) => ({
     type: actions.WITHDRAW_OLD_LP,
     payload: { amount, callback },
   }),
+
+  getStatistics: () => ({
+    type: actions.GET_STATISTICS
+  })
 };
 
 export default actions;

@@ -34,11 +34,19 @@ export const CARD_HASH_PRICE_UNIT = 100;
 export const CARD_SERIES = {
   PEOPLE: "People",
   SUPPORT: "Support",
+  BADGE: "Badge"
 };
+
+export const CARD_SUB_SERIES = {
+  HERO: ['Devs', 'Limited'],
+  SUPPORT: ['Wisdom', 'Attack'],
+  BADGE: ['Generic']
+}
 
 export const CARD_TYPE = {
   HERO: [CARD_SERIES.PEOPLE],
   SUPPORT: [CARD_SERIES.SUPPORT],
+  BADGE: [CARD_SERIES.BADGE]
 };
 
 export const CARD_RARITY = {
@@ -47,3 +55,5 @@ export const CARD_RARITY = {
   RARE: 4,
   COMMON: 1,
 };
+
+export const OPENSEA_BUY_LINK = "https://opensea.io/assets/0x89ee76cc25fcbf1714ed575faa6a10202b71c26a/";

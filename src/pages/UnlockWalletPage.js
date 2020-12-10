@@ -48,22 +48,42 @@ const UnlockWallet = ({ history }) => {
 
 const UnlockWalletWrapper = styled.div`
   width: 100vw;
+  max-width: 100%;
   height: 100vh;
   margin-top: -101px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  align-content: center;
+
+  @media screen and (max-width: 1080px) {
+    margin-top: -50px;
+  }
 
   > div {
-    width: 895px;
+    width: 70%;
     height: 270px;
     background-size: 100% 100%;
     cursor: pointer;
+    padding: 0px 16px;
+
+    @media screen and (max-width: 768px) {
+      width: 90%;
+
+      img {
+        width: 100px;
+      }
+
+      p {
+        font-size: 14px;
+      }
+    }
 
     p {
       font-size: 20px;
       font-family: Orbitron-Medium;
+      text-align: center;
     }
 
     span {

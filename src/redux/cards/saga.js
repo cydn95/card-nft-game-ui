@@ -2,21 +2,13 @@ import { all, takeLatest, call, put, fork } from "redux-saga/effects";
 
 import actions from "./actions";
 
-import {
-  DEV_LPSTAKING_ADDRESS,
-  PROD_LPSTAKING_ADDRESS,
-  DEV_LPSTAKING_ABI,
-  PROD_LPSTAKING_ABI,
-  DEV_NFT_ADDRESS,
-  PROD_NFT_ADDRESS,
-  DEV_NFT_ABI,
-  PROD_NFT_ABI,
-} from "../../helper/contract";
+import { PROD_NDR_ADDRESS } from "../../helper/contract";
 
 import { getWeb3, getGasPrice } from "../../services/web3";
 import {
   getNFTInstance,
   getNFTStakingInstance,
+  getLPStakingInstance,
 } from "../../services/web3/instance";
 
 import {
@@ -38,6 +30,7 @@ import {
 } from "../../services/web3/cards";
 
 import { getEarningAsync } from "../../services/web3/lpStaking";
+import { getTokenInfo } from "../../services/graphql";
 
 import {
   CARD_RARITY,
@@ -45,9 +38,8 @@ import {
   CARD_TYPE,
   RESPONSE,
 } from "../../helper/constant";
+import { cardCompare, getCardType } from "../../helper/utils";
 import { getCardsAPI } from "../../services/axios/api";
-
-const { REACT_APP_BUILD_MODE } = process.env;
 
 export function* getCards() {
   yield takeLatest(actions.GET_CARDS, function* () {
@@ -61,8 +53,11 @@ export function* getCards() {
     if (res.status === 200) {
       const cards = [];
       res.data.cards.forEach((element) => {
-        cards.push({ ...element, minted: 0, owned: 0 });
+        cards.push({ ...element, minted: 0, owned: 0, apy: 0 });
       });
+
+      cards.sort(cardCompare);
+
       yield put({
         type: actions.GET_MINTED_COUNT,
         payload: { cards },
@@ -73,17 +68,8 @@ export function* getCards() {
 
 export function* getCardsPrice() {
   yield takeLatest(actions.GET_CARDS_PRICE, function* () {
-    let abi;
-    let instance;
     const web3 = yield call(getWeb3);
-
-    if (REACT_APP_BUILD_MODE === "development") {
-      abi = DEV_LPSTAKING_ABI;
-      instance = new web3.eth.Contract(abi, DEV_LPSTAKING_ADDRESS);
-    } else if (REACT_APP_BUILD_MODE === "production") {
-      abi = PROD_LPSTAKING_ABI;
-      instance = new web3.eth.Contract(abi, PROD_LPSTAKING_ADDRESS);
-    }
+    const lpStaking = getLPStakingInstance(web3);
 
     const cardPrice = {
       [CARD_RARITY.COMMON]: {
@@ -106,45 +92,45 @@ export function* getCardsPrice() {
 
     cardPrice[CARD_RARITY.COMMON].hero = yield call(
       getHeroPriceAsync,
-      instance,
+      lpStaking.instance,
       CARD_RARITY.COMMON
     );
     cardPrice[CARD_RARITY.COMMON].support = yield call(
       getSupportPriceAsync,
-      instance,
+      lpStaking.instance,
       CARD_RARITY.COMMON
     );
 
     cardPrice[CARD_RARITY.RARE].hero = yield call(
       getHeroPriceAsync,
-      instance,
+      lpStaking.instance,
       CARD_RARITY.RARE
     );
     cardPrice[CARD_RARITY.RARE].support = yield call(
       getSupportPriceAsync,
-      instance,
+      lpStaking.instance,
       CARD_RARITY.RARE
     );
 
     cardPrice[CARD_RARITY.EPIC].hero = yield call(
       getHeroPriceAsync,
-      instance,
+      lpStaking.instance,
       CARD_RARITY.EPIC
     );
     cardPrice[CARD_RARITY.EPIC].support = yield call(
       getSupportPriceAsync,
-      instance,
+      lpStaking.instance,
       CARD_RARITY.EPIC
     );
 
     cardPrice[CARD_RARITY.LEGENDARY].hero = yield call(
       getHeroPriceAsync,
-      instance,
+      lpStaking.instance,
       CARD_RARITY.LEGENDARY
     );
     cardPrice[CARD_RARITY.LEGENDARY].support = yield call(
       getSupportPriceAsync,
-      instance,
+      lpStaking.instance,
       CARD_RARITY.LEGENDARY
     );
 
@@ -155,25 +141,68 @@ export function* getCardsPrice() {
   });
 }
 
+export function* getCardsApy() {
+  yield takeLatest(actions.GET_CARDS_APY, function* ({ payload }) {
+    const web3 = yield call(getWeb3);
+
+    const nftStaking = getNFTStakingInstance(web3);
+
+    const { cards, cardPrice } = payload;
+    const cardsApy = [];
+
+    cards.forEach((card) => {
+      const cardType = getCardType(card)
+
+      if (
+        cardsApy.findIndex(
+          (element) =>
+            element.type === cardType &&
+            element.rarity === card.rarity.weight &&
+            element.strength === card.strength
+        ) === -1
+      ) {
+        cardsApy.push({
+          type: cardType,
+          rarity: card.rarity.weight,
+          strength: card.strength,
+          price: cardPrice[card.rarity.weight][cardType],
+          apy: 0
+        })
+      }
+    });
+
+    const rewardRate = yield call(getRewardRateAsync, nftStaking.instance);
+    const totalStrength = yield call(
+      getTotalStakedStrengthAsync,
+      nftStaking.instance
+    );
+    
+    const ndrTokenInfo = yield call (getTokenInfo, PROD_NDR_ADDRESS);
+    const ndrEthPrice = parseFloat(ndrTokenInfo.derivedETH).toFixed(4);
+
+    cardsApy.forEach((card, index) => {
+      const ndrPerDay = ((rewardRate * card.strength) / totalStrength) * 86400;
+      const apy = ndrPerDay * ndrEthPrice * 365 / card.price * 100;
+      cardsApy[index].apy = apy.toFixed(2);
+    });
+
+    yield put({
+      type: actions.GET_CARDS_APY_SUCCESS,
+      cardsApy: cardsApy,
+    });
+  });
+}
+
 export function* getMintedCount() {
   yield takeLatest(actions.GET_MINTED_COUNT, function* ({ payload }) {
     const { cards } = payload;
 
-    let abi;
-    let instance;
     const web3 = yield call(getWeb3);
-
-    if (REACT_APP_BUILD_MODE === "development") {
-      abi = DEV_NFT_ABI;
-      instance = new web3.eth.Contract(abi, DEV_NFT_ADDRESS);
-    } else if (REACT_APP_BUILD_MODE === "production") {
-      abi = PROD_NFT_ABI;
-      instance = new web3.eth.Contract(abi, PROD_NFT_ADDRESS);
-    }
+    const nft = getNFTInstance(web3);
 
     const newCards = [...cards];
     cards.forEach(async (c, index) => {
-      const mintedCount = await getCirculatingSupplyAsync(instance, c.id);
+      const mintedCount = await getCirculatingSupplyAsync(nft.instance, c.id);
       newCards[index].minted = mintedCount;
     });
 
@@ -292,10 +321,17 @@ export function* getNDRPerDay() {
     const nftStaking = getNFTStakingInstance(web3);
 
     const accounts = yield call(web3.eth.getAccounts);
-    
+
     const rewardRate = yield call(getRewardRateAsync, nftStaking.instance);
-    const myStrength = yield call(getStakedStrengthByAddressAsync, nftStaking.instance, accounts[0]);
-    const totalStrength = yield call(getTotalStakedStrengthAsync, nftStaking.instance);
+    const myStrength = yield call(
+      getStakedStrengthByAddressAsync,
+      nftStaking.instance,
+      accounts[0]
+    );
+    const totalStrength = yield call(
+      getTotalStakedStrengthAsync,
+      nftStaking.instance
+    );
 
     const ndrPerDay = ((rewardRate * myStrength) / totalStrength) * 86400;
 
@@ -329,17 +365,8 @@ export function* buyHeroCardEth() {
   yield takeLatest(actions.BUY_HERO_CARD_ETH, function* ({ payload }) {
     const { card, callback } = payload;
 
-    let abi;
-    let instance;
     const web3 = yield call(getWeb3);
-
-    if (REACT_APP_BUILD_MODE === "development") {
-      abi = DEV_LPSTAKING_ABI;
-      instance = new web3.eth.Contract(abi, DEV_LPSTAKING_ADDRESS);
-    } else if (REACT_APP_BUILD_MODE === "production") {
-      abi = PROD_LPSTAKING_ABI;
-      instance = new web3.eth.Contract(abi, PROD_LPSTAKING_ADDRESS);
-    }
+    const lpStaking = getLPStakingInstance(web3);
 
     // Get Wallet Account
     const accounts = yield call(web3.eth.getAccounts);
@@ -349,13 +376,13 @@ export function* buyHeroCardEth() {
     if (CARD_TYPE.HERO.includes(card.series)) {
       cardPriceEth = yield call(
         getHeroPriceAsync,
-        instance,
+        lpStaking.instance,
         card.rarity.weight
       );
     } else if (CARD_TYPE.SUPPORT.includes(card.series)) {
       cardPriceEth = yield call(
         getSupportPriceAsync,
-        instance,
+        lpStaking.instance,
         card.rarity.weight
       );
     } else {
@@ -371,12 +398,14 @@ export function* buyHeroCardEth() {
     const buyCardAsync = async (cardId, cardPrice, address) => {
       const prices = await getGasPrice();
 
-      const gasLimit = await instance.methods.buy(cardId).estimateGas({
-        from: address,
-        value: cardPrice.toString(),
-      });
+      const gasLimit = await lpStaking.instance.methods
+        .buy(cardId)
+        .estimateGas({
+          from: address,
+          value: cardPrice.toString(),
+        });
 
-      return await instance.methods
+      return await lpStaking.instance.methods
         .buy(cardId)
         .send({
           from: address,
@@ -411,22 +440,17 @@ export function* buyHeroCardHash() {
   yield takeLatest(actions.BUY_HERO_CARD_HASH, function* ({ payload }) {
     const { card, callback } = payload;
 
-    let abi;
-    let instance;
     const web3 = yield call(getWeb3);
-
-    if (REACT_APP_BUILD_MODE === "development") {
-      abi = DEV_LPSTAKING_ABI;
-      instance = new web3.eth.Contract(abi, DEV_LPSTAKING_ADDRESS);
-    } else if (REACT_APP_BUILD_MODE === "production") {
-      abi = PROD_LPSTAKING_ABI;
-      instance = new web3.eth.Contract(abi, PROD_LPSTAKING_ADDRESS);
-    }
+    const lpStaking = getLPStakingInstance(web3);
 
     // Get Wallet Account
     const accounts = yield call(web3.eth.getAccounts);
 
-    const earning = yield call(getEarningAsync, instance, accounts[0]);
+    const earning = yield call(
+      getEarningAsync,
+      lpStaking.instance,
+      accounts[0]
+    );
     const cardHashPrice =
       card.rarity.weight * CARD_HASH_PRICE_UNIT * Math.pow(10, 18);
 
@@ -436,13 +460,13 @@ export function* buyHeroCardHash() {
     }
 
     const buyCardAsync = async (cardId, address) => {
-      const gasLimit = await instance.methods
+      const gasLimit = await lpStaking.instance.methods
         .redeem(cardId)
         .estimateGas({ from: address });
 
       const prices = await getGasPrice();
 
-      return await instance.methods
+      return await lpStaking.instance.methods
         .redeem(cardId)
         .send({
           from: address,
@@ -603,6 +627,7 @@ export default function* rootSaga() {
     fork(buyHeroCardHash),
     fork(getCards),
     fork(getCardsPrice),
+    fork(getCardsApy),
     fork(getMintedCount),
     fork(getMyCardsCount),
     fork(getMyStakedStrength),

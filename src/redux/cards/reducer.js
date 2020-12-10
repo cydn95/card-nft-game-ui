@@ -21,6 +21,7 @@ const initState = {
       support: 0,
     },
   },
+  cardsApy: [],
   myStakedStrength: 0,
   totalStakedStrength: 0,
   claimableNDR: 0,
@@ -39,6 +40,11 @@ export default function pageReducer(state = initState, action) {
       return {
         ...state,
         cardPrice: action.cardPrice,
+      };
+    case actions.GET_CARDS_APY_SUCCESS:
+      return {
+        ...state,
+        cardsApy: action.cardsApy,
       };
     case actions.GET_MY_STAKED_STRENGTH_SUCCESS:
       return {

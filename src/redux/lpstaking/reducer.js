@@ -6,6 +6,11 @@ const initState = {
   oldStakedAmount: 0, // staked amount for lp pool
   earningAmount: 0, // earning
   allowance: 0,
+  stat: {
+    tvl: 0,
+    lpPriceNDR: 0,
+    lpPriceETH: 0
+  }
 };
 
 export default function pageReducer(state = initState, action) {
@@ -40,6 +45,13 @@ export default function pageReducer(state = initState, action) {
         ...state,
         allowance: action.allowance,
       };
+    case actions.GET_STATISTICS_SUCCESS:
+      return {
+        ...state,
+        stat: {
+          ...action.stat
+        }
+      }
     default:
       return state;
   }
