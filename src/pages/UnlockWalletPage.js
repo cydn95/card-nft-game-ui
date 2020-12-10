@@ -9,7 +9,7 @@ const UnlockWallet = ({ history }) => {
 
   useEffect(() => {
     if (account) {
-      history.push("/get-cards");
+      history.push("/get-heroes");
     }
   }, [account, history]);
 

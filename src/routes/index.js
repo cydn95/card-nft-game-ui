@@ -19,7 +19,7 @@ const menuRoutes = [
 		layout: 'cardMenu'
 	},
 	{
-		path: '/get-cards',
+		path: '/get-heroes',
 		component: GetCards,
 		layout: 'cardMenu'
 	},

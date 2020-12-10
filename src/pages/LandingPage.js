@@ -479,7 +479,7 @@ const LandingPage = ({history}) => {
                     </div>
                     <button
                       className="hover-effect1 animation-bigEntrance"
-                      onClick={(e) => history.push("/get-cards")}
+											onClick={(e) => history.push("/get-heroes")}
                     >
                       GET CARDS
                     </button>
@@ -517,7 +517,7 @@ const LandingPage = ({history}) => {
                   <div className="button-wrapper">
                     <button
                       className="hover-effect1"
-                      onClick={(e) => history.push("/get-cards")}
+											onClick={(e) => history.push("/get-heroes")}
                     >
                       GET CARDS
                     </button>
@@ -554,7 +554,7 @@ const LandingPage = ({history}) => {
                   <div className="button-wrapper">
                     <button
                       className="hover-effect1"
-                      onClick={(e) => history.push("/get-cards")}
+											onClick={(e) => history.push("/get-heroes")}
                     >
                       GET CARDS
                     </button>
@@ -595,7 +595,7 @@ const LandingPage = ({history}) => {
                   </div>
                   <button
                     className="hover-effect1"
-                    onClick={(e) => history.push("/get-cards")}
+										onClick={(e) => history.push("/get-heroes")}
                   >
                     GET CARDS
                   </button>

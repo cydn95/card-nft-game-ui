@@ -45,7 +45,7 @@ const Header = () => {
       return "Stake";
     }
 
-    if (getMenuItemActive("get-cards")) {
+    if (getMenuItemActive("get-heroes")) {
       return "Get Cards";
     }
 
@@ -96,10 +96,10 @@ const Header = () => {
         </li>
         <li
           className={`menu-item ${getMenuItemActive(
-            "get-cards"
+            "get-heroes"
           )} hover-effect2`}
         >
-          <NavLink className="menu-link" to="/get-cards">
+          <NavLink className="menu-link" to="/get-heroes">
             <span className="menu-text">Get Cards</span>
           </NavLink>
         </li>
@@ -176,7 +176,7 @@ const Header = () => {
               My Cards
             </a>
             <NavLink className={`${getMenuItemActive("stake")}`} to="/stake">Stake</NavLink>
-            <NavLink className={`${getMenuItemActive("get-cards")}`} to="/get-cards">Get Cards</NavLink>
+            <NavLink className={`${getMenuItemActive("get-heroes")}`} to="/get-heroes">Get Cards</NavLink>
           </div>
         )}
       </ul>
