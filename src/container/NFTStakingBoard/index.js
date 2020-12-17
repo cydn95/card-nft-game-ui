@@ -104,13 +104,13 @@ const NFTStakingBoard = () => {
           <p>{totalStakedStrength}</p>
         </div>
         <div className="stat">
-          <div>
+          <div style={{marginTop: -3}}>
             <label>Claimable NDR:</label>
-            <span>{convertFromWei(claimableNDR)}</span>
+            <span>{convertFromWei(claimableNDR, 3)}</span>
           </div>
           <div>
             <label>NDR per day:</label>
-            <span>{convertFromWei(ndrPerDay)}</span>
+            <span>{convertFromWei(ndrPerDay, 3)}</span>
           </div>
         </div>
         {claimNDRLoading ? (
@@ -132,21 +132,21 @@ const NFTStakeWrapper = styled.div`
   .stake-stats {
     div {
       span {
-        font-size: 20px;
-        max-width: 127px;
+        font-size: 16px;
+        max-width: 101.6px;
         font-family: Orbitron-Black;
         text-transform: uppercase;
         text-shadow: 5px 5px 3px #27787580;
-        line-height: 1.2;
+        line-height: 1;
       }
 
       &.action {
         background-image: url("/static/images/bg/pages/get-heroes/credit-button-bg.png");
         background-size: 100% 100%;
-        width: 180px;
-        height: 100px;
-        margin-right: -7px;
-        padding: 0 17px 22px 0;
+        width: 144px;
+        height: 80px;
+        margin-right: -5.6px;
+        padding: 0 13.6px 17.6px 0;
         display: flex;
         flex-flow: column;
         align-items: center;
@@ -162,20 +162,20 @@ const NFTStakeWrapper = styled.div`
       &.stat {
         background: url("/static/images/bg/card-menu/stat-bg.png");
         background-size: cover;
-        margin: 0 -7px;
-        padding: 10px 12px 0px;
-        min-width: 293px;
-        text-shadow: 15px 15px 10px #80f1ed91;
+        margin: 0 -5.6px;
+        padding: 8px 9.6px 0px;
+        min-width: 234.4px;
+        text-shadow: 0px 8px 8px #80f1ed91;
         font-family: Orbitron-Black;
 
         > div:first-child {
-          margin-bottom: 4px;
+          margin-bottom: 3.2px;
         }
 
         div {
           label {
             color: #80f1ed;
-            font-size: 1rem;
+            font-size: 0.8rem;
             // font-family: Orbitron-Medium;
             line-height: 1rem;
             margin: 0;
@@ -183,7 +183,7 @@ const NFTStakeWrapper = styled.div`
 
           span {
             color: #fec100;
-            font-size: 1.125rem;
+            font-size: 1rem;
             // font-family: Orbitron-Black;
             line-height: 1rem;
             padding-left: 9px;
@@ -194,14 +194,14 @@ const NFTStakeWrapper = styled.div`
 
         h6 {
           color: #80f1ed;
-          font-size: 20px;
+          font-size: 16px;
           line-height: 1;
-          margin: 0 0 7px;
+          margin: 0 0 5.6px;
         }
 
         p {
           color: #fec100;
-          font-size: 30px;
+          font-size: 24px;
           line-height: 1;
           margin: 0;
         }

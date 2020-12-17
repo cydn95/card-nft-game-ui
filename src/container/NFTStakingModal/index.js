@@ -136,25 +136,25 @@ const NFTStakeModalContainer = styled.div`
   .header {
     width: 100%;
     box-sizing: border-box;
-    padding: 100px 10% 30px;
+    padding: 75px 7.5% 22.5px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 
     h2 {
-      font-size: 2.5rem;
+      font-size: 1.875rem;
       font-family: Orbitron-Black;
       text-transform: uppercase;
       text-shadow: 5px 5px 3px #27787580;
-      line-height: 2.5rem;
+      line-height: 1.875rem;
       text-align: center;
       color: #fec100;
     }
 
     .close-button {
       .MuiSvgIcon-root {
-        width: 2.8em;
-        height: 2.8em;
+        width: 2.1em;
+        height: 2.1em;
       }
       svg path {
         fill: #fec100;
@@ -172,16 +172,16 @@ const CardWrapper = styled.div`
   margin: 8px;
 
   .card {
-    width: 310px;
-    height: 432px;
+    width: 232.5px;
+    height: 324px;
     position: relative;
-    padding: 17px 14px;
+    padding: 12.75px 10.5px;
     background: transparent;
     z-index: 400;
 
     .card-image {
-      width: 290px;
-      height: 410px;
+      width: 217.5px;
+      height: 307.5px;
       position: absolute;
     }
 
@@ -189,8 +189,8 @@ const CardWrapper = styled.div`
       position: absolute;
       top: 0;
       left: 0;
-      width: 320px;
-      height: 443px;
+      width: 240px;
+      height: 332.25px;
       background: url("/static/images/bg/components/card/card-border.png");
       background-size: cover;
       cursor: pointer;
@@ -207,22 +207,23 @@ const CardWrapper = styled.div`
 
   .button-wrapper {
     button {
-      width: 238px;
+      width: 100%;
       height: 52px;
       background: url("/static/images/bg/components/card/button-bg.png");
+      background-size: 100% 100%;
       border: none;
       color: #161617;
-      font-size: 20px;
+      font-size: 16px;
       font-family: Orbitron-Medium;
       text-shadow: 5px 5px 3px #27787580;
       outline: none;
       box-sizing: border-box;
-      padding-top: 15px;
     }
     .loading-wrapper {
       display: flex;
-      font-size: 20px;
+      font-size: 16px;
       justify-content: center;
+      align-items: center;
       font-family: Orbitron-Medium;
       text-shadow: 5px 5px 3px #27787580;
       color: #161617;
@@ -239,6 +240,7 @@ const CardWrapper = styled.div`
     .button-wrapper {
       button {
         background: url("/static/images/bg/components/card/button-bg--active.png");
+        background-size: 100% 100%;
         color: #fec100;
       }
     }

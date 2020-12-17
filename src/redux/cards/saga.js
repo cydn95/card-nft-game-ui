@@ -201,10 +201,10 @@ export function* getMintedCount() {
     const nft = getNFTInstance(web3);
 
     const newCards = [...cards];
-    cards.forEach(async (c, index) => {
-      const mintedCount = await getCirculatingSupplyAsync(nft.instance, c.id);
-      newCards[index].minted = mintedCount;
-    });
+    for (let i = 0; i < cards.length; i++) {
+      const mintedCount = yield call (getCirculatingSupplyAsync, nft.instance, cards[i].id);
+      newCards[i].minted = mintedCount;
+    }
 
     yield put({
       type: actions.GET_CARDS_SUCCESS,
@@ -223,14 +223,10 @@ export function* getMyCardsCount() {
     const accounts = yield call(web3.eth.getAccounts);
 
     const newCards = [...cards];
-    cards.forEach(async (c, index) => {
-      const ownedCount = await getOwnedCardsCountAsync(
-        nft.instance,
-        accounts[0],
-        c.id
-      );
-      newCards[index].owned = ownedCount;
-    });
+    for (let i = 0; i < cards.length; i++){
+      const ownedCount = yield call (getOwnedCardsCountAsync, nft.instance, accounts[0], cards[i].id);
+      newCards[i].owned = ownedCount;
+    }
 
     yield put({
       type: actions.GET_CARDS_SUCCESS,

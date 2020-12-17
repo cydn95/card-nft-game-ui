@@ -13,39 +13,36 @@ const SectionTitle = ({ title, long }) => {
 };
 
 const SectionTitleWrapper = styled.div`
-	display: flex;
+  display: flex;
 
 	.title {
       background-image: url('/static/images/bg/components/section-title/section-title-bg.png');
       background-size: 100% 100%;
-      width: ${props => props.theme.widthRatio * 272}px;
-      height: ${props => props.theme.heightRatio * 70}px;
+      width: 210.37px;
+      height: 75.05px;
       text-align: right;
-      color: ${props => props.theme.palette.secondary.main};
-      font-size: ${props => props.theme.widthRatio * 30}px;
-      line-height: ${props => props.theme.heightRatio * 36}px;
-      padding: ${props => props.theme.heightRatio * 8}px ${props => props.theme.widthRatio * 50}px 0 0;
+      color: #fec100;
+      font-size: 23.2px;
+      line-height: 38.6px;
+      padding: 8.57px 38.67px 0 0;
       font-family: Orbitron-Black;
-      text-shadow: ${props => props.theme.widthRatio * 5}px
-       						 ${props => props.theme.heightRatio * 5}px
-       						 ${props => props.theme.widthRatio * 3}px
-       						 #27787580;
-      margin-right: -${props => props.theme.widthRatio * 5}px;
+      text-shadow: 3.86px 5.36px 2.32px #27787580;
+      margin-right: -3.86px;
       
       &.long {
       	background-image: url('/static/images/bg/components/section-title/section-title-bg--long.png');
-      	width: ${props => props.theme.widthRatio * 422}px;
-      	margin-right: -${props => props.theme.widthRatio * 10}px;
-      	padding-top: ${props => props.theme.heightRatio * 10}px;
+      	width: 326px;
+      	margin-right: -7.73px;
+      	padding-top: 10.72px;
       }
     }
 
     .title-line {
       background: url('/static/images/bg/components/section-title/section-title-line.png') no-repeat;
       background-position: bottom;
-      background-size: 100% ${props => props.theme.heightRatio * 18}px;
-      width: ${props => props.theme.widthRatio * 853}px;
-      height: ${props => props.theme.heightRatio * 69}px;
+      background-size: 100% 19.3px;
+      flex: 1;
+      height: 73.98px;
     }
 `;
 

@@ -12,6 +12,7 @@ const CardStaking = ({
   loadingApprove,
   approved,
   onApprove,
+  bonus,
 }) => {
   const handleClickBlankCard = () => {
     if (!unStaked) return;
@@ -35,16 +36,15 @@ const CardStaking = ({
         ) : (
           <img src={card.image} alt={`${card}`} className="card-image" />
         )}
-        <div
-          className="card-border"
-          onClick={(e) => handleClickBlankCard()}
-        ></div>
+        <div className="card-border" onClick={(e) => handleClickBlankCard()}>
+          {bonus && <span>Bonus Card</span>}
+        </div>
       </div>
       <div className="button-wrapper text-center">
         {unStaked ? (
           approved ? (
             <button className="hover-effect3" onClick={onStake}>
-              Stake
+              {`${bonus ? "Stake bonus card" : "Unstake"}`}
             </button>
           ) : loadingApprove ? (
             <button className="hover-effect3">
@@ -74,7 +74,7 @@ const CardStaking = ({
                 Unstaking...
               </div>
             ) : (
-              `Unstake`
+              `${bonus ? "Unstake bonus card" : "Unstake"}`
             )}
           </button>
         )}
@@ -87,15 +87,15 @@ const CardWrapper = styled.div`
   margin: 8px;
 
   .card {
-    width: 310px;
-    height: 432px;
+    width: 232.5px;
+    height: 324px;
     position: relative;
-    padding: 17px 14px;
+    padding: 11.75px 10.5px;
     background: transparent;
 
     .card-image {
-      width: 290px;
-      height: 410px;
+      width: 217.5px;
+      height: 307.5px;
       position: absolute;
 
       &.un-obtained {
@@ -104,8 +104,8 @@ const CardWrapper = styled.div`
     }
 
     .un-staked {
-      width: 290px;
-      height: 410px;
+      width: 217.5px;
+      height: 307.5px;
       cursor: pointer;
     }
 
@@ -113,39 +113,52 @@ const CardWrapper = styled.div`
       position: absolute;
       top: 0;
       left: 0;
-      width: 320px;
-      height: 443px;
+      width: 240px;
+      height: 332.25px;
       background: url("/static/images/bg/components/card/card-border.png");
       background-size: cover;
       cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      align-content: center;
+
+      span {
+        color: #fec100;
+        font-size: 20px;
+        font-family: Orbitron-Black;
+        text-shadow: 5px 5px 3px #27787580;
+      }
     }
 
     .marked {
       position: absolute;
       top: 6.566px;
       left: 6.66px;
-      width: 99px;
-      height: 99px;
+      width: 74.25;
+      height: 74.25px;
     }
   }
 
   .button-wrapper {
+    margin-top: 10px;
+
     button {
-      width: 238px;
-      height: 52px;
+      width: 100%;
+      height: 50px;
       background: url("/static/images/bg/components/card/button-bg.png");
+      background-size: 100% 100%;
       border: none;
       color: #161617;
-      font-size: 20px;
+      font-size: 16px;
       font-family: Orbitron-Medium;
       text-shadow: 5px 5px 3px #27787580;
       outline: none;
       box-sizing: border-box;
-      padding-top: 15px;
     }
     .loading-wrapper {
       display: flex;
-      font-size: 20px;
+      font-size: 16px;
       justify-content: center;
       font-family: Orbitron-Medium;
       text-shadow: 5px 5px 3px #27787580;
@@ -163,6 +176,7 @@ const CardWrapper = styled.div`
     .button-wrapper {
       button {
         background: url("/static/images/bg/components/card/button-bg--active.png");
+        background-size: 100% 100%;
         color: #fec100;
       }
     }

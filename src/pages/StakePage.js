@@ -9,6 +9,7 @@ import { Tab, Nav } from "react-bootstrap";
 import UnlockWalletPage from "./UnlockWalletPage";
 import SectionTitle from "../component/SectionTitle";
 import CardStaking from "../component/Card/CardStaking";
+import BoostStake from "../component/Farm/BoostStake";
 import NFTStakingBoard from "../container/NFTStakingBoard";
 import NFTStakingModal from "../container/NFTStakingModal";
 
@@ -51,6 +52,8 @@ const Stake = () => {
     }
     return ret;
   }, [cards, stakedCardTokens]);
+
+  const bonusCard = { card: null, unStaked: true, bonus: true };
 
   useEffect(() => {
     dispatch(cardsActions.getCards());
@@ -143,16 +146,13 @@ const Stake = () => {
         <NFTStakingBoard />
         <Tab.Content>
           <Tab.Pane eventKey="heroes">
-            <div className="section-title d-flex justify-content-center animation-fadeInRight">
+            <MenuWrapper className="animation-fadeInRight">
               <SectionTitle
                 title={`${stakedCardTokens.length}/${MAX_STAKED_CARD_COUNT} Cards Staked`}
                 long
               />
-            </div>
-            <div
-              className="d-flex flex-wrap justify-content-center"
-              style={{ paddingBottom: 100 }}
-            >
+            </MenuWrapper>
+            <CardContainer>
               {stakeCards.length > 0 &&
                 stakeCards.map((c, index) => (
                   <CardStaking
@@ -168,6 +168,29 @@ const Stake = () => {
                     onApprove={handleApproveAll}
                   />
                 ))}
+              <CardStaking
+                card={bonusCard.card}
+                unStaked={bonusCard.unStaked}
+                currentProcessingCardId={selectedCardId}
+                onUnStake={handleUnStake}
+                onStake={handleOpenStakeModal}
+                loadingUnStake={unStakeLoading}
+                approved={approved}
+                loadingApprove={approveLoading}
+                onApprove={handleApproveAll}
+                bonus
+              />
+            </CardContainer>
+            <MenuWrapper className="animation-fadeInRight">
+              <SectionTitle title="Stake LP tokens" long />
+              <h2>You need to stake at least 1 Hero or Support NFT card to stake LP tokens</h2>
+            </MenuWrapper>
+            <div
+              className="d-flex flex-wrap justify-content-center"
+              style={{ paddingBottom: 100 }}
+            >
+              <BoostStake token="NDR" />
+              <BoostStake token="LP" fee={2} />
             </div>
           </Tab.Pane>
           <Tab.Pane eventKey="villains"></Tab.Pane>
@@ -187,6 +210,31 @@ const NFTStakeModalMask = styled.div`
   background: #000;
   opacity: 0.9;
   z-index: 100;
+`;
+
+const CardContainer = styled.div`
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  padding-bottom: 100px;
+  max-width: 1250px;
+  margin-left: auto;
+  margin-right: auto;
+`;
+
+const MenuWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  max-width: 1250px;
+  margin-left: auto;
+  margin-right: auto;
+
+  h2 {
+    font-family: Orbitron-Black;
+    font-size: 1.5rem;
+    color: #fec100;
+  }
 `;
 
 export default Stake;
