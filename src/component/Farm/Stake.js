@@ -125,7 +125,7 @@ const Stake = ({
           <div className="section">
             <a
               className="b-control action"
-              href="https://app.uniswap.org/#/add/0x739763a258640919981f9ba610ae65492455be53/ETH"
+              href="https://app.zerion.io/market/asset/UNI-V2-0x65d0a154d2425ce2fd5fed3bdae94d9a9afe55ce"
               target="_blank"
               rel="noopener noreferrer"
             >
