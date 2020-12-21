@@ -9,6 +9,7 @@ import { Tab, Nav } from "react-bootstrap";
 import UnlockWalletPage from "./UnlockWalletPage";
 import SectionTitle from "../component/SectionTitle";
 import CardStaking from "../component/Card/CardStaking";
+import CardStakingOld from "../component/Card/CardStakingOld";
 import BoostStake from "../component/Farm/BoostStake";
 import NFTStakingBoard from "../container/NFTStakingBoard";
 import NFTStakingModal from "../container/NFTStakingModal";
@@ -124,28 +125,28 @@ const Stake = () => {
   }
 
   return (
-    <>
+    <StakePageContainer>
       {stakeDlgOpen && (
         <div className="modal-container">
           <NFTStakeModalMask />
           <NFTStakingModal onClose={handleCloseStakeModal} />
         </div>
       )}
-      <Tab.Container id="left-tabs-example" defaultActiveKey="heroes">
+      <Tab.Container id="left-tabs-example" defaultActiveKey="old-pool">
         <Nav
           variant="pills"
           className="justify-content-center animation-fadeIn"
         >
           <Nav.Item>
-            <Nav.Link eventKey="heroes">Stake Heroes</Nav.Link>
+            <Nav.Link className="nav_menu" eventKey="new-pool">Stake NFT & LP</Nav.Link>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link eventKey="villains">Lock Villains</Nav.Link>
+            <Nav.Link className="nav_menu" eventKey="old-pool">Exit Old Pool</Nav.Link>
           </Nav.Item>
         </Nav>
-        <NFTStakingBoard />
         <Tab.Content>
-          <Tab.Pane eventKey="heroes">
+          <Tab.Pane eventKey="new-pool">
+            <NFTStakingBoard />
             <MenuWrapper className="animation-fadeInRight">
               <SectionTitle
                 title={`${stakedCardTokens.length}/${MAX_STAKED_CARD_COUNT} Cards Staked`}
@@ -193,12 +194,52 @@ const Stake = () => {
               <BoostStake token="LP" fee={2} />
             </div>
           </Tab.Pane>
-          <Tab.Pane eventKey="villains"></Tab.Pane>
+          <Tab.Pane eventKey="old-pool">
+            <NFTStakingBoard />
+            <MenuWrapper className="animation-fadeInRight">
+              <SectionTitle
+                title={`${stakedCardTokens.length}/${MAX_STAKED_CARD_COUNT} Cards Staked`}
+                long
+              />
+            </MenuWrapper>
+            <CardContainer>
+              {stakeCards.length > 0 &&
+                stakeCards.map((c, index) => (
+                  <CardStakingOld
+                    key={`card_${index}`}
+                    card={c.card}
+                    unStaked={c.unStaked}
+                    currentProcessingCardId={selectedCardId}
+                    onUnStake={handleUnStake}
+                    onStake={handleOpenStakeModal}
+                    loadingUnStake={unStakeLoading}
+                    approved={approved}
+                    loadingApprove={approveLoading}
+                    onApprove={handleApproveAll}
+                  />
+                ))}
+            </CardContainer>
+          </Tab.Pane>
         </Tab.Content>
       </Tab.Container>
-    </>
+    </StakePageContainer>
   );
 };
+
+const StakePageContainer = styled.div`
+  width: 100vw;
+  max-width: 100%;
+  
+  .nav-pills {
+    margin: 0px;
+  }
+
+  .nav-pills .nav-item .nav-link {
+    margin-bottom: 10px;
+    font-size: 24px;
+  }
+  
+`
 
 const NFTStakeModalMask = styled.div`
   position: fixed;
@@ -234,6 +275,9 @@ const MenuWrapper = styled.div`
     font-family: Orbitron-Black;
     font-size: 1.5rem;
     color: #fec100;
+    padding-left: 20px;
+    padding-right: 20px;
+    text-align: center;
   }
 `;
 

@@ -205,7 +205,7 @@ const Header = () => {
 
 const HeaderWrapper = styled.div`
   .menu-item {
-    height: 58.73px;
+    height: 50px;
     margin-right: -17.5px;
     text-align: center;
     background-size: 100% 100%;
@@ -242,7 +242,7 @@ const HeaderWrapper = styled.div`
 
   .desktop-menu-nav {
     margin-left: -18px;
-    margin-bottom: 15px;
+    margin-bottom: 0px;
     display: flex;
 
     @media screen and (max-width: 780px) {

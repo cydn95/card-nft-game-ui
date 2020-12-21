@@ -14,6 +14,8 @@ const SectionTitle = ({ title, long }) => {
 
 const SectionTitleWrapper = styled.div`
   display: flex;
+  margin-left: 20px;
+  margin-top: 10px;
 
 	.title {
       background-image: url('/static/images/bg/components/section-title/section-title-bg.png');
@@ -29,11 +31,25 @@ const SectionTitleWrapper = styled.div`
       text-shadow: 3.86px 5.36px 2.32px #27787580;
       margin-right: -3.86px;
       
+      @media screen and (max-width: 1024px) {
+        width: 210.37px;
+        height: 60.04px;
+        font-size: 18.56px;
+        line-height: 30.88px;
+        padding: 6.86px 30.94px 0 0;
+      }
+    
       &.long {
       	background-image: url('/static/images/bg/components/section-title/section-title-bg--long.png');
       	width: 326px;
       	margin-right: -7.73px;
-      	padding-top: 10.72px;
+        padding-top: 10.72px;
+        
+        @media screen and (max-width: 1024px) {
+          width: 260.87px;
+          margin-right: -15.18px;
+          padding-top: 8.58px;
+        }
       }
     }
 
@@ -43,6 +59,11 @@ const SectionTitleWrapper = styled.div`
       background-size: 100% 19.3px;
       flex: 1;
       height: 73.98px;
+
+      @media screen and (max-width: 1024px) {
+        height: 62.184px;
+        margin-left: 15px;
+      }
     }
 `;
 

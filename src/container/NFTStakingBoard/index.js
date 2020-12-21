@@ -80,15 +80,15 @@ const NFTStakingBoard = () => {
 
   return (
     <NFTStakeWrapper>
-      <div className="stake-stats d-flex justify-content-center animation-slideDown">
+      <div className="stake-stats desktop animation-slideDown">
         {unStakeAllLoading ? (
-          <div className="action button">
+          <div className="action button desktop">
             <img src="/static/images/icons/loading.gif" height="35" alt="" />
             <span>LOADING...</span>
           </div>
         ) : (
           <div
-            className="action button"
+            className="action button desktop"
             role="button"
             onClick={handleUnStakeAll}
           >
@@ -104,7 +104,7 @@ const NFTStakingBoard = () => {
           <p>{totalStakedStrength}</p>
         </div>
         <div className="stat">
-          <div style={{marginTop: -3}}>
+          <div style={{ marginTop: -3 }}>
             <label>Claimable NDR:</label>
             <span>{convertFromWei(claimableNDR, 3)}</span>
           </div>
@@ -114,12 +114,38 @@ const NFTStakingBoard = () => {
           </div>
         </div>
         {claimNDRLoading ? (
-          <div className="action button">
+          <div className="action button desktop">
             <img src="/static/images/icons/loading.gif" height="35" alt="" />
             <span>LOADING...</span>
           </div>
         ) : (
-          <div className="action button" role="button" onClick={handleClaimNDR}>
+          <div className="action button desktop" role="button" onClick={handleClaimNDR}>
+            <span className="d-block text-center">claim ndr</span>
+          </div>
+        )}
+      </div>
+      <div className="stake-stats mobile animation-slideDown">
+        {unStakeAllLoading ? (
+          <div className="action button mobile">
+            <img src="/static/images/icons/loading.gif" height="35" alt="" />
+            <span>LOADING...</span>
+          </div>
+        ) : (
+          <div
+            className="action button mobile"
+            role="button"
+            onClick={handleUnStakeAll}
+          >
+            <span className="d-block text-center">unstake all</span>
+          </div>
+        )}
+        {claimNDRLoading ? (
+          <div className="action button mobile">
+            <img src="/static/images/icons/loading.gif" height="35" alt="" />
+            <span>LOADING...</span>
+          </div>
+        ) : (
+          <div className="action button mobile" role="button" onClick={handleClaimNDR}>
             <span className="d-block text-center">claim ndr</span>
           </div>
         )}
@@ -130,6 +156,26 @@ const NFTStakingBoard = () => {
 
 const NFTStakeWrapper = styled.div`
   .stake-stats {
+    display: flex;
+    justify-content: center;
+    height: 80px;
+
+    &.desktop {
+      @media screen and (max-width: 768px) {
+        flex-direction: column;
+        height: 200px;
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+    }
+
+    &.mobile {
+      display: none;
+      @media screen and (max-width: 1024px) {
+        display: flex;
+      }
+    }
+
     div {
       span {
         font-size: 16px;
@@ -157,16 +203,41 @@ const NFTStakeWrapper = styled.div`
           background-image: url("/static/images/bg/pages/get-heroes/credit-button-bg--active.png");
           color: #fec100;
         }
+
+        &.desktop {
+          @media screen and (max-width: 1024px) {
+            display: none;
+          }
+        }
+
+        &.mobile {
+          display: none;
+
+          @media screen and (max-width: 1024px) {
+            display: flex;
+          }
+        }
       }
 
       &.stat {
-        background: url("/static/images/bg/card-menu/stat-bg.png");
+        background-image: url("/static/images/bg/card-menu/stat-bg.png");
         background-size: cover;
         margin: 0 -5.6px;
         padding: 8px 9.6px 0px;
         min-width: 234.4px;
         text-shadow: 0px 8px 8px #80f1ed91;
         font-family: Orbitron-Black;
+
+        @media screen and (max-width: 768px) {
+          background-image: none;
+          border: 4px solid #80f1ed;
+          padding-top: 5px;
+          padding-bottom: 5px;
+
+          &:nth-child(2), &:nth-child(3) {
+            border-bottom: none;
+          }
+        }
 
         > div:first-child {
           margin-bottom: 3.2px;

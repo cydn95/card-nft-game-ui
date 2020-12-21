@@ -12,10 +12,10 @@ const BoostStake = ({ token, fee, amount }) => {
     <BoostStakeWrapper>
       <div className="token">{token.toUpperCase()}</div>
       <div className="block">
-        <div className="row">
+        {/* <div className="row">
           <span className="title">{`1 ${token} =  `}</span>
           <span className="value">0.05 STR</span>
-        </div>
+        </div> */}
         <div className="row">
           <span className="title">APY:</span>
           <span className="value">900 %</span>
@@ -24,11 +24,12 @@ const BoostStake = ({ token, fee, amount }) => {
       <div className="block">
         <div className="row">
           <span className="title">STAKED:</span>
+          <span className="value">{`4.53 ${token}`}</span>
         </div>
-        <div className="row">
+        {/* <div className="row">
           <span className="title">{`1 ${token} =  `}</span>
           <span className="value">0.05 STR</span>
-        </div>
+        </div> */}
       </div>
       <div className="section">
         <div className="row">
@@ -36,9 +37,9 @@ const BoostStake = ({ token, fee, amount }) => {
             className="amount"
             showMin={false}
             min={STAKE_MIN_LIMIT}
-            showMax={true}
+            showMax={false}
             max={STAKE_MAX_LIMIT}
-            value="0.0000"
+            value="0.0000000"
           />
         </div>
       </div>
