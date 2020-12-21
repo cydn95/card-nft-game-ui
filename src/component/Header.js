@@ -89,6 +89,18 @@ const Header = () => {
             <span className="menu-text">My Cards</span>
           </a> */}
         </li>
+        <li
+          className={`menu-item ${getMenuItemActive("forum")} hover-effect2`}
+        >
+          <a
+            className="menu-link"
+            href="http://gov.noderunners.io/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span className="menu-text">Forum</span>
+          </a>
+        </li>
         <li className={`menu-item ${getMenuItemActive("stake")} hover-effect2`}>
           <NavLink className="menu-link" to="/stake">
             <span className="menu-text">Stake</span>
@@ -175,6 +187,13 @@ const Header = () => {
             >
               My Cards
             </a>
+            <a
+              href="http://gov.noderunners.io/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Forum
+            </a>
             <NavLink className={`${getMenuItemActive("stake")}`} to="/stake">Stake</NavLink>
             <NavLink className={`${getMenuItemActive("get-heroes")}`} to="/get-heroes">Get Cards</NavLink>
           </div>
@@ -231,6 +250,14 @@ const HeaderWrapper = styled.div`
     }
 
     .menu-item {
+
+      background-image: url("/static/images/bg/components/header/menu-item-2-bg.png");
+      width: 149.22px;
+
+      &.active {
+        background-image: url("/static/images/bg/components/header/menu-item-2-bg--active.png");
+      }
+
       &:nth-of-type(1) {
         background-image: url("/static/images/bg/components/header/menu-item-1-bg.png");
         width: 145.53px;
@@ -240,34 +267,34 @@ const HeaderWrapper = styled.div`
         }
       }
 
-      &:nth-of-type(2) {
-        background-image: url("/static/images/bg/components/header/menu-item-2-bg.png");
-        width: 149.22px;
+      // &:nth-of-type(2) {
+      //   background-image: url("/static/images/bg/components/header/menu-item-2-bg.png");
+      //   width: 149.22px;
 
-        &.active {
-          background-image: url("/static/images/bg/components/header/menu-item-2-bg--active.png");
-        }
-      }
+      //   &.active {
+      //     background-image: url("/static/images/bg/components/header/menu-item-2-bg--active.png");
+      //   }
+      // }
 
-      &:nth-of-type(3) {
-        background-image: url("/static/images/bg/components/header/menu-item-3-bg.png");
-        width: 154.16px;
+      // &:nth-of-type(4) {
+      //   background-image: url("/static/images/bg/components/header/menu-item-3-bg.png");
+      //   width: 154.16px;
 
-        &.active {
-          background-image: url("/static/images/bg/components/header/menu-item-3-bg--active.png");
-        }
-      }
+      //   &.active {
+      //     background-image: url("/static/images/bg/components/header/menu-item-3-bg--active.png");
+      //   }
+      // }
 
-      &:nth-of-type(4) {
-        background-image: url("/static/images/bg/components/header/menu-item-4-bg.png");
-        width: 180.06px;
+      // &:nth-of-type(5) {
+      //   background-image: url("/static/images/bg/components/header/menu-item-4-bg.png");
+      //   width: 180.06px;
 
-        &.active {
-          background-image: url("/static/images/bg/components/header/menu-item-4-bg--active.png");
-        }
-      }
+      //   &.active {
+      //     background-image: url("/static/images/bg/components/header/menu-item-4-bg--active.png");
+      //   }
+      // }
 
-      &:nth-of-type(5) {
+      &:nth-of-type(6) {
         background-image: url("/static/images/bg/components/header/menu-item-5-bg.png");
         width: 209.05px;
 
