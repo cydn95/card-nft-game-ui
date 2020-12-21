@@ -89,18 +89,6 @@ const Header = () => {
             <span className="menu-text">My Cards</span>
           </a> */}
         </li>
-        <li
-          className={`menu-item ${getMenuItemActive("forum")} hover-effect2`}
-        >
-          <a
-            className="menu-link"
-            href="http://gov.noderunners.io/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <span className="menu-text">Forum</span>
-          </a>
-        </li>
         <li className={`menu-item ${getMenuItemActive("stake")} hover-effect2`}>
           <NavLink className="menu-link" to="/stake">
             <span className="menu-text">Stake</span>
@@ -120,6 +108,18 @@ const Header = () => {
 						<span className="menu-text">Fight Villains</span>
 					</NavLink>
 				</li> */}
+        <li
+          className={`menu-item ${getMenuItemActive("forum")} hover-effect2`}
+        >
+          <a
+            className="menu-link"
+            href="http://gov.noderunners.io/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span className="menu-text">Forum</span>
+          </a>
+        </li>
         <li
           className={`menu-item ${getMenuItemActive(
             "unlock-wallet"
@@ -187,6 +187,8 @@ const Header = () => {
             >
               My Cards
             </a>
+            <NavLink className={`${getMenuItemActive("stake")}`} to="/stake">Stake</NavLink>
+            <NavLink className={`${getMenuItemActive("get-heroes")}`} to="/get-heroes">Get Cards</NavLink>
             <a
               href="http://gov.noderunners.io/"
               target="_blank"
@@ -194,8 +196,6 @@ const Header = () => {
             >
               Forum
             </a>
-            <NavLink className={`${getMenuItemActive("stake")}`} to="/stake">Stake</NavLink>
-            <NavLink className={`${getMenuItemActive("get-heroes")}`} to="/get-heroes">Get Cards</NavLink>
           </div>
         )}
       </ul>
