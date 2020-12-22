@@ -1,4 +1,5 @@
 import { getGasPrice } from "../web3";
+import { GAS_PRICE_MULTIPLIER } from "../../helper/contract";
 
 export const getEarningAsync = async (instance, address) => {
   return await instance.methods
@@ -73,7 +74,7 @@ export const depositAsync = async (instance, web3, amount, address) => {
     .send({
       from: address,
       gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
-      gas: gasLimit * 2,
+      gas: gasLimit * GAS_PRICE_MULTIPLIER,
     })
     .then((data) => {
       return data;
@@ -96,7 +97,7 @@ export const withdrawAsync = async (instance, web3, amount, address) => {
     .send({
       from: address,
       gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
-      gas: gasLimit * 2,
+      gas: gasLimit * GAS_PRICE_MULTIPLIER,
     })
     .then((data) => {
       return data;
@@ -131,7 +132,7 @@ export const approveAsync = async (
     .send({
       from: address,
       gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
-      gas: gasLimit * 2,
+      gas: gasLimit * GAS_PRICE_MULTIPLIER,
     })
     .then((data) => {
       return data;

@@ -1,4 +1,5 @@
 import { getGasPrice } from "../web3";
+import { GAS_PRICE_MULTIPLIER } from "../../helper/contract";
 
 export const getHeroPriceAsync = async (instance, rarity) => {
   return await instance.methods
@@ -134,7 +135,7 @@ export const unStakeCardAsync = async (instance, web3, tokenId, address) => {
     .send({
       from: address,
       gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
-      gas: gasLimit * 2,
+      gas: gasLimit * GAS_PRICE_MULTIPLIER,
     })
     .then((data) => {
       return data;
@@ -158,7 +159,7 @@ export const unStakeAllCardsAsync = async (instance, web3, address) => {
     .send({
       from: address,
       gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
-      gas: gasLimit * 2,
+      gas: gasLimit * GAS_PRICE_MULTIPLIER,
     })
     .then((data) => {
       return data;
@@ -182,7 +183,7 @@ export const claimNDRAsync = async (instance, web3, address) => {
     .send({
       from: address,
       gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
-      gas: gasLimit * 2,
+      gas: gasLimit * GAS_PRICE_MULTIPLIER,
     })
     .then((data) => {
       return data;
@@ -206,7 +207,7 @@ export const stakeCardAsync = async (instance, web3, tokenId, address) => {
     .send({
       from: address,
       gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
-      gas: gasLimit * 2,
+      gas: gasLimit * GAS_PRICE_MULTIPLIER,
     })
     .then((data) => {
       return data;
@@ -236,7 +237,7 @@ export const approveAllCardsAsync = async (
     .send({
       from: address,
       gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
-      gas: gasLimit * 2,
+      gas: gasLimit * GAS_PRICE_MULTIPLIER,
     })
     .then((data) => {
       return data;

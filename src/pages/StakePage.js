@@ -8,28 +8,38 @@ import { Tab, Nav } from "react-bootstrap";
 
 import UnlockWalletPage from "./UnlockWalletPage";
 import SectionTitle from "../component/SectionTitle";
+
 import CardStaking from "../component/Card/CardStaking";
 import CardStakingOld from "../component/Card/CardStakingOld";
+
 import BoostStake from "../component/Farm/BoostStake";
 import NFTStakingBoard from "../container/NFTStakingBoard";
+
 import NFTStakingModal from "../container/NFTStakingModal";
+import NFTStakingModalOld from "../container/NFTStakingModalOld";
 
 import cardsActions from "../redux/cards/actions";
+import oldNFTStakingActions from "../redux/oldNFTStaking/actions";
 
-import { MAX_STAKED_CARD_COUNT } from "../helper/constant";
+import {
+  MAX_STAKED_CARD_COUNT,
+  MAX_BONUS_STAKED_CARD_COUNT,
+} from "../helper/constant";
 
 const Stake = () => {
   const dispatch = useDispatch();
 
   const [unStakeLoading, setUnStakeLoading] = useState(false);
-  const [stakeDlgOpen, setStakeDlgOpen] = useState(false);
   const [selectedCardId, setSelectedCardId] = useState(0);
+
+  const [stakeDlgOpen, setStakeDlgOpen] = useState(false);
+  const [stakeDlgOpenOld, setStakeDlgOpenOld] = useState(false);
 
   const [approveLoading, setApproveLoading] = useState(false);
   const [approved, setApproved] = useState(false);
 
   const cards = useSelector((state) => state.Cards.cards);
-  const stakedCardTokens = useSelector((state) => state.Cards.stakedCardTokens);
+  const stakedCardTokens = useSelector((state) => state.OldNFTStaking.stakedCardTokens); // Staked card count
 
   const stakeCards = useMemo(() => {
     const ret = [];
@@ -58,9 +68,9 @@ const Stake = () => {
 
   useEffect(() => {
     dispatch(cardsActions.getCards());
-    dispatch(cardsActions.getStakedCards());
+    dispatch(oldNFTStakingActions.getStakedCards());
     dispatch(
-      cardsActions.getApprovedStatus((status) => {
+      oldNFTStakingActions.getApprovedStatus((status) => {
         setApproved(status);
       })
     );
@@ -68,7 +78,7 @@ const Stake = () => {
 
   useEffect(() => {
     if (cards.length > 0) {
-      dispatch(cardsActions.getMyCardsCount(cards));
+      dispatch(oldNFTStakingActions.getMyCardsCount(cards));
     }
   }, [dispatch, cards]);
 
@@ -76,15 +86,15 @@ const Stake = () => {
     setSelectedCardId(cardId);
     setUnStakeLoading(true);
     dispatch(
-      cardsActions.unStakeCard(cardId, (status) => {
+      oldNFTStakingActions.unStakeCard(cardId, (status) => {
         setSelectedCardId(0);
         setUnStakeLoading(false);
         if (status) {
           toast.success("Sucess");
-          dispatch(cardsActions.getStakedCards());
-          dispatch(cardsActions.getMyStakedStrength());
-          dispatch(cardsActions.getTotalStakedStrength());
-          dispatch(cardsActions.getClaimableNDR());
+          dispatch(oldNFTStakingActions.getStakedCards());
+          dispatch(oldNFTStakingActions.getMyStakedStrength());
+          dispatch(oldNFTStakingActions.getTotalStakedStrength());
+          dispatch(oldNFTStakingActions.getClaimableNDR());
         } else {
           toast.error("Failed...");
         }
@@ -100,15 +110,23 @@ const Stake = () => {
     setStakeDlgOpen(false);
   };
 
+  const handleOpenStakeModalOld = () => {
+    setStakeDlgOpenOld(true);
+  };
+
+  const handleCloseStakeModalOld = () => {
+    setStakeDlgOpenOld(false);
+  };
+
   const handleApproveAll = () => {
     setApproveLoading(true);
     dispatch(
-      cardsActions.approveAll(true, (status) => {
+      oldNFTStakingActions.approveAll(true, (status) => {
         setApproveLoading(false);
         if (status) {
           toast.success("Approved successfully");
           dispatch(
-            cardsActions.getApprovedStatus((status) => {
+            oldNFTStakingActions.getApprovedStatus((status) => {
               setApproved(status);
             })
           );
@@ -132,26 +150,43 @@ const Stake = () => {
           <NFTStakingModal onClose={handleCloseStakeModal} />
         </div>
       )}
-      <Tab.Container id="left-tabs-example" defaultActiveKey="old-pool">
+      {stakeDlgOpenOld && (
+        <div className="modal-container">
+          <NFTStakeModalMask />
+          <NFTStakingModalOld onClose={handleCloseStakeModalOld} />
+        </div>
+      )}
+      <Tab.Container id="left-tabs-example" defaultActiveKey="new-pool">
         <Nav
           variant="pills"
           className="justify-content-center animation-fadeIn"
         >
           <Nav.Item>
-            <Nav.Link className="nav_menu" eventKey="new-pool">Stake NFT & LP</Nav.Link>
+            <Nav.Link className="nav_menu" eventKey="new-pool">
+              Stake NFT & LP
+            </Nav.Link>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link className="nav_menu" eventKey="old-pool">Exit Old Pool</Nav.Link>
+            <Nav.Link className="nav_menu" eventKey="old-pool">
+              Exit Old Pool
+            </Nav.Link>
           </Nav.Item>
         </Nav>
         <Tab.Content>
           <Tab.Pane eventKey="new-pool">
             <NFTStakingBoard />
             <MenuWrapper className="animation-fadeInRight">
-              <SectionTitle
-                title={`${stakedCardTokens.length}/${MAX_STAKED_CARD_COUNT} Cards Staked`}
-                long
-              />
+              <SectionTitle title="Staked Hero, Support and Bonus cards" long />
+            </MenuWrapper>
+            <MenuWrapper className="animation-fadeInRight">
+              <div className="menu-actions">
+                <div className="menu-item selected-card-count">{`${
+                  stakedCardTokens.length
+                }/${
+                  MAX_STAKED_CARD_COUNT + MAX_BONUS_STAKED_CARD_COUNT
+                } Selected`}</div>
+                <div className="menu-item unstake-button">Unstake selected</div>
+              </div>
             </MenuWrapper>
             <CardContainer>
               {stakeCards.length > 0 &&
@@ -182,17 +217,16 @@ const Stake = () => {
                 bonus
               />
             </CardContainer>
-            <MenuWrapper className="animation-fadeInRight">
-              <SectionTitle title="Stake LP tokens" long />
-              <h2>You need to stake at least 1 Hero or Support NFT card to stake LP tokens</h2>
-            </MenuWrapper>
-            <div
-              className="d-flex flex-wrap justify-content-center"
-              style={{ paddingBottom: 100 }}
-            >
-              <BoostStake token="NDR" />
-              <BoostStake token="LP" fee={2} />
-            </div>
+            <StakeButtonWrapper>
+              <div
+                className="stake-button button-approve-all"
+                role="button"
+                onClick={(e) => handleApproveAll()}
+              >
+                Approve all
+              </div>
+              <div className="stake-button button-stake-all">Stake</div>
+            </StakeButtonWrapper>
           </Tab.Pane>
           <Tab.Pane eventKey="old-pool">
             <NFTStakingBoard />
@@ -211,7 +245,7 @@ const Stake = () => {
                     unStaked={c.unStaked}
                     currentProcessingCardId={selectedCardId}
                     onUnStake={handleUnStake}
-                    onStake={handleOpenStakeModal}
+                    onStake={handleOpenStakeModalOld}
                     loadingUnStake={unStakeLoading}
                     approved={approved}
                     loadingApprove={approveLoading}
@@ -229,7 +263,7 @@ const Stake = () => {
 const StakePageContainer = styled.div`
   width: 100vw;
   max-width: 100%;
-  
+
   .nav-pills {
     margin: 0px;
   }
@@ -238,8 +272,7 @@ const StakePageContainer = styled.div`
     margin-bottom: 10px;
     font-size: 24px;
   }
-  
-`
+`;
 
 const NFTStakeModalMask = styled.div`
   position: fixed;
@@ -257,7 +290,7 @@ const CardContainer = styled.div`
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
-  padding-bottom: 100px;
+  margin-bottom: 20px;
   max-width: 1250px;
   margin-left: auto;
   margin-right: auto;
@@ -278,6 +311,80 @@ const MenuWrapper = styled.div`
     padding-left: 20px;
     padding-right: 20px;
     text-align: center;
+  }
+
+  .menu-actions {
+    display: flex;
+    padding-left: 20px;
+
+    .menu-item {
+      width: 210px;
+      height: 32px;
+      padding-left: 40px;
+      padding-top: 6px;
+    }
+
+    .selected-card-count {
+      background-image: url("/static/images/bg/pages/stake/title.png");
+      background-size: 100% 100%;
+      font-family: Orbitron-Black;
+      color: #fec100;
+    }
+
+    .unstake-button {
+      background-image: url("/static/images/bg/pages/stake/button.png");
+      background-size: 100% 100%;
+      font-family: Orbitron-Medium;
+      color: #161617;
+      margin-left: -12px;
+      cursor: pointer;
+
+      &:hover {
+        background-image: url("/static/images/bg/pages/stake/button--active.png");
+        color: #fec100;
+      }
+    }
+  }
+`;
+
+const StakeButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 100px;
+
+  .stake-button {
+    width: 210px;
+    height: 32px;
+    padding-top: 6px;
+    font-family: Orbitron-Black;
+    color: #161617;
+    cursor: pointer;
+
+    &:hover {
+      color: #fec100;
+    }
+  }
+
+  .button-approve-all {
+    background-image: url("/static/images/bg/pages/stake/button-2.png");
+    background-size: 100% 100%;
+    padding-left: 40px;
+
+    &:hover {
+      background-image: url("/static/images/bg/pages/stake/button-2--active.png");
+      color: #fec100;
+    }
+  }
+
+  .button-stake-all {
+    background-image: url("/static/images/bg/pages/stake/button-3.png");
+    background-size: 100% 100%;
+    padding-left: 80px;
+    margin-left: -15px;
+
+    &:hover {
+      background-image: url("/static/images/bg/pages/stake/button-3--active.png");
+    }
   }
 `;
 

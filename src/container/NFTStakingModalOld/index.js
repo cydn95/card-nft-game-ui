@@ -8,7 +8,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import cardsActions from "../../redux/cards/actions";
 import oldNFTStakingActions from "../../redux/oldNFTStaking/actions";
 
-const NFTStakingModal = ({ onClose }) => {
+const NFTStakingModalOld = ({ onClose }) => {
   const dispatch = useDispatch();
 
   const [stakeLoading, setStakeLoading] = useState(false);
@@ -121,7 +121,7 @@ const NFTStakingModal = ({ onClose }) => {
   );
 };
 
-export default NFTStakingModal;
+export default NFTStakingModalOld;
 
 const NFTStakeModalContainer = styled.div`
   position: fixed;

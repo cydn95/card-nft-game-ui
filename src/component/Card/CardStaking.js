@@ -40,11 +40,11 @@ const CardStaking = ({
           {bonus && <span>Bonus Card</span>}
         </div>
       </div>
-      <div className="button-wrapper text-center">
+      {/* <div className="button-wrapper text-center">
         {unStaked ? (
           approved ? (
             <button className="hover-effect3" onClick={onStake}>
-              {`${bonus ? "Stake bonus card" : "Unstake"}`}
+              {`${bonus ? "Stake bonus card" : "Stake"}`}
             </button>
           ) : loadingApprove ? (
             <button className="hover-effect3">
@@ -78,7 +78,7 @@ const CardStaking = ({
             )}
           </button>
         )}
-      </div>
+      </div> */}
     </CardWrapper>
   );
 };
