@@ -3,19 +3,24 @@ import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import styled from "styled-components";
 
-import CloseIcon from "@material-ui/icons/Close";
+// import CloseIcon from "@material-ui/icons/Close";
+
+import SectionTitle from "../../component/SectionTitle";
+import LoadingTextIcon from "../../component/LoadingTextIcon";
 
 import cardsActions from "../../redux/cards/actions";
 import oldNFTStakingActions from "../../redux/oldNFTStaking/actions";
 
-const NFTStakingModal = ({ onClose }) => {
+const NFTStakingModal = ({ remainStakableCards, onClose }) => {
   const dispatch = useDispatch();
 
   const [stakeLoading, setStakeLoading] = useState(false);
-  const [selectedCardId, setSelectedCardId] = useState(0);
+  const [selectedCardIds, setSelectedCardIds] = useState([]);
 
   const cards = useSelector((state) => state.Cards.cards);
-  const stakedCardTokens = useSelector((state) => state.OldNFTStaking.stakedCardTokens);
+  const stakedCardTokens = useSelector(
+    (state) => state.OldNFTStaking.stakedCardTokens
+  );
 
   const unStakeCards = useMemo(() => {
     const ret = [];
@@ -31,91 +36,97 @@ const NFTStakingModal = ({ onClose }) => {
     return ret;
   }, [cards, stakedCardTokens]);
 
-  const handleStake = (e, cardId) => {
+  const handleStake = (e) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (selectedCardIds.length === 0) {
+      toast.error("Select cards please");
+      return;
+    }
 
     if (stakeLoading) return;
 
-    setSelectedCardId(cardId);
     setStakeLoading(true);
-    dispatch(
-      oldNFTStakingActions.stakeCard(cardId, (status) => {
-        setSelectedCardId(0);
-        setStakeLoading(false);
-        if (status) {
-          toast.success("Staked successfully");
-          dispatch(cardsActions.getCards());
-          dispatch(oldNFTStakingActions.getStakedCards());
-          dispatch(oldNFTStakingActions.getMyStakedStrength());
-          dispatch(oldNFTStakingActions.getTotalStakedStrength());
-          dispatch(oldNFTStakingActions.getClaimableNDR());
-          onClose();
-        } else {
-          toast.error("Staked failed");
-        }
-      })
-    );
+    // dispatch(
+    //   oldNFTStakingActions.stakeCard(cardId, (status) => {
+    //     setSelectedCardIds([]);
+    //     setStakeLoading(false);
+    //     if (status) {
+    //       toast.success("Staked successfully");
+    //       dispatch(cardsActions.getCards());
+    //       dispatch(oldNFTStakingActions.getStakedCards());
+    //       dispatch(oldNFTStakingActions.getMyStakedStrength());
+    //       dispatch(oldNFTStakingActions.getTotalStakedStrength());
+    //       dispatch(oldNFTStakingActions.getClaimableNDR());
+    //       onClose();
+    //     } else {
+    //       toast.error("Staked failed");
+    //     }
+    //   })
+    // );
   };
 
-  const handlePreventClose = (e) => {
+  const handleSelectCard = (e, cardId) => {
     e.preventDefault();
     e.stopPropagation();
+
+    const oldSelectedCard = [...selectedCardIds];
+    const findIndex = oldSelectedCard.findIndex((id) => id === cardId);
+    if (findIndex >= 0) {
+      oldSelectedCard.splice(findIndex, 1);
+    } else {
+      if (oldSelectedCard.length < remainStakableCards) {
+        oldSelectedCard.push(cardId);
+      }
+    }
+    setSelectedCardIds([...oldSelectedCard]);
   };
 
   return (
     <NFTStakeModalContainer onClick={(e) => onClose()}>
-      <div className="header">
-        <h2>Stake your Card</h2>
-        <div role="button" className="close-button" onClick={(e) => onClose()}>
-          <CloseIcon />
+      <MenuWrapper className="animation-fadeInRight">
+        <SectionTitle title="Select cards to stake" long />
+      </MenuWrapper>
+      <MenuWrapper className="animation-fadeInRight">
+        <div className="menu-actions">
+          <div className="menu-item selected-card-count">{`${selectedCardIds.length}/${remainStakableCards} Selected`}</div>
+          <div
+            role="button"
+            className="menu-item stake-button"
+            onClick={(e) => handleStake(e)}
+          >
+            {stakeLoading ? (
+              <LoadingTextIcon loadingText="Staking..." />
+            ) : (
+              `Stake selected`
+            )}
+          </div>
         </div>
-      </div>
+      </MenuWrapper>
       <div
-        className="d-flex flex-wrap justify-content-center"
+        className="d-flex flex-wrap justify-content-center animation-fadeInLeft"
         style={{ paddingBottom: 100 }}
       >
         {unStakeCards.length > 0 &&
-          unStakeCards.map((card) => (
-            <CardWrapper key={`stake_card_${card.id}`}>
-              <div className="card position-relative">
-                <img
-                  src={card.image}
-                  alt={`${card.name}`}
-                  className="card-image"
-                />
-                <div
-                  className="card-border"
-                  onClick={(e) => handleStake(e, card.id)}
-                ></div>
-              </div>
-              <div className="button-wrapper text-center">
-                {stakeLoading && card.id === selectedCardId ? (
-                  <button
-                    className="hover-effect3"
-                    onClick={(e) => handlePreventClose(e)}
-                  >
-                    <div className="loading-wrapper">
-                      <img
-                        src="/static/images/icons/loading.gif"
-                        height="25"
-                        alt=""
-                        style={{ marginTop: 3, marginRight: 5 }}
-                      />{" "}
-                      Staking...
-                    </div>{" "}
-                  </button>
-                ) : (
-                  <button
-                    className="hover-effect3"
-                    onClick={(e) => handleStake(e, card.id)}
-                  >
-                    Stake
-                  </button>
-                )}
-              </div>
-            </CardWrapper>
-          ))}
+          unStakeCards.map((card) => {
+            const active = selectedCardIds.includes(card.id) ? "active" : "";
+            return (
+              <CardWrapper key={`stake_card_${card.id}`}>
+                <div className={`card ${active}`}>
+                  <img
+                    src={card.image}
+                    alt={`${card.name}`}
+                    className="card-image"
+                  />
+                  <div
+                    className="card-border"
+                    onClick={(e) => handleSelectCard(e, card.id)}
+                  ></div>
+                </div>
+              </CardWrapper>
+            );
+          })}
       </div>
     </NFTStakeModalContainer>
   );
@@ -133,11 +144,12 @@ const NFTStakeModalContainer = styled.div`
   background: transparent;
   z-index: 200;
   overflow-y: auto;
+  padding-top: 100px;
 
   .header {
     width: 100%;
     box-sizing: border-box;
-    padding: 75px 7.5% 22.5px;
+    padding: 75px 7.5% 0px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -197,51 +209,57 @@ const CardWrapper = styled.div`
       cursor: pointer;
     }
 
-    .marked {
-      position: absolute;
-      top: 6.566px;
-      left: 6.66px;
-      width: 99px;
-      height: 99px;
-    }
-  }
-
-  .button-wrapper {
-    button {
-      width: 100%;
-      height: 52px;
-      background: url("/static/images/bg/components/card/button-bg.png");
-      background-size: 100% 100%;
-      border: none;
-      color: #161617;
-      font-size: 16px;
-      font-family: Orbitron-Medium;
-      text-shadow: 5px 5px 3px #27787580;
-      outline: none;
-      box-sizing: border-box;
-    }
-    .loading-wrapper {
-      display: flex;
-      font-size: 16px;
-      justify-content: center;
-      align-items: center;
-      font-family: Orbitron-Medium;
-      text-shadow: 5px 5px 3px #27787580;
-      color: #161617;
-    }
-  }
-
-  &:hover {
-    .card {
+    &.active {
       .card-border {
         background: url("/static/images/bg/components/card/card-border--active.png");
         background-size: cover;
       }
     }
-    .button-wrapper {
-      button {
-        background: url("/static/images/bg/components/card/button-bg--active.png");
-        background-size: 100% 100%;
+  }
+`;
+
+const MenuWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  padding: 0px 7.5%;
+
+  h2 {
+    font-family: Orbitron-Black;
+    font-size: 1.5rem;
+    color: #fec100;
+    padding-right: 20px;
+    text-align: center;
+  }
+
+  .menu-actions {
+    display: flex;
+    padding-left: 20px;
+
+    .menu-item {
+      width: 210px;
+      height: 32px;
+      padding-left: 40px;
+      padding-top: 6px;
+    }
+
+    .selected-card-count {
+      background-image: url("/static/images/bg/pages/stake/title.png");
+      background-size: 100% 100%;
+      font-family: Orbitron-Black;
+      color: #fec100;
+    }
+
+    .stake-button {
+      background-image: url("/static/images/bg/pages/stake/button.png");
+      background-size: 100% 100%;
+      font-family: Orbitron-Medium;
+      color: #161617;
+      margin-left: -12px;
+      cursor: pointer;
+
+      &:hover {
+        background-image: url("/static/images/bg/pages/stake/button--active.png");
         color: #fec100;
       }
     }

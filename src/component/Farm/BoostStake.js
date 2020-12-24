@@ -7,7 +7,7 @@ import AmountInput from "./AmountInput";
 
 import { STAKE_MIN_LIMIT, STAKE_MAX_LIMIT } from "../../helper/constant";
 
-const BoostStake = ({ token, fee, amount }) => {
+const BoostStake = ({ token, approved, ...rest }) => {
   return (
     <BoostStakeWrapper>
       <div className="token">{token.toUpperCase()}</div>
@@ -20,11 +20,23 @@ const BoostStake = ({ token, fee, amount }) => {
           <span className="title">APY:</span>
           <span className="value">900 %</span>
         </div>
+        <div className="row">
+          <span className="title">NDR Claimable:</span>
+          <span className="value">40.3242</span>
+        </div>
+        <div className="row">
+          <span className="title">NDR per Day:</span>
+          <span className="value">2.1342</span>
+        </div>
       </div>
       <div className="block">
         <div className="row">
-          <span className="title">STAKED:</span>
-          <span className="value">{`4.53 ${token}`}</span>
+          <span className="title">Staked:</span>
+          <span className="value">{`23.5419 ${token}`}</span>
+        </div>
+        <div className="row">
+          <span className="title">Balance:</span>
+          <span className="value">{`424.5333 ${token}`}</span>
         </div>
         {/* <div className="row">
           <span className="title">{`1 ${token} =  `}</span>
@@ -37,32 +49,39 @@ const BoostStake = ({ token, fee, amount }) => {
             className="amount"
             showMin={false}
             min={STAKE_MIN_LIMIT}
-            showMax={false}
-            max={STAKE_MAX_LIMIT}
+            showMax={true}
+            max={0}
             value="0.0000000"
           />
         </div>
       </div>
       <div className="row">
-        <button className="action approve">APPROVE</button>
-        <button className="action stake">STAKE</button>
+        {approved ? (
+          <button className="action stake">STAKE</button>
+        ) : (
+          <button className="action approve">APPROVE</button>
+        )}
       </div>
-      <div className="row">
-        <button className="action unstake">Claim and Unstake</button>
-      </div>
-      <div className="row">
-        <button className="action claim">{`Claim ${token}`}</button>
-      </div>
-      <div className="row">
+      {approved && (
+        <>
+          <div className="row">
+            <button className="action unstake">Claim and Unstake</button>
+          </div>
+          <div className="row">
+            <button className="action claim">Claim NDR</button>
+          </div>
+        </>
+      )}
+      {/* <div className="row">
         <span className="fee-label">{`2% Unstake fee`}</span>
-      </div>
+      </div> */}
     </BoostStakeWrapper>
   );
 };
 
 const BoostStakeWrapper = styled.div`
   width: 380px;
-  min-height: 332.25px;
+  min-height: 553.58px;
   background: url("/static/images/bg/components/card/card-border.png");
   background-size: 100% 100%;
   display: flex;
@@ -84,7 +103,6 @@ const BoostStakeWrapper = styled.div`
     flex-direction: column;
     align-items: center;
     width: 100%;
-    margin-bottom: 15px;
   }
 
   .block {
@@ -127,26 +145,24 @@ const BoostStakeWrapper = styled.div`
       font-size: 15px;
 
       &.approve {
-        background: url("/static/images/bg/components/card/button-left.png");
+        background: url("/static/images/bg/components/card/button-bg.png");
         background-size: 100% 100%;
         background-repeat: no-repeat;
-        padding-bottom: 15px;
 
         &:hover {
-          background: url("/static/images/bg/components/card/button-left--active.png");
+          background: url("/static/images/bg/components/card/button-bg--active.png");
           background-size: 100% 100%;
           color: #fec100;
         }
       }
 
       &.stake {
-        background: url("/static/images/bg/components/card/button-right.png");
+        background: url("/static/images/bg/components/card/button-bg.png");
         background-size: 100% 100%;
         background-repeat: no-repeat;
-        padding-bottom: 15px;
 
         &:hover {
-          background: url("/static/images/bg/components/card/button-right--active.png");
+          background: url("/static/images/bg/components/card/button-bg--active.png");
           background-size: 100% 100%;
           color: #fec100;
         }
@@ -170,7 +186,7 @@ const BoostStakeWrapper = styled.div`
         background-size: 100% 100%;
         background-repeat: no-repeat;
         margin-top: -15px;
-        
+
         &:hover {
           background: url("/static/images/bg/components/card/button-bg--active.png");
           background-size: 100% 100%;

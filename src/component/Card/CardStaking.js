@@ -1,32 +1,29 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
-import { toast } from "react-toastify";
 
 const CardStaking = ({
   card,
   unStaked,
-  currentProcessingCardId,
-  loadingUnStake,
-  onUnStake,
-  onStake,
-  loadingApprove,
-  approved,
-  onApprove,
-  bonus,
+  onSelectCard,
+  selectedCardIds
 }) => {
-  const handleClickBlankCard = () => {
-    if (!unStaked) return;
-
-    if (approved) {
-      onStake();
-    } else {
-      toast.info("You should approve cards first");
-    }
+  const handleClickCard = () => {
+    if (unStaked) return;
+    onSelectCard(card.id)
   };
+
+  const isSelected = useMemo(() => {
+    if (card) {
+      const index = selectedCardIds.findIndex((id) => id === card.id)
+      return index >= 0;
+    }
+
+    return false;
+  }, [card, selectedCardIds])
 
   return (
     <CardWrapper>
-      <div className="card position-relative">
+      <div className={`card ${unStaked ? '' : 'hover'} ${isSelected ? 'active' : ''}`}>
         {unStaked ? (
           <img
             src={`/static/images/bg/components/card/un-staked.png`}
@@ -34,51 +31,11 @@ const CardStaking = ({
             className="un-staked"
           />
         ) : (
-          <img src={card.image} alt={`${card}`} className="card-image" />
-        )}
-        <div className="card-border" onClick={(e) => handleClickBlankCard()}>
-          {bonus && <span>Bonus Card</span>}
+            <img src={card.image} alt={`${card}`} className="card-image" />
+          )}
+        <div className="card-border" onClick={(e) => handleClickCard()}>
         </div>
       </div>
-      {/* <div className="button-wrapper text-center">
-        {unStaked ? (
-          approved ? (
-            <button className="hover-effect3" onClick={onStake}>
-              {`${bonus ? "Stake bonus card" : "Stake"}`}
-            </button>
-          ) : loadingApprove ? (
-            <button className="hover-effect3">
-              <img
-                src="/static/images/icons/loading.gif"
-                height="25"
-                alt=""
-                style={{ marginTop: 3, marginRight: 5 }}
-              />{" "}
-              Approving...
-            </button>
-          ) : (
-            <button className="hover-effect3" onClick={onApprove}>
-              Approve All
-            </button>
-          )
-        ) : (
-          <button className="hover-effect3" onClick={(e) => onUnStake(card.id)}>
-            {loadingUnStake && card.id === currentProcessingCardId ? (
-              <div className="loading-wrapper">
-                <img
-                  src="/static/images/icons/loading.gif"
-                  height="25"
-                  alt=""
-                  style={{ marginTop: 3, marginRight: 5 }}
-                />{" "}
-                Unstaking...
-              </div>
-            ) : (
-              `${bonus ? "Unstake bonus card" : "Unstake"}`
-            )}
-          </button>
-        )}
-      </div> */}
     </CardWrapper>
   );
 };
@@ -92,15 +49,12 @@ const CardWrapper = styled.div`
     position: relative;
     padding: 11.75px 10.5px;
     background: transparent;
+    cursor: not-allowed;
 
     .card-image {
       width: 217.5px;
       height: 307.5px;
       position: absolute;
-
-      &.un-obtained {
-        opacity: 0.3;
-      }
     }
 
     .un-staked {
@@ -117,68 +71,28 @@ const CardWrapper = styled.div`
       height: 332.25px;
       background: url("/static/images/bg/components/card/card-border.png");
       background-size: cover;
-      cursor: pointer;
       display: flex;
       justify-content: center;
       align-items: center;
       align-content: center;
-
-      span {
-        color: #fec100;
-        font-size: 20px;
-        font-family: Orbitron-Black;
-        text-shadow: 5px 5px 3px #27787580;
-      }
     }
 
-    .marked {
-      position: absolute;
-      top: 6.566px;
-      left: 6.66px;
-      width: 74.25;
-      height: 74.25px;
-    }
-  }
-
-  .button-wrapper {
-    margin-top: 10px;
-
-    button {
-      width: 100%;
-      height: 50px;
-      background: url("/static/images/bg/components/card/button-bg.png");
-      background-size: 100% 100%;
-      border: none;
-      color: #161617;
-      font-size: 16px;
-      font-family: Orbitron-Medium;
-      text-shadow: 5px 5px 3px #27787580;
-      outline: none;
-      box-sizing: border-box;
-    }
-    .loading-wrapper {
-      display: flex;
-      font-size: 16px;
-      justify-content: center;
-      font-family: Orbitron-Medium;
-      text-shadow: 5px 5px 3px #27787580;
-      color: #161617;
-    }
-  }
-
-  &:hover {
-    .card {
+    &.active {
       .card-border {
         background: url("/static/images/bg/components/card/card-border--active.png");
         background-size: cover;
       }
     }
-    .button-wrapper {
-      button {
-        background: url("/static/images/bg/components/card/button-bg--active.png");
-        background-size: 100% 100%;
-        color: #fec100;
-      }
+
+    &.hover {
+      cursor: pointer;
+
+      // &:hover{
+      //   .card-border {
+      //     background: url("/static/images/bg/components/card/card-border--active.png");
+      //     background-size: cover;
+      //   }
+      // }
     }
   }
 `;

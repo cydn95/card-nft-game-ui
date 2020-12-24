@@ -11,6 +11,15 @@ import BoostStake from "../component/Farm/BoostStake";
 const Farm = () => {
   // const dispatch = useDispatch();
 
+  const [approveStatus, setApproveStatus] = useState({NDR: false});
+  const getApproveStatus = (token) => {
+    if (!(token in approveStatus)) {
+      return false
+    }
+
+    return approveStatus[token];
+  }
+
   const { account } = useWallet();
   if (!account) {
     return <UnlockWalletPage />;
@@ -20,14 +29,12 @@ const Farm = () => {
     <FarmPageContainer>
       <MenuWrapper className="animation-fadeInRight">
         <SectionTitle title="Stake LP tokens" long />
-        <h2>You need to stake at least 1 Hero or Support NFT card to stake LP tokens</h2>
       </MenuWrapper>
       <div
         className="d-flex flex-wrap justify-content-center animation-fadeInLeft"
         style={{ paddingBottom: 100 }}
       >
-        <BoostStake token="NDR" />
-        <BoostStake token="LP" fee={2} />
+        <BoostStake token="NDR" approved={getApproveStatus("NDR")}/>
       </div>
     </FarmPageContainer>
   );

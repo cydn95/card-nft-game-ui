@@ -1,4 +1,4 @@
-import { all, takeLatest, call, put, fork } from "redux-saga/effects";
+import { all, takeLatest, call, put, fork, takeEvery } from "redux-saga/effects";
 
 import actions from "./actions";
 import cardActions from "../cards/actions";
@@ -51,7 +51,7 @@ export function* getMyCardsCount() {
 }
 
 export function* getApprovedStatus() {
-  yield takeLatest(actions.GET_APPROVED_STATUS, function* ({ payload }) {
+  yield takeEvery(actions.GET_APPROVED_STATUS, function* ({ payload }) {
     const { callback } = payload;
 
     const web3 = yield call(getWeb3);

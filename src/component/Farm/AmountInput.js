@@ -29,10 +29,10 @@ const AmountInput = ({
         />
       </div>
       {showMax && (
-        <div className="max" onClick={e => onSetAmount(max)}>
+        <div className="max" onClick={e => onSetAmount(max > 0 ? max : "MAX")}>
           MAX
           <br />
-          {max}
+          {max > 0 && max}
         </div>
       )}
     </AmountInputWrapper>
