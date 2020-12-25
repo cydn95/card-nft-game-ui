@@ -1,7 +1,19 @@
 import { CARD_TYPE } from "./constant";
 
+export const getValueFromObject = (obj, key) => {
+  if (obj === null) {
+    return null;
+  }
+
+  if (key in obj) {
+    return obj[key];
+  }
+
+  return null;
+};
+
 export const convertFromWei = (val, fixed = 4) =>
-  (Number(val) / Math.pow(10, 18)).toFixed(fixed);
+  (Number(val !== null ? val : 0) / Math.pow(10, 18)).toFixed(fixed);
 
 export const cardCompare = (a, b) => {
   let aScore = 0;
@@ -32,4 +44,4 @@ export const getCardType = (card) => {
   }
 
   return cardType;
-}
+};

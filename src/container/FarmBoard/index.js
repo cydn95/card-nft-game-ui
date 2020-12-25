@@ -1,47 +1,49 @@
-import React from "react";
-import styled from "styled-components";
+import React, { useEffect, useState, useMemo } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
+import styled from "styled-components";
 import { toast } from "react-toastify";
 
-import AmountInput from "./AmountInput";
+import AmountInput from "../../component/Farm/AmountInput";
 
+import farmsAction from "../../redux/farms/actions";
 import { STAKE_MIN_LIMIT, STAKE_MAX_LIMIT } from "../../helper/constant";
+import { convertFromWei } from "../../helper/utils";
 
-const BoostStake = ({ token, approved, ...rest }) => {
+const FarmBoard = ({ token, approved, balance, staked, claimable, apy, rewardPerDay }) => {
+  
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(farmsAction.getTokenBalance(token));
+  }, [dispatch, token])
+
   return (
     <BoostStakeWrapper>
       <div className="token">{token.toUpperCase()}</div>
       <div className="block">
-        {/* <div className="row">
-          <span className="title">{`1 ${token} =  `}</span>
-          <span className="value">0.05 STR</span>
-        </div> */}
         <div className="row">
           <span className="title">APY:</span>
-          <span className="value">900 %</span>
+          <span className="value">{`${convertFromWei(apy, 2)} %`}</span>
         </div>
         <div className="row">
           <span className="title">NDR Claimable:</span>
-          <span className="value">40.3242</span>
+          <span className="value">{convertFromWei(claimable, 4)}</span>
         </div>
         <div className="row">
           <span className="title">NDR per Day:</span>
-          <span className="value">2.1342</span>
+          <span className="value">{convertFromWei(rewardPerDay, 4)}</span>
         </div>
       </div>
       <div className="block">
         <div className="row">
           <span className="title">Staked:</span>
-          <span className="value">{`23.5419 ${token}`}</span>
+          <span className="value">{convertFromWei(staked, 4)}</span>
         </div>
         <div className="row">
           <span className="title">Balance:</span>
-          <span className="value">{`424.5333 ${token}`}</span>
+          <span className="value">{`${convertFromWei(balance, 4)}`}</span>
         </div>
-        {/* <div className="row">
-          <span className="title">{`1 ${token} =  `}</span>
-          <span className="value">0.05 STR</span>
-        </div> */}
       </div>
       <div className="section">
         <div className="row">
@@ -132,6 +134,7 @@ const BoostStakeWrapper = styled.div`
     }
 
     .value {
+      font-family: Orbitron-Black;
       color: #fec100;
       text-shadow: 5px 5px 3px #fec10080;
     }
@@ -218,4 +221,4 @@ const BoostStakeWrapper = styled.div`
   }
 `;
 
-export default BoostStake;
+export default FarmBoard;

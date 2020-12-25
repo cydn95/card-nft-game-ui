@@ -6,19 +6,20 @@ import styled from "styled-components";
 
 import UnlockWalletPage from "./UnlockWalletPage";
 import SectionTitle from "../component/SectionTitle";
-import BoostStake from "../component/Farm/BoostStake";
+import FarmBoard from "../container/FarmBoard";
+
+import { farms } from "../helper/contractFarm";
+import { getValueFromObject } from "../helper/utils";
 
 const Farm = () => {
   // const dispatch = useDispatch();
 
-  const [approveStatus, setApproveStatus] = useState({NDR: false});
-  const getApproveStatus = (token) => {
-    if (!(token in approveStatus)) {
-      return false
-    }
-
-    return approveStatus[token];
-  }
+  const approved = useSelector((state) => state.Farms.approved);
+  const balance = useSelector((state) => state.Farms.balance);
+  const staked = useSelector((state) => state.Farms.staked);
+  const claimable = useSelector((state) => state.Farms.claimable);
+  const apy = useSelector((state) => state.Farms.apy);
+  const rewardPerDay = useSelector((state) => state.Farms.rewardPerDay);
 
   const { account } = useWallet();
   if (!account) {
@@ -34,7 +35,18 @@ const Farm = () => {
         className="d-flex flex-wrap justify-content-center animation-fadeInLeft"
         style={{ paddingBottom: 100 }}
       >
-        <BoostStake token="NDR" approved={getApproveStatus("NDR")}/>
+        {Object.keys(farms).map((key) => (
+          <FarmBoard
+            key={`farm-${key}`}
+            token={key}
+            approved={getValueFromObject(approved, key)}
+            balance={getValueFromObject(balance, key)}
+            staked={getValueFromObject(staked, key)}
+            claimable={getValueFromObject(claimable, key)}
+            apy={getValueFromObject(apy, key)}
+            rewardPerDay={getValueFromObject(rewardPerDay, key)}
+          />
+        ))}
       </div>
     </FarmPageContainer>
   );
@@ -43,7 +55,7 @@ const Farm = () => {
 const FarmPageContainer = styled.div`
   width: 100vw;
   max-width: 100%;
-  
+
   .nav-pills {
     margin: 0px;
   }
@@ -52,8 +64,7 @@ const FarmPageContainer = styled.div`
     margin-bottom: 10px;
     font-size: 24px;
   }
-  
-`
+`;
 
 const MenuWrapper = styled.div`
   display: flex;
