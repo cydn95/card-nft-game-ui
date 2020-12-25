@@ -60,7 +60,7 @@ const CardBuying = ({
               </div>
             </div>
           </div>
-          {Number(card.minted) < Number(card.total_minted) ? (
+          {card.opensea !== true && Number(card.minted) < Number(card.total_minted) ? (
             <div className="grid-button-wrapper">
               {isHero &&
                 (loadingHash && card.id === currentProcessingCardId ? (
