@@ -9,7 +9,7 @@ import CardStakingOld from "../../component/Card/CardStakingOld";
 import NFTStakingBoard from "../NFTStakingBoard";
 import NFTStakingModalOld from "../NFTStakingModalOld";
 
-import cardsActions from "../../redux/cards/actions";
+// import cardsActions from "../../redux/cards/actions";
 import oldNFTStakingActions from "../../redux/oldNFTStaking/actions";
 
 import { MAX_STAKED_CARD_COUNT } from "../../helper/constant";

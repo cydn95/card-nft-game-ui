@@ -13,7 +13,7 @@ import NFTStakingBoard from "../NFTStakingBoard";
 import NFTStakingModal from "../NFTStakingModal";
 import NFTStakingModalBonus from "../NFTStakingModalBonus";
 
-import cardsActions from "../../redux/cards/actions";
+// import cardsActions from "../../redux/cards/actions";
 import oldNFTStakingActions from "../../redux/oldNFTStaking/actions";
 
 import {

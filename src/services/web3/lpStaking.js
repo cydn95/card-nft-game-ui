@@ -13,6 +13,18 @@ export const getEarningAsync = async (instance, address) => {
     });
 };
 
+export const getRewardRateAsync = async (instance, address) => {
+  return await instance.methods
+    .rewardRate()
+    .call()
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
 export const getRewardAsync = async (instance, address) => {
   return await instance.methods
     .rewards(address)
@@ -49,7 +61,7 @@ export const getAllowanceAsync = async (instance, owner, sender) => {
     });
 };
 
-export const getTotalSupply = async (instance) => {
+export const getTotalSupplyAsync = async (instance) => {
   return await instance.methods
     .totalSupply()
     .call()
@@ -129,6 +141,54 @@ export const approveAsync = async (
       spender,
       "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
     )
+    .send({
+      from: address,
+      gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
+      gas: gasLimit * GAS_PRICE_MULTIPLIER,
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
+// Claim Token
+export const claimAsync = async (instance, web3, address) => {
+  const prices = await getGasPrice();
+
+  // Get gas limit
+  const gasLimit = await instance.methods
+    .getReward()
+    .estimateGas({ from: address });
+
+  return await instance.methods
+    .getReward()
+    .send({
+      from: address,
+      gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
+      gas: gasLimit * GAS_PRICE_MULTIPLIER,
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
+// Exit Token
+export const exitAsync = async (instance, web3, address) => {
+  const prices = await getGasPrice();
+
+  // Get gas limit
+  const gasLimit = await instance.methods
+    .exit()
+    .estimateGas({ from: address });
+
+  return await instance.methods
+    .exit()
     .send({
       from: address,
       gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),

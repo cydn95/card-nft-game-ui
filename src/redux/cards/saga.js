@@ -16,10 +16,9 @@ import {
   getSupportPriceAsync,
   getCirculatingSupplyAsync,
   getTotalStakedStrengthAsync,
-  getRewardRateAsync,
 } from "../../services/web3/cards";
 
-import { getEarningAsync } from "../../services/web3/lpStaking";
+import { getEarningAsync, getRewardRateAsync } from "../../services/web3/lpStaking";
 import { getTokenInfo } from "../../services/graphql";
 
 import {
@@ -233,7 +232,7 @@ export function* buyHeroCardEth() {
         card.rarity.weight
       );
     } else {
-      callback(RESPONSE.error);
+      callback(RESPONSE.ERROR);
       return;
     }
 
@@ -333,7 +332,7 @@ export function* buyHeroCardHash() {
     if (buyCardResponse.status) {
       callback(RESPONSE.SUCCESS);
     } else {
-      callback(RESPONSE.error);
+      callback(RESPONSE.ERROR);
     }
   });
 }

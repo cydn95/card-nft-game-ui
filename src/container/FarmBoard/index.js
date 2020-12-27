@@ -1,22 +1,133 @@
-import React, { useEffect, useState, useMemo } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
 import { toast } from "react-toastify";
 
 import AmountInput from "../../component/Farm/AmountInput";
+import LoadingTextIcon from "../../component/LoadingTextIcon";
 
 import farmsAction from "../../redux/farms/actions";
-import { STAKE_MIN_LIMIT, STAKE_MAX_LIMIT } from "../../helper/constant";
+import { RESPONSE } from "../../helper/constant";
 import { convertFromWei } from "../../helper/utils";
 
-const FarmBoard = ({ token, approved, balance, staked, claimable, apy, rewardPerDay }) => {
-  
+const FarmBoard = ({ token, approved, balance, staked, claimable, stats }) => {
+
   const dispatch = useDispatch();
+
+  const [approveLoading, setApproveLoading] = useState(false);
+  const [stakeLoading, setStakeLoading] = useState(false);
+  const [claimLoading, setClaimLoading] = useState(false);
+  const [exitLoading, setExitLoading] = useState(false);
+  
+  const [amount, setAmount] = useState("0.0000000");
+  const [isMax, setIsMax] = useState(false);
+
+  const handleSetAmount = (input) => {
+    if (input === "MAX") {
+      setAmount(convertFromWei(balance, 7));
+      setIsMax(true);
+    } else {
+      setAmount(input);
+      setIsMax(false);
+    }
+  }
+
+  const init = () => {
+    dispatch(farmsAction.getTokenBalance(token));
+    dispatch(farmsAction.getTokenApproveStatus(token));
+    dispatch(farmsAction.getTokenClaimableAmount(token));
+    dispatch(farmsAction.getTokenStakedAmount(token));
+    dispatch(farmsAction.getTokenStats(token));
+  }
 
   useEffect(() => {
     dispatch(farmsAction.getTokenBalance(token));
+    dispatch(farmsAction.getTokenApproveStatus(token));
+    dispatch(farmsAction.getTokenClaimableAmount(token));
+    dispatch(farmsAction.getTokenStakedAmount(token));
+    dispatch(farmsAction.getTokenStats(token));
   }, [dispatch, token])
+
+  const handleApprove = () => {
+    if (approveLoading) {
+      return;
+    }
+    setApproveLoading(true);
+    dispatch(farmsAction.approveToken(token, (status) => {
+      setApproveLoading(false);
+      callback(status);
+    }));
+  }
+
+  const handleStake = () => {
+    if (stakeLoading) {
+      return;
+    }
+
+    if (!checkAmount(amount)) {
+      return;
+    }
+
+    setStakeLoading(true);
+    dispatch(farmsAction.stakeToken(token, amount, isMax, (status) => {
+      setStakeLoading(false);
+      setAmount(0);
+      init();
+      callback(status);
+    }));
+  }
+
+  const handleExit = () => {
+    if (exitLoading){
+      return;
+    }
+    setExitLoading(true);
+    dispatch(farmsAction.exitToken(token, (status) => {
+      setExitLoading(false);
+      init();
+      callback(status);
+    }))
+  }
+
+  const handleClaim = () => {
+    if (claimLoading) {
+      return;
+    }
+    setClaimLoading(true);
+    dispatch(farmsAction.claimToken(token, (status) => {
+      setClaimLoading(false);
+      init();
+      callback(status);
+    }))
+  }
+
+  const callback = (status) => {
+    if (status === RESPONSE.INSUFFICIENT) {
+      toast.error("Insufficient balance");
+    }
+    if (status === RESPONSE.ERROR) {
+      toast.error("Your transaction has been failed");
+    }
+    if (status === RESPONSE.SUCCESS) {
+      toast.success("Your transaction has been successfully");
+    }
+    if (status === RESPONSE.SHOULD_APPROVE) {
+      toast.success("You should approve first");
+    }
+  }
+
+  const checkAmount = (amount) => {
+    if (isNaN(amount)) {
+      toast.error("Amount should be a number");
+      return false;
+    }
+    if (parseFloat(amount) <= 0) {
+      toast.error(`Amount should be greater than zero`);
+      return false;
+    }
+    return true;
+  };
 
   return (
     <BoostStakeWrapper>
@@ -24,7 +135,7 @@ const FarmBoard = ({ token, approved, balance, staked, claimable, apy, rewardPer
       <div className="block">
         <div className="row">
           <span className="title">APY:</span>
-          <span className="value">{`${convertFromWei(apy, 2)} %`}</span>
+          <span className="value">{`${convertFromWei(stats ? stats.apy : 0, 2)} %`}</span>
         </div>
         <div className="row">
           <span className="title">NDR Claimable:</span>
@@ -32,7 +143,7 @@ const FarmBoard = ({ token, approved, balance, staked, claimable, apy, rewardPer
         </div>
         <div className="row">
           <span className="title">NDR per Day:</span>
-          <span className="value">{convertFromWei(rewardPerDay, 4)}</span>
+          <span className="value">{convertFromWei(stats ? stats.rewardPerDay : 0, 4)}</span>
         </div>
       </div>
       <div className="block">
@@ -42,7 +153,7 @@ const FarmBoard = ({ token, approved, balance, staked, claimable, apy, rewardPer
         </div>
         <div className="row">
           <span className="title">Balance:</span>
-          <span className="value">{`${convertFromWei(balance, 4)}`}</span>
+          <span className="value">{`${convertFromWei(balance, 4)} ${token}`}</span>
         </div>
       </div>
       <div className="section">
@@ -50,27 +161,36 @@ const FarmBoard = ({ token, approved, balance, staked, claimable, apy, rewardPer
           <AmountInput
             className="amount"
             showMin={false}
-            min={STAKE_MIN_LIMIT}
+            min={0}
             showMax={true}
             max={0}
-            value="0.0000000"
+            value={amount}
+            onSetAmount={(amount) => handleSetAmount(amount)}
           />
         </div>
       </div>
       <div className="row">
         {approved ? (
-          <button className="action stake">STAKE</button>
+          <button className="action stake" onClick={(e) => handleStake()}>
+            {stakeLoading ? <LoadingTextIcon loadingText="Staking..." /> : `STAKE`}
+          </button>
         ) : (
-          <button className="action approve">APPROVE</button>
+          <button className="action approve" onClick={e => handleApprove()}>
+            {approveLoading ? <LoadingTextIcon loadingText="Approving..." /> : `APPROVE`}
+          </button>
         )}
       </div>
       {approved && (
         <>
           <div className="row">
-            <button className="action unstake">Claim and Unstake</button>
+            <button className="action unstake" onClick={(e) => handleExit()}>
+              {exitLoading ? <LoadingTextIcon loadingText="Loading..." /> : `Claim and Unstake`}
+            </button>
           </div>
           <div className="row">
-            <button className="action claim">Claim NDR</button>
+            <button className="action claim" onClick={(e) => handleClaim()}>
+              {claimLoading ? <LoadingTextIcon loadingText="Loading..." /> : `Claim NDR`}
+            </button>
           </div>
         </>
       )}

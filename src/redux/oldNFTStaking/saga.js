@@ -14,15 +14,15 @@ import {
   getStakedStrengthByAddressAsync,
   getTotalStakedStrengthAsync,
   getClaimableNDRAsync,
-  getRewardRateAsync,
   getStakedCardsAsync,
   isApprovedAllAsync,
   approveAllCardsAsync,
   unStakeCardAsync,
   unStakeAllCardsAsync,
   stakeCardAsync,
-  claimNDRAsync,
 } from "../../services/web3/cards";
+
+import { getRewardRateAsync, claimAsync } from "../../services/web3/lpStaking";
 
 import {
   RESPONSE,
@@ -193,7 +193,7 @@ export function* unStakeCard() {
     if (unstakeCardResponse.status) {
       callback(RESPONSE.SUCCESS);
     } else {
-      callback(RESPONSE.error);
+      callback(RESPONSE.ERROR);
     }
   });
 }
@@ -218,7 +218,7 @@ export function* unStakeAllCards() {
     if (unstakeAllCardsResponse.status) {
       callback(RESPONSE.SUCCESS);
     } else {
-      callback(RESPONSE.error);
+      callback(RESPONSE.ERROR);
     }
   });
 }
@@ -234,7 +234,7 @@ export function* claimNDR() {
     const accounts = yield call(web3.eth.getAccounts);
 
     const claimNDRResponse = yield call(
-      claimNDRAsync,
+      claimAsync,
       oldNftStaking.instance,
       web3,
       accounts[0]
@@ -243,7 +243,7 @@ export function* claimNDR() {
     if (claimNDRResponse.status) {
       callback(RESPONSE.SUCCESS);
     } else {
-      callback(RESPONSE.error);
+      callback(RESPONSE.ERROR);
     }
   });
 }
@@ -271,7 +271,7 @@ export function* approveAll() {
     if (approveResponse.status) {
       callback(RESPONSE.SUCCESS);
     } else {
-      callback(RESPONSE.error);
+      callback(RESPONSE.ERROR);
     }
   });
 }
@@ -297,7 +297,7 @@ export function* stakeCard() {
     if (stakeCardResponse.status) {
       callback(RESPONSE.SUCCESS);
     } else {
-      callback(RESPONSE.error);
+      callback(RESPONSE.ERROR);
     }
   });
 }

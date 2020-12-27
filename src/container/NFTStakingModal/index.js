@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector /*useDispatch*/ } from "react-redux";
 import { toast } from "react-toastify";
 import styled from "styled-components";
 
@@ -8,11 +8,11 @@ import styled from "styled-components";
 import SectionTitle from "../../component/SectionTitle";
 import LoadingTextIcon from "../../component/LoadingTextIcon";
 
-import cardsActions from "../../redux/cards/actions";
-import oldNFTStakingActions from "../../redux/oldNFTStaking/actions";
+// import cardsActions from "../../redux/cards/actions";
+// import oldNFTStakingActions from "../../redux/oldNFTStaking/actions";
 
 const NFTStakingModal = ({ remainStakableCards, onClose }) => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const [stakeLoading, setStakeLoading] = useState(false);
   const [selectedCardIds, setSelectedCardIds] = useState([]);

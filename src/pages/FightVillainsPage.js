@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import SectionTitle from "../component/SectionTitle";
-import Card_2 from "../component/Card_2";
+// import Card_2 from "../component/Card_2";
 
 const GetHeroesWrapper = styled.div`
 	.card-credit {
@@ -81,120 +81,120 @@ const GetHeroesWrapper = styled.div`
   }
 `;
 
-const Villains = [
-	{
-		card: 'card-1',
-		cardGrid: {
-			name: 'Micheal Egorov',
-			strength: 16,
-			defense: 29,
-			rarity: 'common',
-			hash: 100,
-			eth: 10,
-			payed: true,
-			isHero: false,
-			health: 100
-		}
-	},
-	{
-		card: 'card-2',
-		cardGrid: {
-			name: 'Micheal Egorov',
-			strength: 16,
-			defense: 29,
-			rarity: 'common',
-			hash: 100,
-			eth: 10,
-			payed: true,
-			isHero: false,
-			health: 100
-		}
-	},
-	{
-		card: 'card-3',
-		cardGrid: {
-			name: 'Micheal Egorov',
-			strength: 16,
-			defense: 29,
-			rarity: 'common',
-			hash: 100,
-			eth: 10,
-			payed: true,
-			isHero: false,
-			health: 100
-		}
-	},
-	{
-		card: 'card-2',
-		cardGrid: {
-			name: 'Micheal Egorov',
-			strength: 16,
-			defense: 29,
-			rarity: 'common',
-			hash: 100,
-			eth: 10,
-			payed: false,
-			isHero: false,
-			health: 100
-		}
-	},
-	{
-		card: 'card-1',
-		cardGrid: {
-			name: 'Micheal Egorov',
-			strength: 16,
-			defense: 29,
-			rarity: 'common',
-			hash: 100,
-			eth: 10,
-			payed: true,
-			isHero: false,
-			health: 100
-		}
-	},
-	{
-		card: 'card-2',
-		cardGrid: {
-			name: 'Micheal Egorov',
-			strength: 16,
-			defense: 29,
-			rarity: 'common',
-			hash: 100,
-			eth: 10,
-			payed: true,
-			isHero: false,
-			health: 100
-		}
-	},
-	{
-		card: 'card-3',
-		cardGrid: {
-			name: 'Micheal Egorov',
-			strength: 16,
-			defense: 29,
-			rarity: 'common',
-			hash: 100,
-			eth: 10,
-			payed: true,
-			isHero: false,
-			health: 100
-		}
-	},
-	{
-		card: 'card-2',
-		cardGrid: {
-			name: 'Micheal Egorov',
-			strength: 16,
-			defense: 29,
-			rarity: 'common',
-			hash: 100,
-			eth: 10,
-			payed: false,
-			isHero: false,
-			health: 100
-		}
-	}
-];
+// const Villains = [
+// 	{
+// 		card: 'card-1',
+// 		cardGrid: {
+// 			name: 'Micheal Egorov',
+// 			strength: 16,
+// 			defense: 29,
+// 			rarity: 'common',
+// 			hash: 100,
+// 			eth: 10,
+// 			payed: true,
+// 			isHero: false,
+// 			health: 100
+// 		}
+// 	},
+// 	{
+// 		card: 'card-2',
+// 		cardGrid: {
+// 			name: 'Micheal Egorov',
+// 			strength: 16,
+// 			defense: 29,
+// 			rarity: 'common',
+// 			hash: 100,
+// 			eth: 10,
+// 			payed: true,
+// 			isHero: false,
+// 			health: 100
+// 		}
+// 	},
+// 	{
+// 		card: 'card-3',
+// 		cardGrid: {
+// 			name: 'Micheal Egorov',
+// 			strength: 16,
+// 			defense: 29,
+// 			rarity: 'common',
+// 			hash: 100,
+// 			eth: 10,
+// 			payed: true,
+// 			isHero: false,
+// 			health: 100
+// 		}
+// 	},
+// 	{
+// 		card: 'card-2',
+// 		cardGrid: {
+// 			name: 'Micheal Egorov',
+// 			strength: 16,
+// 			defense: 29,
+// 			rarity: 'common',
+// 			hash: 100,
+// 			eth: 10,
+// 			payed: false,
+// 			isHero: false,
+// 			health: 100
+// 		}
+// 	},
+// 	{
+// 		card: 'card-1',
+// 		cardGrid: {
+// 			name: 'Micheal Egorov',
+// 			strength: 16,
+// 			defense: 29,
+// 			rarity: 'common',
+// 			hash: 100,
+// 			eth: 10,
+// 			payed: true,
+// 			isHero: false,
+// 			health: 100
+// 		}
+// 	},
+// 	{
+// 		card: 'card-2',
+// 		cardGrid: {
+// 			name: 'Micheal Egorov',
+// 			strength: 16,
+// 			defense: 29,
+// 			rarity: 'common',
+// 			hash: 100,
+// 			eth: 10,
+// 			payed: true,
+// 			isHero: false,
+// 			health: 100
+// 		}
+// 	},
+// 	{
+// 		card: 'card-3',
+// 		cardGrid: {
+// 			name: 'Micheal Egorov',
+// 			strength: 16,
+// 			defense: 29,
+// 			rarity: 'common',
+// 			hash: 100,
+// 			eth: 10,
+// 			payed: true,
+// 			isHero: false,
+// 			health: 100
+// 		}
+// 	},
+// 	{
+// 		card: 'card-2',
+// 		cardGrid: {
+// 			name: 'Micheal Egorov',
+// 			strength: 16,
+// 			defense: 29,
+// 			rarity: 'common',
+// 			hash: 100,
+// 			eth: 10,
+// 			payed: false,
+// 			isHero: false,
+// 			health: 100
+// 		}
+// 	}
+// ];
 
 const GetHeroes = () => {
 	return (
@@ -204,7 +204,7 @@ const GetHeroes = () => {
 			</div>
 			<div className="d-flex justify-content-center flex-wrap">
 				{
-					Villains.map((c, index) => <Card_2 key={index} card={c.card} cardGrid={c.cardGrid} />)
+					// Villains.map((c, index) => <Card_2 key={index} card={c.card} cardGrid={c.cardGrid} />)
 				}
 			</div>
 		</GetHeroesWrapper>

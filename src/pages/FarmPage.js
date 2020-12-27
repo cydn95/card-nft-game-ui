@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useMemo } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React from "react";
+import { useSelector } from "react-redux";
 import { useWallet } from "use-wallet";
-import { toast } from "react-toastify";
 import styled from "styled-components";
 
 import UnlockWalletPage from "./UnlockWalletPage";
@@ -18,8 +17,7 @@ const Farm = () => {
   const balance = useSelector((state) => state.Farms.balance);
   const staked = useSelector((state) => state.Farms.staked);
   const claimable = useSelector((state) => state.Farms.claimable);
-  const apy = useSelector((state) => state.Farms.apy);
-  const rewardPerDay = useSelector((state) => state.Farms.rewardPerDay);
+  const stats = useSelector((state) => state.Farms.stats);
 
   const { account } = useWallet();
   if (!account) {
@@ -43,8 +41,7 @@ const Farm = () => {
             balance={getValueFromObject(balance, key)}
             staked={getValueFromObject(staked, key)}
             claimable={getValueFromObject(claimable, key)}
-            apy={getValueFromObject(apy, key)}
-            rewardPerDay={getValueFromObject(rewardPerDay, key)}
+            stats={getValueFromObject(stats, key)}
           />
         ))}
       </div>

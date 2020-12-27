@@ -6,7 +6,7 @@ import styled from "styled-components";
 // import CloseIcon from "@material-ui/icons/Close";
 
 import SectionTitle from "../../component/SectionTitle";
-import LoadingTextIcon from "../../component/LoadingTextIcon";
+// import LoadingTextIcon from "../../component/LoadingTextIcon";
 
 import cardsActions from "../../redux/cards/actions";
 import oldNFTStakingActions from "../../redux/oldNFTStaking/actions";
