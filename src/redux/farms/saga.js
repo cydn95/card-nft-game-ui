@@ -25,7 +25,7 @@ import { getFarmInstance } from "../../services/web3/instance";
 
 // Get Token Approve Status
 export function* getTokenApproveStatus() {
-  yield takeLatest(actions.GET_TOKEN_APPROVE_STATUS, function* ({ payload }) {
+  yield takeEvery(actions.GET_TOKEN_APPROVE_STATUS, function* ({ payload }) {
     const { token } = payload;
 
     const web3 = yield call(getWeb3);
@@ -51,7 +51,7 @@ export function* getTokenApproveStatus() {
 
 // Token balance
 export function* getTokenBalance() {
-  yield takeLatest(actions.GET_TOKEN_BALANCE, function* ({ payload }) {
+  yield takeEvery(actions.GET_TOKEN_BALANCE, function* ({ payload }) {
     const { token } = payload;
 
     const web3 = yield call(getWeb3);
@@ -76,7 +76,7 @@ export function* getTokenBalance() {
 
 // Get Staked Amount
 export function* getTokenStakedAmount() {
-  yield takeLatest(actions.GET_TOKEN_STAKED_AMOUNT, function* ({ payload }) {
+  yield takeEvery(actions.GET_TOKEN_STAKED_AMOUNT, function* ({ payload }) {
     const { token } = payload;
 
     const web3 = yield call(getWeb3);
@@ -101,7 +101,7 @@ export function* getTokenStakedAmount() {
 
 // Get Claimable Amount
 export function* getTokenClaimableAmount() {
-  yield takeLatest(actions.GET_TOKEN_CLAIMABLE_AMOUNT, function* ({ payload }) {
+  yield takeEvery(actions.GET_TOKEN_CLAIMABLE_AMOUNT, function* ({ payload }) {
     const { token } = payload;
 
     const web3 = yield call(getWeb3);
