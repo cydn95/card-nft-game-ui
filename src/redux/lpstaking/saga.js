@@ -15,7 +15,7 @@ import {
   depositAsync,
   withdrawAsync,
   approveAsync,
-  getTotalSupply,
+  getTotalSupplyAsync,
 } from "../../services/web3/lpStaking";
 
 import { getPairInfo } from "../../services/graphql";
@@ -350,7 +350,7 @@ export function* getStatistics() {
 
     const pairtokenInfo = yield call(getPairInfo, PROD_UNISWAPV2PAIR_ADDRESS);
 
-    const uniTotalSupply = yield call(getTotalSupply, uni.instance);
+    const uniTotalSupply = yield call(getTotalSupplyAsync, uni.instance);
 
     const stakingTokenPriceEth =
       (pairtokenInfo.token0.derivedETH * pairtokenInfo.reserve0 +

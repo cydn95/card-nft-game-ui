@@ -49,6 +49,10 @@ const Header = () => {
       return "Get Cards";
     }
 
+    if (getMenuItemActive("farm")) {
+      return "Farm";
+    }
+
     return "";
   };
 
@@ -91,7 +95,12 @@ const Header = () => {
         </li>
         <li className={`menu-item ${getMenuItemActive("stake")} hover-effect2`}>
           <NavLink className="menu-link" to="/stake">
-            <span className="menu-text">Stake</span>
+            <span className="menu-text">Stake NFT</span>
+          </NavLink>
+        </li>
+        <li className={`menu-item ${getMenuItemActive("farm")} hover-effect2`}>
+          <NavLink className="menu-link" to="/farm">
+            <span className="menu-text">Farm</span>
           </NavLink>
         </li>
         <li
@@ -187,7 +196,8 @@ const Header = () => {
             >
               My Cards
             </a>
-            <NavLink className={`${getMenuItemActive("stake")}`} to="/stake">Stake</NavLink>
+            <NavLink className={`${getMenuItemActive("stake")}`} to="/stake">Stake NFT</NavLink>
+            <NavLink className={`${getMenuItemActive("farm")}`} to="/farm">Farm</NavLink>
             <NavLink className={`${getMenuItemActive("get-heroes")}`} to="/get-heroes">Get Cards</NavLink>
             <a
               href="http://gov.noderunners.io/"
@@ -205,7 +215,7 @@ const Header = () => {
 
 const HeaderWrapper = styled.div`
   .menu-item {
-    height: 58.73px;
+    height: 50px;
     margin-right: -17.5px;
     text-align: center;
     background-size: 100% 100%;
@@ -242,10 +252,10 @@ const HeaderWrapper = styled.div`
 
   .desktop-menu-nav {
     margin-left: -18px;
-    margin-bottom: 15px;
+    margin-bottom: 0px;
     display: flex;
 
-    @media screen and (max-width: 780px) {
+    @media screen and (max-width: 1024px) {
       display: none;
     }
 
@@ -294,7 +304,7 @@ const HeaderWrapper = styled.div`
       //   }
       // }
 
-      &:nth-of-type(6) {
+      &:nth-of-type(7                                                             ) {
         background-image: url("/static/images/bg/components/header/menu-item-5-bg.png");
         width: 209.05px;
 
@@ -311,7 +321,7 @@ const HeaderWrapper = styled.div`
     height: 50px;
     box-sizing: border-box;
 
-    @media screen and (max-width: 780px) {
+    @media screen and (max-width: 1024px) {
       display: flex;
       flex-direction: row;
       width: 100vw;

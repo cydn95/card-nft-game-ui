@@ -6,8 +6,8 @@ import { PROD_NDR_ADDRESS } from "../../helper/contract";
 
 import { getWeb3, getGasPrice } from "../../services/web3";
 import {
-  getNFTInstance,
-  getNFTStakingInstance,
+  getOldNFTInstance,
+  getOldNFTStakingInstance,
   getLPStakingInstance,
 } from "../../services/web3/instance";
 
@@ -15,21 +15,10 @@ import {
   getHeroPriceAsync,
   getSupportPriceAsync,
   getCirculatingSupplyAsync,
-  getOwnedCardsCountAsync,
-  getStakedStrengthByAddressAsync,
   getTotalStakedStrengthAsync,
-  getClaimableNDRAsync,
-  getRewardRateAsync,
-  getStakedCardsAsync,
-  isApprovedAllAsync,
-  approveAllCardsAsync,
-  unStakeCardAsync,
-  unStakeAllCardsAsync,
-  stakeCardAsync,
-  claimNDRAsync,
 } from "../../services/web3/cards";
 
-import { getEarningAsync } from "../../services/web3/lpStaking";
+import { getEarningAsync, getRewardRateAsync } from "../../services/web3/lpStaking";
 import { getTokenInfo } from "../../services/graphql";
 
 import {
@@ -38,6 +27,7 @@ import {
   CARD_TYPE,
   RESPONSE,
 } from "../../helper/constant";
+import { GAS_PRICE_MULTIPLIER } from "../../helper/contract";
 import { cardCompare, getCardType } from "../../helper/utils";
 import { getCardsAPI } from "../../services/axios/api";
 
@@ -145,13 +135,13 @@ export function* getCardsApy() {
   yield takeLatest(actions.GET_CARDS_APY, function* ({ payload }) {
     const web3 = yield call(getWeb3);
 
-    const nftStaking = getNFTStakingInstance(web3);
+    const nftStaking = getOldNFTStakingInstance(web3);
 
     const { cards, cardPrice } = payload;
     const cardsApy = [];
 
     cards.forEach((card) => {
-      const cardType = getCardType(card)
+      const cardType = getCardType(card);
 
       if (
         cardsApy.findIndex(
@@ -166,8 +156,8 @@ export function* getCardsApy() {
           rarity: card.rarity.weight,
           strength: card.strength,
           price: cardPrice[card.rarity.weight][cardType],
-          apy: 0
-        })
+          apy: 0,
+        });
       }
     });
 
@@ -176,13 +166,13 @@ export function* getCardsApy() {
       getTotalStakedStrengthAsync,
       nftStaking.instance
     );
-    
-    const ndrTokenInfo = yield call (getTokenInfo, PROD_NDR_ADDRESS);
+
+    const ndrTokenInfo = yield call(getTokenInfo, PROD_NDR_ADDRESS);
     const ndrEthPrice = parseFloat(ndrTokenInfo.derivedETH).toFixed(4);
 
     cardsApy.forEach((card, index) => {
       const ndrPerDay = ((rewardRate * card.strength) / totalStrength) * 86400;
-      const apy = ndrPerDay * ndrEthPrice * 365 / card.price * 100;
+      const apy = ((ndrPerDay * ndrEthPrice * 365) / card.price) * 100;
       cardsApy[index].apy = apy.toFixed(2);
     });
 
@@ -198,165 +188,21 @@ export function* getMintedCount() {
     const { cards } = payload;
 
     const web3 = yield call(getWeb3);
-    const nft = getNFTInstance(web3);
+    const nft = getOldNFTInstance(web3);
 
     const newCards = [...cards];
-    cards.forEach(async (c, index) => {
-      const mintedCount = await getCirculatingSupplyAsync(nft.instance, c.id);
-      newCards[index].minted = mintedCount;
-    });
-
-    yield put({
-      type: actions.GET_CARDS_SUCCESS,
-      cards: newCards,
-    });
-  });
-}
-
-export function* getMyCardsCount() {
-  yield takeLatest(actions.GET_MY_CARDS_COUNT, function* ({ payload }) {
-    const { cards } = payload;
-
-    const web3 = yield call(getWeb3);
-    const nft = getNFTInstance(web3);
-
-    const accounts = yield call(web3.eth.getAccounts);
-
-    const newCards = [...cards];
-    cards.forEach(async (c, index) => {
-      const ownedCount = await getOwnedCardsCountAsync(
+    for (let i = 0; i < cards.length; i++) {
+      const mintedCount = yield call(
+        getCirculatingSupplyAsync,
         nft.instance,
-        accounts[0],
-        c.id
+        cards[i].id
       );
-      newCards[index].owned = ownedCount;
-    });
+      newCards[i].minted = mintedCount;
+    }
 
     yield put({
       type: actions.GET_CARDS_SUCCESS,
       cards: newCards,
-    });
-  });
-}
-
-export function* getApprovedStatus() {
-  yield takeLatest(actions.GET_APPROVED_STATUS, function* ({ payload }) {
-    const { callback } = payload;
-
-    const web3 = yield call(getWeb3);
-    const nft = getNFTInstance(web3);
-    const nftStaking = getNFTStakingInstance(web3);
-
-    const accounts = yield call(web3.eth.getAccounts);
-
-    const approvedStatusResponse = yield call(
-      isApprovedAllAsync,
-      nft.instance,
-      accounts[0],
-      nftStaking.address
-    );
-
-    callback(approvedStatusResponse);
-  });
-}
-
-export function* getMyStakedStrength() {
-  yield takeLatest(actions.GET_MY_STAKED_STRENGTH, function* () {
-    const web3 = yield call(getWeb3);
-    const nftStaking = getNFTStakingInstance(web3);
-
-    // Get Wallet Account
-    const accounts = yield call(web3.eth.getAccounts);
-
-    const ret = yield call(
-      getStakedStrengthByAddressAsync,
-      nftStaking.instance,
-      accounts[0]
-    );
-
-    yield put({
-      type: actions.GET_MY_STAKED_STRENGTH_SUCCESS,
-      myStakedStrength: ret,
-    });
-  });
-}
-
-export function* getTotalStakedStrength() {
-  yield takeLatest(actions.GET_TOTAL_STAKED_STRENGTH, function* () {
-    const web3 = yield call(getWeb3);
-    const nftStaking = getNFTStakingInstance(web3);
-
-    // Get Wallet Account
-    const ret = yield call(getTotalStakedStrengthAsync, nftStaking.instance);
-
-    yield put({
-      type: actions.GET_TOTAL_STAKED_STRENGTH_SUCCESS,
-      totalStakedStrength: ret,
-    });
-  });
-}
-
-export function* getClaimableNDR() {
-  yield takeLatest(actions.GET_CLAIMABLE_NDR, function* () {
-    const web3 = yield call(getWeb3);
-    const nftStaking = getNFTStakingInstance(web3);
-
-    const accounts = yield call(web3.eth.getAccounts);
-    const ret = yield call(
-      getClaimableNDRAsync,
-      nftStaking.instance,
-      accounts[0]
-    );
-
-    yield put({
-      type: actions.GET_CLAIMABLE_NDR_SUCCESS,
-      claimableNDR: ret,
-    });
-  });
-}
-
-export function* getNDRPerDay() {
-  yield takeLatest(actions.GET_NDR_PER_DAY, function* () {
-    const web3 = yield call(getWeb3);
-    const nftStaking = getNFTStakingInstance(web3);
-
-    const accounts = yield call(web3.eth.getAccounts);
-
-    const rewardRate = yield call(getRewardRateAsync, nftStaking.instance);
-    const myStrength = yield call(
-      getStakedStrengthByAddressAsync,
-      nftStaking.instance,
-      accounts[0]
-    );
-    const totalStrength = yield call(
-      getTotalStakedStrengthAsync,
-      nftStaking.instance
-    );
-
-    const ndrPerDay = ((rewardRate * myStrength) / totalStrength) * 86400;
-
-    yield put({
-      type: actions.GET_NDR_PER_DAY_SUCCESS,
-      ndrPerDay: ndrPerDay,
-    });
-  });
-}
-
-export function* getStakedCards() {
-  yield takeLatest(actions.GET_STAKED_CARDS, function* () {
-    const web3 = yield call(getWeb3);
-    const nftStaking = getNFTStakingInstance(web3);
-
-    const accounts = yield call(web3.eth.getAccounts);
-    const ret = yield call(
-      getStakedCardsAsync,
-      nftStaking.instance,
-      accounts[0]
-    );
-
-    yield put({
-      type: actions.GET_STAKED_CARDS_SUCCESS,
-      stakedCardTokens: ret,
     });
   });
 }
@@ -386,7 +232,7 @@ export function* buyHeroCardEth() {
         card.rarity.weight
       );
     } else {
-      callback(RESPONSE.error);
+      callback(RESPONSE.ERROR);
       return;
     }
 
@@ -411,7 +257,7 @@ export function* buyHeroCardEth() {
           from: address,
           value: cardPrice.toString(),
           gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
-          gas: gasLimit * 2,
+          gas: gasLimit * GAS_PRICE_MULTIPLIER,
         })
         .then((data) => {
           return data;
@@ -471,7 +317,7 @@ export function* buyHeroCardHash() {
         .send({
           from: address,
           gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
-          gas: gasLimit * 2,
+          gas: gasLimit * GAS_PRICE_MULTIPLIER,
         })
         .then((data) => {
           return data;
@@ -486,137 +332,7 @@ export function* buyHeroCardHash() {
     if (buyCardResponse.status) {
       callback(RESPONSE.SUCCESS);
     } else {
-      callback(RESPONSE.error);
-    }
-  });
-}
-
-export function* unStakeCard() {
-  yield takeLatest(actions.UNSTAKE_CARD, function* ({ payload }) {
-    const { cardId, callback } = payload;
-
-    const web3 = yield call(getWeb3);
-    const nftStaking = getNFTStakingInstance(web3);
-
-    // Get Wallet Account
-    const accounts = yield call(web3.eth.getAccounts);
-
-    const unstakeCardResponse = yield call(
-      unStakeCardAsync,
-      nftStaking.instance,
-      web3,
-      cardId,
-      accounts[0]
-    );
-
-    if (unstakeCardResponse.status) {
-      callback(RESPONSE.SUCCESS);
-    } else {
-      callback(RESPONSE.error);
-    }
-  });
-}
-
-export function* unStakeAllCards() {
-  yield takeLatest(actions.UNSTAKE_ALL_CARDS, function* ({ payload }) {
-    const { callback } = payload;
-
-    const web3 = yield call(getWeb3);
-    const nftStaking = getNFTStakingInstance(web3);
-
-    // Get Wallet Account
-    const accounts = yield call(web3.eth.getAccounts);
-
-    const unstakeAllCardsResponse = yield call(
-      unStakeAllCardsAsync,
-      nftStaking.instance,
-      web3,
-      accounts[0]
-    );
-
-    if (unstakeAllCardsResponse.status) {
-      callback(RESPONSE.SUCCESS);
-    } else {
-      callback(RESPONSE.error);
-    }
-  });
-}
-
-export function* claimNDR() {
-  yield takeLatest(actions.CLAIM_NDR, function* ({ payload }) {
-    const { callback } = payload;
-
-    const web3 = yield call(getWeb3);
-    const nftStaking = getNFTStakingInstance(web3);
-
-    // Get Wallet Account
-    const accounts = yield call(web3.eth.getAccounts);
-
-    const claimNDRResponse = yield call(
-      claimNDRAsync,
-      nftStaking.instance,
-      web3,
-      accounts[0]
-    );
-
-    if (claimNDRResponse.status) {
-      callback(RESPONSE.SUCCESS);
-    } else {
-      callback(RESPONSE.error);
-    }
-  });
-}
-
-export function* approveAll() {
-  yield takeLatest(actions.APPROVE_ALL, function* ({ payload }) {
-    const { approved, callback } = payload;
-
-    const web3 = yield call(getWeb3);
-    const nft = getNFTInstance(web3);
-    const nftStaking = getNFTStakingInstance(web3);
-
-    // Get Wallet Account
-    const accounts = yield call(web3.eth.getAccounts);
-
-    const approveResponse = yield call(
-      approveAllCardsAsync,
-      nft.instance,
-      web3,
-      nftStaking.address,
-      approved,
-      accounts[0]
-    );
-
-    if (approveResponse.status) {
-      callback(RESPONSE.SUCCESS);
-    } else {
-      callback(RESPONSE.error);
-    }
-  });
-}
-
-export function* stakeCard() {
-  yield takeLatest(actions.STAKE_CARD, function* ({ payload }) {
-    const { cardId, callback } = payload;
-
-    const web3 = yield call(getWeb3);
-    const nftStaking = getNFTStakingInstance(web3);
-
-    // Get Wallet Account
-    const accounts = yield call(web3.eth.getAccounts);
-
-    const stakeCardResponse = yield call(
-      stakeCardAsync,
-      nftStaking.instance,
-      web3,
-      cardId,
-      accounts[0]
-    );
-
-    if (stakeCardResponse.status) {
-      callback(RESPONSE.SUCCESS);
-    } else {
-      callback(RESPONSE.error);
+      callback(RESPONSE.ERROR);
     }
   });
 }
@@ -629,17 +345,5 @@ export default function* rootSaga() {
     fork(getCardsPrice),
     fork(getCardsApy),
     fork(getMintedCount),
-    fork(getMyCardsCount),
-    fork(getMyStakedStrength),
-    fork(getTotalStakedStrength),
-    fork(getClaimableNDR),
-    fork(getNDRPerDay),
-    fork(getStakedCards),
-    fork(unStakeCard),
-    fork(unStakeAllCards),
-    fork(claimNDR),
-    fork(approveAll),
-    fork(getApprovedStatus),
-    fork(stakeCard),
   ]);
 }

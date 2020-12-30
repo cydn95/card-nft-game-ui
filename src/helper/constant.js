@@ -12,7 +12,8 @@ export const getNetworkChainId = () => {
   if (REACT_APP_BUILD_MODE === "production") {
     return NETWORK.MAIN;
   } else {
-    return NETWORK.RINKEBY;
+    // return NETWORK.RINKEBY;
+    return NETWORK.ROPSTEIN;
   }
 };
 
@@ -20,6 +21,7 @@ export const STAKE_MIN_LIMIT = 1;
 export const STAKE_MAX_LIMIT = 22.5;
 
 export const MAX_STAKED_CARD_COUNT = 4;
+export const MAX_BONUS_STAKED_CARD_COUNT = 1;
 
 export const RESPONSE = {
   SUCCESS: 100,
