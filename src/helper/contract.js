@@ -10,18 +10,24 @@ import PROD_UNISWAPV2PAIR_ABI from "./json/UniswapV2Pair_abi_prod.json";
 import DEV_NDR_ABI from "./json/NDR_abi_dev.json";
 import PROD_NDR_ABI from "./json/NDR_abi_prod.json";
 
+// NFT Staking (NEW)
+
+
+
 // LpStaking (new lp pool)
 export const DEV_LPSTAKING_ADDRESS = "0xD60D9b25E891a6757460EC2Fd7Dd80e5fE637071";
 export const PROD_LPSTAKING_ADDRESS = "0x2c92744a0428e405e95dc3eb812e1b87872b22eb";
 export { DEV_LPSTAKING_ABI, PROD_LPSTAKING_ABI };
 
 // UniswapV2Pair (lp token NDRWETH)
-export const DEV_UNISWAPV2PAIR_ADDRESS = "0x14c8177245407380d93c501b3e5bec4f228bcc69";
+// export const DEV_UNISWAPV2PAIR_ADDRESS = "0x14c8177245407380d93c501b3e5bec4f228bcc69";   // Rinkeby
+export const DEV_UNISWAPV2PAIR_ADDRESS = "0x4c1ee33627aac7bf637a716438f0df64696d146f";   // Ropstein
 export const PROD_UNISWAPV2PAIR_ADDRESS = "0x65d0A154D2425CE2Fd5fED3BdaE94D9a9aFE55CE";
 export { DEV_UNISWAPV2PAIR_ABI, PROD_UNISWAPV2PAIR_ABI };
 
 // NDR (ndr token)
-export const DEV_NDR_ADDRESS = "0x29326F9050Be6DF0eC285d55476dF4906c82DA1e";
+// export const DEV_NDR_ADDRESS = "0x29326F9050Be6DF0eC285d55476dF4906c82DA1e"; // Rinkeby
+export const DEV_NDR_ADDRESS = "0xbCe7A4482EE4fe54f777fBbEbdb2eDdE16e5120F";  // Ropstein
 export const PROD_NDR_ADDRESS = "0x739763a258640919981F9bA610AE65492455bE53";
 export { DEV_NDR_ABI, PROD_NDR_ABI };
 

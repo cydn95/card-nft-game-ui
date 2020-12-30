@@ -1,10 +1,9 @@
-import { all, takeLatest, call, put, fork } from "redux-saga/effects";
+import { all, takeLatest, call, put, fork, takeEvery } from "redux-saga/effects";
 
 import BigNumber from "bignumber.js";
 
 import actions from "./actions";
 
-// import { PROD_UNISWAPV2PAIR_ADDRESS } from "../../helper/contract";
 import { RESPONSE } from "../../helper/constant";
 
 import { getWeb3 } from "../../services/web3";
@@ -17,11 +16,10 @@ import {
   approveAsync,
   depositAsync,
   claimAsync,
-  exitAsync
+  exitAsync,
 } from "../../services/web3/lpStaking";
 
-// import { getPairInfo } from "../../services/graphql";
-// import { lookUpPrices } from "../../services/web3";
+import { getPairInfo } from "../../services/graphql";
 
 import { getFarmInstance } from "../../services/web3/instance";
 
@@ -128,7 +126,7 @@ export function* getTokenClaimableAmount() {
 
 // Get Token Stats
 export function* getTokenStats() {
-  yield takeLatest(actions.GET_TOKEN_STATISTICS, function* ({ payload }) {
+  yield takeEvery(actions.GET_TOKEN_STATISTICS, function* ({ payload }) {
     const { token } = payload;
 
     const web3 = yield call(getWeb3);
@@ -153,14 +151,33 @@ export function* getTokenStats() {
       accounts[0]
     );
 
+    // NDR per day
     const claimablePerDay =
       totalSupply > 0 ? (stakedAmount * rewardRate * 86400) / totalSupply : 0;
+
+    const pairtokenInfo = yield call(getPairInfo, tokenInstance.token.prodAddress);
+
+    const uniTotalSupply = yield call(
+      getTotalSupplyAsync,
+      tokenInstance.token.instance
+    );
+
+    const stakingTokenPriceEth =
+      (pairtokenInfo.token0.derivedETH * pairtokenInfo.reserve0 +
+        pairtokenInfo.token1.derivedETH * pairtokenInfo.reserve1) /
+      (Number(uniTotalSupply) / Math.pow(10, 18)) /
+      2;
+
+    const apy =
+      stakedAmount > 0
+        ? ((stakingTokenPriceEth * rewardRate * 86400) / stakedAmount) * 100
+        : 0;
 
     yield put({
       type: actions.GET_TOKEN_STATISTICS_SUCCESS,
       token,
       stats: {
-        apy: 0,
+        apy,
         rewardPerDay: claimablePerDay,
       },
     });
@@ -178,7 +195,11 @@ export function* approveToken() {
     const accounts = yield call(web3.eth.getAccounts);
 
     // Check balance
-    const tokenBalance = yield call(getBalanceAsync, tokenInstance.token.instance, accounts[0]);
+    const tokenBalance = yield call(
+      getBalanceAsync,
+      tokenInstance.token.instance,
+      accounts[0]
+    );
 
     if (tokenBalance <= 0) {
       callback(RESPONSE.INSUFFICIENT);
@@ -198,7 +219,7 @@ export function* approveToken() {
     if (approveResult.status) {
       yield put({
         type: actions.GET_TOKEN_APPROVE_STATUS,
-        payload: { token }
+        payload: { token },
       });
 
       callback(RESPONSE.SUCCESS);
@@ -213,13 +234,17 @@ export function* stakeToken() {
     const { token, amount, isMax, callback } = payload;
 
     const web3 = yield call(getWeb3);
-    const tokenInstance = getFarmInstance(web3, token)
+    const tokenInstance = getFarmInstance(web3, token);
 
     // Get Wallet Account
     const accounts = yield call(web3.eth.getAccounts);
 
     // Check balance
-    const tokenBalance = yield call(getBalanceAsync, tokenInstance.token.instance, accounts[0]);
+    const tokenBalance = yield call(
+      getBalanceAsync,
+      tokenInstance.token.instance,
+      accounts[0]
+    );
 
     const stakeAmount = isMax
       ? new BigNumber(tokenBalance)
@@ -320,6 +345,6 @@ export default function* rootSaga() {
     fork(approveToken),
     fork(stakeToken),
     fork(claimToken),
-    fork(exitToken)
+    fork(exitToken),
   ]);
 }

@@ -12,7 +12,8 @@ export const getNetworkChainId = () => {
   if (REACT_APP_BUILD_MODE === "production") {
     return NETWORK.MAIN;
   } else {
-    return NETWORK.RINKEBY;
+    // return NETWORK.RINKEBY;
+    return NETWORK.ROPSTEIN;
   }
 };
 

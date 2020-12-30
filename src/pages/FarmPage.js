@@ -37,6 +37,7 @@ const Farm = () => {
           <FarmBoard
             key={`farm-${key}`}
             token={key}
+            farm={farms[key]}
             approved={getValueFromObject(approved, key)}
             balance={getValueFromObject(balance, key)}
             staked={getValueFromObject(staked, key)}

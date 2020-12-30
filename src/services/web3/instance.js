@@ -178,6 +178,7 @@ export const getFarmInstance = (web3, token) => {
         farmData.staking.abi,
         farmData.staking.address
       ),
+      prodAddress: farms[token].prod.staking.address
     },
     token: {
       address: farmData.token.address,
@@ -186,6 +187,7 @@ export const getFarmInstance = (web3, token) => {
         farmData.token.abi,
         farmData.token.address
       ),
+      prodAddress: farms[token].prod.token.address
     },
   };
 };

@@ -26,7 +26,7 @@ const Stake = () => {
 
   return (
     <StakePageContainer>
-      <Tab.Container id="left-tabs-example" defaultActiveKey="new-pool">
+      {/* <Tab.Container id="left-tabs-example" defaultActiveKey="new-pool">
         <Nav
           variant="pills"
           className="justify-content-center animation-fadeIn"
@@ -46,11 +46,12 @@ const Stake = () => {
           <Tab.Pane eventKey="new-pool">
             <NFTStaking />
           </Tab.Pane>
-          <Tab.Pane eventKey="old-pool">
+          <Tab.Pane eventKey="old-pool"> */}
+      <br /><br />
             <NFTStakingOld />
-          </Tab.Pane>
+          {/* </Tab.Pane>
         </Tab.Content>
-      </Tab.Container>
+      </Tab.Container> */}
     </StakePageContainer>
   );
 };
