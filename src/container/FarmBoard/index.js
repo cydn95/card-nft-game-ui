@@ -145,7 +145,7 @@ const FarmBoard = ({ token, farm, approved, balance, staked, claimable, stats })
         className="token-link"
         rel="noopener noreferrer"
       >
-        Obtain SLP
+        {farm.link_title}
       </a>
       <div className="block">
         <div className="row">
@@ -175,7 +175,7 @@ const FarmBoard = ({ token, farm, approved, balance, staked, claimable, stats })
           <span className="value">{`${convertFromWei(
             balance,
             4
-          )} ${token}`}</span>
+          )}`}</span>
         </div>
       </div>
       <div className="section">

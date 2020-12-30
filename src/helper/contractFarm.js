@@ -25,6 +25,7 @@ export const PROD_NDR_ERC20_STAKING_ADDRESS = "0x25bEc9DdC31684dCe863637A1179249
 export const farms = {
   NDR_ETH: {
     title: "ETH-NDR LP",
+    link_title: "Obtain LP",
     link: "https://app.uniswap.org/#/add/0x739763a258640919981f9ba610ae65492455be53/ETH",
     dev: {
       staking: {
@@ -49,6 +50,7 @@ export const farms = {
   },
   NDR_MEME: {
     title: "MEME-NDR LP",
+    link_title: "Obtain LP",
     link: "https://app.uniswap.org/#/add/0x739763a258640919981f9ba610ae65492455be53/0xd5525d397898e5502075ea5e830d8914f6f0affe",
     dev: {
       staking: {
@@ -73,6 +75,7 @@ export const farms = {
   },
   NDR_GHST: {
     title: "GHST-NDR LP",
+    link_title: "Obtain LP",
     link: "https://app.uniswap.org/#/add/0x3f382dbd960e3a9bbceae22651e88158d2791550/0x739763a258640919981f9ba610ae65492455be53",
     dev: {
       staking: {
@@ -97,6 +100,7 @@ export const farms = {
   },
   NDR_SUSHI: {
     title: "SUSHI-NDR SLP",
+    link_title: "Obtain SLP",
     link: "https://app.uniswap.org/#/add/0x739763a258640919981f9ba610ae65492455be53/ETH",
     dev: {
       staking: {
