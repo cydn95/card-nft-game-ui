@@ -21,7 +21,6 @@ import NDR_SUSHI_STAKING_ABI from "./jsonFarm/NDR-SUSHI_SLP_Staking.json";
 export const DEV_NDR_ERC20_STAKING_ADDRESS = "0x38DA09fD791792D6a6285925F8030A52eF425E4e";    // Ropstein
 export const PROD_NDR_ERC20_STAKING_ADDRESS = "0xC4B73419265B9DFcE7abdD0d8E33f99E565d0262";
 
-
 export const farms = {
   NDR_ETH: {
     title: "ETH-NDR LP",

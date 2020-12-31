@@ -20,6 +20,7 @@ import {
 } from "../../services/web3/lpStaking";
 
 import { getPairInfo } from "../../services/graphql";
+import { lookUpPrices } from "../../services/web3";
 
 import { getFarmInstance } from "../../services/web3/instance";
 
@@ -135,6 +136,8 @@ export function* getTokenStats() {
     // Get Wallet Account
     const accounts = yield call(web3.eth.getAccounts);
 
+    const ethPrice = (yield call(lookUpPrices, ["ethereum"])).ethereum.usd;
+
     const stakedAmount = yield call(
       getBalanceAsync,
       tokenInstance.staking.instance,
@@ -156,28 +159,31 @@ export function* getTokenStats() {
       totalSupply > 0 ? (stakedAmount * rewardRate * 86400) / totalSupply : 0;
 
     const pairtokenInfo = yield call(getPairInfo, tokenInstance.token.prodAddress);
-
+// console.log(token, pairtokenInfo);
     const uniTotalSupply = yield call(
       getTotalSupplyAsync,
       tokenInstance.token.instance
     );
-
+// console.log(uniTotalSupply);
     const stakingTokenPriceEth =
       (pairtokenInfo.token0.derivedETH * pairtokenInfo.reserve0 +
         pairtokenInfo.token1.derivedETH * pairtokenInfo.reserve1) /
       (Number(uniTotalSupply) / Math.pow(10, 18)) /
       2;
+    // console.log('stakingTokenPriceEth', token, stakingTokenPriceEth);
 
+    const totalStakedAmount = yield call(getBalanceAsync, tokenInstance.token.instance, tokenInstance.staking.address);
+    // console.log('totalStakedAmount', totalStakedAmount);
     const apy =
-      stakedAmount > 0
-        ? ((stakingTokenPriceEth * rewardRate * 86400) / stakedAmount) * 100
+      totalStakedAmount > 0
+        ? ((stakingTokenPriceEth * rewardRate * 86400 * 365) / totalStakedAmount) * 100
         : 0;
 
     yield put({
       type: actions.GET_TOKEN_STATISTICS_SUCCESS,
       token,
       stats: {
-        apy,
+        apy: token === "NDR_MEME" ? apy / Math.pow(10, 12) : apy,
         rewardPerDay: claimablePerDay,
       },
     });
