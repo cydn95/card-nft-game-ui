@@ -97,29 +97,31 @@ export const farms = {
       }
     },
   },
-  // NDR_SUSHI: {
-  //   title: "SUSHI-NDR SLP",
-  //   link_title: "Obtain SLP",
-  //   link: "https://app.uniswap.org/#/add/0x739763a258640919981f9ba610ae65492455be53/ETH",
-  //   dev: {
-  //     staking: {
-  //       address: "0xB85337f0A27203DC31205a715C342ED2dc580296",
-  //       abi: NDR_SUSHI_STAKING_ABI
-  //     },
-  //     token: {
-  //       address: "0x3b49d71b23d0a78612374541a3004ef2854fe1c5",
-  //       abi: NDR_SUSHI_SLP_ABI
-  //     }
-  //   },
-  //   prod: {
-  //     staking: {
-  //       address: "0xB85337f0A27203DC31205a715C342ED2dc580296",
-  //       abi: NDR_SUSHI_STAKING_ABI
-  //     },
-  //     token: {
-  //       address: "0x3b49d71b23d0a78612374541a3004ef2854fe1c5",
-  //       abi: NDR_SUSHI_SLP_ABI
-  //     }
-  //   },
-  // }
+  NDR_SUSHI: {
+    title: "SUSHI-NDR SLP",
+    link_title: "Obtain SLP",
+    link: "https://app.uniswap.org/#/add/0x739763a258640919981f9ba610ae65492455be53/ETH",
+    dev: {
+      staking: {
+        address: "0xB85337f0A27203DC31205a715C342ED2dc580296",
+        abi: NDR_SUSHI_STAKING_ABI
+      },
+      token: {
+        address: "0x3b49d71b23d0a78612374541a3004ef2854fe1c5",
+        abi: NDR_SUSHI_SLP_ABI
+      }
+    },
+    prod: {
+      staking: {
+        address: "0xB85337f0A27203DC31205a715C342ED2dc580296",
+        abi: NDR_SUSHI_STAKING_ABI
+      },
+      token: {
+        address: "0x3b49d71b23d0a78612374541a3004ef2854fe1c5",
+        abi: NDR_SUSHI_SLP_ABI,
+        token0: "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2",
+        token1: "0x739763a258640919981f9ba610ae65492455be53"
+      }
+    },
+  }
 }
