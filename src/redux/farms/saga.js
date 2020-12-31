@@ -174,16 +174,24 @@ export function* getTokenStats() {
 
     const totalStakedAmount = yield call(getBalanceAsync, tokenInstance.token.instance, tokenInstance.staking.address);
     // console.log('totalStakedAmount', totalStakedAmount);
-    const apy =
+    let apy =
       totalStakedAmount > 0
-        ? ((stakingTokenPriceEth * rewardRate * 86400 * 365) / totalStakedAmount) * 100
+        ? ((stakingTokenPriceEth * rewardRate * 86400 * 365 * ethPrice) / totalStakedAmount) * 100
         : 0;
+
+    if (token === "NDR_ETH" || token === "NDR_MEME") {
+      apy = apy / ethPrice;
+    }
+
+    if (token === "NDR_MEME") {
+      apy = apy / Math.pow(10, 10);
+    }
 
     yield put({
       type: actions.GET_TOKEN_STATISTICS_SUCCESS,
       token,
       stats: {
-        apy: token === "NDR_MEME" ? apy / Math.pow(10, 12) : apy,
+        apy,
         rewardPerDay: claimablePerDay,
       },
     });
