@@ -14,13 +14,13 @@ const CardStakingOld = ({
   onApprove,
 }) => {
   const handleClickBlankCard = () => {
-    if (!unStaked) return;
+    // if (!unStaked) return;
 
-    if (approved) {
-      onStake();
-    } else {
-      toast.info("You should approve cards first");
-    }
+    // if (approved) {
+    //   onStake();
+    // } else {
+    //   toast.info("You should approve cards first");
+    // }
   };
 
   return (
@@ -40,10 +40,10 @@ const CardStakingOld = ({
       </div>
       <div className="button-wrapper text-center">
         {unStaked ? (
-          approved ? (
-            <button className="hover-effect3" onClick={onStake}>
-              Stake
-            </button>
+          approved ? (``
+            // <button className="hover-effect3" onClick={onStake}>
+            //   Stake
+            // </button>
           ) : loadingApprove ? (
             <button className="hover-effect3">
               <img
