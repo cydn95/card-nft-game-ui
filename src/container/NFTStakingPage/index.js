@@ -14,7 +14,7 @@ import NFTStakingModal from "../NFTStakingModal";
 import NFTStakingModalBonus from "../NFTStakingModalBonus";
 
 // import cardsActions from "../../redux/cards/actions";
-import oldNFTStakingActions from "../../redux/oldNFTStaking/actions";
+import nftStakingActions from "../../redux/oldNFTStaking/actions";
 
 import {
   MAX_STAKED_CARD_COUNT
@@ -35,7 +35,7 @@ const NFTStaking = () => {
 
   const cards = useSelector((state) => state.Cards.cards);
   const stakedCardTokens = useSelector(
-    (state) => state.OldNFTStaking.stakedCardTokens
+    (state) => state.NFTStaking.stakedCardTokens
   ); // Staked card count
 
   const stakedCards = useMemo(() => {
@@ -68,9 +68,9 @@ const NFTStaking = () => {
   const bonusCard = { card: null, unStaked: true, bonus: true };
 
   useEffect(() => {
-    dispatch(oldNFTStakingActions.getStakedCards());
+    dispatch(nftStakingActions.getStakedCards());
     dispatch(
-      oldNFTStakingActions.getApprovedStatus((status) => {
+      nftStakingActions.getApprovedStatus((status) => {
         setApproved(status);
       })
     );
@@ -79,7 +79,7 @@ const NFTStaking = () => {
   // console.log(approved)
   useEffect(() => {
     if (cards.length > 0) {
-      dispatch(oldNFTStakingActions.getMyCardsCount(cards));
+      dispatch(nftStakingActions.getMyCardsCount(cards));
     }
   }, [dispatch, cards]);
 
@@ -133,12 +133,12 @@ const NFTStaking = () => {
   const handleApproveAll = () => {
     setApproveLoading(true);
     dispatch(
-      oldNFTStakingActions.approveAll(true, (status) => {
+      nftStakingActions.approveAll(true, (status) => {
         setApproveLoading(false);
         if (status) {
           toast.success("Approved successfully");
           dispatch(
-            oldNFTStakingActions.getApprovedStatus((status) => {
+            nftStakingActions.getApprovedStatus((status) => {
               setApproved(status);
             })
           );

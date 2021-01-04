@@ -11,6 +11,14 @@ import {
   PROD_UNISWAPV2PAIR_ABI,
   DEV_UNISWAPV2PAIR_ADDRESS,
   PROD_UNISWAPV2PAIR_ADDRESS,
+  DEV_NFT_ADDRESS,
+  PROD_NFT_ADDRESS,
+  DEV_NFT_ABI,
+  PROD_NFT_ABI,
+  DEV_NFT_STAKING_ADDRESS,
+  PROD_NFT_STAKING_ADDRESS,
+  DEV_NFT_STAKING_ABI,
+  PROD_NFT_STAKING_ABI,
 } from "../../helper/contract";
 
 import {
@@ -189,5 +197,49 @@ export const getFarmInstance = (web3, token) => {
       ),
       prodAddress: farms[token].prod.token.address
     },
+  };
+};
+
+export const getNFTInstance = (web3) => {
+  let abi;
+  let instance;
+  let address;
+
+  if (REACT_APP_BUILD_MODE === "development") {
+    abi = DEV_NFT_ABI;
+    address = DEV_NFT_ADDRESS;
+  } else if (REACT_APP_BUILD_MODE === "production") {
+    abi = PROD_NFT_ABI;
+    address = PROD_NFT_ADDRESS;
+  }
+
+  instance = new web3.eth.Contract(abi, address);
+
+  return {
+    address,
+    abi,
+    instance,
+  };
+};
+
+export const getNFTStakingInstance = (web3) => {
+  let abi;
+  let instance;
+  let address;
+
+  if (REACT_APP_BUILD_MODE === "development") {
+    abi = DEV_NFT_STAKING_ABI;
+    address = DEV_NFT_STAKING_ADDRESS;
+  } else if (REACT_APP_BUILD_MODE === "production") {
+    abi = PROD_NFT_STAKING_ABI;
+    address = PROD_NFT_STAKING_ADDRESS;
+  }
+
+  instance = new web3.eth.Contract(abi, address);
+
+  return {
+    address,
+    abi,
+    instance,
   };
 };

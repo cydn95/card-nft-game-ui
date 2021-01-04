@@ -14,13 +14,13 @@ const CardStakingOld = ({
   onApprove,
 }) => {
   const handleClickBlankCard = () => {
-    // if (!unStaked) return;
+    if (!unStaked) return;
 
-    // if (approved) {
-    //   onStake();
-    // } else {
-    //   toast.info("You should approve cards first");
-    // }
+    if (approved) {
+      onStake();
+    } else {
+      toast.info("You should approve cards first");
+    }
   };
 
   return (

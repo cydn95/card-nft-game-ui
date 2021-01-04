@@ -1,8 +1,9 @@
 [
   {
     "inputs": [
+      { "internalType": "address", "name": "_NDR", "type": "address" },
       { "internalType": "address", "name": "_NFT", "type": "address" },
-      { "internalType": "address", "name": "_NDR", "type": "address" }
+      { "internalType": "address", "name": "_NFTSTAKING", "type": "address" }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
@@ -117,12 +118,6 @@
         "internalType": "uint256",
         "name": "tokenId",
         "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
       }
     ],
     "name": "Staked",
@@ -155,12 +150,6 @@
         "internalType": "uint256",
         "name": "tokenId",
         "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
       }
     ],
     "name": "Withdrawn",
@@ -186,6 +175,15 @@
   },
   {
     "inputs": [],
+    "name": "NFTStaking",
+    "outputs": [
+      { "internalType": "contract INFTStaking", "name": "", "type": "address" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "_totalStrength",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
@@ -193,16 +191,16 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
-      { "internalType": "address", "name": "account", "type": "address" }
+      { "internalType": "uint256", "name": "_tokenId", "type": "uint256" }
     ],
-    "name": "balanceByTokenIdOf",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
+    "name": "activateNftToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [
+      { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
       { "internalType": "address", "name": "account", "type": "address" }
     ],
     "name": "balanceOf",
@@ -213,9 +211,19 @@
   {
     "inputs": [
       { "internalType": "address", "name": "_NDR", "type": "address" },
-      { "internalType": "address", "name": "_NFT", "type": "address" }
+      { "internalType": "address", "name": "_NFT", "type": "address" },
+      { "internalType": "address", "name": "_NFTSTAKING", "type": "address" }
     ],
     "name": "changeAddresses",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_tokenId", "type": "uint256" }
+    ],
+    "name": "deactivateNftToken",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -234,6 +242,21 @@
     "name": "exit",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
+    ],
+    "name": "getNftTokenMap",
+    "outputs": [
+      { "internalType": "bool", "name": "", "type": "bool" },
+      { "internalType": "bool", "name": "", "type": "bool" },
+      { "internalType": "uint256", "name": "", "type": "uint256" },
+      { "internalType": "uint256", "name": "", "type": "uint256" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -257,6 +280,26 @@
     "name": "getRewardForDuration",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_tokenId", "type": "uint256" },
+      { "internalType": "uint256", "name": "_maxAmount", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "_strengthWeight",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_strengthDecimals",
+        "type": "uint256"
+      }
+    ],
+    "name": "initNftToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -286,7 +329,21 @@
   {
     "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "name": "nftTokenMap",
-    "outputs": [{ "internalType": "bool", "name": "hasValue", "type": "bool" }],
+    "outputs": [
+      { "internalType": "bool", "name": "hasValue", "type": "bool" },
+      { "internalType": "bool", "name": "active", "type": "bool" },
+      { "internalType": "uint256", "name": "maxAmount", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "strengthWeight",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "strengthDecimals",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
@@ -299,7 +356,8 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "reward", "type": "uint256" }
+      { "internalType": "uint256", "name": "reward", "type": "uint256" },
+      { "internalType": "uint256", "name": "duration", "type": "uint256" }
     ],
     "name": "notifyRewardAmount",
     "outputs": [],
@@ -394,11 +452,7 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_rewardsDuration",
-        "type": "uint256"
-      }
+      { "internalType": "uint256", "name": "duration", "type": "uint256" }
     ],
     "name": "setRewardsDuration",
     "outputs": [],
@@ -407,31 +461,8 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_series", "type": "uint256" },
-      { "internalType": "bool", "name": "supported", "type": "bool" }
-    ],
-    "name": "setSupportedSeries",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_tokenMaxAmount",
-        "type": "uint256"
-      }
-    ],
-    "name": "setTokenMaxAmount",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256[]", "name": "tokenIds", "type": "uint256[]" },
-      { "internalType": "uint256[]", "name": "amounts", "type": "uint256[]" }
+      { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
     ],
     "name": "stake",
     "outputs": [],
@@ -441,13 +472,6 @@
   {
     "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "name": "strengthWeight",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "tokenMaxAmount",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
@@ -484,8 +508,8 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256[]", "name": "tokenIds", "type": "uint256[]" },
-      { "internalType": "uint256[]", "name": "amounts", "type": "uint256[]" }
+      { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
     ],
     "name": "withdrawNFT",
     "outputs": [],

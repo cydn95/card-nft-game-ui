@@ -10,9 +10,13 @@ import PROD_UNISWAPV2PAIR_ABI from "./json/UniswapV2Pair_abi_prod.json";
 import DEV_NDR_ABI from "./json/NDR_abi_dev.json";
 import PROD_NDR_ABI from "./json/NDR_abi_prod.json";
 
-// NFT Staking (NEW)
+// NFT (New Custom)
+import DEV_NFT_ABI from "./json/NFT_abi_dev.json";
+import PROD_NFT_ABI from "./json/NFT_abi_prod.json";
 
-
+// NFT Staking (NEW Custom)
+import DEV_NFT_STAKING_ABI from "./json/NFTStaking_abi_dev.json";
+import PROD_NFT_STAKING_ABI from "./json/NFTStaking_abi_prod.json";
 
 // LpStaking (new lp pool)
 export const DEV_LPSTAKING_ADDRESS = "0xD60D9b25E891a6757460EC2Fd7Dd80e5fE637071";
@@ -30,6 +34,16 @@ export const DEV_NDR_ADDRESS = "0x29326F9050Be6DF0eC285d55476dF4906c82DA1e"; // 
 // export const DEV_NDR_ADDRESS = "0xbCe7A4482EE4fe54f777fBbEbdb2eDdE16e5120F";  // Ropstein
 export const PROD_NDR_ADDRESS = "0x739763a258640919981F9bA610AE65492455bE53";
 export { DEV_NDR_ABI, PROD_NDR_ABI };
+
+// NFT TOKEN
+export const DEV_NFT_ADDRESS = "0x831669C8063B9659D276a0912Be5A0E936224d2e";
+export const PROD_NFT_ADDRESS = "0x831669C8063B9659D276a0912Be5A0E936224d2e";
+export { DEV_NFT_ABI, PROD_NFT_ABI };
+
+// NFT Staking
+export const DEV_NFT_STAKING_ADDRESS = "0x9a0d9e3afb26ec5673a021d077b291bd68f35d14";
+export const PROD_NFT_STAKING_ADDRESS = "0x9a0d9e3afb26ec5673a021d077b291bd68f35d14";
+export { DEV_NFT_STAKING_ABI, PROD_NFT_STAKING_ABI };
 
 // web3 provider (not using for now)
 export const DEV_WEB3_WEBSOCKET_PROVIDER = "wss://kovan.infura.io/ws/v3/235035a10d0a4a9eadc71fff0c1240dc";
