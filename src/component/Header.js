@@ -74,6 +74,18 @@ const Header = () => {
           </NavLink>
         </li>
         <li
+          className={`menu-item ${getMenuItemActive("news")} hover-effect2`}
+        >
+          <a
+            className="menu-link"
+            href="https://noderunners.medium.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span className="menu-text">News</span>
+          </a>
+        </li>
+        <li
           className={`menu-item ${getMenuItemActive("my-cards")} hover-effect2`}
         >
           <a
@@ -84,14 +96,6 @@ const Header = () => {
           >
             <span className="menu-text">My Cards</span>
           </a>
-          {/* <a
-            className="menu-link"
-            href="https://rinkeby.opensea.io/accounts/0x1Ca43437430d1845F5Ff43bf73d36568d00740C7?search=%7B%22query%22%3A%22noderunners%22%2C%22sortBy%22%3A%22LISTING_DATE%22%7D "
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <span className="menu-text">My Cards</span>
-          </a> */}
         </li>
         <li className={`menu-item ${getMenuItemActive("stake")} hover-effect2`}>
           <NavLink className="menu-link" to="/stake">
@@ -189,6 +193,13 @@ const Header = () => {
             >
               Home
             </NavLink>
+            <a
+              href="https://noderunners.medium.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              News
+            </a>
             <a
               href="https://opensea.io/account?search=%7B%22query%22%3A%22noderunners%22%2C%22resultModel%22%3A%22ASSETS%22%2C%22sortBy%22%3A%22LAST_TRANSFER_DATE%22%7D"
               target="_blank"
@@ -304,7 +315,7 @@ const HeaderWrapper = styled.div`
       //   }
       // }
 
-      &:nth-of-type(7                                                             ) {
+      &:nth-of-type(8) {
         background-image: url("/static/images/bg/components/header/menu-item-5-bg.png");
         width: 209.05px;
 
