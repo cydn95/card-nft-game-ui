@@ -14,7 +14,7 @@ import NFTStakingModal from "../NFTStakingModal";
 import NFTStakingModalBonus from "../NFTStakingModalBonus";
 
 // import cardsActions from "../../redux/cards/actions";
-import nftStakingActions from "../../redux/oldNFTStaking/actions";
+import nftStakingActions from "../../redux/nftStaking/actions";
 
 import {
   MAX_STAKED_CARD_COUNT

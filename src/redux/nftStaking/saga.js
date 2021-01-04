@@ -33,13 +33,13 @@ export function* getMyCardsCount() {
     const { cards } = payload;
 
     const web3 = yield call(getWeb3);
-    const oldNft = getNFTInstance(web3);
+    const nft = getNFTInstance(web3);
 
     const accounts = yield call(web3.eth.getAccounts);
 
     const newCards = [...cards];
     for (let i = 0; i < cards.length; i++){
-      const ownedCount = yield call(getOwnedCardsCountAsync, oldNft.instance, accounts[0], cards[i].id);
+      const ownedCount = yield call(getOwnedCardsCountAsync, nft.instance, accounts[0], cards[i].id);
       newCards[i].owned = ownedCount;
     }
 
@@ -55,16 +55,16 @@ export function* getApprovedStatus() {
     const { callback } = payload;
 
     const web3 = yield call(getWeb3);
-    const oldNft = getNFTInstance(web3);
-    const oldNftStaking = getNFTStakingInstance(web3);
+    const nft = getNFTInstance(web3);
+    const nftStaking = getNFTStakingInstance(web3);
 
     const accounts = yield call(web3.eth.getAccounts);
 
     const approvedStatusResponse = yield call(
       isApprovedAllAsync,
-      oldNft.instance,
+      nft.instance,
       accounts[0],
-      oldNftStaking.address
+      nftStaking.address
     );
 
     callback(approvedStatusResponse);
@@ -74,14 +74,14 @@ export function* getApprovedStatus() {
 export function* getMyStakedStrength() {
   yield takeLatest(actions.GET_MY_STAKED_STRENGTH, function* () {
     const web3 = yield call(getWeb3);
-    const oldNftStaking = getNFTStakingInstance(web3);
+    const nftStaking = getNFTStakingInstance(web3);
 
     // Get Wallet Account
     const accounts = yield call(web3.eth.getAccounts);
 
     const ret = yield call(
       getStakedStrengthByAddressAsync,
-      oldNftStaking.instance,
+      nftStaking.instance,
       accounts[0]
     );
 
@@ -95,10 +95,10 @@ export function* getMyStakedStrength() {
 export function* getTotalStakedStrength() {
   yield takeLatest(actions.GET_TOTAL_STAKED_STRENGTH, function* () {
     const web3 = yield call(getWeb3);
-    const oldNftStaking = getNFTStakingInstance(web3);
+    const nftStaking = getNFTStakingInstance(web3);
 
     // Get Wallet Account
-    const ret = yield call(getTotalStakedStrengthAsync, oldNftStaking.instance);
+    const ret = yield call(getTotalStakedStrengthAsync, nftStaking.instance);
 
     yield put({
       type: actions.GET_TOTAL_STAKED_STRENGTH_SUCCESS,
@@ -110,12 +110,12 @@ export function* getTotalStakedStrength() {
 export function* getClaimableNDR() {
   yield takeLatest(actions.GET_CLAIMABLE_NDR, function* () {
     const web3 = yield call(getWeb3);
-    const oldNftStaking = getNFTStakingInstance(web3);
+    const nftStaking = getNFTStakingInstance(web3);
 
     const accounts = yield call(web3.eth.getAccounts);
     const ret = yield call(
       getClaimableNDRAsync,
-      oldNftStaking.instance,
+      nftStaking.instance,
       accounts[0]
     );
 
@@ -129,19 +129,19 @@ export function* getClaimableNDR() {
 export function* getNDRPerDay() {
   yield takeLatest(actions.GET_NDR_PER_DAY, function* () {
     const web3 = yield call(getWeb3);
-    const oldNftStaking = getNFTStakingInstance(web3);
+    const nftStaking = getNFTStakingInstance(web3);
 
     const accounts = yield call(web3.eth.getAccounts);
 
-    const rewardRate = yield call(getRewardRateAsync, oldNftStaking.instance);
+    const rewardRate = yield call(getRewardRateAsync, nftStaking.instance);
     const myStrength = yield call(
       getStakedStrengthByAddressAsync,
-      oldNftStaking.instance,
+      nftStaking.instance,
       accounts[0]
     );
     const totalStrength = yield call(
       getTotalStakedStrengthAsync,
-      oldNftStaking.instance
+      nftStaking.instance
     );
 
     const ndrPerDay = ((rewardRate * myStrength) / totalStrength) * 86400;
@@ -156,12 +156,12 @@ export function* getNDRPerDay() {
 export function* getStakedCards() {
   yield takeLatest(actions.GET_STAKED_CARDS, function* () {
     const web3 = yield call(getWeb3);
-    const oldNftStaking = getNFTStakingInstance(web3);
+    const nftStaking = getNFTStakingInstance(web3);
 
     const accounts = yield call(web3.eth.getAccounts);
     const ret = yield call(
       getStakedCardsAsync,
-      oldNftStaking.instance,
+      nftStaking.instance,
       accounts[0]
     );
 
@@ -177,14 +177,14 @@ export function* unStakeCard() {
     const { cardId, callback } = payload;
 
     const web3 = yield call(getWeb3);
-    const oldNftStaking = getNFTStakingInstance(web3);
+    const nftStaking = getNFTStakingInstance(web3);
 
     // Get Wallet Account
     const accounts = yield call(web3.eth.getAccounts);
 
     const unstakeCardResponse = yield call(
       unStakeCardAsync,
-      oldNftStaking.instance,
+      nftStaking.instance,
       web3,
       cardId,
       accounts[0]
@@ -203,14 +203,14 @@ export function* unStakeAllCards() {
     const { callback } = payload;
 
     const web3 = yield call(getWeb3);
-    const oldNftStaking = getNFTStakingInstance(web3);
+    const nftStaking = getNFTStakingInstance(web3);
 
     // Get Wallet Account
     const accounts = yield call(web3.eth.getAccounts);
 
     const unstakeAllCardsResponse = yield call(
       unStakeAllCardsAsync,
-      oldNftStaking.instance,
+      nftStaking.instance,
       web3,
       accounts[0]
     );
@@ -228,14 +228,14 @@ export function* claimNDR() {
     const { callback } = payload;
 
     const web3 = yield call(getWeb3);
-    const oldNftStaking = getNFTStakingInstance(web3);
+    const nftStaking = getNFTStakingInstance(web3);
 
     // Get Wallet Account
     const accounts = yield call(web3.eth.getAccounts);
 
     const claimNDRResponse = yield call(
       claimAsync,
-      oldNftStaking.instance,
+      nftStaking.instance,
       web3,
       accounts[0]
     );
@@ -253,17 +253,17 @@ export function* approveAll() {
     const { approved, callback } = payload;
 
     const web3 = yield call(getWeb3);
-    const oldNft = getNFTInstance(web3);
-    const oldNftStaking = getNFTStakingInstance(web3);
+    const nft = getNFTInstance(web3);
+    const nftStaking = getNFTStakingInstance(web3);
 
     // Get Wallet Account
     const accounts = yield call(web3.eth.getAccounts);
 
     const approveResponse = yield call(
       approveAllCardsAsync,
-      oldNft.instance,
+      nft.instance,
       web3,
-      oldNftStaking.address,
+      nftStaking.address,
       approved,
       accounts[0]
     );
@@ -281,14 +281,14 @@ export function* stakeCard() {
     const { cardId, callback } = payload;
 
     const web3 = yield call(getWeb3);
-    const oldNftStaking = getNFTStakingInstance(web3);
+    const nftStaking = getNFTStakingInstance(web3);
 
     // Get Wallet Account
     const accounts = yield call(web3.eth.getAccounts);
 
     const stakeCardResponse = yield call(
       stakeCardAsync,
-      oldNftStaking.instance,
+      nftStaking.instance,
       web3,
       cardId,
       accounts[0]
