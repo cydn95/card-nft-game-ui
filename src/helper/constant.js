@@ -52,10 +52,10 @@ export const CARD_TYPE = {
 };
 
 export const CARD_RARITY = {
-  LEGENDARY: 16,
-  EPIC: 8,
-  RARE: 4,
-  COMMON: 1,
+  LEGENDARY: 64,
+  EPIC: 32,
+  RARE: 16,
+  COMMON: 4,
 };
 
 export const OPENSEA_BUY_LINK = "https://opensea.io/assets/0x89ee76cc25fcbf1714ed575faa6a10202b71c26a/";

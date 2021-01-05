@@ -53,12 +53,12 @@ const CardBuying = ({
                 </span>
               </div>
             </div>
-            <div className="text-wrapper">
+            {/* <div className="text-wrapper">
               <div className="text-left">
                 <label>APY:</label>
                 <span>{`${apy}%`}</span>
               </div>
-            </div>
+            </div> */}
           </div>
           {card.opensea !== true && Number(card.minted) < Number(card.total_minted) ? (
             <div className="grid-button-wrapper">
@@ -79,7 +79,7 @@ const CardBuying = ({
                     className="hash-button hover-effect2"
                     onClick={(e) => onBuyCardHash(card)}
                   >
-                    {card.hash ? card.hash : card.rarity.weight * CARD_HASH_PRICE_UNIT} Hash
+                    {card.hash ? card.hash : card.rarity.weight * CARD_HASH_PRICE_UNIT / 4} Hash
                   </button>
                 ))}
 
@@ -256,9 +256,10 @@ const CardWrapper = styled.div`
         }
         &.buy-button {
           width: 232px;
-          height: 30.4px;
+          height: 38px;
           background-image: url("/static/images/bg/components/card/buy-button-bg.png");
           background-size: 100% 100%;
+          padding-top: 3px;
 
           span {
             font-family: "arial";
