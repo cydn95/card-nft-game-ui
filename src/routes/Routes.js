@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import { Switch, Route } from "react-router-dom";
 
+import Footer from "../component/Footer";
 import Loader from "../component/Loader";
 import Layout from "../layout/Layout";
 import LandingPage from "../pages/LandingPage";
@@ -20,7 +21,10 @@ const Routes = () => {
             exact
             render={(props) => (
               <Layout bg={layout}>
-                <Component {...props} />
+                <>
+                  <Component {...props} />
+                  <Footer />
+                </>
               </Layout>
             )}
           />
