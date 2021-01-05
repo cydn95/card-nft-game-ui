@@ -34,8 +34,10 @@ const LPStakingBoard = () => {
   const oldStakedAmount = useSelector((state) => state.LpStaking.oldStakedAmount);
   const earningAmount = useSelector((state) => state.LpStaking.earningAmount);
   const stat = useSelector((state) => state.LpStaking.stat)
+  const allowance = useSelector((state) => state.LpStaking.allowance)
 
   const init = useCallback(() => {
+    dispatch(lpstakingActions.getLPTokenAllowance());
     dispatch(lpstakingActions.getLPTokenBalance());
     dispatch(lpstakingActions.getStakedAmount());
     dispatch(lpstakingActions.getOldStakedAmount());
@@ -132,7 +134,7 @@ const LPStakingBoard = () => {
   };
 
   const checkAmount = (amount) => {
-    if (isNaN(amount)) {
+    if (isNaN(amount) || amount.trim() === "") {
       toast.error("Amount should be a number");
       return false;
     }
@@ -164,6 +166,7 @@ const LPStakingBoard = () => {
       {openStatus === DLG_DEPOSIT && (
         <Deposit
           loading={loading}
+          allowance={allowance}
           balance={convertFromWei(balance)}
           staked={convertFromWei(stakedAmount)}
           onClose={handleOpenStake}

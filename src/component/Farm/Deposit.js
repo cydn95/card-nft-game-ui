@@ -7,6 +7,7 @@ import { STAKE_MIN_LIMIT, STAKE_MAX_LIMIT } from "../../helper/constant";
 
 const Deposit = ({
   loading,
+  allowance,
   balance,
   staked,
   onClose,
@@ -72,7 +73,7 @@ const Deposit = ({
             <span>LOADING...</span>
           </div>
         )}
-        {!loading && (
+        {!loading && allowance <= 0 && (
           <div className="action desktop button" onClick={(e) => onApprove()}>
             <Done />
             <span>APPROVE</span>
@@ -96,7 +97,7 @@ const Deposit = ({
             <span>LOADING...</span>
           </div>
         )}
-        {!loading && (
+        {!loading && allowance <= 0 && (
           <div className="action mobile button" onClick={(e) => onApprove()}>
             <Done />
             <span>APPROVE</span>

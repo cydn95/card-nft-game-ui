@@ -6,6 +6,7 @@ import { Reply, ShoppingCart } from "@material-ui/icons";
 import ModalMask from "../../component/ModalMask";
 
 const Stake = ({
+  allowance,
   balance,
   hashes,
   staked,

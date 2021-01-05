@@ -125,7 +125,7 @@ const FarmBoard = ({ token, farm, approved, balance, staked, claimable, stats })
   };
 
   const checkAmount = (amount) => {
-    if (isNaN(amount)) {
+    if (isNaN(amount) || amount.trim() === "") {
       toast.error("Amount should be a number");
       return false;
     }
