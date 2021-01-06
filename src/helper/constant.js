@@ -41,7 +41,7 @@ export const CARD_SERIES = {
 
 export const CARD_SUB_SERIES = {
   HERO: ['Devs', 'Limited'],
-  SUPPORT: ['Wisdom', 'Attack'],
+  SUPPORT: ['Wisdom', 'Attack', 'Weapons'],
   BADGE: ['Generic']
 }
 
@@ -56,6 +56,7 @@ export const CARD_RARITY = {
   EPIC: 32,
   RARE: 16,
   COMMON: 4,
+  BASIC: 1,
 };
 
 export const OPENSEA_BUY_LINK = "https://opensea.io/assets/0x89ee76cc25fcbf1714ed575faa6a10202b71c26a/";

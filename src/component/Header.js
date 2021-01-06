@@ -90,7 +90,7 @@ const Header = () => {
         >
           <a
             className="menu-link"
-            href="https://opensea.io/account?search=%7B%22query%22%3A%22noderunners%22%2C%22resultModel%22%3A%22ASSETS%22%2C%22sortBy%22%3A%22LAST_TRANSFER_DATE%22%7D"
+            href="https://opensea.io/account/noderunners"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -201,7 +201,7 @@ const Header = () => {
               News
             </a>
             <a
-              href="https://opensea.io/account?search=%7B%22query%22%3A%22noderunners%22%2C%22resultModel%22%3A%22ASSETS%22%2C%22sortBy%22%3A%22LAST_TRANSFER_DATE%22%7D"
+              href="https://opensea.io/account/noderunners"
               target="_blank"
               rel="noopener noreferrer"
             >

@@ -4,6 +4,10 @@ import { CARD_RARITY } from "../../helper/constant";
 const initState = {
   cards: [],
   cardPrice: {
+    [CARD_RARITY.BASIC]: {
+      hero: 0,
+      support: 0,
+    },
     [CARD_RARITY.COMMON]: {
       hero: 0,
       support: 0,

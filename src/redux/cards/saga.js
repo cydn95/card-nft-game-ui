@@ -62,6 +62,10 @@ export function* getCardsPrice() {
     const lpStaking = getLPStakingInstance(web3);
 
     const cardPrice = {
+      [CARD_RARITY.BASIC]: {
+        hero: 0,
+        support: 0,
+      },
       [CARD_RARITY.COMMON]: {
         hero: 0,
         support: 0,
@@ -79,6 +83,17 @@ export function* getCardsPrice() {
         support: 0,
       },
     };
+
+    cardPrice[CARD_RARITY.BASIC].hero = yield call(
+      getHeroPriceAsync,
+      lpStaking.instance,
+      CARD_RARITY.BASIC
+    );
+    cardPrice[CARD_RARITY.BASIC].support = yield call(
+      getSupportPriceAsync,
+      lpStaking.instance,
+      CARD_RARITY.BASIC
+    );
 
     cardPrice[CARD_RARITY.COMMON].hero = yield call(
       getHeroPriceAsync,
