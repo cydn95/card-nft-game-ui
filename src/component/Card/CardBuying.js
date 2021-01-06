@@ -79,7 +79,7 @@ const CardBuying = ({
                     className="hash-button hover-effect2"
                     onClick={(e) => onBuyCardHash(card)}
                   >
-                    {card.hash ? card.hash : card.rarity.weight * CARD_HASH_PRICE_UNIT / 4} Hash
+                    {card.hash ? card.hash : card.rarity.weight * CARD_HASH_PRICE_UNIT} Hash
                   </button>
                 ))}
 

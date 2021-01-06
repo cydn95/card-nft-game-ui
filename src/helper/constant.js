@@ -31,7 +31,7 @@ export const RESPONSE = {
   SHOULD_STAKE: 500,
 };
 
-export const CARD_HASH_PRICE_UNIT = 100;
+export const CARD_HASH_PRICE_UNIT = 25;
 
 export const CARD_SERIES = {
   PEOPLE: "People",
