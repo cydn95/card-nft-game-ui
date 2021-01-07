@@ -191,6 +191,8 @@ export function* getTokenStats() {
           ? ((stakingTokenPriceEth * rewardRate * 86400 * 365 * ethPrice) / totalStakedAmount) * 100
           : 0;
 
+      apy = apy / Math.pow(10, 18);
+
     } else {
       const pairtokenInfo = yield call(getPairInfo, tokenInstance.token.prodAddress);
 
@@ -212,6 +214,7 @@ export function* getTokenStats() {
       if (token === "NDR_MEME") {
         apy = apy / Math.pow(10, 10);
       }
+
     }
 
     yield put({
