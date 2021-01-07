@@ -141,7 +141,7 @@ const GetHeroes = () => {
     );
 
     if (index === -1) {
-      return 0
+      return 0;
     } else {
       return cardsApy[index].apy;
     }
@@ -191,7 +191,11 @@ const GetHeroes = () => {
             onBuyCardEth={handleBuyCardEth}
             onBuyCardHash={handleBuyCardHash}
             isHero={CARD_TYPE.HERO.includes(c.series)}
-            eth={cardPrice[c.rarity.weight].hero}
+            eth={
+              CARD_TYPE.HERO.includes(c.series)
+                ? cardPrice[c.rarity.weight].hero
+                : cardPrice[c.rarity.weight].support
+            }
             currentProcessingCardId={selectedCardId}
             loadingHash={isBuyingHash}
             loadingEth={isBuyingEth}
