@@ -1,4 +1,11 @@
-import { all, takeLatest, call, put, fork, takeEvery } from "redux-saga/effects";
+import {
+  all,
+  takeLatest,
+  call,
+  put,
+  fork,
+  takeEvery,
+} from "redux-saga/effects";
 
 import BigNumber from "bignumber.js";
 
@@ -17,7 +24,7 @@ import {
   depositAsync,
   claimAsync,
   exitAsync,
-  getReservesAsync
+  getReservesAsync,
 } from "../../services/web3/lpStaking";
 
 import { getPairInfo, getTokenInfo } from "../../services/graphql";
@@ -166,35 +173,41 @@ export function* getTokenStats() {
       tokenInstance.token.instance
     );
 
-    const totalStakedAmount = yield call(getBalanceAsync, tokenInstance.token.instance, tokenInstance.staking.address);
+    const totalStakedAmount = yield call(
+      getBalanceAsync,
+      tokenInstance.token.instance,
+      tokenInstance.staking.address
+    );
 
     let apy = 0;
 
     if (token === "NDR_SUSHI") {
       const sushiFarm = farms[token].prod;
-      const sushiTokenInfo = yield call (getTokenInfo, sushiFarm.token.token0);
-      const ndrTokenInfo = yield call (getTokenInfo, sushiFarm.token.token1);
-      const sushiLPReserves = yield call(getReservesAsync, tokenInstance.token.instance);
+      const sushiTokenInfo = yield call(getTokenInfo, sushiFarm.token.token0);
+      const ndrTokenInfo = yield call(getTokenInfo, sushiFarm.token.token1);
 
-      // console.log('sushi', sushiTokenInfo);
-      // console.log('ndr', ndrTokenInfo);
-      // console.log('reserves', sushiLPReserves);
+      const sushiLPReserves = yield call(
+        getReservesAsync,
+        tokenInstance.token.instance
+      );
 
       const stakingTokenPriceEth =
         (sushiTokenInfo.derivedETH * sushiLPReserves._reserve0 +
           ndrTokenInfo.derivedETH * sushiLPReserves._reserve1) /
-        (Number(uniTotalSupply) / Math.pow(10, 18)) /
-        2;
-      
+        Number(uniTotalSupply);
+
       apy =
         totalStakedAmount > 0
-          ? ((stakingTokenPriceEth * rewardRate * 86400 * 365 * ethPrice) / totalStakedAmount) * 100
+          ? ((rewardRate * 86400 * 365 * ndrTokenInfo.derivedETH * ethPrice) /
+              (stakingTokenPriceEth * totalStakedAmount * ethPrice)) *
+            100
           : 0;
 
-      apy = apy / Math.pow(10, 18);
-
     } else {
-      const pairtokenInfo = yield call(getPairInfo, tokenInstance.token.prodAddress);
+      const pairtokenInfo = yield call(
+        getPairInfo,
+        tokenInstance.token.prodAddress
+      );
 
       const stakingTokenPriceEth =
         (pairtokenInfo.token0.derivedETH * pairtokenInfo.reserve0 +
@@ -204,7 +217,9 @@ export function* getTokenStats() {
 
       apy =
         totalStakedAmount > 0
-          ? ((stakingTokenPriceEth * rewardRate * 86400 * 365 * ethPrice) / totalStakedAmount) * 100
+          ? ((stakingTokenPriceEth * rewardRate * 86400 * 365 * ethPrice) /
+              totalStakedAmount) *
+            100
           : 0;
 
       if (token === "NDR_ETH" || token === "NDR_MEME") {
@@ -214,7 +229,6 @@ export function* getTokenStats() {
       if (token === "NDR_MEME") {
         apy = apy / Math.pow(10, 10);
       }
-
     }
 
     yield put({
