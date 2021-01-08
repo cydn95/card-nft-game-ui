@@ -44,7 +44,7 @@ const Stake = () => {
         </Nav>
         <Tab.Content>
           <Tab.Pane eventKey="new-pool">
-            {/* <NFTStaking /> */}
+            <NFTStaking />
           </Tab.Pane>
           <Tab.Pane eventKey="old-pool">
             <NFTStakingOld />

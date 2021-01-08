@@ -68,7 +68,7 @@ const NFTStaking = () => {
   const bonusCard = { card: null, unStaked: true, bonus: true };
 
   useEffect(() => {
-    dispatch(nftStakingActions.getStakedCards());
+    // dispatch(nftStakingActions.getStakedCards());
     dispatch(
       nftStakingActions.getApprovedStatus((status) => {
         setApproved(status);

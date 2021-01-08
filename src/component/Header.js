@@ -132,11 +132,11 @@ const Header = () => {
             <span className="menu-text">Forum</span>
           </a>
         </li> */}
-        <li className={`menu-item ${getMenuItemActive("fight-villains")} hover-effect2`}>
+        {/* <li className={`menu-item ${getMenuItemActive("fight-villains")} hover-effect2`}>
           <NavLink className="menu-link" to="/fight-villains">
             <span className="menu-text">Fight Villains</span>
           </NavLink>
-        </li>
+        </li> */}
         <li
           className={`menu-item ${getMenuItemActive(
             "unlock-wallet"
@@ -214,7 +214,7 @@ const Header = () => {
             <NavLink className={`${getMenuItemActive("stake")}`} to="/stake">Stake NFT</NavLink>
             <NavLink className={`${getMenuItemActive("farm")}`} to="/farm">Farm</NavLink>
             <NavLink className={`${getMenuItemActive("get-heroes")}`} to="/get-heroes">Get Cards</NavLink>
-            <NavLink className={`${getMenuItemActive("fight-villains")}`} to="/fight-villains">Fight Villains</NavLink>
+            {/* <NavLink className={`${getMenuItemActive("fight-villains")}`} to="/fight-villains">Fight Villains</NavLink> */}
             {/* <a
               href="http://gov.noderunners.io/"
               target="_blank"
@@ -320,7 +320,7 @@ const HeaderWrapper = styled.div`
       //   }
       // }
 
-      &:nth-of-type(7) {
+      &:nth-of-type(6) {
         background-image: url("/static/images/bg/components/header/menu-item-5-bg.png");
         width: 209.05px;
 
