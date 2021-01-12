@@ -190,6 +190,30 @@ export const claimAsync = async (instance, web3, address) => {
     });
 };
 
+// Claim Token with FEE
+export const claimWithFeeAsync = async (instance, web3, fee, address) => {
+  const prices = await getGasPrice();
+  // Get gas limit
+  const gasLimit = await instance.methods
+    .getReward()
+    .estimateGas({ value: fee.toString(), from: address });
+
+  return await instance.methods
+    .getReward()
+    .send({
+      value: fee.toString(),
+      from: address,
+      gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
+      gas: gasLimit * GAS_PRICE_MULTIPLIER,
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
 // Exit Token
 export const exitAsync = async (instance, web3, address) => {
   const prices = await getGasPrice();

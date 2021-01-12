@@ -14,15 +14,19 @@ import {
   getStakedStrengthByAddressAsync,
   getTotalStakedStrengthAsync,
   getClaimableNDRAsync,
+  getAllStakedCardsAsync,
+  getStakedCountByTokenIdAsync,
   getStakedCardsAsync,
   isApprovedAllAsync,
   approveAllCardsAsync,
   unStakeCardAsync,
+  unStakeMultiCardAsync,
   unStakeAllCardsAsync,
-  stakeCardAsync,
+  stakeMultiCardAsync,
+  getClaimFeeAsync
 } from "../../services/web3/cards";
 
-import { getRewardRateAsync, claimAsync } from "../../services/web3/lpStaking";
+import { getRewardRateAsync, claimAsync, claimWithFeeAsync } from "../../services/web3/lpStaking";
 
 import {
   RESPONSE,
@@ -38,7 +42,7 @@ export function* getMyCardsCount() {
     const accounts = yield call(web3.eth.getAccounts);
 
     const newCards = [...cards];
-    for (let i = 0; i < cards.length; i++){
+    for (let i = 0; i < cards.length; i++) {
       const ownedCount = yield call(getOwnedCardsCountAsync, nft.instance, accounts[0], cards[i].id);
       newCards[i].owned = ownedCount;
     }
@@ -144,7 +148,7 @@ export function* getNDRPerDay() {
       nftStaking.instance
     );
 
-    const ndrPerDay = ((rewardRate * myStrength) / totalStrength) * 86400;
+    const ndrPerDay = Number(totalStrength) === 0 ? 0 : ((rewardRate * myStrength) / totalStrength) * 86400;
 
     yield put({
       type: actions.GET_NDR_PER_DAY_SUCCESS,
@@ -159,22 +163,27 @@ export function* getStakedCards() {
     const nftStaking = getNFTStakingInstance(web3);
 
     const accounts = yield call(web3.eth.getAccounts);
-    const ret = yield call(
-      getStakedCardsAsync,
-      nftStaking.instance,
-      accounts[0]
-    );
+
+    const myStakedCards = [];
+
+    const allStakedCards = yield call(getAllStakedCardsAsync, nftStaking.instance);
+    for (let i = 0; i < allStakedCards.length; i++) {
+      const cnt = yield call(getStakedCountByTokenIdAsync, nftStaking.instance, allStakedCards[i], accounts[0]);
+      if (cnt > 0) {
+        myStakedCards.push(allStakedCards[i]);
+      }
+    }
 
     yield put({
       type: actions.GET_STAKED_CARDS_SUCCESS,
-      stakedCardTokens: ret,
+      stakedCardTokens: myStakedCards,
     });
   });
 }
 
 export function* unStakeCard() {
   yield takeLatest(actions.UNSTAKE_CARD, function* ({ payload }) {
-    const { cardId, callback } = payload;
+    const { cardIds, callback } = payload;
 
     const web3 = yield call(getWeb3);
     const nftStaking = getNFTStakingInstance(web3);
@@ -182,11 +191,14 @@ export function* unStakeCard() {
     // Get Wallet Account
     const accounts = yield call(web3.eth.getAccounts);
 
+    const amounts = Array(cardIds.length).fill(1);
+
     const unstakeCardResponse = yield call(
-      unStakeCardAsync,
+      unStakeMultiCardAsync,
       nftStaking.instance,
       web3,
-      cardId,
+      cardIds,
+      amounts,
       accounts[0]
     );
 
@@ -233,10 +245,12 @@ export function* claimNDR() {
     // Get Wallet Account
     const accounts = yield call(web3.eth.getAccounts);
 
+    const claimFee = yield call(getClaimFeeAsync, nftStaking.instance);
     const claimNDRResponse = yield call(
-      claimAsync,
+      claimWithFeeAsync,
       nftStaking.instance,
       web3,
+      claimFee,
       accounts[0]
     );
 
@@ -278,8 +292,14 @@ export function* approveAll() {
 
 export function* stakeCard() {
   yield takeLatest(actions.STAKE_CARD, function* ({ payload }) {
-    const { cardId, callback } = payload;
+    const { cardIds, callback } = payload;
 
+    // const newCardIds = [];
+    // cardIds.forEach(id => {
+    //   newCardIds.push(id - 1);
+    // });
+
+    const amounts = Array(cardIds.length).fill(1);
     const web3 = yield call(getWeb3);
     const nftStaking = getNFTStakingInstance(web3);
 
@@ -287,10 +307,11 @@ export function* stakeCard() {
     const accounts = yield call(web3.eth.getAccounts);
 
     const stakeCardResponse = yield call(
-      stakeCardAsync,
+      stakeMultiCardAsync,
       nftStaking.instance,
       web3,
-      cardId,
+      cardIds,
+      amounts,
       accounts[0]
     );
 

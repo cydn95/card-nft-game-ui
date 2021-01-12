@@ -16,9 +16,7 @@ import NFTStakingModalBonus from "../NFTStakingModalBonus";
 // import cardsActions from "../../redux/cards/actions";
 import nftStakingActions from "../../redux/nftStaking/actions";
 
-import {
-  MAX_STAKED_CARD_COUNT
-} from "../../helper/constant";
+import { CARD_SERIES } from "../../helper/constant";
 
 const NFTStaking = () => {
   const dispatch = useDispatch();
@@ -30,6 +28,7 @@ const NFTStaking = () => {
   const [bonusStakeDlgOpen, setBonusStakeDlgOpen] = useState(false);
 
   const [unStakeLoading, setUnStakeLoading] = useState(false);
+  const [unStakeLoadingBonus, setUnStakeLoadingBonus] = useState(false);
   const [approveLoading, setApproveLoading] = useState(false);
   const [approved, setApproved] = useState(false);
 
@@ -40,35 +39,47 @@ const NFTStaking = () => {
 
   const stakedCards = useMemo(() => {
     const ret = [];
-    for (let i = 0; i < 4; i++) {
-      ret.push({
-        card: null,
-        unStaked: true,
-      });
-    }
-
-    let cnt = 0;
     for (let i = 0; i < stakedCardTokens.length; i++) {
       const cardIndex = cards.findIndex(
         (e) => Number(e.id) === Number(stakedCardTokens[i])
       );
+
       if (cardIndex >= 0) {
-        ret[cnt].card = { ...cards[cardIndex] };
-        ret[cnt].unStaked = false;
-        cnt++;
+
+        if (cards[cardIndex].series === CARD_SERIES.BADGE) continue;
+
+        ret.push({
+          card: { ...cards[cardIndex] },
+          unStaked: false,
+        });
       }
     }
     return ret;
   }, [cards, stakedCardTokens]);
 
-  const remainStakableCards = useMemo(() => {
-    return MAX_STAKED_CARD_COUNT - stakedCardTokens.length;
-  }, [stakedCardTokens]);
+  const bonusCard = useMemo(() => {
+    for (let i = 0; i < stakedCardTokens.length; i++) {
+      const cardIndex = cards.findIndex(
+        (e) => Number(e.id) === Number(stakedCardTokens[i])
+      );
+      if (cardIndex >= 0) {
 
-  const bonusCard = { card: null, unStaked: true, bonus: true };
+        if (cards[cardIndex].series !== CARD_SERIES.BADGE) continue;
+
+        return {
+          card: { ...cards[cardIndex] },
+          unStaked: false,
+          bonus: true
+        }
+      }
+    }
+
+    return { card: null, unStaked: true, bonus: true };
+
+  }, [cards, stakedCardTokens]);
 
   useEffect(() => {
-    // dispatch(nftStakingActions.getStakedCards());
+    dispatch(nftStakingActions.getStakedCards());
     dispatch(
       nftStakingActions.getApprovedStatus((status) => {
         setApproved(status);
@@ -105,21 +116,43 @@ const NFTStaking = () => {
     }
 
     setUnStakeLoading(true);
-    // dispatch(
-    //   oldNFTStakingActions.unStakeCard(cardId, (status) => {
-    //     setUnstakeCardIds([]);
-    //     setUnStakeLoading(false);
-    //     if (status) {
-    //       toast.success("Sucess");
-    //       dispatch(oldNFTStakingActions.getStakedCards());
-    //       dispatch(oldNFTStakingActions.getMyStakedStrength());
-    //       dispatch(oldNFTStakingActions.getTotalStakedStrength());
-    //       dispatch(oldNFTStakingActions.getClaimableNDR());
-    //     } else {
-    //       toast.error("Failed...");
-    //     }
-    //   })
-    // );
+    dispatch(
+      nftStakingActions.unStakeCard(selectedUnstakeCardIds, (status) => {
+        setSelectedUnstakeCardIds([]);
+        setUnStakeLoading(false);
+        if (status) {
+          toast.success("Sucess");
+          dispatch(nftStakingActions.getStakedCards());
+          dispatch(nftStakingActions.getMyStakedStrength());
+          dispatch(nftStakingActions.getTotalStakedStrength());
+          dispatch(nftStakingActions.getClaimableNDR());
+        } else {
+          toast.error("Failed...");
+        }
+      })
+    );
+  };
+
+  const handleUnStakeBonus = (cardId) => {
+    if (unStakeLoadingBonus) {
+      return;
+    }
+
+    setUnStakeLoadingBonus(true);
+    dispatch(
+      nftStakingActions.unStakeCard([cardId], (status) => {
+        setUnStakeLoadingBonus(false);
+        if (status) {
+          toast.success("Sucess");
+          dispatch(nftStakingActions.getStakedCards());
+          dispatch(nftStakingActions.getMyStakedStrength());
+          dispatch(nftStakingActions.getTotalStakedStrength());
+          dispatch(nftStakingActions.getClaimableNDR());
+        } else {
+          toast.error("Failed...");
+        }
+      })
+    );
   };
 
   const handleOpenStakeModal = () => {
@@ -164,7 +197,6 @@ const NFTStaking = () => {
         <div className="modal-container">
           <NFTStakeModalMask />
           <NFTStakingModal
-            remainStakableCards={remainStakableCards}
             onClose={handleCloseStakeModal}
           />
         </div>
@@ -173,9 +205,7 @@ const NFTStaking = () => {
       {bonusStakeDlgOpen && (
         <div className="modal-container">
           <NFTStakeModalMask />
-          <NFTStakingModalBonus
-            onClose={handleCloseBonusStakeModal}
-          />
+          <NFTStakingModalBonus onClose={handleCloseBonusStakeModal} />
         </div>
       )}
 
@@ -197,6 +227,42 @@ const NFTStaking = () => {
               `Unstake selected`
             )}
           </div>
+          <StakeButtonWrapper>
+            {approveLoading ? (
+              <div
+                className="stake-button button-approve-all"
+                role="button"
+                onClick={(e) => handleApproveAll()}
+              >
+                <img
+                  src="/static/images/icons/loading.gif"
+                  height="25"
+                  alt=""
+                  style={{ marginTop: 3, marginRight: 5 }}
+                />{" "}
+                Approving...{" "}
+              </div>
+            ) : (
+              !approved && (
+                <div
+                  className="stake-button button-approve-all"
+                  role="button"
+                  onClick={(e) => handleApproveAll()}
+                >
+                  Approve all
+                </div>
+              )
+            )}
+            {approved && (
+              <div
+                role="button"
+                className="stake-button button-stake-all"
+                onClick={(e) => handleOpenStakeModal()}
+              >
+                Stake Hero/Support
+              </div>
+            )}
+          </StakeButtonWrapper>
         </div>
       </MenuWrapper>
       <CardContainer>
@@ -211,58 +277,28 @@ const NFTStaking = () => {
             />
           ))}
       </CardContainer>
-      <StakeButtonWrapper>
-        {approveLoading ? (
-          <div
-            className="stake-button button-approve-all"
-            role="button"
-            onClick={(e) => handleApproveAll()}
-          >
-            <img
-              src="/static/images/icons/loading.gif"
-              height="25"
-              alt=""
-              style={{ marginTop: 3, marginRight: 5 }}
-            />{" "}
-            Approving...{" "}
-          </div>
-        ) : (
-          <div
-            className="stake-button button-approve-all"
-            role="button"
-            onClick={(e) => handleApproveAll()}
-          >
-            Approve all
-          </div>
-        )}
-        {approved && (
-          <div
-            role="button"
-            className="stake-button button-stake-all"
-            onClick={(e) => handleOpenStakeModal()}
-          >
-            Stake Hero/Support
-          </div>
-        )}
-      </StakeButtonWrapper>
+
       <MenuWrapper className="animation-fadeInRight" style={{ marginTop: 50 }}>
         <SectionTitle title="Staked Bonus card" long />
-        <h2>In order to stake bonus card you need to stake at least 1 hero or support card.</h2>
+        {stakedCards.length === 0 && (
+          <h2>
+            In order to stake bonus card you need to stake at least 1 hero or
+            support card.
+          </h2>
+        )}
       </MenuWrapper>
-      <CardContainer style={{ marginBottom: 100 }}>
-        <CardStakingBonus
-          card={bonusCard.card}
-          unStaked={bonusCard.unStaked}
-          currentProcessingCardId={0}
-          onUnStake={handleUnStake}
-          onStake={handleOpenBonusStakeModal}
-          loadingUnStake={unStakeLoading}
-          approved={approved}
-          loadingApprove={approveLoading}
-          onApprove={handleApproveAll}
-          bonus
-        />
-      </CardContainer>
+
+      {stakedCards.length > 0 && (
+        <CardContainer style={{ marginBottom: 100 }}>
+          <CardStakingBonus
+            card={bonusCard.card}
+            unStaked={bonusCard.unStaked}
+            onUnStake={handleUnStakeBonus}
+            onStake={handleOpenBonusStakeModal}
+            loadingUnStake={unStakeLoadingBonus}
+          />
+        </CardContainer>
+      )}
     </StakePageContainer>
   );
 };
@@ -357,12 +393,13 @@ const MenuWrapper = styled.div`
 const StakeButtonWrapper = styled.div`
   display: flex;
   justify-content: center;
+  margin-left: 20px;
 
   .stake-button {
     width: 210px;
     height: 32px;
     padding-top: 2px;
-    font-family: Orbitron-Black;
+    font-family: Orbitron-Medium;
     color: #161617;
     cursor: pointer;
 

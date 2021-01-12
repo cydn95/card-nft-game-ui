@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { useSelector /*useDispatch*/ } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import styled from "styled-components";
 
@@ -8,24 +8,28 @@ import styled from "styled-components";
 import SectionTitle from "../../component/SectionTitle";
 import LoadingTextIcon from "../../component/LoadingTextIcon";
 
+import { CARD_SERIES } from "../../helper/constant";
+
 // import cardsActions from "../../redux/cards/actions";
 // import oldNFTStakingActions from "../../redux/oldNFTStaking/actions";
+import nftStakingActions from "../../redux/nftStaking/actions";
 
-const NFTStakingModal = ({ remainStakableCards, onClose }) => {
-  // const dispatch = useDispatch();
+const NFTStakingModal = ({ onClose }) => {
+  const dispatch = useDispatch();
 
   const [stakeLoading, setStakeLoading] = useState(false);
   const [selectedCardIds, setSelectedCardIds] = useState([]);
 
   const cards = useSelector((state) => state.Cards.cards);
   const stakedCardTokens = useSelector(
-    (state) => state.OldNFTStaking.stakedCardTokens
+    (state) => state.NFTStaking.stakedCardTokens
   );
 
   const unStakeCards = useMemo(() => {
     const ret = [];
 
     for (let i = 0; i < cards.length; i++) {
+      if (cards[i].series === CARD_SERIES.BADGE) continue;
       const idx = stakedCardTokens.findIndex(
         (e) => Number(e) === Number(cards[i].id)
       );
@@ -46,25 +50,24 @@ const NFTStakingModal = ({ remainStakableCards, onClose }) => {
     }
 
     if (stakeLoading) return;
-
+    // console.log(selectedCardIds);
     setStakeLoading(true);
-    // dispatch(
-    //   oldNFTStakingActions.stakeCard(cardId, (status) => {
-    //     setSelectedCardIds([]);
-    //     setStakeLoading(false);
-    //     if (status) {
-    //       toast.success("Staked successfully");
-    //       dispatch(cardsActions.getCards());
-    //       dispatch(oldNFTStakingActions.getStakedCards());
-    //       dispatch(oldNFTStakingActions.getMyStakedStrength());
-    //       dispatch(oldNFTStakingActions.getTotalStakedStrength());
-    //       dispatch(oldNFTStakingActions.getClaimableNDR());
-    //       onClose();
-    //     } else {
-    //       toast.error("Staked failed");
-    //     }
-    //   })
-    // );
+    dispatch(
+      nftStakingActions.stakeCard(selectedCardIds, (status) => {
+        setSelectedCardIds([]);
+        setStakeLoading(false);
+        if (status) {
+          toast.success("Staked successfully");
+          dispatch(nftStakingActions.getStakedCards());
+          dispatch(nftStakingActions.getMyStakedStrength());
+          dispatch(nftStakingActions.getTotalStakedStrength());
+          dispatch(nftStakingActions.getClaimableNDR());
+          onClose();
+        } else {
+          toast.error("Staked failed");
+        }
+      })
+    );
   };
 
   const handleSelectCard = (e, cardId) => {
@@ -76,9 +79,7 @@ const NFTStakingModal = ({ remainStakableCards, onClose }) => {
     if (findIndex >= 0) {
       oldSelectedCard.splice(findIndex, 1);
     } else {
-      if (oldSelectedCard.length < remainStakableCards) {
-        oldSelectedCard.push(cardId);
-      }
+      oldSelectedCard.push(cardId);
     }
     setSelectedCardIds([...oldSelectedCard]);
   };
@@ -90,7 +91,9 @@ const NFTStakingModal = ({ remainStakableCards, onClose }) => {
       </MenuWrapper>
       <MenuWrapper className="animation-fadeInRight">
         <div className="menu-actions">
-          <div className="menu-item selected-card-count">{`${selectedCardIds.length}/${remainStakableCards} Selected`}</div>
+          <div className="menu-item selected-card-count">
+            {`${selectedCardIds.length} Cards Selected`}
+          </div>
           <div
             role="button"
             className="menu-item stake-button"
@@ -145,6 +148,8 @@ const NFTStakeModalContainer = styled.div`
   z-index: 200;
   overflow-y: auto;
   padding-top: 100px;
+  padding-left: 10%;
+  padding-right: 10%;
 
   .header {
     width: 100%;
@@ -248,6 +253,7 @@ const MenuWrapper = styled.div`
       background-size: 100% 100%;
       font-family: Orbitron-Black;
       color: #fec100;
+      padding-left: 20px;
     }
 
     .stake-button {

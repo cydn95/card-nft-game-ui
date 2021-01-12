@@ -52,17 +52,17 @@ const actions = {
     type: actions.APPROVE_ALL,
     payload: { approved, callback },
   }),
-  unStakeCard: (cardId, callback) => ({
+  unStakeCard: (cardIds, callback) => ({
     type: actions.UNSTAKE_CARD,
-    payload: { cardId, callback },
+    payload: { cardIds, callback },
   }),
   unStakeAllCards: (callback) => ({
     type: actions.UNSTAKE_ALL_CARDS,
     payload: { callback },
   }),
-  stakeCard: (cardId, callback) => ({
+  stakeCard: (cardIds, callback) => ({
     type: actions.STAKE_CARD,
-    payload: { cardId, callback },
+    payload: { cardIds, callback },
   }),
   claimNDR: (callback) => ({
     type: actions.CLAIM_NDR,

@@ -51,7 +51,6 @@ const NFTStakingBoard = () => {
         setUnStakeAllLoading(false);
         if (status) {
           toast.success("Sucess");
-          dispatch(cardsActions.getCards());
           dispatch(nftStakingActions.getStakedCards());
           dispatch(nftStakingActions.getMyStakedStrength());
           dispatch(nftStakingActions.getTotalStakedStrength());
@@ -111,7 +110,7 @@ const NFTStakingBoard = () => {
           </div>
           <div>
             <label>NDR per day:</label>
-            <span>{convertFromWei(ndrPerDay, 3)}</span>
+            <span>{convertFromWei(ndrPerDay, 4)}</span>
           </div>
         </div>
         {claimNDRLoading ? (
