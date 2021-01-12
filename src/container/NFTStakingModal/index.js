@@ -29,7 +29,6 @@ const NFTStakingModal = ({ onClose }) => {
     const ret = [];
 
     for (let i = 0; i < cards.length; i++) {
-      if (cards[i].series === CARD_SERIES.BADGE) continue;
       const idx = stakedCardTokens.findIndex(
         (e) => Number(e) === Number(cards[i].id)
       );
@@ -94,7 +93,7 @@ const NFTStakingModal = ({ onClose }) => {
           <div className="menu-item selected-card-count">
             {`${selectedCardIds.length} Cards Selected`}
           </div>
-          <div
+          {selectedCardIds.length > 0 && <div
             role="button"
             className="menu-item stake-button"
             onClick={(e) => handleStake(e)}
@@ -102,9 +101,9 @@ const NFTStakingModal = ({ onClose }) => {
             {stakeLoading ? (
               <LoadingTextIcon loadingText="Staking..." />
             ) : (
-              `Stake selected`
-            )}
-          </div>
+                `Stake selected`
+              )}
+          </div>}
         </div>
       </MenuWrapper>
       <div
@@ -151,6 +150,11 @@ const NFTStakeModalContainer = styled.div`
   padding-left: 10%;
   padding-right: 10%;
 
+  @media screen and (max-width: 768px) {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
   .header {
     width: 100%;
     box-sizing: border-box;
@@ -158,6 +162,10 @@ const NFTStakeModalContainer = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    @media screen and (max-width: 768px) {
+      padding: 75px 0px 0px;
+    }
 
     h2 {
       font-size: 1.875rem;
@@ -229,6 +237,10 @@ const MenuWrapper = styled.div`
   justify-content: start;
   padding: 0px 7.5%;
 
+  @media screen and (max-width: 768px) {
+    padding: 0px;
+  }
+
   h2 {
     font-family: Orbitron-Black;
     font-size: 1.5rem;
@@ -240,12 +252,14 @@ const MenuWrapper = styled.div`
   .menu-actions {
     display: flex;
     padding-left: 20px;
+    flex-flow: row wrap;
 
     .menu-item {
       width: 210px;
       height: 32px;
       padding-left: 40px;
       padding-top: 6px;
+      margin-bottom: 5px;
     }
 
     .selected-card-count {
