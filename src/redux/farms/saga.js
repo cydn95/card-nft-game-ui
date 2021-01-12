@@ -202,33 +202,40 @@ export function* getTokenStats() {
               (stakingTokenPriceEth * totalStakedAmount * ethPrice)) *
             100
           : 0;
-
     } else {
       const pairtokenInfo = yield call(
         getPairInfo,
         tokenInstance.token.prodAddress
       );
 
+      let ndrPrice = pairtokenInfo.token0.derivedETH * ethPrice;
+
+      if (token === "NDR_GHST") {
+        ndrPrice = pairtokenInfo.token1.derivedETH * ethPrice;
+      }
+
       const stakingTokenPriceEth =
         (pairtokenInfo.token0.derivedETH * pairtokenInfo.reserve0 +
           pairtokenInfo.token1.derivedETH * pairtokenInfo.reserve1) /
-        (Number(uniTotalSupply) / Math.pow(10, 18)) /
-        2;
+        (Number(uniTotalSupply) / Math.pow(10, 18));
+
+      // console.log("stakingTokenPrice", stakingTokenPriceEth * ethPrice);
+      // console.log("ndr price", pairtokenInfo.token0.derivedETH * ethPrice);
+      // console.log("totalStakedAmount", totalStakedAmount);
+      // console.log(
+      //   "rewardRate",
+      //   rewardRate,
+      //   (rewardRate * 86400 * 365 * ndrPrice) / Math.pow(10, 18)
+      // );
 
       apy =
         totalStakedAmount > 0
-          ? ((stakingTokenPriceEth * rewardRate * 86400 * 365 * ethPrice) /
-              totalStakedAmount) *
+          ? ((rewardRate * 86400 * 365 * ndrPrice) /
+              totalStakedAmount /
+              stakingTokenPriceEth /
+              ethPrice) *
             100
           : 0;
-
-      if (token === "NDR_ETH" || token === "NDR_MEME") {
-        apy = apy / ethPrice;
-      }
-
-      if (token === "NDR_MEME") {
-        apy = apy / Math.pow(10, 10);
-      }
     }
 
     yield put({
