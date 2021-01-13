@@ -37,12 +37,12 @@ export { DEV_NDR_ABI, PROD_NDR_ABI };
 
 // NFT TOKEN
 export const DEV_NFT_ADDRESS = "0x7fcc8188ef983bc54e7d50c4d46d20ca0174cc37";
-export const PROD_NFT_ADDRESS = "0x7fcc8188ef983bc54e7d50c4d46d20ca0174cc37";
+export const PROD_NFT_ADDRESS = "0x89ee76cc25fcbf1714ed575faa6a10202b71c26a";
 export { DEV_NFT_ABI, PROD_NFT_ABI };
 
 // NFT Staking
 export const DEV_NFT_STAKING_ADDRESS = "0x8d38f755ade31055007c4fb49ff1f06639df0876";
-export const PROD_NFT_STAKING_ADDRESS = "0x8d38f755ade31055007c4fb49ff1f06639df0876";
+export const PROD_NFT_STAKING_ADDRESS = "0x81b6a8bf87817adca4874838560966957c3e01e5";
 export { DEV_NFT_STAKING_ABI, PROD_NFT_STAKING_ABI };
 
 // web3 provider (not using for now)
