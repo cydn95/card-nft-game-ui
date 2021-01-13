@@ -50,7 +50,8 @@ export const DEV_WEB3_WEBSOCKET_PROVIDER = "wss://kovan.infura.io/ws/v3/235035a1
 export const PROD_WEB3_WEBSOCKET_PROVIDER = "wss://mainnet.infura.io/ws/v3/235035a10d0a4a9eadc71fff0c1240dc";
 
 // WETH (MainNet)
-export const WETH_TOKEN = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+export const WETH_TOKEN = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
 
 // Gas price multiplier
-export const GAS_PRICE_MULTIPLIER = 2
+export const GAS_PRICE_MULTIPLIER = 2;
+export const CARD_STRENGTH_MULTIPLIER = 100;

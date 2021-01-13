@@ -6,9 +6,9 @@ import { PROD_NDR_ADDRESS } from "../../helper/contract";
 
 import { getWeb3, getGasPrice } from "../../services/web3";
 import {
-  getOldNFTInstance,
-  getOldNFTStakingInstance,
   getLPStakingInstance,
+  getNFTStakingInstance,
+  getNFTInstance,
 } from "../../services/web3/instance";
 
 import {
@@ -18,7 +18,10 @@ import {
   getTotalStakedStrengthAsync,
 } from "../../services/web3/cards";
 
-import { getEarningAsync, getRewardRateAsync } from "../../services/web3/lpStaking";
+import {
+  getEarningAsync,
+  getRewardRateAsync,
+} from "../../services/web3/lpStaking";
 import { getTokenInfo } from "../../services/graphql";
 
 import {
@@ -27,7 +30,10 @@ import {
   CARD_TYPE,
   RESPONSE,
 } from "../../helper/constant";
-import { GAS_PRICE_MULTIPLIER } from "../../helper/contract";
+import {
+  GAS_PRICE_MULTIPLIER,
+  CARD_STRENGTH_MULTIPLIER,
+} from "../../helper/contract";
 import { cardCompare, getCardType } from "../../helper/utils";
 import { getCardsAPI } from "../../services/axios/api";
 
@@ -150,7 +156,7 @@ export function* getCardsApy() {
   yield takeLatest(actions.GET_CARDS_APY, function* ({ payload }) {
     const web3 = yield call(getWeb3);
 
-    const nftStaking = getOldNFTStakingInstance(web3);
+    const nftStaking = getNFTStakingInstance(web3);
 
     const { cards, cardPrice } = payload;
     const cardsApy = [];
@@ -186,7 +192,12 @@ export function* getCardsApy() {
     const ndrEthPrice = parseFloat(ndrTokenInfo.derivedETH).toFixed(4);
 
     cardsApy.forEach((card, index) => {
-      const ndrPerDay = ((rewardRate * card.strength) / totalStrength) * 86400;
+      const ndrPerDay =
+        Number(totalStrength) === 0
+          ? 0
+          : ((rewardRate * card.strength) /
+              (totalStrength / CARD_STRENGTH_MULTIPLIER)) *
+            86400;
       const apy = ((ndrPerDay * ndrEthPrice * 365) / card.price) * 100;
       cardsApy[index].apy = apy.toFixed(2);
     });
@@ -203,7 +214,7 @@ export function* getMintedCount() {
     const { cards } = payload;
 
     const web3 = yield call(getWeb3);
-    const nft = getOldNFTInstance(web3);
+    const nft = getNFTInstance(web3);
 
     const newCards = [...cards];
     for (let i = 0; i < cards.length; i++) {

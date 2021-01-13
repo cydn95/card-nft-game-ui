@@ -5,9 +5,10 @@ import styled from "styled-components";
 import { toast } from "react-toastify";
 
 import { convertFromWei } from "../../helper/utils";
-import cardsActions from "../../redux/cards/actions";
 import lpstakingActions from "../../redux/lpstaking/actions";
 import nftStakingActions from "../../redux/nftStaking/actions";
+
+import { CARD_STRENGTH_MULTIPLIER } from "../../helper/contract";
 
 const NFTStakingBoard = () => {
   const dispatch = useDispatch();
@@ -97,11 +98,11 @@ const NFTStakingBoard = () => {
         )}
         <div className="stat">
           <h6>My Staked Strength</h6>
-          <p>{myStakedStrength}</p>
+          <p>{(myStakedStrength / CARD_STRENGTH_MULTIPLIER).toFixed(1)}</p>
         </div>
         <div className="stat">
           <h6>Total Staked Strength</h6>
-          <p>{totalStakedStrength}</p>
+          <p>{(totalStakedStrength / CARD_STRENGTH_MULTIPLIER).toFixed(1)}</p>
         </div>
         <div className="stat">
           <div style={{ marginTop: -3 }}>

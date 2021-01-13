@@ -16,17 +16,15 @@ import {
   getClaimableNDRAsync,
   getAllStakedCardsAsync,
   getStakedCountByTokenIdAsync,
-  getStakedCardsAsync,
   isApprovedAllAsync,
   approveAllCardsAsync,
-  unStakeCardAsync,
   unStakeMultiCardAsync,
   unStakeAllCardsAsync,
   stakeMultiCardAsync,
   getClaimFeeAsync
 } from "../../services/web3/cards";
 
-import { getRewardRateAsync, claimAsync, claimWithFeeAsync } from "../../services/web3/lpStaking";
+import { getRewardRateAsync, claimWithFeeAsync } from "../../services/web3/lpStaking";
 
 import {
   RESPONSE,
