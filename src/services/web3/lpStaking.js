@@ -1,5 +1,5 @@
 import { getGasPrice } from "../web3";
-import { GAS_PRICE_MULTIPLIER } from "../../helper/contract";
+import { getGasFee } from "../../helper/contract";
 
 export const getEarningAsync = async (instance, address) => {
   return await instance.methods
@@ -98,7 +98,7 @@ export const depositAsync = async (instance, web3, amount, address) => {
     .send({
       from: address,
       gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
-      gas: gasLimit * GAS_PRICE_MULTIPLIER,
+      gas: getGasFee(gasLimit),
     })
     .then((data) => {
       return data;
@@ -121,7 +121,7 @@ export const withdrawAsync = async (instance, web3, amount, address) => {
     .send({
       from: address,
       gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
-      gas: gasLimit * GAS_PRICE_MULTIPLIER,
+      gas: getGasFee(gasLimit),
     })
     .then((data) => {
       return data;
@@ -156,7 +156,7 @@ export const approveAsync = async (
     .send({
       from: address,
       gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
-      gas: gasLimit * GAS_PRICE_MULTIPLIER,
+      gas: getGasFee(gasLimit),
     })
     .then((data) => {
       return data;
@@ -180,7 +180,7 @@ export const claimAsync = async (instance, web3, address) => {
     .send({
       from: address,
       gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
-      gas: gasLimit * GAS_PRICE_MULTIPLIER,
+      gas: getGasFee(gasLimit),
     })
     .then((data) => {
       return data;
@@ -204,7 +204,7 @@ export const claimWithFeeAsync = async (instance, web3, fee, address) => {
       value: fee.toString(),
       from: address,
       gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
-      gas: gasLimit * GAS_PRICE_MULTIPLIER,
+      gas: getGasFee(gasLimit),
     })
     .then((data) => {
       return data;
@@ -228,7 +228,7 @@ export const exitAsync = async (instance, web3, address) => {
     .send({
       from: address,
       gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
-      gas: gasLimit * GAS_PRICE_MULTIPLIER,
+      gas: getGasFee(gasLimit),
     })
     .then((data) => {
       return data;

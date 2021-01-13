@@ -55,3 +55,7 @@ export const WETH_TOKEN = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
 // Gas price multiplier
 export const GAS_PRICE_MULTIPLIER = 1.3;
 export const CARD_STRENGTH_MULTIPLIER = 100;
+
+export const getGasFee = (gasPrice) => {
+  return Math.round(gasPrice * GAS_PRICE_MULTIPLIER);
+}

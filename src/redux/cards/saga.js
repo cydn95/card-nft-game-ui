@@ -31,8 +31,8 @@ import {
   RESPONSE,
 } from "../../helper/constant";
 import {
-  GAS_PRICE_MULTIPLIER,
   CARD_STRENGTH_MULTIPLIER,
+  getGasFee
 } from "../../helper/contract";
 import { cardCompare, getCardType } from "../../helper/utils";
 import { getCardsAPI } from "../../services/axios/api";
@@ -283,7 +283,7 @@ export function* buyHeroCardEth() {
           from: address,
           value: cardPrice.toString(),
           gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
-          gas: gasLimit * GAS_PRICE_MULTIPLIER,
+          gas: getGasFee(gasLimit),
         })
         .then((data) => {
           return data;
@@ -343,7 +343,7 @@ export function* buyHeroCardHash() {
         .send({
           from: address,
           gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
-          gas: gasLimit * GAS_PRICE_MULTIPLIER,
+          gas: getGasFee(gasLimit),
         })
         .then((data) => {
           return data;
