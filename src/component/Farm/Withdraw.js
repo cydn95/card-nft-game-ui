@@ -39,15 +39,7 @@ const Withdraw = ({ loading, old, staked, onClose, onWithdraw }) => {
         </div>
         <div className="input">
           <div className="buttons">
-            <span
-              role="button"
-              onClick={(e) => setAmount(STAKE_MIN_LIMIT)}
-              className="min"
-            >
-              MIN
-              <br />
-              <small>{STAKE_MIN_LIMIT}</small>
-            </span>
+            <span role="button" className="min"></span>
             <span role="button" onClick={(e) => setMax()} className="max">
               MAX
               <br />
@@ -112,7 +104,7 @@ const WithdrawWrapper = styled.div`
       }
     }
 
-     &.mobile {
+    &.mobile {
       @media screen and (max-width: 400px) {
         flex-direction: column-reverse;
         padding-left: 20px;
@@ -198,7 +190,7 @@ const WithdrawWrapper = styled.div`
             width: 100%;
             height: 50px;
             flex-direction: row;
-            
+
             &:nth-child(1) {
               margin-right: 0px;
               margin-top: 15px;
@@ -253,7 +245,7 @@ const WithdrawWrapper = styled.div`
         }
 
         input {
-          width: 112px;
+          width: 100%;
           text-align: center;
           background: none;
           border: none;

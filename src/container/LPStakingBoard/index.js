@@ -138,10 +138,6 @@ const LPStakingBoard = () => {
       toast.error("Amount should be a number");
       return false;
     }
-    if (parseFloat(amount) < parseFloat(STAKE_MIN_LIMIT)) {
-      toast.error(`Amount should be at least ${STAKE_MIN_LIMIT}`);
-      return false;
-    }
     if (parseFloat(amount) > parseFloat(STAKE_MAX_LIMIT)) {
       toast.error(`Amount can not be more than ${STAKE_MAX_LIMIT}`);
       return false;

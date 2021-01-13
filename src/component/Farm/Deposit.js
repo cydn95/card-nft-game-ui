@@ -19,7 +19,7 @@ const Deposit = ({
 
   const handleChangeAmount = (e) => {
     setAmount(e.target.value);
-    setIsMax(false)
+    setIsMax(false);
   };
 
   const setMax = () => {
@@ -50,15 +50,7 @@ const Deposit = ({
         </div>
         <div className="input">
           <div className="buttons">
-            <span
-              role="button"
-              onClick={(e) => setAmount(STAKE_MIN_LIMIT)}
-              className="min"
-            >
-              MIN
-              <br />
-              <small>{STAKE_MIN_LIMIT}</small>
-            </span>
+            <span role="button" className="min"></span>
             <span role="button" onClick={(e) => setMax()} className="max">
               MAX
               <br />
@@ -80,7 +72,10 @@ const Deposit = ({
           </div>
         )}
         {!loading && (
-          <div className="action desktop button" onClick={(e) => onDeposit(amount, isMax)}>
+          <div
+            className="action desktop button"
+            onClick={(e) => onDeposit(amount, isMax)}
+          >
             <DoubleArrow />
             <span>STAKE</span>
           </div>
@@ -104,7 +99,10 @@ const Deposit = ({
           </div>
         )}
         {!loading && (
-          <div className="action mobile button" onClick={(e) => onDeposit(amount, isMax)}>
+          <div
+            className="action mobile button"
+            onClick={(e) => onDeposit(amount, isMax)}
+          >
             <DoubleArrow />
             <span>STAKE</span>
           </div>
@@ -127,7 +125,7 @@ const DepositWrapper = styled.div`
       }
     }
 
-     &.mobile {
+    &.mobile {
       @media screen and (max-width: 400px) {
         flex-direction: column-reverse;
         padding-left: 20px;
@@ -202,7 +200,8 @@ const DepositWrapper = styled.div`
             width: calc(33.3333% - 15px);
             margin-top: 10px;
 
-            &:nth-child(2), &:nth-child(3) {
+            &:nth-child(2),
+            &:nth-child(3) {
               margin-left: 5px;
             }
           }
@@ -210,8 +209,9 @@ const DepositWrapper = styled.div`
             width: 100%;
             height: 50px;
             flex-direction: row;
-            
-            &:nth-child(2), &:nth-child(3) {
+
+            &:nth-child(2),
+            &:nth-child(3) {
               margin-left: 0px;
             }
           }
@@ -265,7 +265,7 @@ const DepositWrapper = styled.div`
         }
 
         input {
-          width: 112px;
+          width: 100%;
           text-align: center;
           background: none;
           border: none;
