@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import ReactLoading from "react-loading";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import styled from "styled-components";
@@ -7,6 +8,7 @@ import styled from "styled-components";
 
 import SectionTitle from "../../component/SectionTitle";
 import LoadingTextIcon from "../../component/LoadingTextIcon";
+import Loading from "../../component/Loading";
 
 import { CARD_SERIES } from "../../helper/constant";
 
@@ -53,7 +55,9 @@ const NFTStakingModal = ({ isBadgeCardStaked, onClose }) => {
 
     let badgeCardCnt = 0;
     for (let i = 0; i < selectedCardIds.length; i++) {
-      const index = cards.findIndex(c => c.id === selectedCardIds[i] && c.series === CARD_SERIES.BADGE);
+      const index = cards.findIndex(
+        (c) => c.id === selectedCardIds[i] && c.series === CARD_SERIES.BADGE
+      );
       if (index >= 0) {
         badgeCardCnt++;
       }
@@ -109,24 +113,26 @@ const NFTStakingModal = ({ isBadgeCardStaked, onClose }) => {
           <div className="menu-item selected-card-count">
             {`${selectedCardIds.length} Cards Selected`}
           </div>
-          {selectedCardIds.length > 0 && <div
-            role="button"
-            className="menu-item stake-button"
-            onClick={(e) => handleStake(e)}
-          >
-            {stakeLoading ? (
-              <LoadingTextIcon loadingText="Staking..." />
-            ) : (
+          {selectedCardIds.length > 0 && (
+            <div
+              role="button"
+              className="menu-item stake-button"
+              onClick={(e) => handleStake(e)}
+            >
+              {stakeLoading ? (
+                <LoadingTextIcon loadingText="Staking..." />
+              ) : (
                 `Stake selected`
               )}
-          </div>}
+            </div>
+          )}
         </div>
       </MenuWrapper>
       <div
         className="d-flex flex-wrap justify-content-center animation-fadeInLeft"
         style={{ paddingBottom: 100 }}
       >
-        {unStakeCards.length > 0 &&
+        {unStakeCards.length > 0 ? (
           unStakeCards.map((card) => {
             const active = selectedCardIds.includes(card.id) ? "active" : "";
             return (
@@ -144,7 +150,10 @@ const NFTStakingModal = ({ isBadgeCardStaked, onClose }) => {
                 </div>
               </CardWrapper>
             );
-          })}
+          })
+        ) : (
+          <Loading type="bubbles" color="#fec100" text="Loading..."/>
+        )}
       </div>
     </NFTStakeModalContainer>
   );

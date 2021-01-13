@@ -215,7 +215,7 @@ const NFTStaking = () => {
         </div>
       )}
       <MenuWrapper className="animation-fadeInRight" style={{marginBottom: 20}}>
-        <SectionTitle title="Heroes, Support, Badge" long />
+        <SectionTitle title="Heroes, Support, Badges" long />
       </MenuWrapper>
       <NFTStakingBoard />
       <MenuWrapper className="animation-fadeInRight" style={{marginTop: 20}}>
