@@ -14,7 +14,7 @@ import { CARD_SERIES } from "../../helper/constant";
 // import oldNFTStakingActions from "../../redux/oldNFTStaking/actions";
 import nftStakingActions from "../../redux/nftStaking/actions";
 
-const NFTStakingModal = ({ onClose }) => {
+const NFTStakingModal = ({ isBadgeCardStaked, onClose }) => {
   const dispatch = useDispatch();
 
   const [stakeLoading, setStakeLoading] = useState(false);
@@ -33,11 +33,14 @@ const NFTStakingModal = ({ onClose }) => {
         (e) => Number(e) === Number(cards[i].id)
       );
       if (idx < 0 && Number(cards[i].owned) > 0) {
+        if (isBadgeCardStaked && cards[i].series === CARD_SERIES.BADGE) {
+          continue;
+        }
         ret.push({ ...cards[i] });
       }
     }
     return ret;
-  }, [cards, stakedCardTokens]);
+  }, [cards, stakedCardTokens, isBadgeCardStaked]);
 
   const handleStake = (e) => {
     e.preventDefault();
@@ -45,6 +48,19 @@ const NFTStakingModal = ({ onClose }) => {
 
     if (selectedCardIds.length === 0) {
       toast.error("Select cards please");
+      return;
+    }
+
+    let badgeCardCnt = 0;
+    for (let i = 0; i < selectedCardIds.length; i++) {
+      const index = cards.findIndex(c => c.id === selectedCardIds[i] && c.series === CARD_SERIES.BADGE);
+      if (index >= 0) {
+        badgeCardCnt++;
+      }
+    }
+
+    if (badgeCardCnt > 1) {
+      toast.error("Only 1 badge can be staked");
       return;
     }
 

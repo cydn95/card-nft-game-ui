@@ -54,6 +54,19 @@ const NFTStaking = () => {
     return ret;
   }, [cards, stakedCardTokens]);
 
+  const isBadgeCardStaked = useMemo(() => {
+    for (let i = 0; i < stakedCardTokens.length; i++) {
+      const cardIndex = cards.findIndex(
+        (e) => Number(e.id) === Number(stakedCardTokens[i])
+      );
+      
+      if (cardIndex >= 0 && cards[cardIndex].series === CARD_SERIES.BADGE) {
+        return true
+      }
+    }
+    return false
+  }, [cards, stakedCardTokens])
+
   const bonusCard = useMemo(() => {
     for (let i = 0; i < stakedCardTokens.length; i++) {
       const cardIndex = cards.findIndex(
@@ -191,7 +204,7 @@ const NFTStaking = () => {
       {stakeDlgOpen && (
         <div className="modal-container">
           <NFTStakeModalMask />
-          <NFTStakingModal onClose={handleCloseStakeModal} />
+          <NFTStakingModal onClose={handleCloseStakeModal} isBadgeCardStaked={isBadgeCardStaked}/>
         </div>
       )}
 
