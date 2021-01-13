@@ -1,5 +1,5 @@
 import { getGasPrice } from "../web3";
-import { GAS_PRICE_MULTIPLIER } from "../../helper/contract";
+import { getGasFee } from "../../helper/contract";
 
 export const getHeroPriceAsync = async (instance, rarity) => {
   return await instance.methods
@@ -73,6 +73,18 @@ export const getTotalStakedStrengthAsync = async (instance) => {
     });
 };
 
+export const getClaimFeeAsync = async (instance) => {
+  return await instance.methods
+    .fee()
+    .call()
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
 export const getClaimableNDRAsync = async (instance, address) => {
   return await instance.methods
     .earned(address)
@@ -88,6 +100,30 @@ export const getClaimableNDRAsync = async (instance, address) => {
 export const getStakedCardsAsync = async (instance, address) => {
   return await instance.methods
     .stakedOf(address)
+    .call()
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
+export const getAllStakedCardsAsync = async (instance) => {
+  return await instance.methods
+    .getNftTokens()
+    .call()
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
+export const getStakedCountByTokenIdAsync = async (instance, tokenId, address) => {
+  return await instance.methods
+    .balanceByTokenIdOf(tokenId, address)
     .call()
     .then((data) => {
       return data;
@@ -123,7 +159,31 @@ export const unStakeCardAsync = async (instance, web3, tokenId, address) => {
     .send({
       from: address,
       gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
-      gas: gasLimit * GAS_PRICE_MULTIPLIER,
+      gas: getGasFee(gasLimit),
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
+// Unstake Card Multi
+export const unStakeMultiCardAsync = async (instance, web3, tokenIds, amounts, address) => {
+  const prices = await getGasPrice();
+
+  // Get gas limit
+  const gasLimit = await instance.methods
+    .withdrawNFT(tokenIds, amounts)
+    .estimateGas({ from: address });
+
+  return await instance.methods
+    .withdrawNFT(tokenIds, amounts)
+    .send({
+      from: address,
+      gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
+      gas: getGasFee(gasLimit),
     })
     .then((data) => {
       return data;
@@ -147,7 +207,7 @@ export const unStakeAllCardsAsync = async (instance, web3, address) => {
     .send({
       from: address,
       gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
-      gas: gasLimit * GAS_PRICE_MULTIPLIER,
+      gas: getGasFee(gasLimit),
     })
     .then((data) => {
       return data;
@@ -171,7 +231,31 @@ export const stakeCardAsync = async (instance, web3, tokenId, address) => {
     .send({
       from: address,
       gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
-      gas: gasLimit * GAS_PRICE_MULTIPLIER,
+      gas: getGasFee(gasLimit),
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
+// Stake Card Multi
+export const stakeMultiCardAsync = async (instance, web3, tokenIds, amounts, address) => {
+  const prices = await getGasPrice();
+
+  // Get gas limit
+  const gasLimit = await instance.methods
+    .stake(tokenIds, amounts)
+    .estimateGas({ from: address });
+
+  return await instance.methods
+    .stake(tokenIds, amounts)
+    .send({
+      from: address,
+      gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
+      gas: getGasFee(gasLimit),
     })
     .then((data) => {
       return data;
@@ -201,7 +285,7 @@ export const approveAllCardsAsync = async (
     .send({
       from: address,
       gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
-      gas: gasLimit * GAS_PRICE_MULTIPLIER,
+      gas: getGasFee(gasLimit),
     })
     .then((data) => {
       return data;

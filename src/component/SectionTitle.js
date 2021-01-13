@@ -20,8 +20,9 @@ const SectionTitleWrapper = styled.div`
   .title {
     background-image: url("/static/images/bg/components/section-title/section-title-bg.png");
     background-size: 100% 100%;
-    min-width: 210.37px;
-    min-height: 75.05px;
+    background-repeat: no-repeat;
+    // min-width: 210.37px;
+    // min-height: 75.05px;
     text-align: right;
     color: #fec100;
     font-size: 23.2px;
@@ -38,6 +39,7 @@ const SectionTitleWrapper = styled.div`
       @media screen and (max-width: 1024px) {
         font-size: 16px;
         line-height: 18px;
+        padding-top: 5px;
       }
 
       @media screen and (max-width: 425px) {
@@ -61,9 +63,10 @@ const SectionTitleWrapper = styled.div`
       padding-top: 10.72px;
 
       @media screen and (max-width: 1024px) {
+        min-width: 260.87px;
         width: 260.87px;
         margin-right: -15.18px;
-        padding-top: 8.58px;
+        padding-top: 4.58px;
       }
     }
   }

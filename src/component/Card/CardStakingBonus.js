@@ -1,28 +1,17 @@
 import React from "react";
 import styled from "styled-components";
-import { toast } from "react-toastify";
 
 const CardStakingBonus = ({
   card,
   unStaked,
-  currentProcessingCardId,
   loadingUnStake,
   onUnStake,
   onStake,
-  loadingApprove,
-  approved,
-  onApprove,
-  bonus,
   ...rest
 }) => {
   const handleClickBlankCard = () => {
     if (!unStaked) return;
-
-    if (approved) {
-      onStake();
-    } else {
-      toast.info("You should approve cards first");
-    }
+    onStake();
   };
 
   return (
@@ -38,53 +27,32 @@ const CardStakingBonus = ({
           <img src={card.image} alt={`${card}`} className="card-image" />
         )}
         <div className="card-border" onClick={(e) => handleClickBlankCard()}>
-          {bonus && <span>Bonus Card</span>}
+          <span>Bonus Card</span>
         </div>
       </div>
-      {bonus && (
-        <div className="button-wrapper text-center">
-          {unStaked ? (
-            approved ? (
-              <button className="hover-effect3" onClick={onStake}>
-                Stake bonus card
-              </button>
-            ) : loadingApprove ? (
-              <button className="hover-effect3">
+      <div className="button-wrapper text-center">
+        {unStaked ? (
+          <button className="hover-effect3" onClick={onStake}>
+            Stake bonus card
+          </button>
+        ) : (
+          <button className="hover-effect3" onClick={(e) => onUnStake(card.id)}>
+            {loadingUnStake ? (
+              <div className="loading-wrapper">
                 <img
                   src="/static/images/icons/loading.gif"
                   height="25"
                   alt=""
                   style={{ marginTop: 3, marginRight: 5 }}
                 />{" "}
-                Approving...
-              </button>
+                Unstaking...
+              </div>
             ) : (
-              <button className="hover-effect3" onClick={onApprove}>
-                Approve
-              </button>
-            )
-          ) : (
-            <button
-              className="hover-effect3"
-              onClick={(e) => onUnStake(card.id)}
-            >
-              {loadingUnStake && card.id === currentProcessingCardId ? (
-                <div className="loading-wrapper">
-                  <img
-                    src="/static/images/icons/loading.gif"
-                    height="25"
-                    alt=""
-                    style={{ marginTop: 3, marginRight: 5 }}
-                  />{" "}
-                  Unstaking...
-                </div>
-              ) : (
-                `Unstake bonus card`
-              )}
-            </button>
-          )}
-        </div>
-      )}
+              `Unstake bonus card`
+            )}
+          </button>
+        )}
+      </div>
     </CardWrapper>
   );
 };

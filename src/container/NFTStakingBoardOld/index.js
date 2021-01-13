@@ -5,29 +5,28 @@ import styled from "styled-components";
 import { toast } from "react-toastify";
 
 import { convertFromWei } from "../../helper/utils";
+import cardsActions from "../../redux/cards/actions";
 import lpstakingActions from "../../redux/lpstaking/actions";
-import nftStakingActions from "../../redux/nftStaking/actions";
+import oldNFTStakingActions from "../../redux/oldNFTStaking/actions";
 
-import { CARD_STRENGTH_MULTIPLIER } from "../../helper/contract";
-
-const NFTStakingBoard = () => {
+const NFTStakingBoardOld = () => {
   const dispatch = useDispatch();
 
   const [unStakeAllLoading, setUnStakeAllLoading] = useState(false);
   const [claimNDRLoading, setClaimNDRLoading] = useState(false);
 
-  const myStakedStrength = useSelector((state) => state.NFTStaking.myStakedStrength);
+  const myStakedStrength = useSelector((state) => state.OldNFTStaking.myStakedStrength);
   const totalStakedStrength = useSelector(
-    (state) => state.NFTStaking.totalStakedStrength
+    (state) => state.OldNFTStaking.totalStakedStrength
   );
-  const claimableNDR = useSelector((state) => state.NFTStaking.claimableNDR);
-  const ndrPerDay = useSelector((state) => state.NFTStaking.ndrPerDay);
+  const claimableNDR = useSelector((state) => state.OldNFTStaking.claimableNDR);
+  const ndrPerDay = useSelector((state) => state.OldNFTStaking.ndrPerDay);
 
   const init = useCallback(() => {
-    dispatch(nftStakingActions.getMyStakedStrength());
-    dispatch(nftStakingActions.getTotalStakedStrength());
-    dispatch(nftStakingActions.getClaimableNDR());
-    dispatch(nftStakingActions.getNDRPerDay());
+    dispatch(oldNFTStakingActions.getMyStakedStrength());
+    dispatch(oldNFTStakingActions.getTotalStakedStrength());
+    dispatch(oldNFTStakingActions.getClaimableNDR());
+    dispatch(oldNFTStakingActions.getNDRPerDay());
   }, [dispatch]);
 
   // Timer to get <NDR Per Day>
@@ -35,8 +34,8 @@ const NFTStakingBoard = () => {
     let interval = null;
 
     interval = setInterval(() => {
-      dispatch(nftStakingActions.getClaimableNDR());
-      dispatch(nftStakingActions.getNDRPerDay());
+      dispatch(oldNFTStakingActions.getClaimableNDR());
+      dispatch(oldNFTStakingActions.getNDRPerDay());
     }, 30000);
     return () => clearInterval(interval);
   }, [dispatch]);
@@ -48,14 +47,15 @@ const NFTStakingBoard = () => {
   const handleUnStakeAll = () => {
     setUnStakeAllLoading(true);
     dispatch(
-      nftStakingActions.unStakeAllCards((status) => {
+      oldNFTStakingActions.unStakeAllCards((status) => {
         setUnStakeAllLoading(false);
         if (status) {
           toast.success("Sucess");
-          dispatch(nftStakingActions.getStakedCards());
-          dispatch(nftStakingActions.getMyStakedStrength());
-          dispatch(nftStakingActions.getTotalStakedStrength());
-          dispatch(nftStakingActions.getClaimableNDR());
+          dispatch(cardsActions.getCards());
+          dispatch(oldNFTStakingActions.getStakedCards());
+          dispatch(oldNFTStakingActions.getMyStakedStrength());
+          dispatch(oldNFTStakingActions.getTotalStakedStrength());
+          dispatch(oldNFTStakingActions.getClaimableNDR());
         } else {
           toast.error("Failed...");
         }
@@ -66,11 +66,11 @@ const NFTStakingBoard = () => {
   const handleClaimNDR = () => {
     setClaimNDRLoading(true);
     dispatch(
-      nftStakingActions.claimNDR((status) => {
+      oldNFTStakingActions.claimNDR((status) => {
         setClaimNDRLoading(false);
         if (status) {
           toast.success("Sucess");
-          dispatch(nftStakingActions.getClaimableNDR());
+          dispatch(oldNFTStakingActions.getClaimableNDR());
           dispatch(lpstakingActions.getNDRBalance());
         } else {
           toast.error("Failed...");
@@ -98,11 +98,11 @@ const NFTStakingBoard = () => {
         )}
         <div className="stat">
           <h6>My Staked Strength</h6>
-          <p>{(myStakedStrength / CARD_STRENGTH_MULTIPLIER).toFixed(1)}</p>
+          <p>{myStakedStrength}</p>
         </div>
         <div className="stat">
           <h6>Total Staked Strength</h6>
-          <p>{(totalStakedStrength / CARD_STRENGTH_MULTIPLIER).toFixed(1)}</p>
+          <p>{totalStakedStrength}</p>
         </div>
         <div className="stat">
           <div style={{ marginTop: -3 }}>
@@ -111,7 +111,7 @@ const NFTStakingBoard = () => {
           </div>
           <div>
             <label>NDR per day:</label>
-            <span>{convertFromWei(ndrPerDay, 4)}</span>
+            <span>{convertFromWei(ndrPerDay, 3)}</span>
           </div>
         </div>
         {claimNDRLoading ? (
@@ -282,4 +282,4 @@ const NFTStakeWrapper = styled.div`
   }
 `;
 
-export default NFTStakingBoard;
+export default NFTStakingBoardOld;

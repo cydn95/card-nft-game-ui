@@ -8,8 +8,9 @@ import styled from "styled-components";
 import SectionTitle from "../../component/SectionTitle";
 // import LoadingTextIcon from "../../component/LoadingTextIcon";
 
-import cardsActions from "../../redux/cards/actions";
-import oldNFTStakingActions from "../../redux/oldNFTStaking/actions";
+import { CARD_SERIES } from "../../helper/constant";
+
+import nftStakingActions from "../../redux/nftStaking/actions";
 
 const NFTBonusStakingModal = ({ onClose }) => {
   const dispatch = useDispatch();
@@ -18,12 +19,13 @@ const NFTBonusStakingModal = ({ onClose }) => {
   const [selectedCardId, setSelectedCardId] = useState(0);
 
   const cards = useSelector((state) => state.Cards.cards);
-  const stakedCardTokens = useSelector((state) => state.OldNFTStaking.stakedCardTokens);
+  const stakedCardTokens = useSelector((state) => state.NFTStaking.stakedCardTokens);
 
   const unStakeCards = useMemo(() => {
     const ret = [];
 
     for (let i = 0; i < cards.length; i++) {
+      if (cards[i].series !== CARD_SERIES.BADGE) continue;
       const idx = stakedCardTokens.findIndex(
         (e) => Number(e) === Number(cards[i].id)
       );
@@ -41,18 +43,18 @@ const NFTBonusStakingModal = ({ onClose }) => {
     if (stakeLoading) return;
 
     setSelectedCardId(cardId);
+
     setStakeLoading(true);
     dispatch(
-      oldNFTStakingActions.stakeCard(cardId, (status) => {
+      nftStakingActions.stakeCard([cardId], (status) => {
         setSelectedCardId(0);
         setStakeLoading(false);
         if (status) {
           toast.success("Staked successfully");
-          dispatch(cardsActions.getCards());
-          dispatch(oldNFTStakingActions.getStakedCards());
-          dispatch(oldNFTStakingActions.getMyStakedStrength());
-          dispatch(oldNFTStakingActions.getTotalStakedStrength());
-          dispatch(oldNFTStakingActions.getClaimableNDR());
+          dispatch(nftStakingActions.getStakedCards());
+          dispatch(nftStakingActions.getMyStakedStrength());
+          dispatch(nftStakingActions.getTotalStakedStrength());
+          dispatch(nftStakingActions.getClaimableNDR());
           onClose();
         } else {
           toast.error("Staked failed");

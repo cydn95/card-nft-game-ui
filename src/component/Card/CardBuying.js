@@ -53,12 +53,12 @@ const CardBuying = ({
                 </span>
               </div>
             </div>
-            {/* <div className="text-wrapper">
+            <div className="text-wrapper">
               <div className="text-left">
                 <label>APY:</label>
                 <span>{`${apy}%`}</span>
               </div>
-            </div> */}
+            </div>
           </div>
           {card.opensea !== true && Number(card.minted) < Number(card.total_minted) ? (
             <div className="grid-button-wrapper">

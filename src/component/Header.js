@@ -53,6 +53,10 @@ const Header = () => {
       return "Farm";
     }
 
+    if (getMenuItemActive("fight-villains")) {
+      return "Fight Villains";
+    }
+
     return "";
   };
 
@@ -73,7 +77,7 @@ const Header = () => {
             <span className="menu-text">Home</span>
           </NavLink>
         </li>
-        <li
+        {/* <li
           className={`menu-item ${getMenuItemActive("news")} hover-effect2`}
         >
           <a
@@ -84,7 +88,7 @@ const Header = () => {
           >
             <span className="menu-text">News</span>
           </a>
-        </li>
+        </li> */}
         <li
           className={`menu-item ${getMenuItemActive("my-cards")} hover-effect2`}
         >
@@ -116,12 +120,7 @@ const Header = () => {
             <span className="menu-text">Get Cards</span>
           </NavLink>
         </li>
-        {/* <li className={`menu-item ${ getMenuItemActive('fight-villains') } hover-effect2`}>
-					<NavLink className='menu-link' to="/fight-villains">
-						<span className="menu-text">Fight Villains</span>
-					</NavLink>
-				</li> */}
-        <li
+        {/* <li
           className={`menu-item ${getMenuItemActive("forum")} hover-effect2`}
         >
           <a
@@ -132,7 +131,12 @@ const Header = () => {
           >
             <span className="menu-text">Forum</span>
           </a>
-        </li>
+        </li> */}
+        {/* <li className={`menu-item ${getMenuItemActive("fight-villains")} hover-effect2`}>
+          <NavLink className="menu-link" to="/fight-villains">
+            <span className="menu-text">Fight Villains</span>
+          </NavLink>
+        </li> */}
         <li
           className={`menu-item ${getMenuItemActive(
             "unlock-wallet"
@@ -193,13 +197,13 @@ const Header = () => {
             >
               Home
             </NavLink>
-            <a
+            {/* <a
               href="https://noderunners.medium.com/"
               target="_blank"
               rel="noopener noreferrer"
             >
               News
-            </a>
+            </a> */}
             <a
               href="https://opensea.io/account/noderunners"
               target="_blank"
@@ -210,13 +214,14 @@ const Header = () => {
             <NavLink className={`${getMenuItemActive("stake")}`} to="/stake">Stake NFT</NavLink>
             <NavLink className={`${getMenuItemActive("farm")}`} to="/farm">Farm</NavLink>
             <NavLink className={`${getMenuItemActive("get-heroes")}`} to="/get-heroes">Get Cards</NavLink>
-            <a
+            {/* <NavLink className={`${getMenuItemActive("fight-villains")}`} to="/fight-villains">Fight Villains</NavLink> */}
+            {/* <a
               href="http://gov.noderunners.io/"
               target="_blank"
               rel="noopener noreferrer"
             >
               Forum
-            </a>
+            </a> */}
           </div>
         )}
       </ul>
@@ -315,7 +320,7 @@ const HeaderWrapper = styled.div`
       //   }
       // }
 
-      &:nth-of-type(8) {
+      &:nth-of-type(6) {
         background-image: url("/static/images/bg/components/header/menu-item-5-bg.png");
         width: 209.05px;
 

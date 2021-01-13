@@ -1,5 +1,5 @@
 import { getGasPrice } from "../web3";
-import { GAS_PRICE_MULTIPLIER } from "../../helper/contract";
+import { getGasFee } from "../../helper/contract";
 
 export const getEarningAsync = async (instance, address) => {
   return await instance.methods
@@ -98,7 +98,7 @@ export const depositAsync = async (instance, web3, amount, address) => {
     .send({
       from: address,
       gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
-      gas: gasLimit * GAS_PRICE_MULTIPLIER,
+      gas: getGasFee(gasLimit),
     })
     .then((data) => {
       return data;
@@ -121,7 +121,7 @@ export const withdrawAsync = async (instance, web3, amount, address) => {
     .send({
       from: address,
       gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
-      gas: gasLimit * GAS_PRICE_MULTIPLIER,
+      gas: getGasFee(gasLimit),
     })
     .then((data) => {
       return data;
@@ -156,7 +156,7 @@ export const approveAsync = async (
     .send({
       from: address,
       gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
-      gas: gasLimit * GAS_PRICE_MULTIPLIER,
+      gas: getGasFee(gasLimit),
     })
     .then((data) => {
       return data;
@@ -180,7 +180,31 @@ export const claimAsync = async (instance, web3, address) => {
     .send({
       from: address,
       gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
-      gas: gasLimit * GAS_PRICE_MULTIPLIER,
+      gas: getGasFee(gasLimit),
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
+// Claim Token with FEE
+export const claimWithFeeAsync = async (instance, web3, fee, address) => {
+  const prices = await getGasPrice();
+  // Get gas limit
+  const gasLimit = await instance.methods
+    .getReward()
+    .estimateGas({ value: fee.toString(), from: address });
+
+  return await instance.methods
+    .getReward()
+    .send({
+      value: fee.toString(),
+      from: address,
+      gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
+      gas: getGasFee(gasLimit),
     })
     .then((data) => {
       return data;
@@ -204,7 +228,7 @@ export const exitAsync = async (instance, web3, address) => {
     .send({
       from: address,
       gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
-      gas: gasLimit * GAS_PRICE_MULTIPLIER,
+      gas: getGasFee(gasLimit),
     })
     .then((data) => {
       return data;

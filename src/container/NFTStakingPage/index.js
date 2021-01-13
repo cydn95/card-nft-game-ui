@@ -14,11 +14,9 @@ import NFTStakingModal from "../NFTStakingModal";
 import NFTStakingModalBonus from "../NFTStakingModalBonus";
 
 // import cardsActions from "../../redux/cards/actions";
-import oldNFTStakingActions from "../../redux/oldNFTStaking/actions";
+import nftStakingActions from "../../redux/nftStaking/actions";
 
-import {
-  MAX_STAKED_CARD_COUNT
-} from "../../helper/constant";
+import { CARD_SERIES } from "../../helper/constant";
 
 const NFTStaking = () => {
   const dispatch = useDispatch();
@@ -30,47 +28,68 @@ const NFTStaking = () => {
   const [bonusStakeDlgOpen, setBonusStakeDlgOpen] = useState(false);
 
   const [unStakeLoading, setUnStakeLoading] = useState(false);
+  const [unStakeLoadingBonus, setUnStakeLoadingBonus] = useState(false);
   const [approveLoading, setApproveLoading] = useState(false);
   const [approved, setApproved] = useState(false);
 
   const cards = useSelector((state) => state.Cards.cards);
   const stakedCardTokens = useSelector(
-    (state) => state.OldNFTStaking.stakedCardTokens
+    (state) => state.NFTStaking.stakedCardTokens
   ); // Staked card count
 
   const stakedCards = useMemo(() => {
     const ret = [];
-    for (let i = 0; i < 4; i++) {
-      ret.push({
-        card: null,
-        unStaked: true,
-      });
-    }
-
-    let cnt = 0;
     for (let i = 0; i < stakedCardTokens.length; i++) {
       const cardIndex = cards.findIndex(
         (e) => Number(e.id) === Number(stakedCardTokens[i])
       );
+
       if (cardIndex >= 0) {
-        ret[cnt].card = { ...cards[cardIndex] };
-        ret[cnt].unStaked = false;
-        cnt++;
+        ret.push({
+          card: { ...cards[cardIndex] },
+          unStaked: false,
+        });
       }
     }
     return ret;
   }, [cards, stakedCardTokens]);
 
-  const remainStakableCards = useMemo(() => {
-    return MAX_STAKED_CARD_COUNT - stakedCardTokens.length;
-  }, [stakedCardTokens]);
+  const isBadgeCardStaked = useMemo(() => {
+    for (let i = 0; i < stakedCardTokens.length; i++) {
+      const cardIndex = cards.findIndex(
+        (e) => Number(e.id) === Number(stakedCardTokens[i])
+      );
+      
+      if (cardIndex >= 0 && cards[cardIndex].series === CARD_SERIES.BADGE) {
+        return true
+      }
+    }
+    return false
+  }, [cards, stakedCardTokens])
 
-  const bonusCard = { card: null, unStaked: true, bonus: true };
+  const bonusCard = useMemo(() => {
+    for (let i = 0; i < stakedCardTokens.length; i++) {
+      const cardIndex = cards.findIndex(
+        (e) => Number(e.id) === Number(stakedCardTokens[i])
+      );
+      if (cardIndex >= 0) {
+        if (cards[cardIndex].series !== CARD_SERIES.BADGE) continue;
+
+        return {
+          card: { ...cards[cardIndex] },
+          unStaked: false,
+          bonus: true,
+        };
+      }
+    }
+
+    return { card: null, unStaked: true, bonus: true };
+  }, [cards, stakedCardTokens]);
 
   useEffect(() => {
-    dispatch(oldNFTStakingActions.getStakedCards());
+    dispatch(nftStakingActions.getStakedCards());
     dispatch(
-      oldNFTStakingActions.getApprovedStatus((status) => {
+      nftStakingActions.getApprovedStatus((status) => {
         setApproved(status);
       })
     );
@@ -79,7 +98,7 @@ const NFTStaking = () => {
   // console.log(approved)
   useEffect(() => {
     if (cards.length > 0) {
-      dispatch(oldNFTStakingActions.getMyCardsCount(cards));
+      dispatch(nftStakingActions.getMyCardsCount(cards));
     }
   }, [dispatch, cards]);
 
@@ -105,21 +124,43 @@ const NFTStaking = () => {
     }
 
     setUnStakeLoading(true);
-    // dispatch(
-    //   oldNFTStakingActions.unStakeCard(cardId, (status) => {
-    //     setUnstakeCardIds([]);
-    //     setUnStakeLoading(false);
-    //     if (status) {
-    //       toast.success("Sucess");
-    //       dispatch(oldNFTStakingActions.getStakedCards());
-    //       dispatch(oldNFTStakingActions.getMyStakedStrength());
-    //       dispatch(oldNFTStakingActions.getTotalStakedStrength());
-    //       dispatch(oldNFTStakingActions.getClaimableNDR());
-    //     } else {
-    //       toast.error("Failed...");
-    //     }
-    //   })
-    // );
+    dispatch(
+      nftStakingActions.unStakeCard(selectedUnstakeCardIds, (status) => {
+        setSelectedUnstakeCardIds([]);
+        setUnStakeLoading(false);
+        if (status) {
+          toast.success("Sucess");
+          dispatch(nftStakingActions.getStakedCards());
+          dispatch(nftStakingActions.getMyStakedStrength());
+          dispatch(nftStakingActions.getTotalStakedStrength());
+          dispatch(nftStakingActions.getClaimableNDR());
+        } else {
+          toast.error("Failed...");
+        }
+      })
+    );
+  };
+
+  const handleUnStakeBonus = (cardId) => {
+    if (unStakeLoadingBonus) {
+      return;
+    }
+
+    setUnStakeLoadingBonus(true);
+    dispatch(
+      nftStakingActions.unStakeCard([cardId], (status) => {
+        setUnStakeLoadingBonus(false);
+        if (status) {
+          toast.success("Sucess");
+          dispatch(nftStakingActions.getStakedCards());
+          dispatch(nftStakingActions.getMyStakedStrength());
+          dispatch(nftStakingActions.getTotalStakedStrength());
+          dispatch(nftStakingActions.getClaimableNDR());
+        } else {
+          toast.error("Failed...");
+        }
+      })
+    );
   };
 
   const handleOpenStakeModal = () => {
@@ -133,12 +174,12 @@ const NFTStaking = () => {
   const handleApproveAll = () => {
     setApproveLoading(true);
     dispatch(
-      oldNFTStakingActions.approveAll(true, (status) => {
+      nftStakingActions.approveAll(true, (status) => {
         setApproveLoading(false);
         if (status) {
           toast.success("Approved successfully");
           dispatch(
-            oldNFTStakingActions.getApprovedStatus((status) => {
+            nftStakingActions.getApprovedStatus((status) => {
               setApproved(status);
             })
           );
@@ -163,106 +204,106 @@ const NFTStaking = () => {
       {stakeDlgOpen && (
         <div className="modal-container">
           <NFTStakeModalMask />
-          <NFTStakingModal
-            remainStakableCards={remainStakableCards}
-            onClose={handleCloseStakeModal}
-          />
+          <NFTStakingModal onClose={handleCloseStakeModal} isBadgeCardStaked={isBadgeCardStaked}/>
         </div>
       )}
 
       {bonusStakeDlgOpen && (
         <div className="modal-container">
           <NFTStakeModalMask />
-          <NFTStakingModalBonus
-            onClose={handleCloseBonusStakeModal}
-          />
+          <NFTStakingModalBonus onClose={handleCloseBonusStakeModal} />
         </div>
       )}
-
-      <NFTStakingBoard />
-      <MenuWrapper className="animation-fadeInRight">
-        <SectionTitle title="Staked Hero & Support" long />
+      <MenuWrapper className="animation-fadeInRight" style={{marginBottom: 20}}>
+        <SectionTitle title="Heroes, Support, Badges" long />
       </MenuWrapper>
-      <MenuWrapper className="animation-fadeInRight">
+      <NFTStakingBoard />
+      <MenuWrapper className="animation-fadeInRight" style={{marginTop: 20}}>
         <div className="menu-actions">
           <div className="menu-item selected-card-count">{`${selectedUnstakeCardIds.length}/${stakedCardTokens.length} Selected`}</div>
-          <div
-            role="button"
-            className="menu-item unstake-button"
-            onClick={(e) => handleUnStake()}
-          >
-            {unStakeLoading ? (
-              <LoadingTextIcon loadingText="Unstaking..." />
+          {selectedUnstakeCardIds.length > 0 && (
+            <div
+              role="button"
+              className="menu-item unstake-button"
+              onClick={(e) => handleUnStake()}
+            >
+              {unStakeLoading ? (
+                <LoadingTextIcon loadingText="Unstaking..." />
+              ) : (
+                `Unstake selected`
+              )}
+            </div>
+          )}
+          <StakeButtonWrapper>
+            {approveLoading ? (
+              <div
+                className="stake-button button-approve-all"
+                role="button"
+                onClick={(e) => handleApproveAll()}
+              >
+                <LoadingTextIcon loadingText="Approving..." />
+              </div>
             ) : (
-              `Unstake selected`
+              !approved && (
+                <div
+                  className="stake-button button-approve-all"
+                  role="button"
+                  onClick={(e) => handleApproveAll()}
+                >
+                  Approve cards
+                </div>
+              )
             )}
-          </div>
+            {approved && (
+              <div
+                role="button"
+                className="stake-button button-stake-all"
+                onClick={(e) => handleOpenStakeModal()}
+              >
+                Stake Cards
+              </div>
+            )}
+          </StakeButtonWrapper>
         </div>
       </MenuWrapper>
-      <CardContainer>
-        {stakedCards.length > 0 &&
-          stakedCards.map((c, index) => (
-            <CardStaking
-              key={`card_${index}`}
-              card={c.card}
-              unStaked={c.unStaked}
-              onSelectCard={(cardId) => handleSelectCard(cardId)}
-              selectedCardIds={selectedUnstakeCardIds}
-            />
-          ))}
-      </CardContainer>
-      <StakeButtonWrapper>
-        {approveLoading ? (
-          <div
-            className="stake-button button-approve-all"
-            role="button"
-            onClick={(e) => handleApproveAll()}
-          >
-            <img
-              src="/static/images/icons/loading.gif"
-              height="25"
-              alt=""
-              style={{ marginTop: 3, marginRight: 5 }}
-            />{" "}
-            Approving...{" "}
-          </div>
-        ) : (
-          <div
-            className="stake-button button-approve-all"
-            role="button"
-            onClick={(e) => handleApproveAll()}
-          >
-            Approve all
-          </div>
-        )}
-        {approved && (
-          <div
-            role="button"
-            className="stake-button button-stake-all"
-            onClick={(e) => handleOpenStakeModal()}
-          >
-            Stake Hero/Support
-          </div>
-        )}
-      </StakeButtonWrapper>
-      <MenuWrapper className="animation-fadeInRight" style={{ marginTop: 50 }}>
+      {approved ? (
+        <CardContainer>
+          {stakedCards.length > 0 &&
+            stakedCards.map((c, index) => (
+              <CardStaking
+                key={`card_${index}`}
+                card={c.card}
+                unStaked={c.unStaked}
+                onSelectCard={(cardId) => handleSelectCard(cardId)}
+                selectedCardIds={selectedUnstakeCardIds}
+              />
+            ))}
+        </CardContainer>
+      ) : (
+        <h2 className="approve-notice">Approve your cards to stake them</h2>
+      )}
+
+      {/* <MenuWrapper className="animation-fadeInRight" style={{ marginTop: 50 }}>
         <SectionTitle title="Staked Bonus card" long />
-        <h2>In order to stake bonus card you need to stake at least 1 hero or support card.</h2>
+        {stakedCards.length === 0 && (
+          <h2>
+            In order to stake bonus card you need to stake at least 1 hero or
+            support card.
+          </h2>
+        )}
       </MenuWrapper>
-      <CardContainer style={{ marginBottom: 100 }}>
-        <CardStakingBonus
-          card={bonusCard.card}
-          unStaked={bonusCard.unStaked}
-          currentProcessingCardId={0}
-          onUnStake={handleUnStake}
-          onStake={handleOpenBonusStakeModal}
-          loadingUnStake={unStakeLoading}
-          approved={approved}
-          loadingApprove={approveLoading}
-          onApprove={handleApproveAll}
-          bonus
-        />
-      </CardContainer>
+
+      {stakedCards.length > 0 && (
+        <CardContainer style={{ marginBottom: 100 }}>
+          <CardStakingBonus
+            card={bonusCard.card}
+            unStaked={bonusCard.unStaked}
+            onUnStake={handleUnStakeBonus}
+            onStake={handleOpenBonusStakeModal}
+            loadingUnStake={unStakeLoadingBonus}
+          />
+        </CardContainer>
+      )} */}
     </StakePageContainer>
   );
 };
@@ -270,6 +311,7 @@ const NFTStaking = () => {
 const StakePageContainer = styled.div`
   width: 100vw;
   max-width: 100%;
+  min-height: calc(100vh - 280px);
 
   .nav-pills {
     margin: 0px;
@@ -278,6 +320,16 @@ const StakePageContainer = styled.div`
   .nav-pills .nav-item .nav-link {
     margin-bottom: 10px;
     font-size: 24px;
+  }
+
+  .approve-notice {
+    font-family: Orbitron-Medium;
+    font-size: 1.3rem;
+    color: #fec100;
+    padding-left: 20px;
+    padding-right: 20px;
+    text-align: center;
+    padding-top: 30px;
   }
 `;
 
@@ -322,13 +374,16 @@ const MenuWrapper = styled.div`
 
   .menu-actions {
     display: flex;
+    flex-flow: row wrap;
     padding-left: 20px;
+    justify-content: center;
 
     .menu-item {
       width: 210px;
       height: 32px;
       padding-left: 40px;
       padding-top: 6px;
+      margin-bottom: 5px;
     }
 
     .selected-card-count {
@@ -344,6 +399,7 @@ const MenuWrapper = styled.div`
       font-family: Orbitron-Medium;
       color: #161617;
       margin-left: -12px;
+      margin-right: 10px;
       cursor: pointer;
 
       &:hover {
@@ -357,12 +413,13 @@ const MenuWrapper = styled.div`
 const StakeButtonWrapper = styled.div`
   display: flex;
   justify-content: center;
+  margin-left: 20px;
 
   .stake-button {
     width: 210px;
     height: 32px;
-    padding-top: 2px;
-    font-family: Orbitron-Black;
+    padding-top: 7px;
+    font-family: Orbitron-Medium;
     color: #161617;
     cursor: pointer;
 
@@ -372,24 +429,25 @@ const StakeButtonWrapper = styled.div`
   }
 
   .button-approve-all {
-    background-image: url("/static/images/bg/pages/stake/button-2.png");
+    background-image: url("/static/images/bg/pages/stake/button.png");
     background-size: 100% 100%;
     padding-left: 40px;
+    margin-left: -30px;
 
     &:hover {
-      background-image: url("/static/images/bg/pages/stake/button-2--active.png");
+      background-image: url("/static/images/bg/pages/stake/button--active.png");
       color: #fec100;
     }
   }
 
   .button-stake-all {
-    background-image: url("/static/images/bg/pages/stake/button-3.png");
+    background-image: url("/static/images/bg/pages/stake/button.png");
     background-size: 100% 100%;
-    padding-left: 18px;
-    margin-left: -15px;
+    padding-left: 40px;
+    margin-left: -30px;
 
     &:hover {
-      background-image: url("/static/images/bg/pages/stake/button-3--active.png");
+      background-image: url("/static/images/bg/pages/stake/button--active.png");
     }
   }
 `;

@@ -6,7 +6,7 @@ import styled from "styled-components";
 import SectionTitle from "../../component/SectionTitle";
 
 import CardStakingOld from "../../component/Card/CardStakingOld";
-import NFTStakingBoard from "../NFTStakingBoard";
+import NFTStakingBoardOld from "../NFTStakingBoardOld";
 import NFTStakingModalOld from "../NFTStakingModalOld";
 
 // import cardsActions from "../../redux/cards/actions";
@@ -123,7 +123,7 @@ const NFTStakingOld = () => {
           <NFTStakingModalOld onClose={handleCloseStakeModalOld} />
         </div>
       )}
-      <NFTStakingBoard />
+      <NFTStakingBoardOld />
       <MenuWrapper className="animation-fadeInRight">
         <SectionTitle
           title={`${stakedCardTokens.length}/${MAX_STAKED_CARD_COUNT} Cards Staked`}

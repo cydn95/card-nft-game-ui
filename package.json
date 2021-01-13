@@ -24,6 +24,7 @@
     "react": "^16.13.1",
     "react-bootstrap": "latest",
     "react-dom": "^16.13.1",
+    "react-loading": "^2.0.3",
     "react-redux": "latest",
     "react-router": "latest",
     "react-router-dom": "latest",

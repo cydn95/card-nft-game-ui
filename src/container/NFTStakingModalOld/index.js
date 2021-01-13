@@ -133,6 +133,8 @@ const NFTStakeModalContainer = styled.div`
   background: transparent;
   z-index: 200;
   overflow-y: auto;
+  padding-left: 10%;
+  padding-right: 10%;
 
   .header {
     width: 100%;
