@@ -9,6 +9,7 @@ const CardBuying = ({
   isHero,
   eth,
   apy,
+  ndrPerDay,
   onBuyCardEth,
   onBuyCardHash,
   currentProcessingCardId,
@@ -55,8 +56,8 @@ const CardBuying = ({
             </div>
             <div className="text-wrapper">
               <div className="text-left">
-                <label>APY:</label>
-                <span>{`${apy}%`}</span>
+                <label>NDR Per Day:</label>
+                <span>{`${ndrPerDay}`}</span>
               </div>
             </div>
           </div>

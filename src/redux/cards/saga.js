@@ -200,6 +200,7 @@ export function* getCardsApy() {
             86400;
       const apy = ((ndrPerDay * ndrEthPrice * 365) / card.price) * 100;
       cardsApy[index].apy = apy.toFixed(2);
+      cardsApy[index].ndrPerDay = (ndrPerDay / Math.pow(10, 18)).toFixed(2);
     });
 
     yield put({

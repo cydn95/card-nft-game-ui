@@ -147,6 +147,22 @@ const GetHeroes = () => {
     }
   };
 
+  const getCardNDRPerDayValue = (card) => {
+    const cardType = getCardType(card);
+    const index = cardsApy.findIndex(
+      (element) =>
+        element.type === cardType &&
+        element.rarity === card.rarity.weight &&
+        element.strength === card.strength
+    );
+
+    if (index === -1) {
+      return 0;
+    } else {
+      return cardsApy[index].ndrPerDay;
+    }
+  };
+
   if (!account) {
     return <UnlockWalletPage />;
   }
@@ -200,6 +216,7 @@ const GetHeroes = () => {
             loadingHash={isBuyingHash}
             loadingEth={isBuyingEth}
             apy={getCardApyValue(c)}
+            ndrPerDay={getCardNDRPerDayValue(c)}
           />
         ))}
       </CardContainer>
