@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import styled from "styled-components";
 import { DoubleArrow, ArrowBack } from "@material-ui/icons";
-import { STAKE_MIN_LIMIT, STAKE_MAX_LIMIT } from "../../helper/constant";
+import { STAKE_MAX_LIMIT } from "../../helper/constant";
 
 const Withdraw = ({ loading, old, staked, onClose, onWithdraw }) => {
   const [amount, setAmount] = useState("0.0000");

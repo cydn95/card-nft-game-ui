@@ -1,15 +1,15 @@
 import { CARD_TYPE } from "./constant";
 
-export const getValueFromObject = (obj, key) => {
+export const getValueFromObject = (obj, key, def = null) => {
   if (obj === null) {
-    return null;
+    return def;
   }
 
   if (key in obj) {
     return obj[key];
   }
 
-  return null;
+  return def;
 };
 
 export const convertFromWei = (val, fixed = 4) =>

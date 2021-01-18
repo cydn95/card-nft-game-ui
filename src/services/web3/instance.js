@@ -18,7 +18,7 @@ import {
   DEV_NFT_STAKING_ADDRESS,
   PROD_NFT_STAKING_ADDRESS,
   DEV_NFT_STAKING_ABI,
-  PROD_NFT_STAKING_ABI,
+  PROD_NFT_STAKING_ABI
 } from "../../helper/contract";
 
 import {
@@ -37,6 +37,7 @@ import {
 } from "../../helper/contractOld";
 
 import { farms } from "../../helper/contractFarm";
+import { partnerNFTs } from "../../helper/contractPartner";
 
 const { REACT_APP_BUILD_MODE } = process.env;
 
@@ -186,7 +187,7 @@ export const getFarmInstance = (web3, token) => {
         farmData.staking.abi,
         farmData.staking.address
       ),
-      prodAddress: farms[token].prod.staking.address
+      prodAddress: farms[token].prod.staking.address,
     },
     token: {
       address: farmData.token.address,
@@ -195,7 +196,7 @@ export const getFarmInstance = (web3, token) => {
         farmData.token.abi,
         farmData.token.address
       ),
-      prodAddress: farms[token].prod.token.address
+      prodAddress: farms[token].prod.token.address,
     },
   };
 };
@@ -241,5 +242,25 @@ export const getNFTStakingInstance = (web3) => {
     address,
     abi,
     instance,
+  };
+};
+
+export const getPartnerNFTInstance = (web3, token) => {
+  const partnerData =
+    REACT_APP_BUILD_MODE === "production"
+      ? partnerNFTs[token].prod
+      : partnerNFTs[token].dev;
+
+  return {
+    token: {
+      address: partnerData.token,
+      abi: partnerData.tokenAbi,
+      instance: new web3.eth.Contract(partnerData.tokenAbi, partnerData.token)
+    },
+    staking: {
+      address: partnerData.staking,
+      abi: partnerData.stakingAbi,
+      instance: new web3.eth.Contract(partnerData.stakingAbi, partnerData.staking)
+    }
   };
 };

@@ -7,37 +7,45 @@ import SectionTitle from "../../component/SectionTitle";
 import LoadingTextIcon from "../../component/LoadingTextIcon";
 import Loading from "../../component/Loading";
 
-import { CARD_SERIES } from "../../helper/constant";
+import { CUSTOM_NFT, MAX_STAKED_CARD_COUNT } from "../../helper/constant";
+import { getValueFromObject } from "../../helper/utils";
 
-import nftStakingActions from "../../redux/nftStaking/actions";
+import customNFTStakingActions from "../../redux/customNFTStaking/actions";
 
-const NFTStakingModal = ({ isBadgeCardStaked, onClose }) => {
+const { REACT_APP_BUILD_MODE } = process.env;
+
+const CustomNFTStakingModal = ({ nftToken, onClose }) => {
   const dispatch = useDispatch();
 
   const [stakeLoading, setStakeLoading] = useState(false);
   const [selectedCardIds, setSelectedCardIds] = useState([]);
 
-  const cards = useSelector((state) => state.Cards.cards);
-  const stakedCardTokens = useSelector(
-    (state) => state.NFTStaking.stakedCardTokens
-  );
+  const cards = useSelector((state) => state.customNFTStaking.cards);
+  const stakedCardTokens = useSelector((state) => getValueFromObject(state.customNFTStaking.staked, nftToken, []));
+  const ownedCardTokens = useSelector((state) => getValueFromObject(state.customNFTStaking.owned, nftToken, []));
 
   const unStakeCards = useMemo(() => {
+    const token = REACT_APP_BUILD_MODE === "development" ? CUSTOM_NFT.NODERUNNER : nftToken;
+
     const ret = [];
 
-    for (let i = 0; i < cards.length; i++) {
-      const idx = stakedCardTokens.findIndex(
-        (e) => Number(e) === Number(cards[i].id)
-      );
-      if (idx < 0 && Number(cards[i].owned) > 0) {
-        if (isBadgeCardStaked && cards[i].series === CARD_SERIES.BADGE) {
-          continue;
+    if (token in cards) {
+      const myCards = cards[token].cards;
+
+      for (let i = 0; i < myCards.length; i++) {
+        const idx = stakedCardTokens.findIndex(
+          (e) => Number(e) === Number(myCards[i].id)
+        );
+        const idx2 = ownedCardTokens.findIndex(
+          (e) => Number(e) === Number(myCards[i].id)
+        );
+        if (idx < 0 && idx2 >= 0) {
+          ret.push({ ...myCards[i] });
         }
-        ret.push({ ...cards[i] });
       }
     }
     return ret;
-  }, [cards, stakedCardTokens, isBadgeCardStaked]);
+  }, [cards, stakedCardTokens, ownedCardTokens, nftToken]);
 
   const handleStake = (e) => {
     e.preventDefault();
@@ -48,34 +56,22 @@ const NFTStakingModal = ({ isBadgeCardStaked, onClose }) => {
       return;
     }
 
-    let badgeCardCnt = 0;
-    for (let i = 0; i < selectedCardIds.length; i++) {
-      const index = cards.findIndex(
-        (c) => c.id === selectedCardIds[i] && c.series === CARD_SERIES.BADGE
-      );
-      if (index >= 0) {
-        badgeCardCnt++;
-      }
-    }
-
-    if (badgeCardCnt > 1) {
-      toast.error("Only 1 badge can be staked");
-      return;
-    }
-
     if (stakeLoading) return;
     // console.log(selectedCardIds);
     setStakeLoading(true);
     dispatch(
-      nftStakingActions.stakeCard(selectedCardIds, (status) => {
+      customNFTStakingActions.stakeCard(nftToken, selectedCardIds, (status) => {
         setSelectedCardIds([]);
         setStakeLoading(false);
         if (status) {
           toast.success("Staked successfully");
-          dispatch(nftStakingActions.getStakedCards());
-          dispatch(nftStakingActions.getMyStakedStrength());
-          dispatch(nftStakingActions.getTotalStakedStrength());
-          dispatch(nftStakingActions.getClaimableNDR());
+          const token = REACT_APP_BUILD_MODE === "development" ? CUSTOM_NFT.NODERUNNER : nftToken;
+          if (token in cards) {
+            dispatch(customNFTStakingActions.getStakedCards(cards[token].cards, nftToken));
+          }
+          dispatch(customNFTStakingActions.getMyStakedStrength(nftToken));
+          dispatch(customNFTStakingActions.getTotalStakedStrength(nftToken));
+          dispatch(customNFTStakingActions.getClaimableNDR(nftToken));
           onClose();
         } else {
           toast.error("Staked failed");
@@ -93,6 +89,9 @@ const NFTStakingModal = ({ isBadgeCardStaked, onClose }) => {
     if (findIndex >= 0) {
       oldSelectedCard.splice(findIndex, 1);
     } else {
+      if (selectedCardIds.length >= (MAX_STAKED_CARD_COUNT - stakedCardTokens.length)) {
+        return;
+      }
       oldSelectedCard.push(cardId);
     }
     setSelectedCardIds([...oldSelectedCard]);
@@ -106,7 +105,7 @@ const NFTStakingModal = ({ isBadgeCardStaked, onClose }) => {
       <MenuWrapper className="animation-fadeInRight">
         <div className="menu-actions">
           <div className="menu-item selected-card-count">
-            {`${selectedCardIds.length} Cards Selected`}
+            {`${selectedCardIds.length}/${MAX_STAKED_CARD_COUNT - stakedCardTokens.length} Cards Selected`}
           </div>
           {selectedCardIds.length > 0 && (
             <div
@@ -154,7 +153,7 @@ const NFTStakingModal = ({ isBadgeCardStaked, onClose }) => {
   );
 };
 
-export default NFTStakingModal;
+export default CustomNFTStakingModal;
 
 const NFTStakeModalContainer = styled.div`
   position: fixed;

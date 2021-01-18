@@ -10,11 +10,11 @@ import PROD_UNISWAPV2PAIR_ABI from "./json/UniswapV2Pair_abi_prod.json";
 import DEV_NDR_ABI from "./json/NDR_abi_dev.json";
 import PROD_NDR_ABI from "./json/NDR_abi_prod.json";
 
-// NFT (New Custom)
+// NFT
 import DEV_NFT_ABI from "./json/NFT_abi_dev.json";
 import PROD_NFT_ABI from "./json/NFT_abi_prod.json";
 
-// NFT Staking (NEW Custom)
+// NFT Staking (Main)
 import DEV_NFT_STAKING_ABI from "./json/NFTStaking_abi_dev.json";
 import PROD_NFT_STAKING_ABI from "./json/NFTStaking_abi_prod.json";
 
