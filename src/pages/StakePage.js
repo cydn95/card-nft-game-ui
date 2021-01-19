@@ -28,7 +28,7 @@ const Stake = () => {
   return (
     <StakePageContainer>
       <NFTStaking />
-      <CustomNFTStaking nftToken={CUSTOM_NFT.MEME} />
+      <CustomNFTStaking icon={"icons/meme.png"} nftToken={CUSTOM_NFT.MEME} />
     </StakePageContainer>
   );
 };

@@ -1,10 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 
-const SectionTitle = ({ title, long }) => {
+const SectionTitle = ({ title, long, icon }) => {
   return (
     <SectionTitleWrapper>
       <div className={`title ${long && "long"}`}>
+        {icon && <img src={`/static/images/${icon}`} width="32" alt=""/> }
         {title.length >= 20 ? <h2>{title}</h2> : title}
       </div>
       <div className="title-line" />
@@ -23,7 +24,7 @@ const SectionTitleWrapper = styled.div`
     background-repeat: no-repeat;
     // min-width: 210.37px;
     // min-height: 75.05px;
-    text-align: right;
+    text-align: center;
     color: #fec100;
     font-size: 23.2px;
     line-height: 38.6px;

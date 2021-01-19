@@ -22,7 +22,7 @@ import {
   getClaimFeeAsync
 } from "../../services/web3/cards";
 
-import { getRewardRateAsync, claimWithFeeAsync, claimAsync } from "../../services/web3/lpStaking";
+import { getRewardRateAsync, claimWithFeeAsync } from "../../services/web3/lpStaking";
 
 import {
   RESPONSE,
@@ -281,10 +281,12 @@ export function* claimNDR() {
     // Get Wallet Account
     const accounts = yield call(web3.eth.getAccounts);
 
+    const claimFee = yield call(getClaimFeeAsync, partnerNft.staking.instance);
     const claimNDRResponse = yield call(
-      claimAsync,
+      claimWithFeeAsync,
       partnerNft.staking.instance,
       web3,
+      claimFee,
       accounts[0]
     );
 

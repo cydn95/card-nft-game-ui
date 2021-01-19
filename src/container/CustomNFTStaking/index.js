@@ -20,7 +20,7 @@ import { getValueFromObject } from "../../helper/utils";
 
 const { REACT_APP_BUILD_MODE } = process.env;
 
-const CustomNFTStaking = ({ nftToken }) => {
+const CustomNFTStaking = ({ icon, nftToken }) => {
   const dispatch = useDispatch();
 
   const cards = useSelector((state) => state.customNFTStaking.cards);
@@ -47,6 +47,30 @@ const CustomNFTStaking = ({ nftToken }) => {
   const approved = useSelector((state) => getValueFromObject(state.customNFTStaking.approved, nftToken, false));
   
   const stakedCardTokens = useSelector((state) => getValueFromObject(state.customNFTStaking.staked, nftToken, [])); // Staked card count
+  const ownedCardTokens = useSelector((state) => getValueFromObject(state.customNFTStaking.owned, nftToken, []));
+
+  const totalStakableCards = useMemo(() => {
+    const token = REACT_APP_BUILD_MODE === "development" ? CUSTOM_NFT.NODERUNNER : nftToken;
+
+    let ret = 0;
+
+    if (token in cards) {
+      const myCards = cards[token].cards;
+
+      for (let i = 0; i < myCards.length; i++) {
+        const idx = stakedCardTokens.findIndex(
+          (e) => Number(e) === Number(myCards[i].id)
+        );
+        const idx2 = ownedCardTokens.findIndex(
+          (e) => Number(e) === Number(myCards[i].id)
+        );
+        if (idx < 0 && idx2 >= 0) {
+          ret++;
+        }
+      }
+    }
+    return ret;
+  }, [cards, stakedCardTokens, ownedCardTokens, nftToken]);
 
   const stakedCards = useMemo(() => {
     const token = REACT_APP_BUILD_MODE === "development" ? CUSTOM_NFT.NODERUNNER : nftToken;
@@ -153,12 +177,14 @@ const CustomNFTStaking = ({ nftToken }) => {
       )}
 
       <MenuWrapper className="animation-fadeInRight" style={{ marginBottom: 20 }}>
-        <SectionTitle title="MEME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" long />
+        <SectionTitle icon={icon} title="MEME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" long />
       </MenuWrapper>
       <CustomNFTStakingBoard nftToken={nftToken} />
       <MenuWrapper className="animation-fadeInRight" style={{ marginTop: 20 }}>
         <div className="menu-actions">
-          <div className="menu-item selected-card-count">{`${selectedUnstakeCardIds.length}/${stakedCardTokens.length} Selected`}</div>
+          <div className="menu-item selected-card-count">
+            {approved ? `${selectedUnstakeCardIds.length}/${stakedCardTokens.length} Selected` : `${totalStakableCards} Available`}
+          </div>
           {selectedUnstakeCardIds.length > 0 && (
             <div
               role="button"
