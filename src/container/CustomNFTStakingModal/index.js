@@ -142,6 +142,10 @@ const CustomNFTStakingModal = ({ nftToken, onClose }) => {
                     onClick={(e) => handleSelectCard(e, card.id)}
                   ></div>
                 </div>
+                <div className="strength-text">
+                  <label>Strength:</label>
+                  <span>{card.strength}</span>
+                </div>
               </CardWrapper>
             );
           })
@@ -246,6 +250,25 @@ const CardWrapper = styled.div`
         background: url("/static/images/bg/components/card/card-border--active.png");
         background-size: cover;
       }
+    }
+  }
+
+  .strength-text{
+    padding-left: 10px;
+    padding-top: 5px;
+
+    label {
+      font-size: 16px;
+      font-family: Orbitron-Medium;
+      color: #80f1ed;
+      margin-bottom: 0;
+    }
+
+    span {
+      font-size: 16px;
+      font-family: Orbitron-Black;
+      color: #fec100;
+      padding-left: 4.66667px;
     }
   }
 `;
