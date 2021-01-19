@@ -240,6 +240,7 @@ const CustomNFTStaking = ({ icon, nftToken }) => {
                 unStaked={c.unStaked}
                 onSelectCard={(cardId) => handleSelectCard(cardId)}
                 selectedCardIds={selectedUnstakeCardIds}
+                strength
               />
             ))}
         </CardContainer>
