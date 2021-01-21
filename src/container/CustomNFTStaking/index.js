@@ -10,12 +10,9 @@ import CardStaking from "../../component/Card/CardStaking";
 import CustomNFTStakingBoard from "../CustomNFTStakingBoard";
 import CustomNFTStakingModal from "../CustomNFTStakingModal";
 
-// import cardsActions from "../../redux/cards/actions";
-import nftStakingActions from "../../redux/nftStaking/actions";
-// import memeStakingActions from "../../redux/memeStaking/actions";
 import customNFTStakingActions from "../../redux/customNFTStaking/actions";
 
-import { CUSTOM_NFT, MAX_STAKED_CARD_COUNT } from "../../helper/constant";
+import { CUSTOM_NFT, RESPONSE } from "../../helper/constant";
 import { getValueFromObject } from "../../helper/utils";
 
 const { REACT_APP_BUILD_MODE } = process.env;
@@ -30,11 +27,8 @@ const CustomNFTStaking = ({ icon, nftToken }) => {
   }, [dispatch, nftToken]);
 
   useEffect(() => {
-    const token = REACT_APP_BUILD_MODE === "development" ? CUSTOM_NFT.NODERUNNER : nftToken;
-    if (token in cards) {
-      dispatch(customNFTStakingActions.getStakedCards(cards[token].cards, nftToken));
-    }
-  }, [dispatch, nftToken, cards])
+    dispatch(customNFTStakingActions.getStakedCards(nftToken));
+  }, [dispatch, nftToken])
 
   // Selected Cards for Staking or Unstaking
   const [selectedUnstakeCardIds, setSelectedUnstakeCardIds] = useState([]);
@@ -97,12 +91,6 @@ const CustomNFTStaking = ({ icon, nftToken }) => {
     return ret;
   }, [cards, stakedCardTokens, nftToken]);
 
-  useEffect(() => {
-    if (cards.length > 0) {
-      dispatch(nftStakingActions.getMyCardsCount(cards));
-    }
-  }, [dispatch, cards]);
-
   const handleSelectCard = (cardId) => {
     const oldUnstakeCardIds = [...selectedUnstakeCardIds];
     const findIndex = oldUnstakeCardIds.findIndex((id) => id === cardId);
@@ -129,12 +117,9 @@ const CustomNFTStaking = ({ icon, nftToken }) => {
       customNFTStakingActions.unStakeCard(nftToken, selectedUnstakeCardIds, (status) => {
         setSelectedUnstakeCardIds([]);
         setUnStakeLoading(false);
-        if (status) {
+        if (status === RESPONSE.SUCCESS) {
           toast.success("Sucess");
-          const token = REACT_APP_BUILD_MODE === "development" ? CUSTOM_NFT.NODERUNNER : nftToken;
-          if (token in cards) {
-            dispatch(customNFTStakingActions.getStakedCards(cards[token].cards, nftToken));
-          }
+          dispatch(customNFTStakingActions.getStakedCards(nftToken));
           dispatch(customNFTStakingActions.getMyStakedStrength(nftToken));
           dispatch(customNFTStakingActions.getTotalStakedStrength(nftToken));
           dispatch(customNFTStakingActions.getClaimableNDR(nftToken));
@@ -158,7 +143,7 @@ const CustomNFTStaking = ({ icon, nftToken }) => {
     dispatch(
       customNFTStakingActions.approveAll(nftToken, true, (status) => {
         setApproveLoading(false);
-        if (status) {
+        if (status === RESPONSE.SUCCESS) {
           toast.success("Approved successfully");
         } else {
           toast.error("Approved failed");
@@ -218,7 +203,7 @@ const CustomNFTStaking = ({ icon, nftToken }) => {
                   </div>
                 )
               )}
-            {approved && (stakedCardTokens.length < MAX_STAKED_CARD_COUNT) && (
+            {approved && (
               <div
                 role="button"
                 className="stake-button button-stake-all"

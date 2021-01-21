@@ -7,7 +7,7 @@ import SectionTitle from "../../component/SectionTitle";
 import LoadingTextIcon from "../../component/LoadingTextIcon";
 import Loading from "../../component/Loading";
 
-import { CARD_SERIES } from "../../helper/constant";
+import { CARD_SERIES, RESPONSE } from "../../helper/constant";
 
 import nftStakingActions from "../../redux/nftStaking/actions";
 
@@ -70,7 +70,7 @@ const NFTStakingModal = ({ isBadgeCardStaked, onClose }) => {
       nftStakingActions.stakeCard(selectedCardIds, (status) => {
         setSelectedCardIds([]);
         setStakeLoading(false);
-        if (status) {
+        if (status === RESPONSE.SUCCESS) {
           toast.success("Staked successfully");
           dispatch(nftStakingActions.getStakedCards());
           dispatch(nftStakingActions.getMyStakedStrength());

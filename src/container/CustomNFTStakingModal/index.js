@@ -7,7 +7,7 @@ import SectionTitle from "../../component/SectionTitle";
 import LoadingTextIcon from "../../component/LoadingTextIcon";
 import Loading from "../../component/Loading";
 
-import { CUSTOM_NFT, MAX_STAKED_CARD_COUNT } from "../../helper/constant";
+import { CUSTOM_NFT, RESPONSE } from "../../helper/constant";
 import { getValueFromObject } from "../../helper/utils";
 
 import customNFTStakingActions from "../../redux/customNFTStaking/actions";
@@ -63,12 +63,9 @@ const CustomNFTStakingModal = ({ nftToken, onClose }) => {
       customNFTStakingActions.stakeCard(nftToken, selectedCardIds, (status) => {
         setSelectedCardIds([]);
         setStakeLoading(false);
-        if (status) {
+        if (status === RESPONSE.SUCCESS) {
           toast.success("Staked successfully");
-          const token = REACT_APP_BUILD_MODE === "development" ? CUSTOM_NFT.NODERUNNER : nftToken;
-          if (token in cards) {
-            dispatch(customNFTStakingActions.getStakedCards(cards[token].cards, nftToken));
-          }
+          dispatch(customNFTStakingActions.getStakedCards(nftToken));
           dispatch(customNFTStakingActions.getMyStakedStrength(nftToken));
           dispatch(customNFTStakingActions.getTotalStakedStrength(nftToken));
           dispatch(customNFTStakingActions.getClaimableNDR(nftToken));
@@ -89,9 +86,6 @@ const CustomNFTStakingModal = ({ nftToken, onClose }) => {
     if (findIndex >= 0) {
       oldSelectedCard.splice(findIndex, 1);
     } else {
-      if (selectedCardIds.length >= (MAX_STAKED_CARD_COUNT - stakedCardTokens.length)) {
-        return;
-      }
       oldSelectedCard.push(cardId);
     }
     setSelectedCardIds([...oldSelectedCard]);
@@ -105,7 +99,7 @@ const CustomNFTStakingModal = ({ nftToken, onClose }) => {
       <MenuWrapper className="animation-fadeInRight">
         <div className="menu-actions">
           <div className="menu-item selected-card-count">
-            {`${selectedCardIds.length}/${MAX_STAKED_CARD_COUNT - stakedCardTokens.length} Cards Selected`}
+            {`${selectedCardIds.length} Cards Selected`}
           </div>
           {selectedCardIds.length > 0 && (
             <div

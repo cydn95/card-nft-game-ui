@@ -5,6 +5,8 @@ import styled from "styled-components";
 import { toast } from "react-toastify";
 
 import { convertFromWei } from "../../helper/utils";
+import { RESPONSE } from "../../helper/constant";
+
 import cardsActions from "../../redux/cards/actions";
 import lpstakingActions from "../../redux/lpstaking/actions";
 import oldNFTStakingActions from "../../redux/oldNFTStaking/actions";
@@ -49,7 +51,7 @@ const NFTStakingBoardOld = () => {
     dispatch(
       oldNFTStakingActions.unStakeAllCards((status) => {
         setUnStakeAllLoading(false);
-        if (status) {
+        if (status === RESPONSE.SUCCESS) {
           toast.success("Sucess");
           dispatch(cardsActions.getCards());
           dispatch(oldNFTStakingActions.getStakedCards());
@@ -68,7 +70,7 @@ const NFTStakingBoardOld = () => {
     dispatch(
       oldNFTStakingActions.claimNDR((status) => {
         setClaimNDRLoading(false);
-        if (status) {
+        if (status === RESPONSE.SUCCESS) {
           toast.success("Sucess");
           dispatch(oldNFTStakingActions.getClaimableNDR());
           dispatch(lpstakingActions.getNDRBalance());

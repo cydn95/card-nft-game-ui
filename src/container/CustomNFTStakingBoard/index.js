@@ -10,6 +10,7 @@ import customNFTStakingActions from "../../redux/customNFTStaking/actions";
 
 import { CARD_STRENGTH_MULTIPLIER } from "../../helper/contract";
 import { getValueFromObject } from "../../helper/utils";
+import { RESPONSE } from "../../helper/constant";
 
 const CustomNFTStakingBoard = ({ nftToken }) => {
   const dispatch = useDispatch();
@@ -49,8 +50,9 @@ const CustomNFTStakingBoard = ({ nftToken }) => {
     dispatch(
       customNFTStakingActions.unStakeAllCards(nftToken, (status) => {
         setUnStakeAllLoading(false);
-        if (status) {
+        if (status === RESPONSE.SUCCESS) {
           toast.success("Sucess");
+          dispatch(customNFTStakingActions.getStakedCards(nftToken));
           dispatch(customNFTStakingActions.getMyStakedStrength(nftToken));
           dispatch(customNFTStakingActions.getTotalStakedStrength(nftToken));
           dispatch(customNFTStakingActions.getClaimableNDR(nftToken));
@@ -67,7 +69,7 @@ const CustomNFTStakingBoard = ({ nftToken }) => {
     dispatch(
       customNFTStakingActions.claimNDR(nftToken, (status) => {
         setClaimNDRLoading(false);
-        if (status) {
+        if (status === RESPONSE.SUCCESS) {
           toast.success("Sucess");
           dispatch(customNFTStakingActions.getClaimableNDR(nftToken));
           dispatch(lpstakingActions.getNDRBalance());

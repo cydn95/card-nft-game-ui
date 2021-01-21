@@ -49,9 +49,9 @@ const actions = {
     type: actions.GET_NDR_PER_DAY,
     payload: { token }
   }),
-  getStakedCards: (cards, token) => ({
+  getStakedCards: (token) => ({
     type: actions.GET_STAKED_CARDS,
-    payload: { cards, token }
+    payload: { token }
   }),
 
   approveAll: (token, approved, callback) => ({

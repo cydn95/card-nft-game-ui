@@ -13,7 +13,7 @@ import NFTStakingModal from "../NFTStakingModal";
 
 import nftStakingActions from "../../redux/nftStaking/actions";
 
-import { CARD_SERIES } from "../../helper/constant";
+import { CARD_SERIES, RESPONSE } from "../../helper/constant";
 
 const NFTStaking = () => {
   const dispatch = useDispatch();
@@ -104,7 +104,7 @@ const NFTStaking = () => {
       nftStakingActions.unStakeCard(selectedUnstakeCardIds, (status) => {
         setSelectedUnstakeCardIds([]);
         setUnStakeLoading(false);
-        if (status) {
+        if (status === RESPONSE.SUCCESS) {
           toast.success("Sucess");
           dispatch(nftStakingActions.getStakedCards());
           dispatch(nftStakingActions.getMyStakedStrength());
@@ -130,7 +130,7 @@ const NFTStaking = () => {
     dispatch(
       nftStakingActions.approveAll(true, (status) => {
         setApproveLoading(false);
-        if (status) {
+        if (status === RESPONSE.SUCCESS) {
           toast.success("Approved successfully");
           dispatch(
             nftStakingActions.getApprovedStatus((status) => {

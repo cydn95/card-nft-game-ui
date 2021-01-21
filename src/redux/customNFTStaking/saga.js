@@ -61,7 +61,7 @@ export function* getCustomCards() {
 export function* getStakedCards() {
   yield takeEvery(actions.GET_STAKED_CARDS, function* ({ payload }) {
 
-    const { cards, token } = payload;
+    const { token } = payload;
 
     const web3 = yield call(getWeb3);
     const partnerNft = getPartnerNFTInstance(web3, token);
@@ -76,11 +76,12 @@ export function* getStakedCards() {
 
     // const cardsWithBalance = yield call(getOwnedCardsCountMultiAsync, partnerNft.token.instance, addresses, tokenIds);
 
+    const stakableTokenIds = yield call(getAllStakedCardsAsync, partnerNft.staking.instance);
     const ownedTokens = [];
-    for (let i = 0; i < cards.length; i++) {
-      const balance = yield call(getOwnedCardsCountAsync, partnerNft.token.instance, accounts[0], cards[i].id);
+    for (let i = 0; i < stakableTokenIds.length; i++) {
+      const balance = yield call(getOwnedCardsCountAsync, partnerNft.token.instance, accounts[0], stakableTokenIds[i]);
       if (Number(balance) > 0) {
-        ownedTokens.push(cards[i].id);
+        ownedTokens.push(stakableTokenIds[i]);
       }
     }
     // cardsWithBalance.forEach((c, index) => {
@@ -89,12 +90,11 @@ export function* getStakedCards() {
     //   }
     // });
     
-    const getStakedTokens = yield call(getAllStakedCardsAsync, partnerNft.staking.instance);
     const stakedTokens = [];
-    for (let i = 0; i < getStakedTokens.length; i++) {
-      const stakingBalance = yield call(getOwnedCardsCountAsync, partnerNft.staking.instance, getStakedTokens[i], accounts[0]);
+    for (let i = 0; i < stakableTokenIds.length; i++) {
+      const stakingBalance = yield call(getOwnedCardsCountAsync, partnerNft.staking.instance, stakableTokenIds[i], accounts[0]);
       if (stakingBalance > 0) {
-        stakedTokens.push(getStakedTokens[i]);
+        stakedTokens.push(stakableTokenIds[i]);
       }
     }
 
