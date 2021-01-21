@@ -99,11 +99,11 @@ const CustomNFTStakingBoard = ({ nftToken }) => {
         )}
         <div className="stat">
           <h6>My Staked Strength</h6>
-          <p>{(myStakedStrength / CARD_STRENGTH_MULTIPLIER).toFixed(1)}</p>
+          <p>{myStakedStrength}</p>
         </div>
         <div className="stat">
           <h6>Total Staked Strength</h6>
-          <p>{(totalStakedStrength / CARD_STRENGTH_MULTIPLIER).toFixed(1)}</p>
+          <p>{totalStakedStrength}</p>
         </div>
         <div className="stat">
           <div style={{ marginTop: -3 }}>
