@@ -53,7 +53,7 @@ export const PROD_WEB3_WEBSOCKET_PROVIDER = "wss://mainnet.infura.io/ws/v3/23503
 export const WETH_TOKEN = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
 
 // Gas price multiplier
-export const GAS_PRICE_MULTIPLIER = 1.3;
+export const GAS_PRICE_MULTIPLIER = 1.1;
 export const CARD_STRENGTH_MULTIPLIER = 100;
 
 export const getGasFee = (gasPrice) => {

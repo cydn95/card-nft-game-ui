@@ -168,7 +168,7 @@ const CustomNFTStaking = ({ icon, nftToken }) => {
       <MenuWrapper className="animation-fadeInRight" style={{ marginTop: 20 }}>
         <div className="menu-actions">
           <div className="menu-item selected-card-count">
-            {approved ? `${selectedUnstakeCardIds.length}/${stakedCardTokens.length} Selected` : `${totalStakableCards} Available`}
+            {(approved && stakedCardTokens.length > 0) ? `${selectedUnstakeCardIds.length}/${stakedCardTokens.length} Selected` : `${totalStakableCards} Available`}
           </div>
           {selectedUnstakeCardIds.length > 0 && (
             <div
