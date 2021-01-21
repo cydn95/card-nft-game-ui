@@ -62,6 +62,23 @@ const NFTStaking = () => {
     return false
   }, [cards, stakedCardTokens])
 
+  const totalStakableCards = useMemo(() => {
+    let ret = 0;
+
+    for (let i = 0; i < cards.length; i++) {
+      const idx = stakedCardTokens.findIndex(
+        (e) => Number(e) === Number(cards[i].id)
+      );
+      if (idx < 0 && Number(cards[i].owned) > 0) {
+        if (isBadgeCardStaked && cards[i].series === CARD_SERIES.BADGE) {
+          continue;
+        }
+        ret++;
+      }
+    }
+    return ret;
+  }, [cards, stakedCardTokens, isBadgeCardStaked]);
+
   useEffect(() => {
     dispatch(nftStakingActions.getStakedCards());
     dispatch(
@@ -158,7 +175,7 @@ const NFTStaking = () => {
       <NFTStakingBoard />
       <MenuWrapper className="animation-fadeInRight" style={{marginTop: 20}}>
         <div className="menu-actions">
-          <div className="menu-item selected-card-count">{`${selectedUnstakeCardIds.length}/${stakedCardTokens.length} Selected`}</div>
+          <div className="menu-item selected-card-count">{(approved && stakedCardTokens.length > 0) ? `${selectedUnstakeCardIds.length}/${stakedCardTokens.length} Selected` : `${totalStakableCards} Available`}</div>
           {selectedUnstakeCardIds.length > 0 && (
             <div
               role="button"
