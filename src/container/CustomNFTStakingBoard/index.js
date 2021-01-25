@@ -8,7 +8,6 @@ import { convertFromWei } from "../../helper/utils";
 import lpstakingActions from "../../redux/lpstaking/actions";
 import customNFTStakingActions from "../../redux/customNFTStaking/actions";
 
-import { CARD_STRENGTH_MULTIPLIER } from "../../helper/contract";
 import { getValueFromObject } from "../../helper/utils";
 import { RESPONSE } from "../../helper/constant";
 

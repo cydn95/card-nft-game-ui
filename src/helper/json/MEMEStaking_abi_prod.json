@@ -310,6 +310,30 @@
     "type": "function"
   },
   {
+    "inputs": [
+      { "internalType": "uint256[]", "name": "_tokenIds", "type": "uint256[]" },
+      {
+        "internalType": "uint256[]",
+        "name": "_maxAmounts",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "_strengthWeights",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "_strengthDecimals",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "initNftTokenBatch",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "lastTimeRewardApplicable",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
@@ -396,6 +420,13 @@
     "name": "owner",
     "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "pause",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -524,6 +555,33 @@
       { "internalType": "address", "name": "newOwner", "type": "address" }
     ],
     "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "unpause",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_tokenId", "type": "uint256" },
+      { "internalType": "uint256", "name": "_maxAmount", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "_strengthWeight",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_strengthDecimals",
+        "type": "uint256"
+      }
+    ],
+    "name": "updateNftToken",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
