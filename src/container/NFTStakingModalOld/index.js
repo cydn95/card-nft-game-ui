@@ -8,6 +8,8 @@ import CloseIcon from "@material-ui/icons/Close";
 import cardsActions from "../../redux/cards/actions";
 import oldNFTStakingActions from "../../redux/oldNFTStaking/actions";
 
+import { RESPONSE } from "../../helper/constant";
+
 const NFTStakingModalOld = ({ onClose }) => {
   const dispatch = useDispatch();
 
@@ -43,7 +45,7 @@ const NFTStakingModalOld = ({ onClose }) => {
       oldNFTStakingActions.stakeCard(cardId, (status) => {
         setSelectedCardId(0);
         setStakeLoading(false);
-        if (status) {
+        if (status === RESPONSE.SUCCESS) {
           toast.success("Staked successfully");
           dispatch(cardsActions.getCards());
           dispatch(oldNFTStakingActions.getStakedCards());

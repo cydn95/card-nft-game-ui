@@ -5,42 +5,40 @@ import styled from "styled-components";
 import { toast } from "react-toastify";
 
 import { convertFromWei } from "../../helper/utils";
+import lpstakingActions from "../../redux/lpstaking/actions";
+import customNFTStakingActions from "../../redux/customNFTStaking/actions";
+
+import { getValueFromObject } from "../../helper/utils";
 import { RESPONSE } from "../../helper/constant";
 
-import cardsActions from "../../redux/cards/actions";
-import lpstakingActions from "../../redux/lpstaking/actions";
-import oldNFTStakingActions from "../../redux/oldNFTStaking/actions";
-
-const NFTStakingBoardOld = () => {
+const CustomNFTStakingBoard = ({ nftToken }) => {
   const dispatch = useDispatch();
 
   const [unStakeAllLoading, setUnStakeAllLoading] = useState(false);
   const [claimNDRLoading, setClaimNDRLoading] = useState(false);
 
-  const myStakedStrength = useSelector((state) => state.OldNFTStaking.myStakedStrength);
-  const totalStakedStrength = useSelector(
-    (state) => state.OldNFTStaking.totalStakedStrength
-  );
-  const claimableNDR = useSelector((state) => state.OldNFTStaking.claimableNDR);
-  const ndrPerDay = useSelector((state) => state.OldNFTStaking.ndrPerDay);
+  const myStakedStrength = useSelector((state) => getValueFromObject(state.customNFTStaking.myStakedStrength, nftToken, 0));
+  const totalStakedStrength = useSelector((state) => getValueFromObject(state.customNFTStaking.totalStakedStrength, nftToken, 0));
+  const claimableNDR = useSelector((state) => getValueFromObject(state.customNFTStaking.claimableNDR, nftToken, 0));
+  const ndrPerDay = useSelector((state) => getValueFromObject(state.customNFTStaking.ndrPerDay, nftToken, 0));
 
   const init = useCallback(() => {
-    dispatch(oldNFTStakingActions.getMyStakedStrength());
-    dispatch(oldNFTStakingActions.getTotalStakedStrength());
-    dispatch(oldNFTStakingActions.getClaimableNDR());
-    dispatch(oldNFTStakingActions.getNDRPerDay());
-  }, [dispatch]);
+    dispatch(customNFTStakingActions.getMyStakedStrength(nftToken));
+    dispatch(customNFTStakingActions.getTotalStakedStrength(nftToken));
+    dispatch(customNFTStakingActions.getClaimableNDR(nftToken));
+    dispatch(customNFTStakingActions.getNDRPerDay(nftToken));
+  }, [dispatch, nftToken]);
 
   // Timer to get <NDR Per Day>
   useEffect(() => {
     let interval = null;
 
     interval = setInterval(() => {
-      dispatch(oldNFTStakingActions.getClaimableNDR());
-      dispatch(oldNFTStakingActions.getNDRPerDay());
+      dispatch(customNFTStakingActions.getClaimableNDR(nftToken));
+      dispatch(customNFTStakingActions.getNDRPerDay(nftToken));
     }, 30000);
     return () => clearInterval(interval);
-  }, [dispatch]);
+  }, [dispatch, nftToken]);
 
   useEffect(() => {
     init();
@@ -49,15 +47,15 @@ const NFTStakingBoardOld = () => {
   const handleUnStakeAll = () => {
     setUnStakeAllLoading(true);
     dispatch(
-      oldNFTStakingActions.unStakeAllCards((status) => {
+      customNFTStakingActions.unStakeAllCards(nftToken, (status) => {
         setUnStakeAllLoading(false);
         if (status === RESPONSE.SUCCESS) {
           toast.success("Sucess");
-          dispatch(cardsActions.getCards());
-          dispatch(oldNFTStakingActions.getStakedCards());
-          dispatch(oldNFTStakingActions.getMyStakedStrength());
-          dispatch(oldNFTStakingActions.getTotalStakedStrength());
-          dispatch(oldNFTStakingActions.getClaimableNDR());
+          dispatch(customNFTStakingActions.getStakedCards(nftToken));
+          dispatch(customNFTStakingActions.getMyStakedStrength(nftToken));
+          dispatch(customNFTStakingActions.getTotalStakedStrength(nftToken));
+          dispatch(customNFTStakingActions.getClaimableNDR(nftToken));
+          dispatch(customNFTStakingActions.getNDRPerDay(nftToken));
         } else {
           toast.error("Failed...");
         }
@@ -68,11 +66,11 @@ const NFTStakingBoardOld = () => {
   const handleClaimNDR = () => {
     setClaimNDRLoading(true);
     dispatch(
-      oldNFTStakingActions.claimNDR((status) => {
+      customNFTStakingActions.claimNDR(nftToken, (status) => {
         setClaimNDRLoading(false);
         if (status === RESPONSE.SUCCESS) {
           toast.success("Sucess");
-          dispatch(oldNFTStakingActions.getClaimableNDR());
+          dispatch(customNFTStakingActions.getClaimableNDR(nftToken));
           dispatch(lpstakingActions.getNDRBalance());
         } else {
           toast.error("Failed...");
@@ -113,7 +111,7 @@ const NFTStakingBoardOld = () => {
           </div>
           <div>
             <label>NDR per day:</label>
-            <span>{convertFromWei(ndrPerDay, 3)}</span>
+            <span>{convertFromWei(ndrPerDay, 4)}</span>
           </div>
         </div>
         {claimNDRLoading ? (
@@ -284,4 +282,4 @@ const NFTStakeWrapper = styled.div`
   }
 `;
 
-export default NFTStakingBoardOld;
+export default CustomNFTStakingBoard;

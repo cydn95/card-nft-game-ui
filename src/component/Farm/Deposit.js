@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { ArrowBack, Done, DoubleArrow } from "@material-ui/icons";
 
-import { STAKE_MIN_LIMIT, STAKE_MAX_LIMIT } from "../../helper/constant";
+import { STAKE_MAX_LIMIT } from "../../helper/constant";
 
 const Deposit = ({
   loading,

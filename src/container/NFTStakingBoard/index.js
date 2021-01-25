@@ -9,6 +9,7 @@ import lpstakingActions from "../../redux/lpstaking/actions";
 import nftStakingActions from "../../redux/nftStaking/actions";
 
 import { CARD_STRENGTH_MULTIPLIER } from "../../helper/contract";
+import { RESPONSE } from "../../helper/constant";
 
 const NFTStakingBoard = () => {
   const dispatch = useDispatch();
@@ -50,7 +51,7 @@ const NFTStakingBoard = () => {
     dispatch(
       nftStakingActions.unStakeAllCards((status) => {
         setUnStakeAllLoading(false);
-        if (status) {
+        if (status === RESPONSE.SUCCESS) {
           toast.success("Sucess");
           dispatch(nftStakingActions.getStakedCards());
           dispatch(nftStakingActions.getMyStakedStrength());
@@ -68,7 +69,7 @@ const NFTStakingBoard = () => {
     dispatch(
       nftStakingActions.claimNDR((status) => {
         setClaimNDRLoading(false);
-        if (status) {
+        if (status === RESPONSE.SUCCESS) {
           toast.success("Sucess");
           dispatch(nftStakingActions.getClaimableNDR());
           dispatch(lpstakingActions.getNDRBalance());

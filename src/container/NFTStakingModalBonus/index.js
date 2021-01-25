@@ -8,7 +8,7 @@ import styled from "styled-components";
 import SectionTitle from "../../component/SectionTitle";
 // import LoadingTextIcon from "../../component/LoadingTextIcon";
 
-import { CARD_SERIES } from "../../helper/constant";
+import { CARD_SERIES, RESPONSE } from "../../helper/constant";
 
 import nftStakingActions from "../../redux/nftStaking/actions";
 
@@ -49,7 +49,7 @@ const NFTBonusStakingModal = ({ onClose }) => {
       nftStakingActions.stakeCard([cardId], (status) => {
         setSelectedCardId(0);
         setStakeLoading(false);
-        if (status) {
+        if (status === RESPONSE.SUCCESS) {
           toast.success("Staked successfully");
           dispatch(nftStakingActions.getStakedCards());
           dispatch(nftStakingActions.getMyStakedStrength());

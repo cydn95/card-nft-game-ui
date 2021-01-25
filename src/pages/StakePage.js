@@ -5,13 +5,19 @@ import styled from "styled-components";
 
 import UnlockWalletPage from "./UnlockWalletPage";
 import NFTStaking from "../container/NFTStakingPage";
+import CustomNFTStaking from "../container/CustomNFTStaking";
+
+import { CUSTOM_NFT } from "../helper/constant";
+
 import cardsActions from "../redux/cards/actions";
+import memeStakingActions from "../redux/customNFTStaking/actions";
 
 const Stake = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(cardsActions.getCards());
+    dispatch(memeStakingActions.getCustomCards());
   }, [dispatch]);
 
   const { account } = useWallet();
@@ -22,6 +28,7 @@ const Stake = () => {
   return (
     <StakePageContainer>
       <NFTStaking />
+      <CustomNFTStaking icon={"icons/meme.png"} nftToken={CUSTOM_NFT.MEME} />
     </StakePageContainer>
   );
 };

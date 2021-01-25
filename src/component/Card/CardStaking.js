@@ -5,7 +5,8 @@ const CardStaking = ({
   card,
   unStaked,
   onSelectCard,
-  selectedCardIds
+  selectedCardIds,
+  strength
 }) => {
   const handleClickCard = () => {
     if (unStaked) return;
@@ -33,9 +34,12 @@ const CardStaking = ({
         ) : (
             <img src={card.image} alt={`${card}`} className="card-image" />
           )}
-        <div className="card-border" onClick={(e) => handleClickCard()}>
-        </div>
+        <div className="card-border" onClick={(e) => handleClickCard()}></div>
       </div>
+      {strength && <div className="strength-text">
+        <label>Strength:</label>
+        <span>{card.strength}</span>
+      </div>}
     </CardWrapper>
   );
 };
@@ -93,6 +97,25 @@ const CardWrapper = styled.div`
       //     background-size: cover;
       //   }
       // }
+    }
+  }
+
+  .strength-text{
+    padding-left: 10px;
+    padding-top: 5px;
+
+    label {
+      font-size: 16px;
+      font-family: Orbitron-Medium;
+      color: #80f1ed;
+      margin-bottom: 0;
+    }
+
+    span {
+      font-size: 16px;
+      font-family: Orbitron-Black;
+      color: #fec100;
+      padding-left: 4.66667px;
     }
   }
 `;

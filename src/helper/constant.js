@@ -60,3 +60,8 @@ export const CARD_RARITY = {
 };
 
 export const OPENSEA_BUY_LINK = "https://opensea.io/assets/0x89ee76cc25fcbf1714ed575faa6a10202b71c26a/";
+
+export const CUSTOM_NFT = {
+  NODERUNNER: 'NODERUNNER',
+  MEME: 'MEME',
+}

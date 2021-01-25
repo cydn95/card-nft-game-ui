@@ -49,6 +49,18 @@ export const getOwnedCardsCountAsync = async (instance, address, tokenId) => {
     });
 };
 
+export const getOwnedCardsCountMultiAsync = async (instance, addresses, tokenIds) => {
+  return await instance.methods
+    .balanceOfBatch(addresses, tokenIds)
+    .call()
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
 export const getStakedStrengthByAddressAsync = async (instance, address) => {
   return await instance.methods
     .strengthWeight(address)

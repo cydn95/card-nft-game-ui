@@ -7,11 +7,7 @@ import Stake from "../../component/Farm/Stake";
 import Deposit from "../../component/Farm/Deposit";
 import Withdraw from "../../component/Farm/Withdraw";
 
-import {
-  STAKE_MIN_LIMIT,
-  STAKE_MAX_LIMIT,
-  RESPONSE,
-} from "../../helper/constant";
+import { STAKE_MAX_LIMIT, RESPONSE } from "../../helper/constant";
 import { convertFromWei } from "../../helper/utils";
 
 import lpstakingActions from "../../redux/lpstaking/actions";
@@ -31,10 +27,12 @@ const LPStakingBoard = () => {
 
   const balance = useSelector((state) => state.LpStaking.lpTokenBalance);
   const stakedAmount = useSelector((state) => state.LpStaking.stakedAmount);
-  const oldStakedAmount = useSelector((state) => state.LpStaking.oldStakedAmount);
+  const oldStakedAmount = useSelector(
+    (state) => state.LpStaking.oldStakedAmount
+  );
   const earningAmount = useSelector((state) => state.LpStaking.earningAmount);
-  const stat = useSelector((state) => state.LpStaking.stat)
-  const allowance = useSelector((state) => state.LpStaking.allowance)
+  const stat = useSelector((state) => state.LpStaking.stat);
+  const allowance = useSelector((state) => state.LpStaking.allowance);
 
   const init = useCallback(() => {
     dispatch(lpstakingActions.getLPTokenAllowance());

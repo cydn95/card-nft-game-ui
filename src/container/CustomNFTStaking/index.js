@@ -7,16 +7,28 @@ import SectionTitle from "../../component/SectionTitle";
 import LoadingTextIcon from "../../component/LoadingTextIcon";
 
 import CardStaking from "../../component/Card/CardStaking";
+import CustomNFTStakingBoard from "../CustomNFTStakingBoard";
+import CustomNFTStakingModal from "../CustomNFTStakingModal";
 
-import NFTStakingBoard from "../NFTStakingBoard";
-import NFTStakingModal from "../NFTStakingModal";
+import customNFTStakingActions from "../../redux/customNFTStaking/actions";
 
-import nftStakingActions from "../../redux/nftStaking/actions";
+import { CUSTOM_NFT, RESPONSE } from "../../helper/constant";
+import { getValueFromObject } from "../../helper/utils";
 
-import { CARD_SERIES, RESPONSE } from "../../helper/constant";
+const { REACT_APP_BUILD_MODE } = process.env;
 
-const NFTStaking = () => {
+const CustomNFTStaking = ({ icon, nftToken }) => {
   const dispatch = useDispatch();
+
+  const cards = useSelector((state) => state.customNFTStaking.cards);
+
+  useEffect(() => {
+    dispatch(customNFTStakingActions.getApprovedStatus(nftToken));
+  }, [dispatch, nftToken]);
+
+  useEffect(() => {
+    dispatch(customNFTStakingActions.getStakedCards(nftToken));
+  }, [dispatch, nftToken])
 
   // Selected Cards for Staking or Unstaking
   const [selectedUnstakeCardIds, setSelectedUnstakeCardIds] = useState([]);
@@ -25,75 +37,59 @@ const NFTStaking = () => {
 
   const [unStakeLoading, setUnStakeLoading] = useState(false);
   const [approveLoading, setApproveLoading] = useState(false);
-  const [approved, setApproved] = useState(false);
-
-  const cards = useSelector((state) => state.Cards.cards);
-  const stakedCardTokens = useSelector(
-    (state) => state.NFTStaking.stakedCardTokens
-  ); // Staked card count
-
-  const stakedCards = useMemo(() => {
-    const ret = [];
-    for (let i = 0; i < stakedCardTokens.length; i++) {
-      const cardIndex = cards.findIndex(
-        (e) => Number(e.id) === Number(stakedCardTokens[i])
-      );
-
-      if (cardIndex >= 0) {
-        ret.push({
-          card: { ...cards[cardIndex] },
-          unStaked: false,
-        });
-      }
-    }
-    return ret;
-  }, [cards, stakedCardTokens]);
-
-  const isBadgeCardStaked = useMemo(() => {
-    for (let i = 0; i < stakedCardTokens.length; i++) {
-      const cardIndex = cards.findIndex(
-        (e) => Number(e.id) === Number(stakedCardTokens[i])
-      );
-      
-      if (cardIndex >= 0 && cards[cardIndex].series === CARD_SERIES.BADGE) {
-        return true
-      }
-    }
-    return false
-  }, [cards, stakedCardTokens])
+  
+  const approved = useSelector((state) => getValueFromObject(state.customNFTStaking.approved, nftToken, false));
+  
+  const stakedCardTokens = useSelector((state) => getValueFromObject(state.customNFTStaking.staked, nftToken, [])); // Staked card count
+  const ownedCardTokens = useSelector((state) => getValueFromObject(state.customNFTStaking.owned, nftToken, []));
 
   const totalStakableCards = useMemo(() => {
+    const token = REACT_APP_BUILD_MODE === "development" ? CUSTOM_NFT.NODERUNNER : nftToken;
+
     let ret = 0;
 
-    for (let i = 0; i < cards.length; i++) {
-      const idx = stakedCardTokens.findIndex(
-        (e) => Number(e) === Number(cards[i].id)
-      );
-      if (idx < 0 && Number(cards[i].owned) > 0) {
-        if (isBadgeCardStaked && cards[i].series === CARD_SERIES.BADGE) {
-          continue;
+    if (token in cards) {
+      const myCards = cards[token].cards;
+
+      for (let i = 0; i < myCards.length; i++) {
+        const idx = stakedCardTokens.findIndex(
+          (e) => Number(e) === Number(myCards[i].id)
+        );
+        const idx2 = ownedCardTokens.findIndex(
+          (e) => Number(e) === Number(myCards[i].id)
+        );
+        if (idx < 0 && idx2 >= 0) {
+          ret++;
         }
-        ret++;
       }
     }
     return ret;
-  }, [cards, stakedCardTokens, isBadgeCardStaked]);
+  }, [cards, stakedCardTokens, ownedCardTokens, nftToken]);
 
-  useEffect(() => {
-    dispatch(nftStakingActions.getStakedCards());
-    dispatch(
-      nftStakingActions.getApprovedStatus((status) => {
-        setApproved(status);
-      })
-    );
-  }, [dispatch]);
+  const stakedCards = useMemo(() => {
+    const token = REACT_APP_BUILD_MODE === "development" ? CUSTOM_NFT.NODERUNNER : nftToken;
+    
+    const ret = [];
 
-  // console.log(approved)
-  useEffect(() => {
-    if (cards.length > 0) {
-      dispatch(nftStakingActions.getMyCardsCount(cards));
+    if (token in cards) {
+      const myCards = cards[token].cards;
+
+      for (let i = 0; i < stakedCardTokens.length; i++) {
+        const cardIndex = myCards.findIndex(
+          (e) => Number(e.id) === Number(stakedCardTokens[i])
+        );
+
+        if (cardIndex >= 0) {
+          ret.push({
+            card: { ...myCards[cardIndex] },
+            unStaked: false,
+          });
+        }
+      }
     }
-  }, [dispatch, cards]);
+
+    return ret;
+  }, [cards, stakedCardTokens, nftToken]);
 
   const handleSelectCard = (cardId) => {
     const oldUnstakeCardIds = [...selectedUnstakeCardIds];
@@ -118,15 +114,15 @@ const NFTStaking = () => {
 
     setUnStakeLoading(true);
     dispatch(
-      nftStakingActions.unStakeCard(selectedUnstakeCardIds, (status) => {
+      customNFTStakingActions.unStakeCard(nftToken, selectedUnstakeCardIds, (status) => {
         setSelectedUnstakeCardIds([]);
         setUnStakeLoading(false);
         if (status === RESPONSE.SUCCESS) {
           toast.success("Sucess");
-          dispatch(nftStakingActions.getStakedCards());
-          dispatch(nftStakingActions.getMyStakedStrength());
-          dispatch(nftStakingActions.getTotalStakedStrength());
-          dispatch(nftStakingActions.getClaimableNDR());
+          dispatch(customNFTStakingActions.getStakedCards(nftToken));
+          dispatch(customNFTStakingActions.getMyStakedStrength(nftToken));
+          dispatch(customNFTStakingActions.getTotalStakedStrength(nftToken));
+          dispatch(customNFTStakingActions.getClaimableNDR(nftToken));
         } else {
           toast.error("Failed...");
         }
@@ -145,15 +141,10 @@ const NFTStaking = () => {
   const handleApproveAll = () => {
     setApproveLoading(true);
     dispatch(
-      nftStakingActions.approveAll(true, (status) => {
+      customNFTStakingActions.approveAll(nftToken, true, (status) => {
         setApproveLoading(false);
         if (status === RESPONSE.SUCCESS) {
           toast.success("Approved successfully");
-          dispatch(
-            nftStakingActions.getApprovedStatus((status) => {
-              setApproved(status);
-            })
-          );
         } else {
           toast.error("Approved failed");
         }
@@ -166,16 +157,19 @@ const NFTStaking = () => {
       {stakeDlgOpen && (
         <div className="modal-container">
           <NFTStakeModalMask />
-          <NFTStakingModal onClose={handleCloseStakeModal} isBadgeCardStaked={isBadgeCardStaked}/>
+          <CustomNFTStakingModal onClose={handleCloseStakeModal} nftToken={nftToken} />
         </div>
       )}
-      <MenuWrapper className="animation-fadeInRight" style={{marginBottom: 20}}>
-        <SectionTitle title="Heroes, Support, Badges" long />
+
+      <MenuWrapper className="animation-fadeInRight" style={{ marginBottom: 20 }}>
+        <SectionTitle icon={icon} title="MEME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" long />
       </MenuWrapper>
-      <NFTStakingBoard />
-      <MenuWrapper className="animation-fadeInRight" style={{marginTop: 20}}>
+      <CustomNFTStakingBoard nftToken={nftToken} />
+      <MenuWrapper className="animation-fadeInRight" style={{ marginTop: 20 }}>
         <div className="menu-actions">
-          <div className="menu-item selected-card-count">{(approved && stakedCardTokens.length > 0) ? `${selectedUnstakeCardIds.length}/${stakedCardTokens.length} Selected` : `${totalStakableCards} Available`}</div>
+          <div className="menu-item selected-card-count">
+            {(approved && stakedCardTokens.length > 0) ? `${selectedUnstakeCardIds.length}/${stakedCardTokens.length} Selected` : `${totalStakableCards} Available`}
+          </div>
           {selectedUnstakeCardIds.length > 0 && (
             <div
               role="button"
@@ -185,8 +179,8 @@ const NFTStaking = () => {
               {unStakeLoading ? (
                 <LoadingTextIcon loadingText="Unstaking..." />
               ) : (
-                `Unstake selected`
-              )}
+                  `Unstake selected`
+                )}
             </div>
           )}
           <StakeButtonWrapper>
@@ -199,16 +193,16 @@ const NFTStaking = () => {
                 <LoadingTextIcon loadingText="Approving..." />
               </div>
             ) : (
-              !approved && (
-                <div
-                  className="stake-button button-approve-all"
-                  role="button"
-                  onClick={(e) => handleApproveAll()}
-                >
-                  Approve cards
-                </div>
-              )
-            )}
+                !approved && (
+                  <div
+                    className="stake-button button-approve-all"
+                    role="button"
+                    onClick={(e) => handleApproveAll()}
+                  >
+                    Approve cards
+                  </div>
+                )
+              )}
             {approved && (
               <div
                 role="button"
@@ -231,12 +225,13 @@ const NFTStaking = () => {
                 unStaked={c.unStaked}
                 onSelectCard={(cardId) => handleSelectCard(cardId)}
                 selectedCardIds={selectedUnstakeCardIds}
+                strength
               />
             ))}
         </CardContainer>
       ) : (
-        <h2 className="approve-notice">Approve your cards to stake them</h2>
-      )}
+          <h2 className="approve-notice">Approve your cards to stake them</h2>
+        )}
     </StakePageContainer>
   );
 };
@@ -244,7 +239,7 @@ const NFTStaking = () => {
 const StakePageContainer = styled.div`
   width: 100vw;
   max-width: 100%;
-  margin-bottom: 60px;
+  min-height: calc(100vh - 280px);
 
   .nav-pills {
     margin: 0px;
@@ -385,4 +380,4 @@ const StakeButtonWrapper = styled.div`
   }
 `;
 
-export default NFTStaking;
+export default CustomNFTStaking;
