@@ -172,7 +172,8 @@ const LockFarmBoard = ({
 
   return (
     <BoostStakeWrapper>
-      <div className="token">{`${farm.title} ${!poolAllowed ? `Lock ${releaseTime}` : ''}`}</div>
+      <div className="token">{farm.title}</div>
+      {!poolAllowed && <div className="token1">{`Lock Until ${'12/12/2023'}`}</div>}
       <a
         href={farm.link}
         target="_blank"
@@ -320,7 +321,15 @@ const BoostStakeWrapper = styled.div`
     font-family: Orbitron-Black;
     text-shadow: 0px 10px 5px #fec10080;
     color: #fec100;
-    font-size: 1.5rem;
+    font-size: 1.75rem;
+    margin-bottom: 10px;
+  }
+
+  .token1 {
+    font-family: Orbitron-Black;
+    text-shadow: 0px 10px 5px #fec10080;
+    color: #fec100;
+    font-size: 1.4rem;
     margin-bottom: 10px;
   }
 
