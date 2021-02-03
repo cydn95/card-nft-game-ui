@@ -172,7 +172,7 @@ const LockFarmBoard = ({
 
   return (
     <BoostStakeWrapper>
-      <div className="token">{`${farm.title} Lock ${releaseTime}`}</div>
+      <div className="token">{`${farm.title} ${!poolAllowed ? `Lock ${releaseTime}` : ''}`}</div>
       <a
         href={farm.link}
         target="_blank"
@@ -229,7 +229,7 @@ const LockFarmBoard = ({
           {approved ? (
             <button
               className="action stake"
-              onClick={(e) => setConfirmDlgOpen(true)}
+              onClick={(e) => poolAllowed ? handleStake() : setConfirmDlgOpen(true)}
             >
               {stakeLoading ? (
                 <LoadingTextIcon loadingText="Staking..." />
