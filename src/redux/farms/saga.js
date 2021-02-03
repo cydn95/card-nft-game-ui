@@ -25,6 +25,7 @@ import {
   claimAsync,
   exitAsync,
   getReservesAsync,
+  getReleaseTimeAsync
 } from "../../services/web3/lpStaking";
 
 import { getPairInfo, getTokenInfo } from "../../services/graphql";
@@ -181,7 +182,17 @@ export function* getTokenStats() {
 
     let apy = 0;
 
-    if (token === "NDR_SUSHI") {
+    if (!farms[token].lp) {
+      const farm = farms[token].prod;
+      const tokenInfo = yield call(getTokenInfo, farm.token.address);
+      console.log(tokenInfo);
+      const tokenPrice = tokenInfo.derivedETH * ethPrice;
+      console.log("ndr price", tokenPrice);
+      apy =
+        totalStakedAmount > 0
+          ? ((rewardRate * 86400 * 365) / totalStakedAmount) * 100
+          : 0;
+    } else if (token === "NDR_SUSHI") {
       const sushiFarm = farms[token].prod;
       const sushiTokenInfo = yield call(getTokenInfo, sushiFarm.token.token0);
       const ndrTokenInfo = yield call(getTokenInfo, sushiFarm.token.token1);
@@ -246,6 +257,30 @@ export function* getTokenStats() {
         rewardPerDay: claimablePerDay,
       },
     });
+  });
+}
+
+// Get Release Time
+export function* getReleaseTime() {
+  yield takeEvery(actions.GET_RELEASE_TIME, function* ({ payload }) {
+    const { token, callback } = payload;
+
+    const web3 = yield call(getWeb3);
+    const tokenInstance = getFarmInstance(web3, token);
+
+    const releaseTime = yield call(
+      getReleaseTimeAsync,
+      tokenInstance.staking.instance,
+    );
+
+    const releaseDate = new Date(releaseTime * 1000);
+    const dateStr = releaseDate.toLocaleDateString();
+
+    const currentTime = new Date().getTime();
+
+    const allowed = currentTime >= releaseTime * 1000 ? true : false;
+
+    callback(dateStr, allowed);
   });
 }
 
@@ -407,6 +442,7 @@ export default function* rootSaga() {
     fork(getTokenApproveStatus),
     fork(getTokenClaimableAmount),
     fork(getTokenStats),
+    fork(getReleaseTime),
     fork(approveToken),
     fork(stakeToken),
     fork(claimToken),
