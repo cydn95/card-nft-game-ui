@@ -172,7 +172,7 @@ const LockFarmBoard = ({
 
   return (
     <BoostStakeWrapper>
-      <div className="token">{farm.title}</div>
+      <div className="token">{`${farm.title} Lock ${releaseTime}`}</div>
       <a
         href={farm.link}
         target="_blank"
@@ -320,7 +320,7 @@ const BoostStakeWrapper = styled.div`
     font-family: Orbitron-Black;
     text-shadow: 0px 10px 5px #fec10080;
     color: #fec100;
-    font-size: 1.7rem;
+    font-size: 1.5rem;
     margin-bottom: 10px;
   }
 
