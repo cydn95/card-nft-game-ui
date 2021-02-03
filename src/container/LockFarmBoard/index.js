@@ -173,7 +173,7 @@ const LockFarmBoard = ({
   return (
     <BoostStakeWrapper>
       <div className="token">{farm.title}</div>
-      {!poolAllowed && <div className="token1">{`Lock Until ${'12/12/2023'}`}</div>}
+      {!poolAllowed && <div className="token1">{`Lock Until ${releaseTime}`}</div>}
       <a
         href={farm.link}
         target="_blank"
