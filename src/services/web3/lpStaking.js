@@ -85,6 +85,18 @@ export const getReservesAsync = async (instance) => {
     });
 };
 
+export const getReleaseTimeAsync = async (instance) => {
+  return await instance.methods
+    .releaseTime()
+    .call()
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
 export const depositAsync = async (instance, web3, amount, address) => {
   const prices = await getGasPrice();
 

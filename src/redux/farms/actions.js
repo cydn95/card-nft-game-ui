@@ -19,6 +19,8 @@ const actions = {
   CLIAM_TOKEN: "CLAIM_TOKEN",
   EXIT_TOKEN: "EXIT_TOKEN",
 
+  GET_RELEASE_TIME: "GET_RELEASE_TIME",
+
   getTokenApproveStatus: (token) => ({
     type: actions.GET_TOKEN_APPROVE_STATUS,
     payload: { token },
@@ -38,6 +40,10 @@ const actions = {
   getTokenStats: (token) => ({
     type: actions.GET_TOKEN_STATISTICS,
     payload: { token },
+  }),
+  getReleaseTime: (token, callback) => ({
+    type: actions.GET_RELEASE_TIME,
+    payload: { token, callback }
   }),
 
   approveToken: (token, callback) => ({

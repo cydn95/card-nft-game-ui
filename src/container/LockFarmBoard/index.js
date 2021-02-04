@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
@@ -11,7 +11,11 @@ import farmsAction from "../../redux/farms/actions";
 import { RESPONSE } from "../../helper/constant";
 import { convertFromWei } from "../../helper/utils";
 
-const FarmBoard = ({
+import ModalMask from "../ModalMask";
+import ConfirmModal from "../ConfirmModal";
+import AlertModal from "../AlertModal";
+
+const LockFarmBoard = ({
   token,
   farm,
   approved,
@@ -21,6 +25,12 @@ const FarmBoard = ({
   stats,
 }) => {
   const dispatch = useDispatch();
+
+  const [releaseTime, setReleaseTime] = useState(null);
+  const [poolAllowed, setPoolAllowed] = useState(false);
+
+  const [confirmDlgOpen, setConfirmDlgOpen] = useState(false);
+  const [alertDlgOpen, setAlertDlgOpen] = useState(false);
 
   const [approveLoading, setApproveLoading] = useState(false);
   const [stakeLoading, setStakeLoading] = useState(false);
@@ -54,6 +64,10 @@ const FarmBoard = ({
     dispatch(farmsAction.getTokenClaimableAmount(token));
     dispatch(farmsAction.getTokenStakedAmount(token));
     dispatch(farmsAction.getTokenStats(token));
+    dispatch(farmsAction.getReleaseTime(token, (date, allowed) => {
+      setReleaseTime(date);
+      setPoolAllowed(allowed);
+    }))
   }, [dispatch, token]);
 
   const handleApprove = () => {
@@ -93,6 +107,12 @@ const FarmBoard = ({
     if (exitLoading) {
       return;
     }
+
+    if (!poolAllowed) {
+      setAlertDlgOpen(true);
+      return;
+    }
+
     setExitLoading(true);
     dispatch(
       farmsAction.exitToken(token, (status) => {
@@ -107,6 +127,12 @@ const FarmBoard = ({
     if (claimLoading) {
       return;
     }
+
+    if (!poolAllowed) {
+      setAlertDlgOpen(true);
+      return;
+    }
+
     setClaimLoading(true);
     dispatch(
       farmsAction.claimToken(token, (status) => {
@@ -147,6 +173,7 @@ const FarmBoard = ({
   return (
     <BoostStakeWrapper>
       <div className="token">{farm.title}</div>
+      {!poolAllowed && <div className="token1">{`Lock Until ${releaseTime}`}</div>}
       <a
         href={farm.link}
         target="_blank"
@@ -156,32 +183,32 @@ const FarmBoard = ({
         {farm.link_title}
       </a>
       <div className="block">
-        {farm.active && <div className="row">
+        <div className="row">
           <span className="title">APY:</span>
           <span className="value">{`${
             stats ? stats.apy.toFixed(2) : 0
-            } %`}</span>
-        </div>}
+          } %`}</span>
+        </div>
         <div className="row">
           <span className="title">NDR Claimable:</span>
           <span className="value">{convertFromWei(claimable, 4)}</span>
         </div>
-        {farm.active && <div className="row">
+        <div className="row">
           <span className="title">NDR per Day:</span>
           <span className="value">
             {convertFromWei(stats ? stats.rewardPerDay : 0, 4)}
           </span>
-        </div>}
+        </div>
       </div>
       <div className="block">
         <div className="row">
           <span className="title">Staked:</span>
           <span className="value">{convertFromWei(staked, 4)}</span>
         </div>
-        {farm.active && <div className="row">
+        <div className="row">
           <span className="title">Balance:</span>
           <span className="value">{`${convertFromWei(balance, 4)}`}</span>
-        </div>}
+        </div>
       </div>
       {farm.active && (
         <div className="section">
@@ -198,50 +225,83 @@ const FarmBoard = ({
           </div>
         </div>
       )}
-      {farm.active && <div className="row">
-        {approved ? (
-          <button className="action stake" onClick={(e) => handleStake()}>
-            {stakeLoading ? (
-              <LoadingTextIcon loadingText="Staking..." />
-            ) : (
+      {farm.active && (
+        <div className="row">
+          {approved ? (
+            <button
+              className="action stake"
+              onClick={(e) => poolAllowed ? handleStake() : setConfirmDlgOpen(true)}
+            >
+              {stakeLoading ? (
+                <LoadingTextIcon loadingText="Staking..." />
+              ) : (
                 `STAKE`
               )}
-          </button>
-        ) : (
+            </button>
+          ) : (
             <button className="action approve" onClick={(e) => handleApprove()}>
               {approveLoading ? (
                 <LoadingTextIcon loadingText="Approving..." />
               ) : (
-                  `APPROVE`
-                )}
+                `APPROVE`
+              )}
             </button>
           )}
-      </div>}
-      {approved && (
+        </div>
+      )}
+      {approved && farm.active && (
         <>
           <div className="row">
             <button className="action unstake" onClick={(e) => handleExit()}>
               {exitLoading ? (
                 <LoadingTextIcon loadingText="Loading..." />
               ) : (
-                  `Claim and Unstake`
-                )}
+                `Claim and Unstake`
+              )}
             </button>
           </div>
-          {farm.active && <div className="row">
+          <div className="row">
             <button className="action claim" onClick={(e) => handleClaim()}>
               {claimLoading ? (
                 <LoadingTextIcon loadingText="Loading..." />
               ) : (
-                  `Claim NDR`
-                )}
+                `Claim NDR`
+              )}
             </button>
-          </div>}
+          </div>
         </>
       )}
-      {/* <div className="row">
-        <span className="fee-label">{`2% Unstake fee`}</span>
-      </div> */}
+      {confirmDlgOpen && (
+        <div className="modal-container">
+          <ModalMask />
+          <ConfirmModal
+            title="Are you sure to Stake?"
+            description="You can not withdraw or claim until xxx"
+            onNo={() => setConfirmDlgOpen(false)}
+            onYes={() => {
+              setConfirmDlgOpen(false);
+              handleStake();
+            }}
+            yes="Stake"
+            no="Cancel"
+          >
+            <p>Please be sure that you are ready to commit to lock until <span style={{ color: '#fec100'}}>{releaseTime}</span> before you stake. You will not be able to access these tokens for governance/voting.</p>
+            <p>There will be no admin unlock capability. Once tokens are staked, tokens and rewards are locked until the unlock date is reached.</p>
+          </ConfirmModal>
+        </div>
+      )}
+      {alertDlgOpen && (
+        <div className="modal-container">
+          <ModalMask />
+          <AlertModal
+            title="Your transaction is not allowed"
+            onClose={() => setAlertDlgOpen(false)}
+          >
+            <p>You will not be able to access these tokens for governance/voting until <span style={{ color: '#fec100' }}>{releaseTime}</span> .</p>
+            <p>There will be no admin unlock capability. Once tokens are staked, tokens and rewards are locked until the unlock date is reached.</p>
+          </AlertModal>
+        </div>
+      )}
     </BoostStakeWrapper>
   );
 };
@@ -261,7 +321,15 @@ const BoostStakeWrapper = styled.div`
     font-family: Orbitron-Black;
     text-shadow: 0px 10px 5px #fec10080;
     color: #fec100;
-    font-size: 1.7rem;
+    font-size: 1.75rem;
+    margin-bottom: 10px;
+  }
+
+  .token1 {
+    font-family: Orbitron-Black;
+    text-shadow: 0px 10px 5px #fec10080;
+    color: #fec100;
+    font-size: 1.4rem;
     margin-bottom: 10px;
   }
 
@@ -395,4 +463,4 @@ const BoostStakeWrapper = styled.div`
   }
 `;
 
-export default FarmBoard;
+export default LockFarmBoard;
