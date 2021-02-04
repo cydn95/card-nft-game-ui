@@ -32,7 +32,7 @@ const Farm = () => {
         <SectionTitle title="Stake LP tokens" long />
       </MenuWrapper>
       <Tab.Container defaultActiveKey="ACTIVE">
-        <Nav
+        {/* <Nav
           variant="pills"
           className="justify-content-center animation-fadeIn"
         >
@@ -42,7 +42,7 @@ const Farm = () => {
           <Nav.Item>
             <Nav.Link eventKey="CLOSED">CLOSED</Nav.Link>
           </Nav.Item>
-        </Nav>
+        </Nav> */}
         <Tab.Content>
           <Tab.Pane eventKey="ACTIVE">
             <div
