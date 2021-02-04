@@ -24,8 +24,8 @@ import NDR_LOCK_STAKING_ABI from "./jsonFarm/NDR_Lock_Staking.json";
 export const DEV_NDR_ERC20_STAKING_ADDRESS = "0x38DA09fD791792D6a6285925F8030A52eF425E4e";    // Ropstein
 export const PROD_NDR_ERC20_STAKING_ADDRESS = "0xC4B73419265B9DFcE7abdD0d8E33f99E565d0262";
 
-// export const DEV_NDR_LOCK_STAKING_ADDRESS = "0x5D4F0f46f2B81e883D803F5eD21C818E9C3576c4";  // old - real 1day locked
-export const DEV_NDR_LOCK_STAKING_ADDRESS = "0x501d0f74471d97F7c09315A9F845F5Da3279F797";     // new - 30 day locked
+export const DEV_NDR_LOCK_STAKING_ADDRESS = "0x5D4F0f46f2B81e883D803F5eD21C818E9C3576c4";  // old - real 1day locked
+// export const DEV_NDR_LOCK_STAKING_ADDRESS = "0x501d0f74471d97F7c09315A9F845F5Da3279F797";     // new - 30 day locked
 export const PROD_NDR_LOCK_STAKING_ADDRESS = "0xe2c968806657F70E73B2ddc55E3dF9375f22fd4B";
 
 export const farms = {
@@ -36,6 +36,7 @@ export const farms = {
     active: true,
     lp: false,
     locked: true,
+    lock_days: 89,
     dev: {
       staking: {
         address: DEV_NDR_LOCK_STAKING_ADDRESS,

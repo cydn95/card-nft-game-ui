@@ -182,15 +182,15 @@ export function* getTokenStats() {
 
     let apy = 0;
 
-    if (!farms[token].lp) {
-      const farm = farms[token].prod;
-      const tokenInfo = yield call(getTokenInfo, farm.token.address);
-      console.log(tokenInfo);
-      const tokenPrice = tokenInfo.derivedETH * ethPrice;
-      console.log("ndr price", tokenPrice);
+    if (farms[token].locked) {
+      // const farm = farms[token].prod;
+      // const tokenInfo = yield call(getTokenInfo, farm.token.address);
+
+      // const tokenPrice = tokenInfo.derivedETH * ethPrice;
+
       apy =
         totalStakedAmount > 0
-          ? ((rewardRate * 86400 * 365) / totalStakedAmount) * 100
+        ? ((rewardRate * 86400 * 365 * (365 / farms[token].lock_days)) / totalStakedAmount) * 100
           : 0;
     } else if (token === "NDR_SUSHI") {
       const sushiFarm = farms[token].prod;
