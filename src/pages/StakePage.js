@@ -29,7 +29,7 @@ const Stake = () => {
     <StakePageContainer>
       <NFTStaking />
       <CustomNFTStaking icon={"icons/meme.png"} nftToken={CUSTOM_NFT.MEME} />
-      <CustomNFTStaking icon={"icons/doki.png"} nftToken={CUSTOM_NFT.DOKI} />
+      {/* <CustomNFTStaking icon={"icons/doki.png"} nftToken={CUSTOM_NFT.DOKI} /> */}
     </StakePageContainer>
   );
 };

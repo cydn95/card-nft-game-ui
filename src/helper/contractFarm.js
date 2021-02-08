@@ -149,6 +149,7 @@ export const farms = {
     active: true,
     lp: true,
     locked: false,
+    note: 'Until 18/02/2021',
     dev: {
       staking: {
         address: "0xB85337f0A27203DC31205a715C342ED2dc580296",

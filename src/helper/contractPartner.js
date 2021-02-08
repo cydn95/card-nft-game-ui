@@ -45,19 +45,19 @@ export const partnerNFTs = {
       stakingAbi: PROD_MEME_STAKING_ABI
     },
   },
-  DOKI: {
-    title: "DOKI",
-    dev: {
-      token: Contract.DEV_NFT_ADDRESS,
-      tokenAbi: Contract.DEV_NFT_ABI,
-      staking: DEV_MEME_STAKING_ADDRESS,
-      stakingAbi: DEV_MEME_STAKING_ABI
-    },
-    prod: {
-      token: DOKI_NFT_ADDRESS,
-      tokenAbi: DOKI_ABI,
-      staking: PROD_DOKI_STAKING_ADDRESS,
-      stakingAbi: PROD_DOKI_STAKING_ABI
-    },
-  },
+  // DOKI: {
+  //   title: "DOKI",
+  //   dev: {
+  //     token: Contract.DEV_NFT_ADDRESS,
+  //     tokenAbi: Contract.DEV_NFT_ABI,
+  //     staking: DEV_MEME_STAKING_ADDRESS,
+  //     stakingAbi: DEV_MEME_STAKING_ABI
+  //   },
+  //   prod: {
+  //     token: DOKI_NFT_ADDRESS,
+  //     tokenAbi: DOKI_ABI,
+  //     staking: PROD_DOKI_STAKING_ADDRESS,
+  //     stakingAbi: PROD_DOKI_STAKING_ABI
+  //   },
+  // },
 };
