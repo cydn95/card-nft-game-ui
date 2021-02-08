@@ -64,4 +64,5 @@ export const OPENSEA_BUY_LINK = "https://opensea.io/assets/0x89ee76cc25fcbf1714e
 export const CUSTOM_NFT = {
   NODERUNNER: 'NODERUNNER',
   MEME: 'MEME',
+  DOKI: 'DOKI'
 }

@@ -20,7 +20,7 @@ const UnlockWallet = ({ history }) => {
           <div
             role="button"
             className="meta-mask d-flex flex-column align-items-center justify-content-center"
-            onClick={(e) => connect("injected")}
+            onClick={(e) => connect()}
           >
             <img src={`/static/images/icons/meta-mask.png`} alt="meta-mask" />
             <p>

@@ -90,7 +90,7 @@ export const farms = {
     title: "MEME-NDR LP",
     link_title: "Obtain LP",
     link: "https://app.uniswap.org/#/add/0x739763a258640919981f9ba610ae65492455be53/0xd5525d397898e5502075ea5e830d8914f6f0affe",
-    active: true,
+    active: false,
     lp: true,
     locked: false,
     dev: {
@@ -118,7 +118,7 @@ export const farms = {
     title: "GHST-NDR LP",
     link_title: "Obtain LP",
     link: "https://app.uniswap.org/#/add/0x3f382dbd960e3a9bbceae22651e88158d2791550/0x739763a258640919981f9ba610ae65492455be53",
-    active: true,
+    active: false,
     lp: true,
     locked: false,
     dev: {
@@ -146,7 +146,7 @@ export const farms = {
     title: "SUSHI-NDR SLP",
     link_title: "Obtain SLP",
     link: "https://sushiswap.fi/pair/0x3b49d71b23d0a78612374541a3004ef2854fe1c5",
-    active: true,
+    active: false,
     lp: true,
     locked: false,
     dev: {

@@ -162,7 +162,7 @@ const CustomNFTStaking = ({ icon, nftToken }) => {
       )}
 
       <MenuWrapper className="animation-fadeInRight" style={{ marginBottom: 20 }}>
-        <SectionTitle icon={icon} title="MEME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" long />
+        <SectionTitle icon={icon} title={nftToken} long />
       </MenuWrapper>
       <CustomNFTStakingBoard nftToken={nftToken} />
       <MenuWrapper className="animation-fadeInRight" style={{ marginTop: 20 }}>

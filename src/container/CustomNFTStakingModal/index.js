@@ -44,6 +44,7 @@ const CustomNFTStakingModal = ({ nftToken, onClose }) => {
         }
       }
     }
+    console.log(ret);
     return ret;
   }, [cards, stakedCardTokens, ownedCardTokens, nftToken]);
 
