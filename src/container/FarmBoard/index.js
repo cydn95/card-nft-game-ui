@@ -147,6 +147,7 @@ const FarmBoard = ({
   return (
     <BoostStakeWrapper>
       <div className="token">{farm.title}</div>
+      {('note' in farm) && <div className="token1">{farm.note}</div>}
       <a
         href={farm.link}
         target="_blank"
@@ -262,6 +263,14 @@ const BoostStakeWrapper = styled.div`
     text-shadow: 0px 10px 5px #fec10080;
     color: #fec100;
     font-size: 1.7rem;
+    margin-bottom: 10px;
+  }
+
+  .token1 {
+    font-family: Orbitron-Black;
+    text-shadow: 0px 10px 5px #fec10080;
+    color: #fec100;
+    font-size: 1.4rem;
     margin-bottom: 10px;
   }
 

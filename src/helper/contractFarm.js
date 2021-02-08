@@ -90,7 +90,7 @@ export const farms = {
     title: "MEME-NDR LP",
     link_title: "Obtain LP",
     link: "https://app.uniswap.org/#/add/0x739763a258640919981f9ba610ae65492455be53/0xd5525d397898e5502075ea5e830d8914f6f0affe",
-    active: true,
+    active: false,
     lp: true,
     locked: false,
     dev: {
@@ -118,7 +118,7 @@ export const farms = {
     title: "GHST-NDR LP",
     link_title: "Obtain LP",
     link: "https://app.uniswap.org/#/add/0x3f382dbd960e3a9bbceae22651e88158d2791550/0x739763a258640919981f9ba610ae65492455be53",
-    active: true,
+    active: false,
     lp: true,
     locked: false,
     dev: {
@@ -149,6 +149,7 @@ export const farms = {
     active: true,
     lp: true,
     locked: false,
+    note: 'Until 18/02/2021',
     dev: {
       staking: {
         address: "0xB85337f0A27203DC31205a715C342ED2dc580296",
