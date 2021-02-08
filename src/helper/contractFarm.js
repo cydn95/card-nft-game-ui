@@ -146,7 +146,7 @@ export const farms = {
     title: "SUSHI-NDR SLP",
     link_title: "Obtain SLP",
     link: "https://sushiswap.fi/pair/0x3b49d71b23d0a78612374541a3004ef2854fe1c5",
-    active: false,
+    active: true,
     lp: true,
     locked: false,
     dev: {
