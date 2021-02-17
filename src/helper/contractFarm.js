@@ -146,10 +146,10 @@ export const farms = {
     title: "SUSHI-NDR SLP",
     link_title: "Obtain SLP",
     link: "https://sushiswap.fi/pair/0x3b49d71b23d0a78612374541a3004ef2854fe1c5",
-    active: true,
+    active: false,
     lp: true,
     locked: false,
-    note: 'Until 18/02/2021',
+    note: '',
     dev: {
       staking: {
         address: "0xB85337f0A27203DC31205a715C342ED2dc580296",
