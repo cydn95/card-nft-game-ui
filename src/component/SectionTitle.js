@@ -5,7 +5,7 @@ const SectionTitle = ({ title, long, icon }) => {
   return (
     <SectionTitleWrapper>
       <div className={`title ${long && "long"}`}>
-        {icon && <img src={`/static/images/${icon}`} width="32" alt=""/> }
+        {icon && <img src={`/static/images/${icon}`} height="32" alt=""/> }
         {title.length >= 20 ? <h2>{title}</h2> : title}
       </div>
       <div className="title-line" />

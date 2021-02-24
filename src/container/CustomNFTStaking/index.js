@@ -12,6 +12,7 @@ import CustomNFTStakingModal from "../CustomNFTStakingModal";
 
 import customNFTStakingActions from "../../redux/customNFTStaking/actions";
 
+import { partnerNFTs } from "../../helper/contractPartner";
 import { CUSTOM_NFT, RESPONSE } from "../../helper/constant";
 import { getValueFromObject } from "../../helper/utils";
 
@@ -162,7 +163,7 @@ const CustomNFTStaking = ({ icon, nftToken }) => {
       )}
 
       <MenuWrapper className="animation-fadeInRight" style={{ marginBottom: 20 }}>
-        <SectionTitle icon={icon} title={nftToken} long />
+        <SectionTitle icon={icon} title={partnerNFTs[nftToken].title} long />
       </MenuWrapper>
       <CustomNFTStakingBoard nftToken={nftToken} />
       <MenuWrapper className="animation-fadeInRight" style={{ marginTop: 20 }}>
