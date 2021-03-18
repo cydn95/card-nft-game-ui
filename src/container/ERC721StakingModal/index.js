@@ -14,7 +14,7 @@ import customNFTStakingActions from "../../redux/customNFTStaking/actions";
 
 const { REACT_APP_BUILD_MODE } = process.env;
 
-const CustomNFTStakingModal = ({ nftToken, onClose }) => {
+const ERC721StakingModal = ({ nftToken, onClose }) => {
   const dispatch = useDispatch();
 
   const [stakeLoading, setStakeLoading] = useState(false);
@@ -60,14 +60,14 @@ const CustomNFTStakingModal = ({ nftToken, onClose }) => {
     // console.log(selectedCardIds);
     setStakeLoading(true);
     dispatch(
-      customNFTStakingActions.stakeCard(nftToken, selectedCardIds, (status) => {
+      customNFTStakingActions.stakeERC721Card(nftToken, selectedCardIds, (status) => {
         setSelectedCardIds([]);
         setStakeLoading(false);
         if (status === RESPONSE.SUCCESS) {
           toast.success("Staked successfully");
-          dispatch(customNFTStakingActions.getStakedCards(nftToken));
-          dispatch(customNFTStakingActions.getMyStakedStrength(nftToken));
-          dispatch(customNFTStakingActions.getTotalStakedStrength(nftToken));
+          dispatch(customNFTStakingActions.getStakedERC721Cards(nftToken));
+          dispatch(customNFTStakingActions.getMyERC721Staked(nftToken));
+          dispatch(customNFTStakingActions.getTotalERC721Staked(nftToken));
           dispatch(customNFTStakingActions.getClaimableNDR(nftToken));
           onClose();
         } else {
@@ -136,10 +136,6 @@ const CustomNFTStakingModal = ({ nftToken, onClose }) => {
                     onClick={(e) => handleSelectCard(e, card.id)}
                   ></div>
                 </div>
-                <div className="strength-text">
-                  <label>Strength:</label>
-                  <span>{card.strength}</span>
-                </div>
               </CardWrapper>
             );
           })
@@ -151,7 +147,7 @@ const CustomNFTStakingModal = ({ nftToken, onClose }) => {
   );
 };
 
-export default CustomNFTStakingModal;
+export default ERC721StakingModal;
 
 const NFTStakeModalContainer = styled.div`
   position: fixed;

@@ -21,8 +21,9 @@ import {
   stakeMultiCardAsync,
   getClaimFeeAsync
 } from "../../services/web3/cards";
+import { getTokenIdOfOwnerByIndexAsync, isERC721StakedAsync, getMyERC721StakedAsync, stakeERC721MultiCardAsync, unStakeERC721MultiCardAsync } from "../../services/web3/erc721";
 
-import { getRewardRateAsync, claimWithFeeAsync } from "../../services/web3/lpStaking";
+import { getRewardRateAsync, claimWithFeeAsync, getBalanceAsync, getTotalSupplyAsync } from "../../services/web3/lpStaking";
 
 import {
   RESPONSE,
@@ -107,6 +108,41 @@ export function* getStakedCards() {
   });
 }
 
+export function* getStakedERC721Cards() {
+  yield takeEvery(actions.GET_STAKED_ERC721_CARDS, function* ({ payload }) {
+
+    const { token } = payload;
+
+    const web3 = yield call(getWeb3);
+    const partnerNft = getPartnerNFTInstance(web3, token);
+
+    const accounts = yield call(web3.eth.getAccounts);
+
+    const ownedERC721TokenCount = yield call(getBalanceAsync, partnerNft.token.instance, accounts[0]);
+    const ownedTokens = [];
+    for (let i = 0; i < ownedERC721TokenCount; i++) {
+      const tokenId = yield call(getTokenIdOfOwnerByIndexAsync, partnerNft.token.instance, accounts[0], i);
+      ownedTokens.push(tokenId);
+    }
+
+    const stakedTokens = [];
+    const alreadyStakedTokens = yield call(getAllStakedCardsAsync, partnerNft.staking.instance);
+    for (let i = 0; i < alreadyStakedTokens.length; i++) {
+      const ret = yield call(isERC721StakedAsync, partnerNft.staking.instance, alreadyStakedTokens[i], accounts[0]);
+      if (ret > 0) {
+        stakedTokens.push(alreadyStakedTokens[i]);
+      }
+    }
+
+    yield put({
+      type: actions.GET_STAKED_CARDS_SUCCESS,
+      token,
+      owned: [...ownedTokens],
+      staked: [...stakedTokens]
+    });
+  });
+}
+
 export function* getApprovedStatus() {
   yield takeEvery(actions.GET_APPROVED_STATUS, function* ({ payload }) {
     const { token } = payload;
@@ -173,6 +209,48 @@ export function* getTotalStakedStrength() {
   });
 }
 
+export function* getMyERC721Staked() {
+  yield takeEvery(actions.GET_MY_ERC721_STAKED, function* ({ payload }) {
+    const { token } = payload;
+
+    const web3 = yield call(getWeb3);
+    const partnerNft = getPartnerNFTInstance(web3, token);
+
+    // Get Wallet Account
+    const accounts = yield call(web3.eth.getAccounts);
+
+    const ret = yield call(
+      getMyERC721StakedAsync,
+      partnerNft.staking.instance,
+      accounts[0]
+    );
+
+    yield put({
+      type: actions.GET_MY_STAKED_STRENGTH_SUCCESS,
+      token,
+      value: ret,
+    });
+  });
+}
+
+export function* getTotalERC721Staked() {
+  yield takeEvery(actions.GET_TOTAL_ERC721_STAKED, function* ({ payload }) {
+    const { token } = payload;
+
+    const web3 = yield call(getWeb3);
+    const partnerNft = getPartnerNFTInstance(web3, token);
+
+    // Get Wallet Account
+    const ret = yield call(getTotalSupplyAsync, partnerNft.staking.instance);
+
+    yield put({
+      type: actions.GET_TOTAL_STAKED_STRENGTH_SUCCESS,
+      token,
+      value: ret,
+    });
+  });
+}
+
 export function* getClaimableNDR() {
   yield takeEvery(actions.GET_CLAIMABLE_NDR, function* ({ payload }) {
     const { token } = payload;
@@ -203,6 +281,29 @@ export function* getNDRPerDay() {
     const rewardRate = yield call(getRewardRateAsync, partnerNft.staking.instance);
     const myStrength = yield call(getStakedStrengthByAddressAsync, partnerNft.staking.instance, accounts[0]);
     const totalStrength = yield call(getTotalStakedStrengthAsync, partnerNft.staking.instance );
+
+    const ndrPerDay = Number(totalStrength) === 0 ? 0 : ((rewardRate * myStrength) / totalStrength) * 86400;
+
+    yield put({
+      type: actions.GET_NDR_PER_DAY_SUCCESS,
+      token,
+      value: ndrPerDay,
+    });
+  });
+}
+
+export function* getNDRPerDayERC721() {
+  yield takeEvery(actions.GET_NDR_PER_DAY_ERC721, function* ({ payload }) {
+    const { token } = payload;
+
+    const web3 = yield call(getWeb3);
+    const partnerNft = getPartnerNFTInstance(web3, token);
+
+    const accounts = yield call(web3.eth.getAccounts);
+
+    const rewardRate = yield call(getRewardRateAsync, partnerNft.staking.instance);
+    const myStrength = yield call(getMyERC721StakedAsync, partnerNft.staking.instance, accounts[0]);
+    const totalStrength = yield call(getTotalSupplyAsync, partnerNft.staking.instance);
 
     const ndrPerDay = Number(totalStrength) === 0 ? 0 : ((rewardRate * myStrength) / totalStrength) * 86400;
 
@@ -302,11 +403,6 @@ export function* stakeCard() {
   yield takeLatest(actions.STAKE_CARD, function* ({ payload }) {
     const { token, cardIds, callback } = payload;
 
-    // const newCardIds = [];
-    // cardIds.forEach(id => {
-    //   newCardIds.push(id - 1);
-    // });
-
     const amounts = Array(cardIds.length).fill(1);
     const web3 = yield call(getWeb3);
     const partnerNft = getPartnerNFTInstance(web3, token);
@@ -320,6 +416,32 @@ export function* stakeCard() {
       web3,
       cardIds,
       amounts,
+      accounts[0]
+    );
+
+    if (stakeCardResponse.status) {
+      callback(RESPONSE.SUCCESS);
+    } else {
+      callback(RESPONSE.ERROR);
+    }
+  });
+}
+
+export function* stakeERC721Card() {
+  yield takeLatest(actions.STAKE_ERC721_CARD, function* ({ payload }) {
+    const { token, cardIds, callback } = payload;
+
+    const web3 = yield call(getWeb3);
+    const partnerNft = getPartnerNFTInstance(web3, token);
+
+    // Get Wallet Account
+    const accounts = yield call(web3.eth.getAccounts);
+
+    const stakeCardResponse = yield call(
+      stakeERC721MultiCardAsync,
+      partnerNft.staking.instance,
+      web3,
+      cardIds,
       accounts[0]
     );
 
@@ -360,19 +482,51 @@ export function* unStakeCard() {
   });
 }
 
+export function* unStakeERC721Card() {
+  yield takeLatest(actions.UNSTAKE_ERC721_CARD, function* ({ payload }) {
+    const { token, cardIds, callback } = payload;
+
+    const web3 = yield call(getWeb3);
+    const partnerNft = getPartnerNFTInstance(web3, token);
+
+    // Get Wallet Account
+    const accounts = yield call(web3.eth.getAccounts);
+
+    const unstakeCardResponse = yield call(
+      unStakeERC721MultiCardAsync,
+      partnerNft.staking.instance,
+      web3,
+      cardIds,
+      accounts[0]
+    );
+
+    if (unstakeCardResponse.status) {
+      callback(RESPONSE.SUCCESS);
+    } else {
+      callback(RESPONSE.ERROR);
+    }
+  });
+}
+
 export default function* rootSaga() {
   yield all([
     fork(getCustomCards),
     fork(getStakedCards),
+    fork(getStakedERC721Cards),
     fork(getApprovedStatus),
     fork(approveAll),
     fork(getMyStakedStrength),
     fork(getTotalStakedStrength),
+    fork(getMyERC721Staked),
+    fork(getTotalERC721Staked),
     fork(getClaimableNDR),
     fork(getNDRPerDay),
+    fork(getNDRPerDayERC721),
     fork(unStakeAllCards),
     fork(claimNDR),
     fork(stakeCard),
-    fork(unStakeCard)
+    fork(stakeERC721Card),
+    fork(unStakeCard),
+    fork(unStakeERC721Card)
   ]);
 }

@@ -6,6 +6,7 @@ import styled from "styled-components";
 import UnlockWalletPage from "./UnlockWalletPage";
 import NFTStaking from "../container/NFTStakingPage";
 import CustomNFTStaking from "../container/CustomNFTStaking";
+import ERC721Staking from "../container/ERC721Staking";
 
 import { CUSTOM_NFT } from "../helper/constant";
 
@@ -28,10 +29,10 @@ const Stake = () => {
   return (
     <StakePageContainer>
       <NFTStaking />
-      {/* <CustomNFTStaking icon={"icons/meme.png"} nftToken={CUSTOM_NFT.MEME} />
+      <CustomNFTStaking icon={"icons/meme.png"} nftToken={CUSTOM_NFT.MEME} />
       <CustomNFTStaking icon={"icons/doki.png"} nftToken={CUSTOM_NFT.DOKI} />
-      <CustomNFTStaking icon={"icons/eth_men.png"} nftToken={CUSTOM_NFT.ETH_MEN} /> */}
-      <CustomNFTStaking icon={"icons/eth_men.png"} nftToken={CUSTOM_NFT.MUSE} />
+      <CustomNFTStaking icon={"icons/eth_men.png"} nftToken={CUSTOM_NFT.ETH_MEN} />
+      <ERC721Staking nftToken={CUSTOM_NFT.MUSE} />
     </StakePageContainer>
   );
 };
