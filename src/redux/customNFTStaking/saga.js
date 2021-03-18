@@ -21,7 +21,7 @@ import {
   stakeMultiCardAsync,
   getClaimFeeAsync
 } from "../../services/web3/cards";
-import { getTokenIdOfOwnerByIndexAsync, isERC721StakedAsync, getMyERC721StakedAsync, stakeERC721MultiCardAsync, unStakeERC721MultiCardAsync } from "../../services/web3/erc721";
+import { getTokenIdOfOwnerByIndexAsync, isERC721StakedAsync, getMyStakedERC721TokenIdsAsync, stakeERC721MultiCardAsync, unStakeERC721MultiCardAsync } from "../../services/web3/erc721";
 
 import { getRewardRateAsync, claimWithFeeAsync, getBalanceAsync, getTotalSupplyAsync } from "../../services/web3/lpStaking";
 
@@ -125,14 +125,7 @@ export function* getStakedERC721Cards() {
       ownedTokens.push(tokenId);
     }
 
-    const stakedTokens = [];
-    const alreadyStakedTokens = yield call(getAllStakedCardsAsync, partnerNft.staking.instance);
-    for (let i = 0; i < alreadyStakedTokens.length; i++) {
-      const ret = yield call(isERC721StakedAsync, partnerNft.staking.instance, alreadyStakedTokens[i], accounts[0]);
-      if (ret > 0) {
-        stakedTokens.push(alreadyStakedTokens[i]);
-      }
-    }
+    const stakedTokens = yield call(getMyStakedERC721TokenIdsAsync, partnerNft.staking.instance, accounts[0]);
 
     yield put({
       type: actions.GET_STAKED_CARDS_SUCCESS,
@@ -220,7 +213,7 @@ export function* getMyERC721Staked() {
     const accounts = yield call(web3.eth.getAccounts);
 
     const ret = yield call(
-      getMyERC721StakedAsync,
+      getBalanceAsync,
       partnerNft.staking.instance,
       accounts[0]
     );
@@ -302,7 +295,7 @@ export function* getNDRPerDayERC721() {
     const accounts = yield call(web3.eth.getAccounts);
 
     const rewardRate = yield call(getRewardRateAsync, partnerNft.staking.instance);
-    const myStrength = yield call(getMyERC721StakedAsync, partnerNft.staking.instance, accounts[0]);
+    const myStrength = yield call(getBalanceAsync, partnerNft.staking.instance, accounts[0]);
     const totalStrength = yield call(getTotalSupplyAsync, partnerNft.staking.instance);
 
     const ndrPerDay = Number(totalStrength) === 0 ? 0 : ((rewardRate * myStrength) / totalStrength) * 86400;

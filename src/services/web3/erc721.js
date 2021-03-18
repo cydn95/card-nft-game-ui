@@ -25,9 +25,9 @@ export const isERC721StakedAsync = async (instance, tokenId, address) => {
     });
 };
 
-export const getMyERC721StakedAsync = async (instance, address) => {
+export const getMyStakedERC721TokenIdsAsync = async (instance, address) => {
   return await instance.methods
-    .nftAccountBalances(address)
+    .nftTokensOf(address)
     .call()
     .then((data) => {
       return data;
