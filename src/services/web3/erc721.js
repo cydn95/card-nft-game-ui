@@ -13,18 +13,6 @@ export const getTokenIdOfOwnerByIndexAsync = async (instance, address, index) =>
     });
 };
 
-export const isERC721StakedAsync = async (instance, tokenId, address) => {
-  return await instance.methods
-    .nftTokenBalances(tokenId, address)
-    .call()
-    .then((data) => {
-      return data;
-    })
-    .catch((error) => {
-      return error;
-    });
-};
-
 export const getMyStakedERC721TokenIdsAsync = async (instance, address) => {
   return await instance.methods
     .nftTokensOf(address)

@@ -21,7 +21,7 @@ import {
   stakeMultiCardAsync,
   getClaimFeeAsync
 } from "../../services/web3/cards";
-import { getTokenIdOfOwnerByIndexAsync, isERC721StakedAsync, getMyStakedERC721TokenIdsAsync, stakeERC721MultiCardAsync, unStakeERC721MultiCardAsync } from "../../services/web3/erc721";
+import { getTokenIdOfOwnerByIndexAsync, getMyStakedERC721TokenIdsAsync, stakeERC721MultiCardAsync, unStakeERC721MultiCardAsync } from "../../services/web3/erc721";
 
 import { getRewardRateAsync, claimWithFeeAsync, getBalanceAsync, getTotalSupplyAsync } from "../../services/web3/lpStaking";
 
