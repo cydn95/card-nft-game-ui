@@ -13,7 +13,7 @@ import { getERCTokenImage } from "../../helper/utils";
 
 import customNFTStakingActions from "../../redux/customNFTStaking/actions";
 
-const ERC721StakingModal = ({ nftToken, stakableTokens, onClose }) => {
+const ERC721StakingModal = ({ nftToken, stakableTokens, loading, onClose }) => {
   const dispatch = useDispatch();
 
   const [stakeLoading, setStakeLoading] = useState(false);
@@ -32,20 +32,24 @@ const ERC721StakingModal = ({ nftToken, stakableTokens, onClose }) => {
     // console.log(selectedCardIds);
     setStakeLoading(true);
     dispatch(
-      customNFTStakingActions.stakeERC721Card(nftToken, selectedCardIds, (status) => {
-        setSelectedCardIds([]);
-        setStakeLoading(false);
-        if (status === RESPONSE.SUCCESS) {
-          toast.success("Staked successfully");
-          dispatch(customNFTStakingActions.getStakedERC721Cards(nftToken));
-          dispatch(customNFTStakingActions.getMyERC721Staked(nftToken));
-          dispatch(customNFTStakingActions.getTotalERC721Staked(nftToken));
-          dispatch(customNFTStakingActions.getClaimableNDR(nftToken));
-          onClose();
-        } else {
-          toast.error("Staked failed");
+      customNFTStakingActions.stakeERC721Card(
+        nftToken,
+        selectedCardIds,
+        (status) => {
+          setSelectedCardIds([]);
+          setStakeLoading(false);
+          if (status === RESPONSE.SUCCESS) {
+            toast.success("Staked successfully");
+            dispatch(customNFTStakingActions.getStakedERC721Cards(nftToken));
+            dispatch(customNFTStakingActions.getMyERC721Staked(nftToken));
+            dispatch(customNFTStakingActions.getTotalERC721Staked(nftToken));
+            dispatch(customNFTStakingActions.getClaimableNDR(nftToken));
+            onClose();
+          } else {
+            toast.error("Staked failed");
+          }
         }
-      })
+      )
     );
   };
 
@@ -66,12 +70,12 @@ const ERC721StakingModal = ({ nftToken, stakableTokens, onClose }) => {
   return (
     <NFTStakeModalContainer onClick={(e) => onClose()}>
       <MenuWrapper className="animation-fadeInRight">
-        <SectionTitle title="Select cards to stake" long />
+        <SectionTitle title="Select NFT to stake" long />
       </MenuWrapper>
       <MenuWrapper className="animation-fadeInRight">
         <div className="menu-actions">
           <div className="menu-item selected-card-count">
-            {`${selectedCardIds.length} Cards Selected`}
+            {`${selectedCardIds.length} NFT Selected`}
           </div>
           {selectedCardIds.length > 0 && (
             <div
@@ -92,7 +96,9 @@ const ERC721StakingModal = ({ nftToken, stakableTokens, onClose }) => {
         className="d-flex flex-wrap justify-content-center animation-fadeInLeft"
         style={{ paddingBottom: 100 }}
       >
-        {stakableTokens.length > 0 ? (
+        {loading ? (
+          <Loading type="bubbles" color="#fec100" text="Loading..." />
+        ) : stakableTokens.length > 0 ? (
           stakableTokens.map((token) => {
             const active = selectedCardIds.includes(token) ? "active" : "";
             return (
@@ -112,7 +118,12 @@ const ERC721StakingModal = ({ nftToken, stakableTokens, onClose }) => {
             );
           })
         ) : (
-          <Loading type="bubbles" color="#fec100" text="Loading..."/>
+          <Loading
+            type="bubbles"
+            color="#fec100"
+            text="No available NFTs to stake"
+            loading={false}
+          />
         )}
       </div>
     </NFTStakeModalContainer>
@@ -129,7 +140,7 @@ const NFTStakeModalContainer = styled.div`
   height: 100vh;
   min-height: 100vh;
   background: transparent;
-  z-index: 200;
+  z-index: 5001;
   overflow-y: auto;
   padding-top: 100px;
   padding-left: 10%;

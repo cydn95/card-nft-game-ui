@@ -102,8 +102,8 @@ export const partnerNFTs = {
       stakingAbi: PROD_ETH_MEN_STAKING_ABI
     },
   },
-  MUSE: {
-    title: "MUSE",
+  COMETH: {
+    title: "Cometh",
     image: "https://images.service.cometh.io/",
     dev: {
       token: DEV_MUSE_ADDRESS,

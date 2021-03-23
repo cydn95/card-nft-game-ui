@@ -66,5 +66,6 @@ export const CUSTOM_NFT = {
   MEME: 'MEME',
   DOKI: 'DOKI',
   ETH_MEN: 'ETH_MEN',
+  COMETH: 'COMETH',
   MUSE: 'MUSE'
 }

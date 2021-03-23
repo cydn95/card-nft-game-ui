@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 import SectionTitle from "../../component/SectionTitle";
 import LoadingTextIcon from "../../component/LoadingTextIcon";
-import { CardWrapper } from "../../component/Wrappers";
+import { CardWrapper, NFTStakeModalMask } from "../../component/Wrappers";
 
 import ERC721StakingBoard from "../ERC721StakingBoard";
 import ERC721StakingModal from "../ERC721StakingModal";
@@ -19,12 +19,16 @@ import { getValueFromObject, getERCTokenImage } from "../../helper/utils";
 const ERC721Staking = ({ icon, nftToken }) => {
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => { 
     dispatch(customNFTStakingActions.getApprovedStatus(nftToken));
   }, [dispatch, nftToken]);
 
   useEffect(() => {
-    dispatch(customNFTStakingActions.getStakedERC721Cards(nftToken));
+    dispatch(customNFTStakingActions.getStakedERC721Cards(nftToken), () => {
+      setLoading(true);
+    });
   }, [dispatch, nftToken]);
 
   // Selected Cards for Staking or Unstaking
@@ -63,7 +67,7 @@ const ERC721Staking = ({ icon, nftToken }) => {
     }
 
     if (selectedUnstakeCardIds.length === 0) {
-      toast.error("Select cards to unstake please");
+      toast.error("Select NFT to unstake please");
       return;
     }
 
@@ -120,6 +124,7 @@ const ERC721Staking = ({ icon, nftToken }) => {
             onClose={handleCloseStakeModal}
             nftToken={nftToken}
             stakableTokens={ownedCardTokens}
+            loading={loading}
           />
         </div>
       )}
@@ -167,17 +172,17 @@ const ERC721Staking = ({ icon, nftToken }) => {
                   role="button"
                   onClick={(e) => handleApproveAll()}
                 >
-                  Approve cards
+                  Approve NFT
                 </div>
               )
             )}
-            {approved && (
+            {approved && selectedUnstakeCardIds.length === 0 && (
               <div
                 role="button"
                 className="stake-button button-stake-all"
                 onClick={(e) => handleOpenStakeModal()}
               >
-                Stake Cards
+                Stake NFT
               </div>
             )}
           </StakeButtonWrapper>
@@ -206,7 +211,7 @@ const ERC721Staking = ({ icon, nftToken }) => {
             })}
         </CardContainer>
       ) : (
-        <h2 className="approve-notice">Approve your cards to stake them</h2>
+        <h2 className="approve-notice">Approve your NFTs to stake them</h2>
       )}
     </StakePageContainer>
   );
@@ -235,18 +240,6 @@ const StakePageContainer = styled.div`
     text-align: center;
     padding-top: 30px;
   }
-`;
-
-const NFTStakeModalMask = styled.div`
-  position: fixed;
-  top: 0px;
-  left: 0px;
-  width: 100vw;
-  max-width: 100%;
-  min-height: 100vh;
-  background: #000;
-  opacity: 0.9;
-  z-index: 100;
 `;
 
 const CardContainer = styled.div`

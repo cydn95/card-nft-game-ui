@@ -1,3 +1,4 @@
 import CardWrapper from "./CardWrapper";
+import NFTStakeModalMask from "./NFTStakeModalMask";
 
-export { CardWrapper };
+export { CardWrapper, NFTStakeModalMask };

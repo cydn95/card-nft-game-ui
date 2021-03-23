@@ -33,6 +33,10 @@ const SectionTitleWrapper = styled.div`
     text-shadow: 3.86px 5.36px 2.32px #27787580;
     margin-right: -3.86px;
 
+    img {
+      margin-right: 5px;
+    }
+
     h2 {
       padding-left: 25px;
       padding-right: 25px;

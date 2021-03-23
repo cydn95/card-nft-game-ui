@@ -111,7 +111,7 @@ export function* getStakedCards() {
 export function* getStakedERC721Cards() {
   yield takeEvery(actions.GET_STAKED_ERC721_CARDS, function* ({ payload }) {
 
-    const { token } = payload;
+    const { token, callback } = payload;
 
     const web3 = yield call(getWeb3);
     const partnerNft = getPartnerNFTInstance(web3, token);
@@ -133,6 +133,8 @@ export function* getStakedERC721Cards() {
       owned: [...ownedTokens],
       staked: [...stakedTokens]
     });
+
+    callback();
   });
 }
 

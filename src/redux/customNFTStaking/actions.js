@@ -72,9 +72,9 @@ const actions = {
     type: actions.GET_STAKED_CARDS,
     payload: { token }
   }),
-  getStakedERC721Cards: (token) => ({
+  getStakedERC721Cards: (token, callback = () => {}) => ({
     type: actions.GET_STAKED_ERC721_CARDS,
-    payload: { token }
+    payload: { token, callback }
   }),
 
   approveAll: (token, approved, callback) => ({

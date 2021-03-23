@@ -32,7 +32,7 @@ const Stake = () => {
       <CustomNFTStaking icon={"icons/meme.png"} nftToken={CUSTOM_NFT.MEME} />
       <CustomNFTStaking icon={"icons/doki.png"} nftToken={CUSTOM_NFT.DOKI} />
       <CustomNFTStaking icon={"icons/eth_men.png"} nftToken={CUSTOM_NFT.ETH_MEN} />
-      <ERC721Staking nftToken={CUSTOM_NFT.MUSE} />
+      <ERC721Staking icon={"icons/cometh.png"} nftToken={CUSTOM_NFT.COMETH} />
     </StakePageContainer>
   );
 };
