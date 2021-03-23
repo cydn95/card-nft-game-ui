@@ -1,51 +1,23 @@
-import React, { useState, useMemo } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import styled from "styled-components";
 
 import SectionTitle from "../../component/SectionTitle";
 import LoadingTextIcon from "../../component/LoadingTextIcon";
 import Loading from "../../component/Loading";
+import { CardWrapper } from "../../component/Wrappers";
 
-import { CUSTOM_NFT, RESPONSE } from "../../helper/constant";
-import { getValueFromObject } from "../../helper/utils";
+import { RESPONSE } from "../../helper/constant";
+import { getERCTokenImage } from "../../helper/utils";
 
 import customNFTStakingActions from "../../redux/customNFTStaking/actions";
 
-const { REACT_APP_BUILD_MODE } = process.env;
-
-const ERC721StakingModal = ({ nftToken, onClose }) => {
+const ERC721StakingModal = ({ nftToken, stakableTokens, onClose }) => {
   const dispatch = useDispatch();
 
   const [stakeLoading, setStakeLoading] = useState(false);
   const [selectedCardIds, setSelectedCardIds] = useState([]);
-
-  const cards = useSelector((state) => state.customNFTStaking.cards);
-  const stakedCardTokens = useSelector((state) => getValueFromObject(state.customNFTStaking.staked, nftToken, []));
-  const ownedCardTokens = useSelector((state) => getValueFromObject(state.customNFTStaking.owned, nftToken, []));
-
-  const unStakeCards = useMemo(() => {
-    const token = REACT_APP_BUILD_MODE === "development" ? CUSTOM_NFT.NODERUNNER : nftToken;
-
-    const ret = [];
-
-    if (token in cards) {
-      const myCards = cards[token].cards;
-
-      for (let i = 0; i < myCards.length; i++) {
-        const idx = stakedCardTokens.findIndex(
-          (e) => Number(e) === Number(myCards[i].id)
-        );
-        const idx2 = ownedCardTokens.findIndex(
-          (e) => Number(e) === Number(myCards[i].id)
-        );
-        if (idx < 0 && idx2 >= 0) {
-          ret.push({ ...myCards[i] });
-        }
-      }
-    }
-    return ret;
-  }, [cards, stakedCardTokens, ownedCardTokens, nftToken]);
 
   const handleStake = (e) => {
     e.preventDefault();
@@ -120,20 +92,20 @@ const ERC721StakingModal = ({ nftToken, onClose }) => {
         className="d-flex flex-wrap justify-content-center animation-fadeInLeft"
         style={{ paddingBottom: 100 }}
       >
-        {unStakeCards.length > 0 ? (
-          unStakeCards.map((card) => {
-            const active = selectedCardIds.includes(card.id) ? "active" : "";
+        {stakableTokens.length > 0 ? (
+          stakableTokens.map((token) => {
+            const active = selectedCardIds.includes(token) ? "active" : "";
             return (
-              <CardWrapper key={`stake_card_${card.id}`}>
+              <CardWrapper key={`stake_card_${token}`}>
                 <div className={`card ${active}`}>
                   <img
-                    src={card.image}
-                    alt={`${card.name}`}
+                    src={getERCTokenImage(nftToken, token)}
+                    alt={`${token}`}
                     className="card-image"
                   />
                   <div
                     className="card-border"
-                    onClick={(e) => handleSelectCard(e, card.id)}
+                    onClick={(e) => handleSelectCard(e, token)}
                   ></div>
                 </div>
               </CardWrapper>
@@ -203,62 +175,6 @@ const NFTStakeModalContainer = styled.div`
           fill: #f628ca;
         }
       }
-    }
-  }
-`;
-
-const CardWrapper = styled.div`
-  margin: 8px;
-
-  .card {
-    width: 232.5px;
-    height: 324px;
-    position: relative;
-    padding: 12.75px 10.5px;
-    background: transparent;
-    z-index: 400;
-
-    .card-image {
-      width: 217.5px;
-      height: 307.5px;
-      position: absolute;
-    }
-
-    .card-border {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 240px;
-      height: 332.25px;
-      background: url("/static/images/bg/components/card/card-border.png");
-      background-size: cover;
-      cursor: pointer;
-    }
-
-    &.active {
-      .card-border {
-        background: url("/static/images/bg/components/card/card-border--active.png");
-        background-size: cover;
-      }
-    }
-  }
-
-  .strength-text{
-    padding-left: 10px;
-    padding-top: 5px;
-
-    label {
-      font-size: 16px;
-      font-family: Orbitron-Medium;
-      color: #80f1ed;
-      margin-bottom: 0;
-    }
-
-    span {
-      font-size: 16px;
-      font-family: Orbitron-Black;
-      color: #fec100;
-      padding-left: 4.66667px;
     }
   }
 `;

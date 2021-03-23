@@ -1,27 +1,23 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import styled from "styled-components";
 
 import SectionTitle from "../../component/SectionTitle";
 import LoadingTextIcon from "../../component/LoadingTextIcon";
+import { CardWrapper } from "../../component/Wrappers";
 
-import CardStaking from "../../component/Card/CardStaking";
 import ERC721StakingBoard from "../ERC721StakingBoard";
 import ERC721StakingModal from "../ERC721StakingModal";
 
 import customNFTStakingActions from "../../redux/customNFTStaking/actions";
 
 import { partnerNFTs } from "../../helper/contractPartner";
-import { CUSTOM_NFT, RESPONSE } from "../../helper/constant";
-import { getValueFromObject } from "../../helper/utils";
-
-const { REACT_APP_BUILD_MODE } = process.env;
+import { RESPONSE } from "../../helper/constant";
+import { getValueFromObject, getERCTokenImage } from "../../helper/utils";
 
 const ERC721Staking = ({ icon, nftToken }) => {
   const dispatch = useDispatch();
-
-  const cards = useSelector((state) => state.customNFTStaking.cards);
 
   useEffect(() => {
     dispatch(customNFTStakingActions.getApprovedStatus(nftToken));
@@ -29,7 +25,7 @@ const ERC721Staking = ({ icon, nftToken }) => {
 
   useEffect(() => {
     dispatch(customNFTStakingActions.getStakedERC721Cards(nftToken));
-  }, [dispatch, nftToken])
+  }, [dispatch, nftToken]);
 
   // Selected Cards for Staking or Unstaking
   const [selectedUnstakeCardIds, setSelectedUnstakeCardIds] = useState([]);
@@ -38,59 +34,17 @@ const ERC721Staking = ({ icon, nftToken }) => {
 
   const [unStakeLoading, setUnStakeLoading] = useState(false);
   const [approveLoading, setApproveLoading] = useState(false);
-  
-  const approved = useSelector((state) => getValueFromObject(state.customNFTStaking.approved, nftToken, false));
-  
-  const stakedCardTokens = useSelector((state) => getValueFromObject(state.customNFTStaking.staked, nftToken, [])); // Staked card count
-  const ownedCardTokens = useSelector((state) => getValueFromObject(state.customNFTStaking.owned, nftToken, []));
 
-  const totalStakableCards = useMemo(() => {
-    const token = REACT_APP_BUILD_MODE === "development" ? CUSTOM_NFT.NODERUNNER : nftToken;
+  const approved = useSelector((state) =>
+    getValueFromObject(state.customNFTStaking.approved, nftToken, false)
+  );
 
-    let ret = 0;
-
-    if (token in cards) {
-      const myCards = cards[token].cards;
-
-      for (let i = 0; i < myCards.length; i++) {
-        const idx = stakedCardTokens.findIndex(
-          (e) => Number(e) === Number(myCards[i].id)
-        );
-        const idx2 = ownedCardTokens.findIndex(
-          (e) => Number(e) === Number(myCards[i].id)
-        );
-        if (idx < 0 && idx2 >= 0) {
-          ret++;
-        }
-      }
-    }
-    return ret;
-  }, [cards, stakedCardTokens, ownedCardTokens, nftToken]);
-
-  const stakedCards = useMemo(() => {
-    const token = REACT_APP_BUILD_MODE === "development" ? CUSTOM_NFT.NODERUNNER : nftToken;
-    
-    const ret = [];
-
-    if (token in cards) {
-      const myCards = cards[token].cards;
-
-      for (let i = 0; i < stakedCardTokens.length; i++) {
-        const cardIndex = myCards.findIndex(
-          (e) => Number(e.id) === Number(stakedCardTokens[i])
-        );
-
-        if (cardIndex >= 0) {
-          ret.push({
-            card: { ...myCards[cardIndex] },
-            unStaked: false,
-          });
-        }
-      }
-    }
-
-    return ret;
-  }, [cards, stakedCardTokens, nftToken]);
+  const stakedCardTokens = useSelector((state) =>
+    getValueFromObject(state.customNFTStaking.staked, nftToken, [])
+  ); // Staked card count
+  const ownedCardTokens = useSelector((state) =>
+    getValueFromObject(state.customNFTStaking.owned, nftToken, [])
+  );
 
   const handleSelectCard = (cardId) => {
     const oldUnstakeCardIds = [...selectedUnstakeCardIds];
@@ -115,19 +69,23 @@ const ERC721Staking = ({ icon, nftToken }) => {
 
     setUnStakeLoading(true);
     dispatch(
-      customNFTStakingActions.unStakeERC721Card(nftToken, selectedUnstakeCardIds, (status) => {
-        setSelectedUnstakeCardIds([]);
-        setUnStakeLoading(false);
-        if (status === RESPONSE.SUCCESS) {
-          toast.success("Sucess");
-          dispatch(customNFTStakingActions.getStakedERC721Cards(nftToken));
-          dispatch(customNFTStakingActions.getMyERC721Staked(nftToken));
-          dispatch(customNFTStakingActions.getTotalERC721Staked(nftToken));
-          dispatch(customNFTStakingActions.getClaimableNDR(nftToken));
-        } else {
-          toast.error("Failed...");
+      customNFTStakingActions.unStakeERC721Card(
+        nftToken,
+        selectedUnstakeCardIds,
+        (status) => {
+          setSelectedUnstakeCardIds([]);
+          setUnStakeLoading(false);
+          if (status === RESPONSE.SUCCESS) {
+            toast.success("Sucess");
+            dispatch(customNFTStakingActions.getStakedERC721Cards(nftToken));
+            dispatch(customNFTStakingActions.getMyERC721Staked(nftToken));
+            dispatch(customNFTStakingActions.getTotalERC721Staked(nftToken));
+            dispatch(customNFTStakingActions.getClaimableNDR(nftToken));
+          } else {
+            toast.error("Failed...");
+          }
         }
-      })
+      )
     );
   };
 
@@ -158,18 +116,27 @@ const ERC721Staking = ({ icon, nftToken }) => {
       {stakeDlgOpen && (
         <div className="modal-container">
           <NFTStakeModalMask />
-          <ERC721StakingModal onClose={handleCloseStakeModal} nftToken={nftToken} />
+          <ERC721StakingModal
+            onClose={handleCloseStakeModal}
+            nftToken={nftToken}
+            stakableTokens={ownedCardTokens}
+          />
         </div>
       )}
 
-      <MenuWrapper className="animation-fadeInRight" style={{ marginBottom: 20 }}>
+      <MenuWrapper
+        className="animation-fadeInRight"
+        style={{ marginBottom: 20 }}
+      >
         <SectionTitle icon={icon} title={partnerNFTs[nftToken].title} long />
       </MenuWrapper>
       <ERC721StakingBoard nftToken={nftToken} />
       <MenuWrapper className="animation-fadeInRight" style={{ marginTop: 20 }}>
         <div className="menu-actions">
           <div className="menu-item selected-card-count">
-            {(approved && stakedCardTokens.length > 0) ? `${selectedUnstakeCardIds.length}/${stakedCardTokens.length} Selected` : `${totalStakableCards} Available`}
+            {approved && stakedCardTokens.length > 0
+              ? `${selectedUnstakeCardIds.length}/${stakedCardTokens.length} Selected`
+              : `${ownedCardTokens.length} Available`}
           </div>
           {selectedUnstakeCardIds.length > 0 && (
             <div
@@ -180,8 +147,8 @@ const ERC721Staking = ({ icon, nftToken }) => {
               {unStakeLoading ? (
                 <LoadingTextIcon loadingText="Unstaking..." />
               ) : (
-                  `Unstake selected`
-                )}
+                `Unstake selected`
+              )}
             </div>
           )}
           <StakeButtonWrapper>
@@ -194,16 +161,16 @@ const ERC721Staking = ({ icon, nftToken }) => {
                 <LoadingTextIcon loadingText="Approving..." />
               </div>
             ) : (
-                !approved && (
-                  <div
-                    className="stake-button button-approve-all"
-                    role="button"
-                    onClick={(e) => handleApproveAll()}
-                  >
-                    Approve cards
-                  </div>
-                )
-              )}
+              !approved && (
+                <div
+                  className="stake-button button-approve-all"
+                  role="button"
+                  onClick={(e) => handleApproveAll()}
+                >
+                  Approve cards
+                </div>
+              )
+            )}
             {approved && (
               <div
                 role="button"
@@ -218,20 +185,29 @@ const ERC721Staking = ({ icon, nftToken }) => {
       </MenuWrapper>
       {approved ? (
         <CardContainer>
-          {stakedCards.length > 0 &&
-            stakedCards.map((c, index) => (
-              <CardStaking
-                key={`card_${index}`}
-                card={c.card}
-                unStaked={c.unStaked}
-                onSelectCard={(cardId) => handleSelectCard(cardId)}
-                selectedCardIds={selectedUnstakeCardIds}
-              />
-            ))}
+          {stakedCardTokens.length > 0 &&
+            stakedCardTokens.map((token) => {
+              const active = selectedUnstakeCardIds.includes(token) ? "active" : "";
+              return (
+                <CardWrapper key={`unstake_card_${nftToken}_${token}`}>
+                  <div className={`card ${active}`}>
+                    <img
+                      src={getERCTokenImage(nftToken, token)}
+                      alt={`${token}`}
+                      className="card-image"
+                    />
+                    <div
+                      className="card-border"
+                      onClick={(e) => handleSelectCard(token)}
+                    ></div>
+                  </div>
+                </CardWrapper>
+              );
+            })}
         </CardContainer>
       ) : (
-          <h2 className="approve-notice">Approve your cards to stake them</h2>
-        )}
+        <h2 className="approve-notice">Approve your cards to stake them</h2>
+      )}
     </StakePageContainer>
   );
 };

@@ -50,10 +50,10 @@ export const ETH_MEN_NFT_ADDRESS = "0x33b83B6D3179dCb4094c685C2418cab06372eD89";
 
 // ERC721 Staking (MUSE)
 export const DEV_MUSE_STAKING_ADDRESS = "0x6248EDa17d6c2fCDc1d15783f2e2c592F5b92064";
-export const PROD_MUSE_STAKING_ADDRESS = "0x6248EDa17d6c2fCDc1d15783f2e2c592F5b92064";
+export const PROD_MUSE_STAKING_ADDRESS = "0xBd0E5ee54DBC97181E474d0206e472f1935d6bCd";
 
 export const DEV_MUSE_ADDRESS = "0x3a204786B22d079b68060865Fc1cFca1e4A4EBE0";
-export const PROD_MUSE_ADDRESS = "0x3a204786B22d079b68060865Fc1cFca1e4A4EBE0";
+export const PROD_MUSE_ADDRESS = "0xbcd4F1EcFf4318e7A0c791C7728f3830Db506C71";
 
 // For dev: Test with nft
 export const partnerNFTs = {
@@ -104,6 +104,7 @@ export const partnerNFTs = {
   },
   MUSE: {
     title: "MUSE",
+    image: "https://images.service.cometh.io/",
     dev: {
       token: DEV_MUSE_ADDRESS,
       tokenAbi: MUSE_ABI,
