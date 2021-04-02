@@ -1,4 +1,8 @@
 import { CARD_TYPE } from "./constant";
+import { partnerNFTs } from "./contractPartner";
+import { erc721Images } from "./dummy";
+
+const { REACT_APP_BUILD_MODE } = process.env;
 
 export const getValueFromObject = (obj, key, def = null) => {
   if (obj === null) {
@@ -45,3 +49,11 @@ export const getCardType = (card) => {
 
   return cardType;
 };
+
+export const getERCTokenImage = (token, id) => {
+  if (REACT_APP_BUILD_MODE === "production") {
+    return `${partnerNFTs[token].image}/${id}.png`;
+  } else {
+    return erc721Images[id];
+  }
+}

@@ -2,10 +2,10 @@ import React from "react";
 import ReactLoading from "react-loading";
 import styled from "styled-components";
 
-const Loading = ({ type, text, color }) => {
+const Loading = ({ type, text, color, loading = true }) => {
   return (
     <LoadingWrapper>
-      <ReactLoading type={type} color={color} />
+      {loading && <ReactLoading type={type} color={color} />}
       <span>{text}</span>
     </LoadingWrapper>
   );

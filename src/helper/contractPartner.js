@@ -9,6 +9,9 @@ import DOKI_ABI from "./jsonPartner/DOKI_abi.json";
 // ETH-MEN NFT
 import ETH_MEN_ABI from "./jsonPartner/ETH_MEN_abi.json";
 
+// ERC721 (MUSE)
+import MUSE_ABI from "./jsonPartner/MUSE_NFT_abi.json";
+
 // Meme Staking abi
 import DEV_MEME_STAKING_ABI from "./json/MEMEStaking_abi_dev.json";
 import PROD_MEME_STAKING_ABI from "./json/MEMEStaking_abi_prod.json";
@@ -20,6 +23,10 @@ import PROD_DOKI_STAKING_ABI from "./jsonPartner/DOKI_NFT_Staking_abi.json";
 // ETH-MEN Staking abi
 import DEV_ETH_MEN_STAKING_ABI from "./jsonPartner/ETH_MEN_Staking_abi.json";
 import PROD_ETH_MEN_STAKING_ABI from "./jsonPartner/ETH_MEN_Staking_abi.json";
+
+// ERC721 Staking abi (MUSE)
+import DEV_MUSE_STAKING_ABI from "./jsonPartner/MUSE_NFT_Staking_abi.json";
+import PROD_MUSE_STAKING_ABI from "./jsonPartner/MUSE_NFT_Staking_abi.json";
 
 // MEME Staking
 export const DEV_MEME_STAKING_ADDRESS = "0x177e145cE88FE047C3B6A57C59a19103257e7912";
@@ -40,6 +47,13 @@ export const DEV_ETH_MEN_STAKING_ADDRESS = "0x177e145cE88FE047C3B6A57C59a1910325
 export const PROD_ETH_MEN_STAKING_ADDRESS = "0x8edC7cDCe7356f1Fc9F498B1Fa4A4b3C946E85C1";
 
 export const ETH_MEN_NFT_ADDRESS = "0x33b83B6D3179dCb4094c685C2418cab06372eD89";
+
+// ERC721 Staking (MUSE)
+export const DEV_MUSE_STAKING_ADDRESS = "0x6248EDa17d6c2fCDc1d15783f2e2c592F5b92064";
+export const PROD_MUSE_STAKING_ADDRESS = "0xBd0E5ee54DBC97181E474d0206e472f1935d6bCd";
+
+export const DEV_MUSE_ADDRESS = "0x3a204786B22d079b68060865Fc1cFca1e4A4EBE0";
+export const PROD_MUSE_ADDRESS = "0xbcd4F1EcFf4318e7A0c791C7728f3830Db506C71";
 
 // For dev: Test with nft
 export const partnerNFTs = {
@@ -88,4 +102,20 @@ export const partnerNFTs = {
       stakingAbi: PROD_ETH_MEN_STAKING_ABI
     },
   },
+  COMETH: {
+    title: "Cometh",
+    image: "https://images.service.cometh.io/",
+    dev: {
+      token: DEV_MUSE_ADDRESS,
+      tokenAbi: MUSE_ABI,
+      staking: DEV_MUSE_STAKING_ADDRESS,
+      stakingAbi: DEV_MUSE_STAKING_ABI
+    },
+    prod: {
+      token: PROD_MUSE_ADDRESS,
+      tokenAbi: MUSE_ABI,
+      staking: PROD_MUSE_STAKING_ADDRESS,
+      stakingAbi: PROD_MUSE_STAKING_ABI
+    },
+  }
 };
