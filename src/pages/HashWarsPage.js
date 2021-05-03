@@ -12,7 +12,7 @@ import LockFarmBoard from "../container/LockFarmBoard";
 import { farms } from "../helper/contractFarm";
 import { getValueFromObject } from "../helper/utils";
 
-const Farm = () => {
+const HashWars = () => {
   // const dispatch = useDispatch();
 
   const approved = useSelector((state) => state.Farms.approved);
@@ -27,48 +27,48 @@ const Farm = () => {
   }
 
   return (
-    <FarmPageContainer>
-      <MenuWrapper className="animation-fadeInRight">
-        <SectionTitle title="Stake LP tokens" long />
-      </MenuWrapper>
+    <HashWarsPageContainer>
       <Tab.Container defaultActiveKey="ACTIVE">
         <Nav
           variant="pills"
           className="justify-content-center animation-fadeIn"
         >
           <Nav.Item>
-            <Nav.Link eventKey="ACTIVE">ACTIVE</Nav.Link>
+            <Nav.Link eventKey="ACTIVE" className="nav-active">Active</Nav.Link>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link eventKey="CLOSED">CLOSED</Nav.Link>
+            <Nav.Link eventKey="FINISHED" className="nav-finished">Finished</Nav.Link>
           </Nav.Item>
         </Nav>
         <Tab.Content>
           <Tab.Pane eventKey="ACTIVE">
             <div
               className="d-flex flex-wrap justify-content-center animation-fadeInLeft"
-              style={{ paddingBottom: 100 }}
             >
-              {Object.keys(farms).map(
-                (key) => {
-                  if (!farms[key].active) return null;
-                  const Farm = farms[key].locked ? LockFarmBoard : FarmBoard;
-                  return (
-                    <Farm
-                      key={`farm-${key}`}
-                      token={key}
-                      farm={farms[key]}
-                      approved={getValueFromObject(approved, key)}
-                      balance={getValueFromObject(balance, key)}
-                      staked={getValueFromObject(staked, key)}
-                      claimable={getValueFromObject(claimable, key)}
-                      stats={getValueFromObject(stats, key)}
-                    />
-                  )
-              })}
+              {/* <img src={`/static/images/bg/pages/hash-wars/round.png`} alt="ndr" ><span>Round 1</span></img> */}
+              <div className="round">
+                Round 1
+              </div>
+            </div>
+            <div
+              className="d-flex flex-wrap justify-content-center animation-fadeInLeft"
+            >
+              <div className="d-flex hash-wars-round">
+                <div className="time-left">
+                  <p2 className="p-text sky">Time left:</p2>
+                  <p1 className="p-value yellow">5d - 2h - 1m</p1>
+                </div>
+                <div className="prize-pool">
+                  <p2 className="p-text sky">Prize pool</p2>
+                  <p1 className="p-value yellow">$10439</p1>
+                </div>
+              </div>
+            </div>
+            <div className="hash-wars-round-detail">
+            
             </div>
           </Tab.Pane>
-          <Tab.Pane eventKey="CLOSED">
+          <Tab.Pane eventKey="FINISHED">
             <div
               className="d-flex flex-wrap justify-content-center animation-fadeInLeft"
               style={{ paddingBottom: 100 }}
@@ -92,41 +92,61 @@ const Farm = () => {
           </Tab.Pane>
         </Tab.Content>
       </Tab.Container>
-    </FarmPageContainer>
+    </HashWarsPageContainer>
   );
 };
 
-const FarmPageContainer = styled.div`
+const HashWarsPageContainer = styled.div`
   width: 100vw;
   max-width: 100%;
 
   .nav-pills {
-    margin: 0px;
+    margin-top: 0px;
+    margin-bottom: 86px;
   }
-
+  .nav-pills .nav-item {
+    width: 50%;
+  }
   .nav-pills .nav-item .nav-link {
-    margin-bottom: 10px;
-    font-size: 24px;
+    font-size: 30px;
+    padding: 0 1rem;
   }
+  .nav-active {
+    text-align: end;
+  }
+  .nav-finished {
+    text-align: start;
+  }
+
+  .round {
+    background-image: url("/static/images/bg/pages/hash-wars/round.png");
+    background-size: 100% 100%;
+    padding: 4px 40px;
+    font-size: 26px;
+    font-weight: 700;
+    color: #FEC100;
+  }
+
+  .hash-wars-round {
+    border: 3px solid #80f1ed;
+    box-shadow: 0px 5px 3px #80f1ed80;
+    max-width: 840px;
+    width: calc(100% - 20px);
+
+    .time-left {
+      border-right: 2px solid #80f1ed;
+      display: grid;
+      width: 50%;
+      text-align: center;
+    }
+    .prize-pool {
+      border-left: 2px solid #80f1ed;
+      display: grid;
+      width: 50%;
+      text-align: center;
+    }
+  }
+ 
 `;
 
-const MenuWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  max-width: 1250px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 20px;
-
-  h2 {
-    font-family: Orbitron-Black;
-    font-size: 1.5rem;
-    color: #fec100;
-    padding-left: 20px;
-    padding-right: 20px;
-    text-align: center;
-  }
-`;
-
-export default Farm;
+export default HashWars;
