@@ -18,6 +18,7 @@ import NDR_SUSHI_STAKING_ABI from "./jsonFarm/NDR-SUSHI_SLP_Staking.json";
 
 // NDR Lock
 import NDR_LOCK_STAKING_ABI from "./jsonFarm/NDR_Lock_Staking.json";
+import NDR_LOCK_STAKING2_ABI from "./jsonFarm/NDR_Lock_Staking2.json";
 
 // Farms
 // export const DEV_NDR_ERC20_STAKING_ADDRESS = "0x25bEc9DdC31684dCe863637A11792496C3a4B4eD";   // Rinkeby
@@ -29,6 +30,35 @@ export const DEV_NDR_LOCK_STAKING_ADDRESS = "0x5D4F0f46f2B81e883D803F5eD21C818E9
 export const PROD_NDR_LOCK_STAKING_ADDRESS = "0xe2c968806657F70E73B2ddc55E3dF9375f22fd4B";
 
 export const farms = {
+  NDR2: {
+    title: "NDR",
+    link_title: "Obtain NDR",
+    link: "https://app.uniswap.org/#/add/0x739763a258640919981f9ba610ae65492455be53/ETH",
+    active: true,
+    lp: false,
+    locked: true,
+    lock_days: 30,
+    dev: {
+      staking: {
+        address: DEV_NDR_LOCK_STAKING_ADDRESS,
+        abi: NDR_LOCK_STAKING2_ABI
+      },
+      token: {
+        address: Contract.DEV_NDR_ADDRESS,
+        abi: Contract.DEV_NDR_ABI
+      }
+    },
+    prod: {
+      staking: {
+        address: "0xF2d073cfE180eee64D6efE5401A415835c4CC935",
+        abi: NDR_LOCK_STAKING2_ABI
+      },
+      token: {
+        address: Contract.PROD_NDR_ADDRESS,
+        abi: Contract.PROD_NDR_ABI
+      }
+    }
+  },
   NDR: {
     title: "NDR",
     link_title: "Obtain NDR",
