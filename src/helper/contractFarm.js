@@ -63,7 +63,7 @@ export const farms = {
     title: "NDR",
     link_title: "Obtain NDR",
     link: "https://app.uniswap.org/#/add/0x739763a258640919981f9ba610ae65492455be53/ETH",
-    active: true,
+    active: false,
     lp: false,
     locked: true,
     lock_days: 89,
