@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useWallet } from "use-wallet";
 import { Tab, Nav } from "react-bootstrap";
 import styled from "styled-components";
+import cn from "classnames";
 
 import UnlockWalletPage from "./UnlockWalletPage";
 import SectionTitle from "../component/SectionTitle";
@@ -11,6 +12,7 @@ import LockFarmBoard from "../container/LockFarmBoard";
 
 import { farms } from "../helper/contractFarm";
 import { getValueFromObject } from "../helper/utils";
+import { finishedWars } from "../helper/dummy";
 
 const HashWars = () => {
   // const dispatch = useDispatch();
@@ -20,6 +22,8 @@ const HashWars = () => {
   const staked = useSelector((state) => state.Farms.staked);
   const claimable = useSelector((state) => state.Farms.claimable);
   const stats = useSelector((state) => state.Farms.stats);
+
+  const [redTeamHash, setRedTeamHash] = useState(60);
 
   const { account } = useWallet();
   if (!account) {
@@ -65,44 +69,50 @@ const HashWars = () => {
               </div>
             </div>
             <div className="hash-wars-round-detail">
-              <div className="hash-wars-round-detail-bar">
-                <div className="red-team-bar">60%</div>
-                <div className="blue-team-bar">40%</div>
+              <div className="hash-wars-round-detail-hash">
+                {/* <div className="red-team-bar">60%</div>
+                <div className="blue-team-bar">40%</div> */}
+                <div className="hash-wars-round-detail-hash-title d-flex">
+                  <p className="p1-text red" style={{ width: redTeamHash + '%' }}>RED</p>
+                  <p className="p1-text blue" style={{ width: (100 - redTeamHash) + '%' }}>BLUE</p>
+                </div>
+                <div className="hash-wars-round-detail-bar">
+                  <progress max="100" value={redTeamHash} className="css3">
+                    <div className="progress-bar">{redTeamHash} %</div>
+                  </progress>
+                </div>
               </div>
-              <progress max="100" value="60" className="css3">
-                <div className="progress-bar"></div>
-              </progress>
               <div className="hash-wars-round-detail-per-value">
                 <div className="team-value d-flex">
                   <div className="team-value-detail">
-                    <img src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
+                    <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
                     <p className="p2-text sky">Hashes</p>
                     <p className="p1-text yellow">1200</p>
                   </div>
                   <div className="team-value-detail">
-                    <img src={`/static/images/icons/strength.png`} alt="power" height="80"/>
+                    <img className="margin-auto" src={`/static/images/icons/strength.png`} alt="power" height="80"/>
                     <p className="p2-text sky">Power</p>
                     <p className="p1-text yellow">100</p>
                   </div>
                   <div className="team-value-detail">
-                    <img src={`/static/images/icons/ndr.png`} alt="ndr" height="80"/>
+                    <img className="margin-auto" src={`/static/images/icons/ndr.png`} alt="ndr" height="80"/>
                     <p className="p2-text sky">NDR</p>
                     <p className="p1-text yellow">100</p>
                   </div>
                 </div>
                 <div className="team-value">
                   <div className="team-value-detail">
-                    <img src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
+                    <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
                     <p className="p2-text sky">Hashes</p>
                     <p className="p1-text yellow">1200</p>
                   </div>
                   <div className="team-value-detail">
-                    <img src={`/static/images/icons/strength.png`} alt="power" height="80"/>
+                    <img className="margin-auto" src={`/static/images/icons/strength.png`} alt="power" height="80"/>
                     <p className="p2-text sky">Power</p>
                     <p className="p1-text yellow">100</p>
                   </div>
                   <div className="team-value-detail">
-                    <img src={`/static/images/icons/ndr.png`} alt="ndr" height="80"/>
+                    <img className="margin-auto" src={`/static/images/icons/ndr.png`} alt="ndr" height="80"/>
                     <p className="p2-text sky">NDR</p>
                     <p className="p1-text yellow">100</p>
                   </div>
@@ -116,24 +126,29 @@ const HashWars = () => {
           </Tab.Pane>
           <Tab.Pane eventKey="FINISHED">
             <div
-              className="d-flex flex-wrap justify-content-center animation-fadeInLeft"
+              className="animation-fadeInLeft"
               style={{ paddingBottom: 100 }}
             >
-              {Object.keys(farms).map(
-                (key) =>
-                  !farms[key].active && (
-                    <FarmBoard
-                      key={`farm-${key}`}
-                      token={key}
-                      farm={farms[key]}
-                      approved={getValueFromObject(approved, key)}
-                      balance={getValueFromObject(balance, key)}
-                      staked={getValueFromObject(staked, key)}
-                      claimable={getValueFromObject(claimable, key)}
-                      stats={getValueFromObject(stats, key)}
-                    />
-                  )
-              )}
+              {finishedWars.map((key) => (
+                <div className="finished" key={key.id}>
+                  <div className={cn("finished-hash-wars", key.win =='RED'?"finished-hash-wars--red":"finished-hash-wars--blue", "d-flex", "flex-wrap")}>
+                    <div className="red-team">
+                      <p className="p2-text sky">{key.win == 'RED' ? 'Win' : 'Lose'}</p>
+                      <p className="p1-text red">RED {key.redValue}</p>
+                    </div>
+                    <p className="p2-text yellow">{key.id}</p>
+                    <div className="blue-team">
+                      <p className="p2-text sky">{key.win == 'BLUE' ? 'Win' : 'Lose'}</p>
+                      <p className="p1-text blue">BLUE {key.blueValue}</p>
+                    </div>
+                  </div>
+                  <div className="open-button d-flex flex-wrap">
+                    <div role="button" className="open-button-red p2-text yellow">Open Red</div>
+                    <div className="space-temp"></div>
+                    <div role="button" className="open-button-blue p2-text yellow">Open Blue</div>
+                  </div>
+                </div>
+              ))}
             </div>
           </Tab.Pane>
         </Tab.Content>
@@ -226,17 +241,18 @@ const HashWarsPageContainer = styled.div`
     text-align: center;
   }
   .hash-wars-round-detail {
-    &-bar {
-      background-image: url("/static/images/bg/progress-bar.png");
-      background-size: 100% 100%;
+    &-hash {
       width: 100%;
       max-width: 1139px;
       height: 52px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: 1rem;
-
+      margin: auto;
+      &-title {
+        margin-top: 140px;
+      }
+    }
+    &-bar {
+      // background-image: url("/static/images/bg/progress-bar.png");
+      // background-size: 100% 100%;
       .red-team-bar {
         background-color: #FA0046;
         width: 60%;
@@ -256,13 +272,51 @@ const HashWarsPageContainer = styled.div`
     }
   }
   progress[value] {
-    width: 500px;
+    width: 100%;
     height: 50px;
-    background-image: url("/static/images/bg/progress-bar.png");
-    background-size: 100% 100%;
+    color: #00A6F5;
   }
-  progress[value]::-webkit-progress-bar {
-    
+
+  .margin-auto {
+    margin: auto;
+  }
+
+  .finished {
+    margin-bottom: 35px;
+    .finished-hash-wars {
+      align-items: center;
+      width: calc(100% - 4rem);
+      max-width: 1160px;
+      margin: auto;
+      justify-content: space-evenly;
+      &--red {
+        border: 4px solid #FA0046;
+        background-color: #3E0011;
+      }
+      &--blue {
+        border: 4px solid #0287F0;
+        background-color: #003156;
+      }
+    }
+    .open-button {
+      justify-content: space-evenly;
+      width: calc(100% - 4rem);
+      max-width: 1160px;
+      margin: auto;
+      &-red {
+        background-image: url("/static/images/icons/open-red-button.png");
+        background-size: 100% 100%;
+        padding: 2px 24px;
+      }
+      .space-temp {
+        width: 100px;
+      }
+      &-blue {
+        background-image: url("/static/images/icons/open-blue-button.png");
+        background-size: 100% 100%;
+        padding: 2px 24px;
+      }
+    }
   }
 `;
 
