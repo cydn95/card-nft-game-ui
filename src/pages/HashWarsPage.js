@@ -267,8 +267,12 @@ const HashWarsPageContainer = styled.div`
     &-per-value {
       display: flex;
       align-items: center;
-      justify-content: space-around;
+      justify-content: space-between;
       margin-top: 2rem;
+      width: 100%;
+      max-width: 1139px;
+      margin-right: auto;
+      margin-left: auto;
     }
   }
   progress[value] {
