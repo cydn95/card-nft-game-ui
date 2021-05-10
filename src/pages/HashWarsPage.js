@@ -34,15 +34,14 @@ const HashWars = () => {
         <Tab.Content>
           <Tab.Pane eventKey="ACTIVE">
             <div
-              className="d-flex flex-wrap justify-content-center animation-fadeInLeft"
+              className="d-flex flex-wrap justify-content-center animation-fadeInRight"
             >
-              {/* <img src={`/static/images/bg/pages/hash-wars/round.png`} alt="ndr" ><span>Round 1</span></img> */}
               <div className="round">
                 Round 1
               </div>
             </div>
             <div
-              className="d-flex flex-wrap justify-content-center animation-fadeInLeft"
+              className="d-flex flex-wrap justify-content-center animation-fadeInRight"
             >
               <div className="d-flex hash-wars-round">
                 <div className="time-left">
@@ -55,10 +54,8 @@ const HashWars = () => {
                 </div>
               </div>
             </div>
-            <div className="hash-wars-round-detail">
+            <div className="hash-wars-round-detail animation-fadeInLeft">
               <div className="hash-wars-round-detail-hash">
-                {/* <div className="red-team-bar">60%</div>
-                <div className="blue-team-bar">40%</div> */}
                 <div className="hash-wars-round-detail-hash-title d-flex">
                   <p className="p1-text red" style={{ width: redTeamHash + '%' }}>RED</p>
                   <p className="p1-text blue" style={{ width: (100 - redTeamHash) + '%' }}>BLUE</p>
@@ -106,7 +103,7 @@ const HashWars = () => {
                 </div>
               </div>
             </div>
-            <div className="hash-wars-round-join">
+            <div className="hash-wars-round-join animation-fadeIn">
               <div role="button" className="join-red p1-text yellow">Join RED</div>
               <div role="button" className="join-blue p1-text yellow">Join BLUE</div>
             </div>
@@ -150,7 +147,7 @@ const HashWarsPageContainer = styled.div`
 
   .nav-pills {
     margin-top: 0px;
-    margin-bottom: 86px;
+    margin-bottom: 40px;
   }
   .nav-pills .nav-item {
     width: 50%;
@@ -197,7 +194,9 @@ const HashWarsPageContainer = styled.div`
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-top: 132px;
+      margin: auto;
+      margin-top: 40px;
+      width: calc(100% - 20px);
       .join-red {
         background-image: url("/static/images/bg/red-button.png");
         background-size: 100% 100%;
@@ -220,20 +219,25 @@ const HashWarsPageContainer = styled.div`
       }
     }
   }
-  .team-value-detail {
-    display: inline-grid;
-    margin-left: 1rem;
-    text-align: center;
+  .team-value {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    &-detail {
+      display: inline-grid;
+      margin-left: 1rem;
+      text-align: center;
+    }
   }
+
   .hash-wars-round-detail {
+    margin-top: 60px;
     &-hash {
-      width: 100%;
+      width: calc(100% - 20px);
       max-width: 1139px;
       height: 52px;
       margin: auto;
-      &-title {
-        margin-top: 140px;
-      }
     }
     &-bar {
       // background-image: url("/static/images/bg/progress-bar.png");
@@ -252,9 +256,9 @@ const HashWarsPageContainer = styled.div`
     &-per-value {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: space-around;
       margin-top: 2rem;
-      width: 100%;
+      width: calc(100% - 20px);
       max-width: 1139px;
       margin-right: auto;
       margin-left: auto;
