@@ -6,23 +6,10 @@ import styled from "styled-components";
 import cn from "classnames";
 
 import UnlockWalletPage from "./UnlockWalletPage";
-import SectionTitle from "../component/SectionTitle";
-import FarmBoard from "../container/FarmBoard";
-import LockFarmBoard from "../container/LockFarmBoard";
 
-import { farms } from "../helper/contractFarm";
-import { getValueFromObject } from "../helper/utils";
 import { finishedWars } from "../helper/dummy";
 
 const HashWars = () => {
-  // const dispatch = useDispatch();
-
-  const approved = useSelector((state) => state.Farms.approved);
-  const balance = useSelector((state) => state.Farms.balance);
-  const staked = useSelector((state) => state.Farms.staked);
-  const claimable = useSelector((state) => state.Farms.claimable);
-  const stats = useSelector((state) => state.Farms.stats);
-
   const [redTeamHash, setRedTeamHash] = useState(60);
 
   const { account } = useWallet();
@@ -83,7 +70,7 @@ const HashWars = () => {
                 </div>
               </div>
               <div className="hash-wars-round-detail-per-value">
-                <div className="team-value d-flex">
+                <div className="team-value">
                   <div className="team-value-detail">
                     <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
                     <p className="p2-text sky">Hashes</p>
@@ -120,8 +107,8 @@ const HashWars = () => {
               </div>
             </div>
             <div className="hash-wars-round-join">
-              <div role="button" className="join-red p2-text yellow">Join RED</div>
-              <div role="button" className="join-blue p2-text yellow">Join BLUE</div>
+              <div role="button" className="join-red p1-text yellow">Join RED</div>
+              <div role="button" className="join-blue p1-text yellow">Join BLUE</div>
             </div>
           </Tab.Pane>
           <Tab.Pane eventKey="FINISHED">
@@ -131,21 +118,21 @@ const HashWars = () => {
             >
               {finishedWars.map((key) => (
                 <div className="finished" key={key.id}>
-                  <div className={cn("finished-hash-wars", key.win =='RED'?"finished-hash-wars--red":"finished-hash-wars--blue", "d-flex", "flex-wrap")}>
-                    <div className="red-team">
-                      <p className="p2-text sky">{key.win == 'RED' ? 'Win' : 'Lose'}</p>
+                  <div className={cn("finished-hash-wars", key.win ==='RED'?"finished-hash-wars--red":"finished-hash-wars--blue", "d-flex", "flex-wrap")}>
+                    <div className="red-team" style={{ width: '40%' }}>
+                      <p className="p2-text sky">{key.win === 'RED' ? 'Win' : 'Lose'}</p>
                       <p className="p1-text red">RED {key.redValue}</p>
                     </div>
-                    <p className="p2-text yellow">{key.id}</p>
-                    <div className="blue-team">
-                      <p className="p2-text sky">{key.win == 'BLUE' ? 'Win' : 'Lose'}</p>
+                    <p className="p2-text-bold yellow" style={{ width: '20%', maxWidth: '170px' }}>{key.id}</p>
+                    <div className="blue-team" style={{ width: '40%' }}>
+                      <p className="p2-text sky">{key.win === 'BLUE' ? 'Win' : 'Lose'}</p>
                       <p className="p1-text blue">BLUE {key.blueValue}</p>
                     </div>
                   </div>
                   <div className="open-button d-flex flex-wrap">
-                    <div role="button" className="open-button-red p2-text yellow">Open Red</div>
+                    <div role="button" className="open-button-red p2-text-bold yellow">Open Red</div>
                     <div className="space-temp"></div>
-                    <div role="button" className="open-button-blue p2-text yellow">Open Blue</div>
+                    <div role="button" className="open-button-blue p2-text-bold yellow">Open Blue</div>
                   </div>
                 </div>
               ))}
@@ -183,8 +170,8 @@ const HashWarsPageContainer = styled.div`
     background-image: url("/static/images/bg/pages/hash-wars/round.png");
     background-size: 100% 100%;
     padding: 4px 40px;
+    font-family: Orbitron-Bold;
     font-size: 26px;
-    font-weight: 700;
   }
 
   .hash-wars-round {
@@ -214,7 +201,6 @@ const HashWarsPageContainer = styled.div`
       .join-red {
         background-image: url("/static/images/bg/red-button.png");
         background-size: 100% 100%;
-        font-weight: 700;
         max-width: 447px;
         height: 66px;
         width: 50%;
@@ -225,7 +211,6 @@ const HashWarsPageContainer = styled.div`
       .join-blue {
         background-image: url("/static/images/bg/blue-button.png");
         background-size: 100% 100%;
-        font-weight: 700;
         max-width: 447px;
         height: 66px;
         width: 50%;
@@ -292,6 +277,7 @@ const HashWarsPageContainer = styled.div`
       width: calc(100% - 4rem);
       max-width: 1160px;
       margin: auto;
+      margin-bottom: 0.5rem;
       justify-content: space-evenly;
       &--red {
         border: 4px solid #FA0046;
@@ -308,17 +294,29 @@ const HashWarsPageContainer = styled.div`
       max-width: 1160px;
       margin: auto;
       &-red {
-        background-image: url("/static/images/icons/open-red-button.png");
+        background-image: url("/static/images/bg/red-button.png");
         background-size: 100% 100%;
-        padding: 2px 24px;
+        width: 40%;
+        max-width: 341px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
       .space-temp {
-        width: 100px;
+        max-width: 170px;
+        width: 20%;
       }
       &-blue {
-        background-image: url("/static/images/icons/open-blue-button.png");
+        background-image: url("/static/images/bg/blue-button.png");
         background-size: 100% 100%;
         padding: 2px 24px;
+        width: 40%;
+        max-width: 341px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     }
   }

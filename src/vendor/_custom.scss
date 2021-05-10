@@ -1,14 +1,46 @@
 .p1-text {
-  font-size: 30px;
+  font-family: 'Orbitron-Black';
+  font-size: 22px;
   font-weight: 600;
   line-height: 1;
   margin: 0;
   text-align: center;
+  @include respond-to(tablet) {
+    font-size: 26px;
+  }
+  @include respond-to(desktop) {
+    font-size: 30px;
+  }
 }
 
 .p2-text {
-  font-size: 26px;
+  font-family: 'Orbitron-Regular';
+  font-size: 18px;
   font-weight: 600;
   margin: 0;
   text-align: center;
+  @include respond-to(tablet) {
+    font-size: 22px;
+  }
+  @include respond-to(desktop) {
+    font-size: 26px;
+  }
+}
+
+.p2-text-bold {
+  font-family: 'Orbitron-Bold';
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  text-align: center;
+  @include respond-to(tablet) {
+    font-size: 22px;
+  }
+  @include respond-to(desktop) {
+    font-size: 26px;
+  }
+}
+
+.hidden {
+  visibility: hidden;
 }
