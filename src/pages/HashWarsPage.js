@@ -6,11 +6,12 @@ import styled from "styled-components";
 import cn from "classnames";
 
 import UnlockWalletPage from "./UnlockWalletPage";
-
+import SectionTitle from "../component/SectionTitle";
 import { finishedWars } from "../helper/dummy";
 
 const HashWars = () => {
   const [redTeamHash, setRedTeamHash] = useState(60);
+  const [myTeam, setMyTeam] = useState('RED');
 
   const { account } = useWallet();
   if (!account) {
@@ -33,80 +34,152 @@ const HashWars = () => {
         </Nav>
         <Tab.Content>
           <Tab.Pane eventKey="ACTIVE">
-            <div
-              className="d-flex flex-wrap justify-content-center animation-fadeInRight"
-            >
-              <div className="round">
-                Round 1
+            {myTeam === null && <div>
+              <div className="d-flex flex-wrap justify-content-center animation-fadeInRight">
+                <p className="round p2-text-bold">
+                  Round 1
+                </p>
               </div>
-            </div>
-            <div
-              className="d-flex flex-wrap justify-content-center animation-fadeInRight"
-            >
-              <div className="d-flex hash-wars-round">
-                <div className="time-left">
-                  <p className="p2-text sky">Time left:</p>
-                  <p className="p1-text yellow">5d - 2h - 1m</p>
-                </div>
-                <div className="prize-pool">
-                  <p className="p2-text sky">Prize pool</p>
-                  <p className="p1-text yellow">$10439</p>
-                </div>
-              </div>
-            </div>
-            <div className="hash-wars-round-detail animation-fadeInLeft">
-              <div className="hash-wars-round-detail-hash">
-                <div className="hash-wars-round-detail-hash-title d-flex">
-                  <p className="p1-text red" style={{ width: redTeamHash + '%' }}>RED</p>
-                  <p className="p1-text blue" style={{ width: (100 - redTeamHash) + '%' }}>BLUE</p>
-                </div>
-                <div className="hash-wars-round-detail-bar">
-                  <progress max="100" value={redTeamHash} className="css3">
-                    <div className="progress-bar">{redTeamHash} %</div>
-                  </progress>
-                </div>
-              </div>
-              <div className="hash-wars-round-detail-per-value">
-                <div className="team-value">
-                  <div className="team-value-detail">
-                    <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
-                    <p className="p2-text sky">Hashes</p>
-                    <p className="p1-text yellow">1200</p>
+              <div className="d-flex flex-wrap justify-content-center animation-fadeInRight">
+                <div className="d-flex hash-wars-round">
+                  <div className="time-left">
+                    <p className="p2-text sky">Time left:</p>
+                    <p className="p1-text yellow">5d - 2h - 1m</p>
                   </div>
-                  <div className="team-value-detail">
-                    <img className="margin-auto" src={`/static/images/icons/strength.png`} alt="power" height="80"/>
-                    <p className="p2-text sky">Power</p>
-                    <p className="p1-text yellow">100</p>
-                  </div>
-                  <div className="team-value-detail">
-                    <img className="margin-auto" src={`/static/images/icons/ndr.png`} alt="ndr" height="80"/>
-                    <p className="p2-text sky">NDR</p>
-                    <p className="p1-text yellow">100</p>
-                  </div>
-                </div>
-                <div className="team-value">
-                  <div className="team-value-detail">
-                    <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
-                    <p className="p2-text sky">Hashes</p>
-                    <p className="p1-text yellow">1200</p>
-                  </div>
-                  <div className="team-value-detail">
-                    <img className="margin-auto" src={`/static/images/icons/strength.png`} alt="power" height="80"/>
-                    <p className="p2-text sky">Power</p>
-                    <p className="p1-text yellow">100</p>
-                  </div>
-                  <div className="team-value-detail">
-                    <img className="margin-auto" src={`/static/images/icons/ndr.png`} alt="ndr" height="80"/>
-                    <p className="p2-text sky">NDR</p>
-                    <p className="p1-text yellow">100</p>
+                  <div className="prize-pool">
+                    <p className="p2-text sky">Prize pool</p>
+                    <p className="p1-text yellow">$10439</p>
                   </div>
                 </div>
               </div>
+              <div className="hash-wars-round-detail animation-fadeInLeft">
+                <div className="hash-wars-round-detail-hash">
+                  <div className="hash-wars-round-detail-hash-title d-flex">
+                    <p className="p1-text red" style={{ width: redTeamHash + '%' }}>RED</p>
+                    <p className="p1-text blue" style={{ width: (100 - redTeamHash) + '%' }}>BLUE</p>
+                  </div>
+                  <div className="hash-wars-round-detail-bar">
+                    <progress max="100" value={redTeamHash} className="css3">
+                      <div className="progress-bar">{redTeamHash} %</div>
+                    </progress>
+                  </div>
+                </div>
+                <div className="hash-wars-round-detail-per-value">
+                  <div className="team-value">
+                    <div className="team-value-detail">
+                      <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
+                      <p className="p2-text sky">Hashes</p>
+                      <p className="p1-text yellow">1200</p>
+                    </div>
+                    <div className="team-value-detail">
+                      <img className="margin-auto" src={`/static/images/icons/strength.png`} alt="power" height="80"/>
+                      <p className="p2-text sky">Power</p>
+                      <p className="p1-text yellow">100</p>
+                    </div>
+                    <div className="team-value-detail">
+                      <img className="margin-auto" src={`/static/images/icons/ndr.png`} alt="ndr" height="80"/>
+                      <p className="p2-text sky">NDR</p>
+                      <p className="p1-text yellow">100</p>
+                    </div>
+                  </div>
+                  <div className="team-value">
+                    <div className="team-value-detail">
+                      <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
+                      <p className="p2-text sky">Hashes</p>
+                      <p className="p1-text yellow">1200</p>
+                    </div>
+                    <div className="team-value-detail">
+                      <img className="margin-auto" src={`/static/images/icons/strength.png`} alt="power" height="80"/>
+                      <p className="p2-text sky">Power</p>
+                      <p className="p1-text yellow">100</p>
+                    </div>
+                    <div className="team-value-detail">
+                      <img className="margin-auto" src={`/static/images/icons/ndr.png`} alt="ndr" height="80"/>
+                      <p className="p2-text sky">NDR</p>
+                      <p className="p1-text yellow">100</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="hash-wars-round-join animation-fadeIn">
+                <div role="button" className="join-red p1-text yellow" onClick={() => setMyTeam('RED')}>Join RED</div>
+                <div role="button" className="join-blue p1-text yellow" onClick={() => setMyTeam('BLUE')}>Join BLUE</div>
+              </div>
+            </div>}
+            {myTeam !== null && <div className="my-round">
+              <p className={cn("p1-text", myTeam === 'RED' ? "red" : "blue")}>{myTeam}</p>
+              <div className="my-round-detail">
+                <div className="my-round-detail-team">
+                  <div className="flex-center">
+                    <p className={cn("team-round", myTeam === 'RED' ? "team-round--red" : "team-round--blue", "p2-text-bold", "yellow" )}>Round 1</p>
+                    <a className="p3-text sky">Join Team chat</a>
+                  </div>
+                  <div className="detail-board">
+                    <div className="team-value-detail">
+                      <img className="margin-auto" src={`/static/images/icons/hash-day.png`} alt="hash-day" height="80"/>
+                      <p className="p2-text sky">Hashes/Day</p>
+                      <p className="p1-text yellow">1200</p>
+                    </div>
+                    <div className="team-value-detail">
+                      <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
+                      <p className="p2-text sky">Hashes</p>
+                      <p className="p1-text yellow">1200</p>
+                    </div>
+                    <div className="team-value-detail">
+                      <img className="margin-auto" src={`/static/images/icons/strength.png`} alt="power" height="80"/>
+                      <p className="p2-text sky">Power</p>
+                      <p className="p1-text yellow">100</p>
+                    </div>
+                    <div className="team-value-detail">
+                      <img className="margin-auto" src={`/static/images/icons/ndr.png`} alt="ndr" height="80"/>
+                      <p className="p2-text sky">NDR</p>
+                      <p className="p1-text yellow">100</p>
+                    </div>
+                    <div className="team-value-detail">
+                      <img className="margin-auto" src={`/static/images/icons/players.png`} alt="players" height="80"/>
+                      <p className="p2-text sky">Players</p>
+                      <p className="p1-text yellow">120</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="my-round-detail-my-stats">
+                  <div>
+                    <p className="team-round team-round--sky p2-text-bold yellow">My Stats</p>
+                  </div>
+                  <div className="detail-board">
+                    <div className="team-value-detail">
+                      <img className="margin-auto" src={`/static/images/icons/hash-day.png`} alt="hash-day" height="80"/>
+                      <p className="p2-text sky">Hashes/Day</p>
+                      <p className="p1-text yellow">1200</p>
+                    </div>
+                    <div className="team-value-detail">
+                      <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
+                      <p className="p2-text sky">Hashes</p>
+                      <p className="p1-text yellow">1200</p>
+                    </div>
+                    <div className="team-value-detail">
+                      <img className="margin-auto" src={`/static/images/icons/strength.png`} alt="power" height="80"/>
+                      <p className="p2-text sky">Power</p>
+                      <p className="p1-text yellow">100</p>
+                    </div>
+                    <div className="team-value-detail">
+                      <img className="margin-auto" src={`/static/images/icons/ndr.png`} alt="ndr" height="80"/>
+                      <p className="p2-text sky">NDR</p>
+                      <p className="p1-text yellow">100</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="hash-wars-round-join animation-fadeIn">
+                <div role="button" className="stake-button stake-button--pink p1-text yellow">Stake NFT</div>
+                <div role="button" className="stake-button stake-button--sky p1-text">Stake NDR</div>
+              </div>
+              <div className="">
+                <SectionTitle title="Select cards to stake" long />
+                <SectionTitle title="Get more power" long />
+              </div>
             </div>
-            <div className="hash-wars-round-join animation-fadeIn">
-              <div role="button" className="join-red p1-text yellow">Join RED</div>
-              <div role="button" className="join-blue p1-text yellow">Join BLUE</div>
-            </div>
+            }
           </Tab.Pane>
           <Tab.Pane eventKey="FINISHED">
             <div
@@ -167,8 +240,6 @@ const HashWarsPageContainer = styled.div`
     background-image: url("/static/images/bg/pages/hash-wars/round.png");
     background-size: 100% 100%;
     padding: 4px 40px;
-    font-family: Orbitron-Bold;
-    font-size: 26px;
   }
 
   .hash-wars-round {
@@ -272,6 +343,65 @@ const HashWarsPageContainer = styled.div`
 
   .margin-auto {
     margin: auto;
+  }
+
+  .my-round {
+    &-detail {
+      display: flex;
+      margin: auto;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      .team-round {
+        background-size: 100% 100%;
+        width: 207px;
+        height: 47px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        &--red {
+          background-image: url("/static/images/bg/pages/hash-wars/round-red.png");
+        }
+        &--blue {
+          background-image: url("/static/images/bg/pages/hash-wars/round-blue.png");
+        }
+        &--sky {
+          background-image: url("/static/images/bg/pages/hash-wars/round.png");
+        }
+      }
+      &-team {
+        margin-right: 2rem;
+        a {
+          text-decoration: underline;
+          margin-top: 4px;
+          margin-left: 2rem;
+        }
+      }
+      &-my-stats {
+
+      }
+      .detail-board {
+        border: 3px solid #80f1ed;
+        box-shadow: 0px 5px 3px #80f1ed80;
+        padding: 1rem;
+      }
+    }
+    .stake-button {
+      background-size: 100% 100%;
+      max-width: 364px;
+      height: 84px;
+      width: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &--pink {
+        background-image: url("/static/images/bg/pink-button.png");
+      }
+      &--sky {
+        background-image: url("/static/images/bg/sky-button.png");
+      }
+    }
   }
 
   .finished {

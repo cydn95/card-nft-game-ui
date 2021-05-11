@@ -21,7 +21,7 @@ const FirstStartPageWrapper = styled.div`
 		outline: none;
 
 		&.attack {
-			background-image: url("/static/images/bg/pages/fight-start/attack-button-bg.png");
+			background-image: url("/static/images/bg/pink-button.png");
 			color: ${props => props.theme.palette.secondary.main};
 			font-family: Orbitron-Black;
 			text-shadow: 0 0 7px ${props => props.theme.darken('#000000', 0.35)};
@@ -30,7 +30,7 @@ const FirstStartPageWrapper = styled.div`
 		}
 
 		&.retreat {
-			background-image: url("/static/images/bg/pages/fight-start/retreat-button-bg.png");
+			background-image: url("/static/images/bg/sky-button.png");
 			color: #00000;
 			font-family: Orbitron-Medium;
 			text-shadow: 3px 3px 3px ${props => props.theme.darken('#277875', 0.5)};
