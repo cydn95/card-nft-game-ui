@@ -4,14 +4,28 @@ import { useWallet } from "use-wallet";
 import { Tab, Nav } from "react-bootstrap";
 import styled from "styled-components";
 import cn from "classnames";
+import { ArrowBack } from "@material-ui/icons";
 
 import UnlockWalletPage from "./UnlockWalletPage";
 import SectionTitle from "../component/SectionTitle";
 import { finishedWars } from "../helper/dummy";
+import "../vendor/index.scss";
 
 const HashWars = () => {
   const [redTeamHash, setRedTeamHash] = useState(60);
-  const [myTeam, setMyTeam] = useState('RED');
+  const [myTeam, setMyTeam] = useState(null);
+  const [openTeam, setOpenTeam] = useState(null);
+  const [openRound, setOpenRound] = useState(null);
+
+  const handleOpenTeam = (team, round) => {
+    setOpenTeam(team);
+    setOpenRound(round);
+  }
+
+  const handleResetOpenTeam = () => {
+    setOpenTeam(null);
+    setOpenRound(null);
+  }
 
   const { account } = useWallet();
   if (!account) {
@@ -107,7 +121,13 @@ const HashWars = () => {
               </div>
             </div>}
             {myTeam !== null && <div className="my-round">
-              <p className={cn("p1-text", myTeam === 'RED' ? "red" : "blue")}>{myTeam}</p>
+              <div className="flex-center my-round-header">
+                <div className="flex-center" role="button" onClick={() => setMyTeam(null)} style={{ zIndex: 1, width: 0}}>
+                  <ArrowBack style={{ color: '#80F1ED', fontSize: '30'}}/>
+                  <p className="p2-text sky">Back</p>
+                </div>
+                <p className={cn("p1-text", myTeam === 'RED' ? "red" : "blue", "my-round-header-title")}>Join {myTeam}</p>
+              </div>
               <div className="my-round-detail">
                 <div className="my-round-detail-team">
                   <div className="flex-center">
@@ -174,7 +194,7 @@ const HashWars = () => {
                 <div role="button" className="stake-button stake-button--pink p1-text yellow">Stake NFT</div>
                 <div role="button" className="stake-button stake-button--sky p1-text">Stake NDR</div>
               </div>
-              <div className="">
+              <div>
                 <SectionTitle title="Select cards to stake" long />
                 <SectionTitle title="Get more power" long />
               </div>
@@ -182,7 +202,7 @@ const HashWars = () => {
             }
           </Tab.Pane>
           <Tab.Pane eventKey="FINISHED">
-            <div
+            {openTeam === null && <div
               className="animation-fadeInLeft"
               style={{ paddingBottom: 100 }}
             >
@@ -200,13 +220,90 @@ const HashWars = () => {
                     </div>
                   </div>
                   <div className="open-button d-flex flex-wrap">
-                    <div role="button" className="open-button-red p2-text-bold yellow">Open Red</div>
+                    <div role="button" className="open-button-red p2-text-bold yellow" onClick={() => handleOpenTeam('RED', key.id)}>Open Red</div>
                     <div className="space-temp"></div>
-                    <div role="button" className="open-button-blue p2-text-bold yellow">Open Blue</div>
+                    <div role="button" className="open-button-blue p2-text-bold yellow" onClick={() => handleOpenTeam('BLUE', key.id)}>Open Blue</div>
                   </div>
                 </div>
               ))}
-            </div>
+            </div>}
+            {openTeam !== null && <div className="my-round">
+              <div className="flex-center my-round-header">
+                <div className="flex-center" role="button" onClick={() => handleResetOpenTeam()} style={{ zIndex: 1, width: 0}}>
+                  <ArrowBack style={{ color: '#80F1ED', fontSize: '30'}}/>
+                  <p className="p2-text sky">Back</p>
+                </div>
+                <p className={cn("p1-text", openTeam === 'RED' ? "red" : "blue", "my-round-header-title")}>Open {openTeam}</p>
+              </div>
+              <div className="my-round-detail">
+                <div className="my-round-detail-team">
+                  <div className="flex-center">
+                    <p className={cn("team-round", openTeam === 'RED' ? "team-round--red" : "team-round--blue", "p2-text-bold", "yellow" )}>{openRound}</p>
+                    <a className="p3-text sky">Join Team chat</a>
+                  </div>
+                  <div className="detail-board">
+                    <div className="team-value-detail">
+                      <img className="margin-auto" src={`/static/images/icons/hash-day.png`} alt="hash-day" height="80"/>
+                      <p className="p2-text sky">Hashes/Day</p>
+                      <p className="p1-text yellow">1200</p>
+                    </div>
+                    <div className="team-value-detail">
+                      <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
+                      <p className="p2-text sky">Hashes</p>
+                      <p className="p1-text yellow">1200</p>
+                    </div>
+                    <div className="team-value-detail">
+                      <img className="margin-auto" src={`/static/images/icons/strength.png`} alt="power" height="80"/>
+                      <p className="p2-text sky">Power</p>
+                      <p className="p1-text yellow">100</p>
+                    </div>
+                    <div className="team-value-detail">
+                      <img className="margin-auto" src={`/static/images/icons/ndr.png`} alt="ndr" height="80"/>
+                      <p className="p2-text sky">NDR</p>
+                      <p className="p1-text yellow">100</p>
+                    </div>
+                    <div className="team-value-detail">
+                      <img className="margin-auto" src={`/static/images/icons/players.png`} alt="players" height="80"/>
+                      <p className="p2-text sky">Players</p>
+                      <p className="p1-text yellow">120</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="my-round-detail-my-stats">
+                  <div>
+                    <p className="team-round team-round--sky p2-text-bold yellow">My Stats</p>
+                  </div>
+                  <div className="detail-board">
+                    <div className="team-value-detail">
+                      <img className="margin-auto" src={`/static/images/icons/hash-day.png`} alt="hash-day" height="80"/>
+                      <p className="p2-text sky">Hashes/Day</p>
+                      <p className="p1-text yellow">1200</p>
+                    </div>
+                    <div className="team-value-detail">
+                      <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
+                      <p className="p2-text sky">Hashes</p>
+                      <p className="p1-text yellow">1200</p>
+                    </div>
+                    <div className="team-value-detail">
+                      <img className="margin-auto" src={`/static/images/icons/strength.png`} alt="power" height="80"/>
+                      <p className="p2-text sky">Power</p>
+                      <p className="p1-text yellow">100</p>
+                    </div>
+                    <div className="team-value-detail">
+                      <img className="margin-auto" src={`/static/images/icons/ndr.png`} alt="ndr" height="80"/>
+                      <p className="p2-text sky">NDR</p>
+                      <p className="p1-text yellow">100</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="hash-wars-round-join animation-fadeIn">
+                <div role="button" className="stake-button stake-button--pink p1-text yellow">Unstake All</div>
+              </div>
+              <div className="">
+                <SectionTitle title="Select cards to stake" long />
+              </div>
+            </div>}
           </Tab.Pane>
         </Tab.Content>
       </Tab.Container>
@@ -297,7 +394,9 @@ const HashWarsPageContainer = styled.div`
 
     &-detail {
       display: inline-grid;
-      margin-left: 1rem;
+      &:nth-child(n+2) {
+        margin-left: 1rem;
+      }
       text-align: center;
     }
   }
@@ -346,12 +445,32 @@ const HashWarsPageContainer = styled.div`
   }
 
   .my-round {
+    &-header {
+      padding-left: 1rem;
+      &-title {
+        width: calc(100% - 1rem);
+      }
+      @media screen and (min-width: 1320px) {
+        padding-left: 2rem;
+        &-title {
+          width: calc(100% - 2rem);
+        }
+      }
+      @media screen and (min-width: 1440px) {
+        padding-left: 4rem;
+        &-title {
+          width: calc(100% - 4rem);
+        }
+      }
+    }
     &-detail {
-      display: flex;
       margin: auto;
-      align-items: center;
-      justify-content: center;
       padding: 1rem;
+      @media screen and (min-width: 769px) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
       .team-round {
         background-size: 100% 100%;
         width: 207px;
@@ -370,7 +489,11 @@ const HashWarsPageContainer = styled.div`
         }
       }
       &-team {
-        margin-right: 2rem;
+        @media screen and (min-width: 769px) {
+          margin-right: 2rem;
+          margin-bottom: 0;
+        }
+        margin-bottom: 1rem;
         a {
           text-decoration: underline;
           margin-top: 4px;
@@ -384,6 +507,9 @@ const HashWarsPageContainer = styled.div`
         border: 3px solid #80f1ed;
         box-shadow: 0px 5px 3px #80f1ed80;
         padding: 1rem;
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
       }
     }
     .stake-button {
@@ -453,6 +579,10 @@ const HashWarsPageContainer = styled.div`
         justify-content: center;
       }
     }
+  }
+  img {
+    width: 80px;
+    height: 80px;
   }
 `;
 
