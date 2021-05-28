@@ -76,7 +76,7 @@ const NFTStakingOld = () => {
         setSelectedCardId(0);
         setUnStakeLoading(false);
         if (status === RESPONSE.SUCCESS) {
-          toast.success("Sucess");
+          toast.success("Success");
           dispatch(oldNFTStakingActions.getStakedCards());
           dispatch(oldNFTStakingActions.getMyStakedStrength());
           dispatch(oldNFTStakingActions.getTotalStakedStrength());

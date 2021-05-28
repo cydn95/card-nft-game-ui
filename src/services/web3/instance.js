@@ -37,6 +37,7 @@ import {
 } from "../../helper/contractOld";
 
 import { farms } from "../../helper/contractFarm";
+import { activeHashWars, finishedHashWars } from "../../helper/contractBattle";
 import { partnerNFTs } from "../../helper/contractPartner";
 
 const { REACT_APP_BUILD_MODE } = process.env;
@@ -262,5 +263,21 @@ export const getPartnerNFTInstance = (web3, token) => {
       abi: partnerData.stakingAbi,
       instance: new web3.eth.Contract(partnerData.stakingAbi, partnerData.staking)
     }
+  };
+};
+
+export const getHashWarsInstance = (web3, round = 0, active = true) => {
+  const warsData =
+    REACT_APP_BUILD_MODE === "production"
+      ? active ? activeHashWars.prod : finishedHashWars[round].prod
+      : active ? activeHashWars.dev : finishedHashWars[round].dev;
+
+  return {
+    address: warsData.address,
+    abi: warsData.abi,
+    instance: new web3.eth.Contract(
+      warsData.abi,
+      warsData.address
+    )
   };
 };

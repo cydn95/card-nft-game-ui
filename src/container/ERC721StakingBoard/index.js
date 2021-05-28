@@ -50,7 +50,7 @@ const ERC721StakingBoard = ({ nftToken }) => {
       customNFTStakingActions.unStakeAllCards(nftToken, (status) => {
         setUnStakeAllLoading(false);
         if (status === RESPONSE.SUCCESS) {
-          toast.success("Sucess");
+          toast.success("Success");
           dispatch(customNFTStakingActions.getStakedERC721Cards(nftToken));
           dispatch(customNFTStakingActions.getMyERC721Staked(nftToken));
           dispatch(customNFTStakingActions.getTotalERC721Staked(nftToken));
@@ -69,7 +69,7 @@ const ERC721StakingBoard = ({ nftToken }) => {
       customNFTStakingActions.claimNDR(nftToken, (status) => {
         setClaimNDRLoading(false);
         if (status === RESPONSE.SUCCESS) {
-          toast.success("Sucess");
+          toast.success("Success");
           dispatch(customNFTStakingActions.getClaimableNDR(nftToken));
           dispatch(lpstakingActions.getNDRBalance());
         } else {

@@ -80,7 +80,7 @@ const ERC721Staking = ({ icon, nftToken }) => {
           setSelectedUnstakeCardIds([]);
           setUnStakeLoading(false);
           if (status === RESPONSE.SUCCESS) {
-            toast.success("Sucess");
+            toast.success("Success");
             dispatch(customNFTStakingActions.getStakedERC721Cards(nftToken));
             dispatch(customNFTStakingActions.getMyERC721Staked(nftToken));
             dispatch(customNFTStakingActions.getTotalERC721Staked(nftToken));

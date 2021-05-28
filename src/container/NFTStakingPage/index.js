@@ -122,7 +122,7 @@ const NFTStaking = () => {
         setSelectedUnstakeCardIds([]);
         setUnStakeLoading(false);
         if (status === RESPONSE.SUCCESS) {
-          toast.success("Sucess");
+          toast.success("Success");
           dispatch(nftStakingActions.getStakedCards());
           dispatch(nftStakingActions.getMyStakedStrength());
           dispatch(nftStakingActions.getTotalStakedStrength());

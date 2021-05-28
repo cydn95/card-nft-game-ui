@@ -119,7 +119,7 @@ const CustomNFTStaking = ({ icon, nftToken }) => {
         setSelectedUnstakeCardIds([]);
         setUnStakeLoading(false);
         if (status === RESPONSE.SUCCESS) {
-          toast.success("Sucess");
+          toast.success("Success");
           dispatch(customNFTStakingActions.getStakedCards(nftToken));
           dispatch(customNFTStakingActions.getMyStakedStrength(nftToken));
           dispatch(customNFTStakingActions.getTotalStakedStrength(nftToken));

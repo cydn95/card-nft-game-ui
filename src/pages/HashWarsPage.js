@@ -1,21 +1,40 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useWallet } from "use-wallet";
 import { Tab, Nav } from "react-bootstrap";
 import styled from "styled-components";
 import cn from "classnames";
 import { ArrowBack } from "@material-ui/icons";
+import Countdown from "react-countdown";
+import { toast } from "react-toastify";
 
 import UnlockWalletPage from "./UnlockWalletPage";
 import SectionTitle from "../component/SectionTitle";
 import { finishedWars } from "../helper/dummy";
+import { timeFormatBlockTime } from "../helper/utils";
+import { activeHashWars, finishedHashWars } from "../helper/contractBattle";
+import { RESPONSE } from "../helper/constant";
+import hashWarsAction from "../redux/hashWars/actions";
 import "../vendor/index.scss";
 
 const HashWars = () => {
+  const { account } = useWallet();
+  const endDate = useSelector((state) => state.HashWars.endDate);
+  // teamId = "0": not join any team, teamId = "1": RED team, teamId = "2": BLUE team
+  const teamId = useSelector((state) => state.HashWars.teamId);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(hashWarsAction.getBattleStartDateStatus("endDate"));
+    dispatch(hashWarsAction.getTeamIdPerUserStatus());
+  }, [dispatch]);
+
   const [redTeamHash, setRedTeamHash] = useState(60);
   const [myTeam, setMyTeam] = useState(null);
   const [openTeam, setOpenTeam] = useState(null);
   const [openRound, setOpenRound] = useState(null);
+  const [selectTeamId, setSelectTeamId] = useState("0");
+  const [selectTeamLoading, setSelectTeamLoading] = useState(false);
 
   const handleOpenTeam = (team, round) => {
     setOpenTeam(team);
@@ -27,10 +46,42 @@ const HashWars = () => {
     setOpenRound(null);
   }
 
-  const { account } = useWallet();
+  const handleSelectTeam = (teamId) => {
+    if (selectTeamLoading) {
+      return;
+    }
+    setSelectTeamLoading(true);
+    setSelectTeamId(teamId);
+    dispatch(
+      hashWarsAction.selectTeam(teamId, (status) => {
+        setMyTeam('RED');
+        setSelectTeamLoading(false);
+        if (status === RESPONSE.SUCCESS) {
+          toast.success("Success");
+        } else {
+          toast.error("Failed...");
+        }
+      })
+    );
+  };
+
   if (!account) {
     return <UnlockWalletPage />;
   }
+
+  // Random component
+  const Completionist = () => <span>The Battle ended!</span>;
+
+  // Renderer callback with condition
+  const renderer = ({ days, hours, minutes, seconds, completed }) => {
+    if (completed) {
+      // Render a completed state
+      return <Completionist />;
+    } else {
+      // Render a countdown
+      return <span>{days}d - {hours}h - {minutes < 10 ? '0'+minutes : minutes}m - {seconds < 10 ? '0'+seconds : seconds}s</span>;
+    }
+  };
 
   return (
     <HashWarsPageContainer>
@@ -51,14 +102,14 @@ const HashWars = () => {
             {myTeam === null && <div>
               <div className="d-flex flex-wrap justify-content-center animation-fadeInRight">
                 <p className="round p2-text-bold">
-                  Round 1
+                  Round {activeHashWars.round}
                 </p>
               </div>
               <div className="d-flex flex-wrap justify-content-center animation-fadeInRight">
                 <div className="d-flex hash-wars-round">
                   <div className="time-left">
                     <p className="p2-text sky">Time left:</p>
-                    <p className="p1-text yellow">5d - 2h - 1m</p>
+                    <p className="p1-text yellow"><Countdown date={timeFormatBlockTime(endDate)} renderer={renderer}/></p>
                   </div>
                   <div className="prize-pool">
                     <p className="p2-text sky">Prize pool</p>
@@ -115,10 +166,45 @@ const HashWars = () => {
                   </div>
                 </div>
               </div>
-              <div className="hash-wars-round-join animation-fadeIn">
-                <div role="button" className="join-red p1-text yellow" onClick={() => setMyTeam('RED')}>Join RED</div>
-                <div role="button" className="join-blue p1-text yellow" onClick={() => setMyTeam('BLUE')}>Join BLUE</div>
+              {teamId === "0" && <div className="hash-wars-round-join animation-fadeIn">
+                {selectTeamLoading && selectTeamId === "1" ? (
+                  <div role="button" className="join-red p1-text yellow">
+                    <div className="loading-wrapper">
+                      <img
+                        src="/static/images/icons/loading.gif"
+                        height="25"
+                        alt=""
+                        style={{ marginTop: 3, marginRight: 5 }}
+                      />{" "}
+                      Joining...
+                    </div>
+                  </div>
+                ) : (
+                  <div role="button" className="join-red p1-text yellow" onClick={(e) => !selectTeamLoading && handleSelectTeam("1")}>Join RED</div>
+                )}
+                {selectTeamLoading && selectTeamId === "2" ? (
+                  <div role="button" className="join-blue p1-text yellow">
+                    <div className="loading-wrapper">
+                      <img
+                        src="/static/images/icons/loading.gif"
+                        height="25"
+                        alt=""
+                        style={{ marginTop: 3, marginRight: 5 }}
+                      />{" "}
+                      Joining...
+                    </div>
+                  </div>
+                ) : (
+                  <div role="button" className="join-blue p1-text yellow" onClick={(e) => !selectTeamLoading && handleSelectTeam("2")}>Join BLUE</div>
+                )}
               </div>
+              }
+              {teamId === "1" && <div className="hash-wars-round-join animation-fadeIn">
+                <div role="button" className="join-red p1-text yellow" onClick={() => setMyTeam('RED')}>Open RED</div>
+              </div>}
+              {teamId === "2" && <div className="hash-wars-round-join animation-fadeIn">
+                <div role="button" className="join-blue p1-text yellow" onClick={() => setMyTeam('BLUE')}>Open BLUE</div>
+              </div>}
             </div>}
             {myTeam !== null && <div className="my-round">
               <div className="flex-center my-round-header">
@@ -126,7 +212,7 @@ const HashWars = () => {
                   <ArrowBack style={{ color: '#80F1ED', fontSize: '30'}}/>
                   <p className="p2-text sky">Back</p>
                 </div>
-                <p className={cn("p1-text", myTeam === 'RED' ? "red" : "blue", "my-round-header-title")}>Join {myTeam}</p>
+                <p className={cn("p1-text", myTeam === 'RED' ? "red" : "blue", "my-round-header-title")}>{myTeam} Team</p>
               </div>
               <div className="my-round-detail">
                 <div className="my-round-detail-team">
@@ -579,10 +665,6 @@ const HashWarsPageContainer = styled.div`
         justify-content: center;
       }
     }
-  }
-  img {
-    width: 80px;
-    height: 80px;
   }
 `;
 

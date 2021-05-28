@@ -57,3 +57,8 @@ export const getERCTokenImage = (token, id) => {
     return erc721Images[id];
   }
 }
+
+export const timeFormatBlockTime = (time) => {
+  var newDate = new Date(time.endDate*1000);
+  return newDate.toUTCString();
+}

@@ -5,6 +5,7 @@ import NFTStaking from "./nftStaking/reducer";
 import customNFTStaking from "./customNFTStaking/reducer";
 import Farms from "./farms/reducer";
 import Theme from "./theme/reducer";
+import HashWars from "./hashWars/reducer";
 
 export default {
   LpStaking,
@@ -14,4 +15,5 @@ export default {
   customNFTStaking,
   Farms,
   Theme,
+  HashWars
 };
