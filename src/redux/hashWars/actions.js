@@ -5,6 +5,12 @@ const actions = {
   GET_TEAM_ID_PER_USER_STATUS_SUCCESS: "GET_TEAM_ID_PER_USER_STATUS_SUCCESS",
   GET_TOTAL_HASH_PER_TEAM_STATUS: "GET_TOTAL_HASH_PER_TEAM_STATUS",
   GET_TOTAL_HASH_PER_TEAM_STATUS_SUCCESS: "GET_TOTAL_HASH_PER_TEAM_STATUS_SUCCESS",
+  GET_DAY_HASH_PER_TEAM_STATUS: "GET_DAY_HASH_PER_TEAM_STATUS",
+  GET_DAY_HASH_PER_TEAM_STATUS_SUCCESS: "GET_DAY_HASH_PER_TEAM_STATUS_SUCCESS",
+  GET_TOTAL_HASH_PER_USER_STATUS: "GET_TOTAL_HASH_PER_USER_STATUS",
+  GET_TOTAL_HASH_PER_USER_STATUS_SUCCESS: "GET_TOTAL_HASH_PER_USER_STATUS_SUCCESS",
+  GET_DAY_HASH_PER_USER_STATUS: "GET_DAY_HASH_PER_USER_STATUS",
+  GET_DAY_HASH_PER_USER_STATUS_SUCCESS: "GET_DAY_HASH_PER_USER_STATUS_SUCCESS",
   SELECT_TEAM_STATUS: "SELECT_TEAM_STATUS",
   SELECT_TEAM_STATUS_SUCCESS: "SELECT_TEAM_STATUS_SUCCESS",
 
@@ -16,11 +22,22 @@ const actions = {
     type: actions.GET_TEAM_ID_PER_USER_STATUS,
     payload: {}
   }),
-  getTotalHashPerTeamStatus: (teamId) => ({
+  getTotalHashPerTeamStatus: () => ({
     type: actions.GET_TOTAL_HASH_PER_TEAM_STATUS,
+    payload: {}
+  }),
+  getDayHashPerTeamStatus: (teamId) => ({
+    type: actions.GET_DAY_HASH_PER_TEAM_STATUS,
     payload: { teamId }
   }),
-
+  getTotalHashPerUserStatus: () => ({
+    type: actions.GET_TOTAL_HASH_PER_USER_STATUS,
+    payload: {}
+  }),
+  getDayHashPerUserStatus: () => ({
+    type: actions.GET_DAY_HASH_PER_USER_STATUS,
+    payload: {}
+  }),
   selectTeam: (teamId, callback) => ({
     type: actions.SELECT_TEAM_STATUS,
     payload: { teamId, callback }

@@ -25,6 +25,54 @@ export const getTeamIdPerUserAsync = async (instance, address) => {
     });
 };
 
+export const getTotalHashPerTeamAsync = async (instance, teamId) => {
+  return await instance.methods
+    .totalHashPerTeam(teamId)
+    .call()
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
+export const getDayHashPerTeamAsync = async (instance, teamId) => {
+  return await instance.methods
+    .dayHashPerTeam(teamId)
+    .call()
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
+export const getTotalHashPerUserAsync = async (instance, address) => {
+  return await instance.methods
+    .totalHashPerUser(address)
+    .call()
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
+export const getDayHashPerUserAsync = async (instance, address) => {
+  return await instance.methods
+    .dayHashPerUser(address)
+    .call()
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
 export const selectTeamAsync = async (instance, web3, teamId, address) => {
   const prices = await getGasPrice();
 

@@ -3,8 +3,8 @@ import DEV_ACTIVE_HASH_WARS_ABI from "./jsonBattle/HashWars_abi_dev.json";
 import PROD_ACTIVE_HASH_WARS_ABI from "./jsonBattle/HashWars_abi_prod.json";
 
 // Hash Wars
-export const DEV_ACTIVE_HASH_WARS_ADDRESS = "0x40079EE7fC296E260B432DB34a7763D79b2e94Ce";
-export const PROD_ACTIVE_HASH_WARS_ADDRESS = "0x40079EE7fC296E260B432DB34a7763D79b2e94Ce";
+export const DEV_ACTIVE_HASH_WARS_ADDRESS = "0x6634A11EDD843B128a970f10870D069B42989a04";
+export const PROD_ACTIVE_HASH_WARS_ADDRESS = "0x6634A11EDD843B128a970f10870D069B42989a04";
 export { DEV_ACTIVE_HASH_WARS_ABI, PROD_ACTIVE_HASH_WARS_ABI };
 
 export const activeHashWars = {
@@ -19,6 +19,7 @@ export const activeHashWars = {
   }
 };
 
+// need to change
 export const finishedHashWars = [
   {
     round: 1,

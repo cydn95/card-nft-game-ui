@@ -3,7 +3,11 @@ import actions from "./actions";
 const initState = {
   endDate: {},
   teamId: {},
-  totalHashPerTeam: {},
+  totalHashPerTeam1: {},
+  totalHashPerTeam2: {},
+  dayHashPerTeam: {},
+  totalHashPerUser: {},
+  dayHashPerUser: {},
 };
 
 export default function pageReducer(state = initState, action) {
@@ -24,9 +28,24 @@ export default function pageReducer(state = initState, action) {
     case actions.GET_TOTAL_HASH_PER_TEAM_STATUS_SUCCESS:
       return {
         ...state,
-        totalHashPerTeam: action.totalHashPerTeam
+        totalHashPerTeam1: action.totalHashPerTeam1,
+        totalHashPerTeam2: action.totalHashPerTeam2
       };
-      
+    case actions.GET_DAY_HASH_PER_TEAM_STATUS_SUCCESS:
+      return {
+        ...state,
+        dayHashPerTeam: action.dayHashPerTeam,
+      };
+    case actions.GET_TOTAL_HASH_PER_USER_STATUS_SUCCESS:
+      return {
+        ...state,
+        totalHashPerUser: action.totalHashPerUser,
+      };
+    case actions.GET_DAY_HASH_PER_USER_STATUS_SUCCESS:
+      return {
+        ...state,
+        dayHashPerUser: action.dayHashPerUser,
+      };
     default:
       return state;
   }

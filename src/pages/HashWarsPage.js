@@ -16,18 +16,31 @@ import { activeHashWars, finishedHashWars } from "../helper/contractBattle";
 import { RESPONSE } from "../helper/constant";
 import hashWarsAction from "../redux/hashWars/actions";
 import "../vendor/index.scss";
+import { empty } from "@apollo/client";
 
 const HashWars = () => {
   const { account } = useWallet();
   const endDate = useSelector((state) => state.HashWars.endDate);
   // teamId = "0": not join any team, teamId = "1": RED team, teamId = "2": BLUE team
   const teamId = useSelector((state) => state.HashWars.teamId);
+  const totalHashPerTeam1 = useSelector((state) => state.HashWars.totalHashPerTeam1);
+  const totalHashPerTeam2 = useSelector((state) => state.HashWars.totalHashPerTeam2);
+  const dayHashPerTeam = useSelector((state) => state.HashWars.dayHashPerTeam);
+  const totalHashPerUser = useSelector((state) => state.HashWars.totalHashPerUser);
+  const dayHashPerUser = useSelector((state) => state.HashWars.dayHashPerUser);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(hashWarsAction.getBattleStartDateStatus("endDate"));
     dispatch(hashWarsAction.getTeamIdPerUserStatus());
+    dispatch(hashWarsAction.getTotalHashPerTeamStatus());
   }, [dispatch]);
+
+  useEffect(() => {
+    (teamId === "1" || teamId === "2") && dispatch(hashWarsAction.getDayHashPerTeamStatus(teamId));
+    dispatch(hashWarsAction.getTotalHashPerUserStatus());
+    dispatch(hashWarsAction.getDayHashPerUserStatus());
+  }, [teamId]);
 
   const [redTeamHash, setRedTeamHash] = useState(60);
   const [myTeam, setMyTeam] = useState(null);
@@ -134,7 +147,7 @@ const HashWars = () => {
                     <div className="team-value-detail">
                       <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
                       <p className="p2-text sky">Hashes</p>
-                      <p className="p1-text yellow">1200</p>
+                      <p className="p1-text yellow">{(totalHashPerTeam1 && totalHashPerTeam1.length > 0) ? totalHashPerTeam1 : 0}</p>
                     </div>
                     <div className="team-value-detail">
                       <img className="margin-auto" src={`/static/images/icons/strength.png`} alt="power" height="80"/>
@@ -151,7 +164,7 @@ const HashWars = () => {
                     <div className="team-value-detail">
                       <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
                       <p className="p2-text sky">Hashes</p>
-                      <p className="p1-text yellow">1200</p>
+                      <p className="p1-text yellow">{(totalHashPerTeam2 && totalHashPerTeam2.length > 0) ? totalHashPerTeam2 : 0}</p>
                     </div>
                     <div className="team-value-detail">
                       <img className="margin-auto" src={`/static/images/icons/strength.png`} alt="power" height="80"/>
@@ -224,12 +237,12 @@ const HashWars = () => {
                     <div className="team-value-detail">
                       <img className="margin-auto" src={`/static/images/icons/hash-day.png`} alt="hash-day" height="80"/>
                       <p className="p2-text sky">Hashes/Day</p>
-                      <p className="p1-text yellow">1200</p>
+                      <p className="p1-text yellow">{(dayHashPerTeam && dayHashPerTeam.length > 0) ? dayHashPerTeam : 0}</p>
                     </div>
                     <div className="team-value-detail">
                       <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
                       <p className="p2-text sky">Hashes</p>
-                      <p className="p1-text yellow">1200</p>
+                      <p className="p1-text yellow">{teamId === "1" ? totalHashPerTeam1 : totalHashPerTeam2}</p>
                     </div>
                     <div className="team-value-detail">
                       <img className="margin-auto" src={`/static/images/icons/strength.png`} alt="power" height="80"/>
@@ -256,12 +269,12 @@ const HashWars = () => {
                     <div className="team-value-detail">
                       <img className="margin-auto" src={`/static/images/icons/hash-day.png`} alt="hash-day" height="80"/>
                       <p className="p2-text sky">Hashes/Day</p>
-                      <p className="p1-text yellow">1200</p>
+                      <p className="p1-text yellow">{dayHashPerUser ? dayHashPerUser : 0}</p>
                     </div>
                     <div className="team-value-detail">
                       <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
                       <p className="p2-text sky">Hashes</p>
-                      <p className="p1-text yellow">1200</p>
+                      <p className="p1-text yellow">{totalHashPerUser ? totalHashPerUser : 0}</p>
                     </div>
                     <div className="team-value-detail">
                       <img className="margin-auto" src={`/static/images/icons/strength.png`} alt="power" height="80"/>
