@@ -1,186 +1,129 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
-import Countdown from "react-countdown";
-import { toast } from "react-toastify";
+import cn from "classnames";
+import { ArrowBack } from "@material-ui/icons";
 
-import { timeFormatBlockTime } from "../../helper/utils";
-import { activeHashWars } from "../../helper/contractBattle";
-import { RESPONSE } from "../../helper/constant";
+import SectionTitle from "../../component/SectionTitle";
 import hashWarsAction from "../../redux/hashWars/actions";
 import "../../vendor/index.scss";
 
-const ActiveTeam = ({
+const OpenActiveTeam = ({
   teamId,
+  myTeam,
+  setMyTeam,
   totalHashPerTeam1,
-  totalHashPerTeam2,
-  setMyTeam
+  totalHashPerTeam2
 }) => {
-  const endDate = useSelector((state) => state.HashWars.endDate);
+  const totalHashPerUser = useSelector((state) => state.HashWars.totalHashPerUser);
+  const dayHashPerUser = useSelector((state) => state.HashWars.dayHashPerUser);
+  const dayHashPerTeam = useSelector((state) => state.HashWars.dayHashPerTeam);
   const totalPowerPerTeam1 = useSelector((state) => state.HashWars.totalPowerPerTeam1);
   const totalPowerPerTeam2 = useSelector((state) => state.HashWars.totalPowerPerTeam2);
+  const totalPowerPerUser = useSelector((state) => state.HashWars.totalPowerPerUser);
   const totalNDRPerTeam1 = useSelector((state) => state.HashWars.totalNDRPerTeam1);
   const totalNDRPerTeam2 = useSelector((state) => state.HashWars.totalNDRPerTeam2);
-
+  const totalNDRPerUser = useSelector((state) => state.HashWars.totalNDRPerUser);
+  const teamPlayersCount = useSelector((state) => state.HashWars.teamPlayersCount);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(hashWarsAction.getBattleStartDateStatus("endDate"));
+    dispatch(hashWarsAction.getDayHashPerTeamStatus(teamId));
+    dispatch(hashWarsAction.getTotalHashPerUserStatus());
+    dispatch(hashWarsAction.getDayHashPerUserStatus());
     dispatch(hashWarsAction.getTotalPowerPerTeamStatus());
+    dispatch(hashWarsAction.getTotalPowerPerUserStatus());
     dispatch(hashWarsAction.getTotalNDRPerTeamStatus());
-  }, [dispatch]);
-
-  const [selectTeamId, setSelectTeamId] = useState("0");
-  const [selectTeamLoading, setSelectTeamLoading] = useState(false);
-  const [redTeamHash, setRedTeamHash] = useState(60);
-
-  const handleSelectTeam = (teamId) => {
-    if (selectTeamLoading) {
-      return;
-    }
-    setSelectTeamLoading(true);
-    setSelectTeamId(teamId);
-    dispatch(
-      hashWarsAction.selectTeam(teamId, (status) => {
-        setMyTeam('RED');
-        setSelectTeamLoading(false);
-        if (status === RESPONSE.SUCCESS) {
-          toast.success("Success");
-        } else {
-          toast.error("Failed...");
-        }
-      })
-    );
-  };
-
-  // Random component
-  const Completionist = () => <span>The Battle ended!</span>;
-
-  // Renderer callback with condition
-  const renderer = ({ days, hours, minutes, seconds, completed }) => {
-    if (completed) {
-      // Render a completed state
-      return <Completionist />;
-    } else {
-      // Render a countdown
-      return <span>{days}d - {hours}h - {minutes < 10 ? '0'+minutes : minutes}m - {seconds < 10 ? '0'+seconds : seconds}s</span>;
-    }
-  };
+    dispatch(hashWarsAction.getTotalNDRPerUserStatus());
+    dispatch(hashWarsAction.getTeamPlayersCountStatus(teamId));
+  }, [dispatch, teamId]);
 
   return (
-    <ActiveTeamContainer>
-      <div>
-        <div className="d-flex flex-wrap justify-content-center animation-fadeInRight">
-          <p className="round p2-text-bold">
-            Round {activeHashWars.round}
-          </p>
-        </div>
-        <div className="d-flex flex-wrap justify-content-center animation-fadeInRight">
-          <div className="d-flex hash-wars-round">
-            <div className="time-left">
-              <p className="p2-text sky">Time left:</p>
-              <p className="p1-text yellow"><Countdown date={timeFormatBlockTime(endDate)} renderer={renderer}/></p>
-            </div>
-            <div className="prize-pool">
-              <p className="p2-text sky">Prize pool</p>
-              <p className="p1-text yellow">$10439</p>
-            </div>
+    <OpenActiveTeamContainer>
+      <div className="my-round">
+        <div className="flex-center my-round-header">
+          <div className="flex-center" role="button" onClick={() => setMyTeam(null)} style={{ zIndex: 1, width: 0}}>
+            <ArrowBack style={{ color: '#80F1ED', fontSize: '30'}}/>
+            <p className="p2-text sky">Back</p>
           </div>
+          <p className={cn("p1-text", myTeam === 'RED' ? "red" : "blue", "my-round-header-title")}>{myTeam} Team</p>
         </div>
-        <div className="hash-wars-round-detail animation-fadeInLeft">
-          <div className="hash-wars-round-detail-hash">
-            <div className="hash-wars-round-detail-hash-title d-flex">
-              <p className="p1-text red" style={{ width: redTeamHash + '%' }}>RED</p>
-              <p className="p1-text blue" style={{ width: (100 - redTeamHash) + '%' }}>BLUE</p>
+        <div className="my-round-detail">
+          <div className="my-round-detail-team">
+            <div className="flex-center">
+              <p className={cn("team-round", myTeam === 'RED' ? "team-round--red" : "team-round--blue", "p2-text-bold", "yellow" )}>Round 1</p>
+              <a className="p3-text sky" >Join Team chat</a>
             </div>
-            <div className="hash-wars-round-detail-bar">
-              <progress max="100" value={redTeamHash} className="css3">
-                <div className="progress-bar">{redTeamHash} %</div>
-              </progress>
-            </div>
-          </div>
-          <div className="hash-wars-round-detail-per-value">
-            <div className="team-value">
+            <div className="detail-board">
+              <div className="team-value-detail">
+                <img className="margin-auto" src={`/static/images/icons/hash-day.png`} alt="hash-day" height="80"/>
+                <p className="p2-text sky">Hashes/Day</p>
+                <p className="p1-text yellow">{(dayHashPerTeam && dayHashPerTeam.length > 0) ? dayHashPerTeam : 0}</p>
+              </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
                 <p className="p2-text sky">Hashes</p>
-                <p className="p1-text yellow">{(totalHashPerTeam1 && totalHashPerTeam1.length > 0) ? totalHashPerTeam1 : 0}</p>
+                <p className="p1-text yellow">{teamId === "1" ? totalHashPerTeam1 : totalHashPerTeam2}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/strength.png`} alt="power" height="80"/>
                 <p className="p2-text sky">Power</p>
-                <p className="p1-text yellow">{totalPowerPerTeam1}</p>
+                <p className="p1-text yellow">{teamId === "1" ? totalPowerPerTeam1 : totalPowerPerTeam2}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/ndr.png`} alt="ndr" height="80"/>
                 <p className="p2-text sky">NDR</p>
-                <p className="p1-text yellow">{totalNDRPerTeam1}</p>
+                <p className="p1-text yellow">{teamId === "1" ? totalNDRPerTeam1 : totalNDRPerTeam2}</p>
+              </div>
+              <div className="team-value-detail">
+                <img className="margin-auto" src={`/static/images/icons/players.png`} alt="players" height="80"/>
+                <p className="p2-text sky">Players</p>
+                <p className="p1-text yellow">{teamPlayersCount ? teamPlayersCount : 0}</p>
               </div>
             </div>
-            <div className="team-value">
+          </div>
+          <div className="my-round-detail-my-stats">
+            <div>
+              <p className="team-round team-round--sky p2-text-bold yellow">My Stats</p>
+            </div>
+            <div className="detail-board">
+              <div className="team-value-detail">
+                <img className="margin-auto" src={`/static/images/icons/hash-day.png`} alt="hash-day" height="80"/>
+                <p className="p2-text sky">Hashes/Day</p>
+                <p className="p1-text yellow">{dayHashPerUser.length > 0 ? dayHashPerUser : 0}</p>
+              </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
                 <p className="p2-text sky">Hashes</p>
-                <p className="p1-text yellow">{(totalHashPerTeam2 && totalHashPerTeam2.length > 0) ? totalHashPerTeam2 : 0}</p>
+                <p className="p1-text yellow">{totalHashPerUser.length > 0 ? totalHashPerUser : 0}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/strength.png`} alt="power" height="80"/>
                 <p className="p2-text sky">Power</p>
-                <p className="p1-text yellow">{totalPowerPerTeam2}</p>
+                <p className="p1-text yellow">{totalPowerPerUser ? totalPowerPerUser : 0}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/ndr.png`} alt="ndr" height="80"/>
                 <p className="p2-text sky">NDR</p>
-                <p className="p1-text yellow">{totalNDRPerTeam2}</p>
+                <p className="p1-text yellow">{totalNDRPerUser ? totalNDRPerUser : 0}</p>
               </div>
             </div>
           </div>
         </div>
-        {teamId === "0" && <div className="hash-wars-round-join animation-fadeIn">
-          {selectTeamLoading && selectTeamId === "1" ? (
-            <div role="button" className="join-red p1-text yellow">
-              <div className="loading-wrapper">
-                <img
-                  src="/static/images/icons/loading.gif"
-                  height="25"
-                  alt=""
-                  style={{ marginTop: 3, marginRight: 5 }}
-                />{" "}
-                Joining...
-              </div>
-            </div>
-          ) : (
-            <div role="button" className="join-red p1-text yellow" onClick={(e) => !selectTeamLoading && handleSelectTeam("1")}>Join RED</div>
-          )}
-          {selectTeamLoading && selectTeamId === "2" ? (
-            <div role="button" className="join-blue p1-text yellow">
-              <div className="loading-wrapper">
-                <img
-                  src="/static/images/icons/loading.gif"
-                  height="25"
-                  alt=""
-                  style={{ marginTop: 3, marginRight: 5 }}
-                />{" "}
-                Joining...
-              </div>
-            </div>
-          ) : (
-            <div role="button" className="join-blue p1-text yellow" onClick={(e) => !selectTeamLoading && handleSelectTeam("2")}>Join BLUE</div>
-          )}
+        <div className="hash-wars-round-join animation-fadeIn">
+          <div role="button" className="stake-button stake-button--pink p1-text yellow">Stake NFT</div>
+          <div role="button" className="stake-button stake-button--sky p1-text">Stake NDR</div>
         </div>
-        }
-        {teamId === "1" && <div className="hash-wars-round-join animation-fadeIn">
-          <div role="button" className="join-red p1-text yellow" onClick={() => setMyTeam('RED')}>Open RED</div>
-        </div>}
-        {teamId === "2" && <div className="hash-wars-round-join animation-fadeIn">
-          <div role="button" className="join-blue p1-text yellow" onClick={() => setMyTeam('BLUE')}>Open BLUE</div>
-        </div>}
+        <div>
+          <SectionTitle title="Select cards to stake" long />
+          <SectionTitle title="Get more power" long />
+        </div>
       </div>
-    </ActiveTeamContainer>
+    </OpenActiveTeamContainer>
   );
 };
 
-const ActiveTeamContainer = styled.div`
+const OpenActiveTeamContainer = styled.div`
   width: 100vw;
   max-width: 100%;
 
@@ -451,4 +394,4 @@ const ActiveTeamContainer = styled.div`
   }
 `;
 
-export default ActiveTeam;
+export default OpenActiveTeam;

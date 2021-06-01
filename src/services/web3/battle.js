@@ -73,6 +73,66 @@ export const getDayHashPerUserAsync = async (instance, address) => {
     });
 };
 
+export const getTotalPowerPerTeamAsync = async (instance, teamId) => {
+  return await instance.methods
+    .totalNFTStrengthPerTeam(teamId)
+    .call()
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
+export const getTotalPowerPerUserAsync = async (instance, address) => {
+  return await instance.methods
+    .totalNFTStrengthPerUser(address)
+    .call()
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
+export const getTotalNDRPerTeamAsync = async (instance, teamId) => {
+  return await instance.methods
+    .totalNDRAmountPerTeam(teamId)
+    .call()
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
+export const getTotalNDRPerUserAsync = async (instance, address) => {
+  return await instance.methods
+    .totalNDRAmountPerUser(address)
+    .call()
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
+export const getTeamPlayersCountAsync = async (instance, teamId) => {
+  return await instance.methods
+    .playersCounter(teamId)
+    .call()
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
 export const selectTeamAsync = async (instance, web3, teamId, address) => {
   const prices = await getGasPrice();
 

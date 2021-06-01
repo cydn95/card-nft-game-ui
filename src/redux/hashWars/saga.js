@@ -7,12 +7,8 @@ import {
   takeEvery,
 } from "redux-saga/effects";
 
-import BigNumber from "bignumber.js";
-
 import actions from "./actions";
-
 import { RESPONSE } from "../../helper/constant";
-
 import { getWeb3 } from "../../services/web3";
 import {
   getBattleFinishDateAsync,
@@ -21,14 +17,13 @@ import {
   getDayHashPerTeamAsync,
   getTotalHashPerUserAsync,
   getDayHashPerUserAsync,
+  getTotalPowerPerTeamAsync,
+  getTotalPowerPerUserAsync,
+  getTotalNDRPerTeamAsync,
+  getTotalNDRPerUserAsync,
+  getTeamPlayersCountAsync,
   selectTeamAsync
 } from "../../services/web3/battle";
-
-import { getPairInfo, getTokenInfo } from "../../services/graphql";
-import { lookUpPrices } from "../../services/web3";
-
-import { farms } from "../../helper/contractFarm";
-
 import { getHashWarsInstance } from "../../services/web3/instance";
 
 // Get Token Approve Status
@@ -110,7 +105,7 @@ export function* getDayHashPerTeamStatus() {
       tokenInstance.instance,
       teamId,
     );
-    console.log("dayHashPerTeam", dayHashPerTeam);
+
     yield put({
       type: actions.GET_DAY_HASH_PER_TEAM_STATUS_SUCCESS,
       dayHashPerTeam
@@ -158,6 +153,117 @@ export function* getDayHashPerUserStatus() {
   });
 }
 
+// Get Total NFT Power Per Team
+export function* getTotalPowerPerTeamStatus() {
+  yield takeEvery(actions.GET_TOTAL_POWER_PER_TEAM_STATUS, function* () {
+    const web3 = yield call(getWeb3);
+    const tokenInstance = getHashWarsInstance(web3);
+
+    const totalPowerPerTeam1 = yield call(
+      getTotalPowerPerTeamAsync,
+      tokenInstance.instance,
+      1
+    );
+    const totalPowerPerTeam2 = yield call(
+      getTotalPowerPerTeamAsync,
+      tokenInstance.instance,
+      2
+    );
+
+    yield put({
+      type: actions.GET_TOTAL_POWER_PER_TEAM_STATUS_SUCCESS,
+      totalPowerPerTeam1,
+      totalPowerPerTeam2
+    });
+  });
+}
+
+// Get Total NFT Power Per User
+export function* getTotalPowerPerUserStatus() {
+  yield takeEvery(actions.GET_TOTAL_POWER_PER_USER_STATUS, function* () {
+    const web3 = yield call(getWeb3);
+    const tokenInstance = getHashWarsInstance(web3);
+    const accounts = yield call(web3.eth.getAccounts);
+
+    const totalPowerPerUser = yield call(
+      getTotalPowerPerUserAsync,
+      tokenInstance.instance,
+      accounts[0]
+    );
+
+    yield put({
+      type: actions.GET_TOTAL_POWER_PER_USER_STATUS_SUCCESS,
+      totalPowerPerUser
+    });
+  });
+}
+
+// Get Total NDR Amount Per Team
+export function* getTotalNDRPerTeamStatus() {
+  yield takeEvery(actions.GET_TOTAL_NDR_PER_TEAM_STATUS, function* () {
+    const web3 = yield call(getWeb3);
+    const tokenInstance = getHashWarsInstance(web3);
+
+    const totalNDRPerTeam1 = yield call(
+      getTotalNDRPerTeamAsync,
+      tokenInstance.instance,
+      1
+    );
+    const totalNDRPerTeam2 = yield call(
+      getTotalNDRPerTeamAsync,
+      tokenInstance.instance,
+      2
+    );
+
+    yield put({
+      type: actions.GET_TOTAL_NDR_PER_TEAM_STATUS_SUCCESS,
+      totalNDRPerTeam1,
+      totalNDRPerTeam2
+    });
+  });
+}
+
+// Get Total NDR Amount Per User
+export function* getTotalNDRPerUserStatus() {
+  yield takeEvery(actions.GET_TOTAL_NDR_PER_USER_STATUS, function* () {
+    const web3 = yield call(getWeb3);
+    const tokenInstance = getHashWarsInstance(web3);
+    const accounts = yield call(web3.eth.getAccounts);
+
+    const totalNDRPerUser = yield call(
+      getTotalNDRPerUserAsync,
+      tokenInstance.instance,
+      accounts[0]
+    );
+
+    yield put({
+      type: actions.GET_TOTAL_NDR_PER_USER_STATUS_SUCCESS,
+      totalNDRPerUser
+    });
+  });
+}
+
+// Get Total Team Players Count
+export function* getTeamPlayersCountStatus() {
+  yield takeEvery(actions.GET_TEAM_PLAYERS_COUNT_STATUS, function* ({ payload }) {
+    const { teamId } = payload;
+    const web3 = yield call(getWeb3);
+    const tokenInstance = getHashWarsInstance(web3);
+
+    const teamPlayersCount = yield call(
+      getTeamPlayersCountAsync,
+      tokenInstance.instance,
+      teamId
+    );
+    console.log("count", teamPlayersCount);
+    console.log("teamId", teamId);
+    yield put({
+      type: actions.GET_TEAM_PLAYERS_COUNT_STATUS_SUCCESS,
+      teamPlayersCount: teamPlayersCount
+    });
+  });
+}
+
 export function* selectTeam() {
   yield takeLatest(actions.SELECT_TEAM_STATUS, function* ({ payload }) {
     const { teamId, callback } = payload;
@@ -191,6 +297,11 @@ export default function* rootSaga() {
     fork(getDayHashPerTeamStatus),
     fork(getTotalHashPerUserStatus),
     fork(getDayHashPerUserStatus),
+    fork(getTotalPowerPerTeamStatus),
+    fork(getTotalPowerPerUserStatus),
+    fork(getTotalNDRPerTeamStatus),
+    fork(getTotalNDRPerUserStatus),
+    fork(getTeamPlayersCountStatus),
     fork(selectTeam),
   ]);
 }
