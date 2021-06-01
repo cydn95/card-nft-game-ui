@@ -34,6 +34,17 @@ const ActiveTeam = ({
   const [selectTeamLoading, setSelectTeamLoading] = useState(false);
   const [redTeamHash, setRedTeamHash] = useState(60);
 
+  const init = () => {
+    dispatch(hashWarsAction.getDayHashPerTeamStatus(teamId));
+    dispatch(hashWarsAction.getTotalHashPerUserStatus());
+    dispatch(hashWarsAction.getDayHashPerUserStatus());
+    dispatch(hashWarsAction.getTotalPowerPerTeamStatus());
+    dispatch(hashWarsAction.getTotalPowerPerUserStatus());
+    dispatch(hashWarsAction.getTotalNDRPerTeamStatus());
+    dispatch(hashWarsAction.getTotalNDRPerUserStatus());
+    dispatch(hashWarsAction.getTeamPlayersCountStatus(teamId));
+  };
+
   const handleSelectTeam = (teamId) => {
     if (selectTeamLoading) {
       return;
@@ -42,9 +53,10 @@ const ActiveTeam = ({
     setSelectTeamId(teamId);
     dispatch(
       hashWarsAction.selectTeam(teamId, (status) => {
-        setMyTeam('RED');
         setSelectTeamLoading(false);
         if (status === RESPONSE.SUCCESS) {
+          init();
+          setMyTeam(teamId);
           toast.success("Success");
         } else {
           toast.error("Failed...");
@@ -71,7 +83,7 @@ const ActiveTeam = ({
     <ActiveTeamContainer>
       <div>
         <div className="d-flex flex-wrap justify-content-center animation-fadeInRight">
-          <p className="round p2-text-bold">
+          <p className="round p2-text-bold yellow">
             Round {activeHashWars.round}
           </p>
         </div>
@@ -170,10 +182,10 @@ const ActiveTeam = ({
         </div>
         }
         {teamId === "1" && <div className="hash-wars-round-join animation-fadeIn">
-          <div role="button" className="join-red p1-text yellow" onClick={() => setMyTeam('RED')}>Open RED</div>
+          <div role="button" className="join-red p1-text yellow" onClick={() => setMyTeam('1')}>Open RED</div>
         </div>}
         {teamId === "2" && <div className="hash-wars-round-join animation-fadeIn">
-          <div role="button" className="join-blue p1-text yellow" onClick={() => setMyTeam('BLUE')}>Open BLUE</div>
+          <div role="button" className="join-blue p1-text yellow" onClick={() => setMyTeam('2')}>Open BLUE</div>
         </div>}
       </div>
     </ActiveTeamContainer>

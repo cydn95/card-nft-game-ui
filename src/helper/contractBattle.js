@@ -8,7 +8,7 @@ export const PROD_ACTIVE_HASH_WARS_ADDRESS = "0x6634A11EDD843B128a970f10870D069B
 export { DEV_ACTIVE_HASH_WARS_ABI, PROD_ACTIVE_HASH_WARS_ABI };
 
 export const activeHashWars = {
-  round: 2,
+  round: 3,
   dev: {
     address: DEV_ACTIVE_HASH_WARS_ADDRESS,
     abi: DEV_ACTIVE_HASH_WARS_ABI

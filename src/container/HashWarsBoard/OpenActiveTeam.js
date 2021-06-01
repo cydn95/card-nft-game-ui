@@ -36,7 +36,7 @@ const OpenActiveTeam = ({
     dispatch(hashWarsAction.getTotalNDRPerTeamStatus());
     dispatch(hashWarsAction.getTotalNDRPerUserStatus());
     dispatch(hashWarsAction.getTeamPlayersCountStatus(teamId));
-  }, [dispatch, teamId]);
+  }, [dispatch]);
 
   return (
     <OpenActiveTeamContainer>
@@ -46,12 +46,12 @@ const OpenActiveTeam = ({
             <ArrowBack style={{ color: '#80F1ED', fontSize: '30'}}/>
             <p className="p2-text sky">Back</p>
           </div>
-          <p className={cn("p1-text", myTeam === 'RED' ? "red" : "blue", "my-round-header-title")}>{myTeam} Team</p>
+          <p className={cn("p1-text", myTeam === '1' ? "red" : "blue", "my-round-header-title")}>{myTeam === '1' ? 'RED' : 'BLUE'} Team</p>
         </div>
         <div className="my-round-detail">
           <div className="my-round-detail-team">
             <div className="flex-center">
-              <p className={cn("team-round", myTeam === 'RED' ? "team-round--red" : "team-round--blue", "p2-text-bold", "yellow" )}>Round 1</p>
+              <p className={cn("team-round", myTeam === '1' ? "team-round--red" : "team-round--blue", "p2-text-bold", "yellow" )}>Round 1</p>
               <a className="p3-text sky" >Join Team chat</a>
             </div>
             <div className="detail-board">
