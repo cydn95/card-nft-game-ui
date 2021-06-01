@@ -34,7 +34,8 @@ const ActiveTeam = ({
   const [selectTeamLoading, setSelectTeamLoading] = useState(false);
   const [redTeamHash, setRedTeamHash] = useState(60);
 
-  const init = () => {
+  const init = (teamId) => {
+    dispatch(hashWarsAction.getTeamIdPerUserStatus());
     dispatch(hashWarsAction.getDayHashPerTeamStatus(teamId));
     dispatch(hashWarsAction.getTotalHashPerUserStatus());
     dispatch(hashWarsAction.getDayHashPerUserStatus());
@@ -55,7 +56,7 @@ const ActiveTeam = ({
       hashWarsAction.selectTeam(teamId, (status) => {
         setSelectTeamLoading(false);
         if (status === RESPONSE.SUCCESS) {
-          init();
+          init(teamId);
           setMyTeam(teamId);
           toast.success("Success");
         } else {
