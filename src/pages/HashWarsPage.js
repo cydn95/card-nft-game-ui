@@ -24,7 +24,7 @@ const HashWars = () => {
   useEffect(() => {
     dispatch(hashWarsAction.getTeamIdPerUserStatus());
     dispatch(hashWarsAction.getTotalHashPerTeamStatus());
-  }, [dispatch]);
+  }, [dispatch, setMyTeam]);
 
   const [myTeam, setMyTeam] = useState(null);
   const [openTeam, setOpenTeam] = useState(null);

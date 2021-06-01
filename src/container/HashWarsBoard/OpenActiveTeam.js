@@ -36,7 +36,7 @@ const OpenActiveTeam = ({
     dispatch(hashWarsAction.getTotalNDRPerTeamStatus());
     dispatch(hashWarsAction.getTotalNDRPerUserStatus());
     dispatch(hashWarsAction.getTeamPlayersCountStatus(teamId));
-  }, [dispatch]);
+  }, [dispatch, teamId]);
 
   return (
     <OpenActiveTeamContainer>
