@@ -21,14 +21,14 @@ const HashWars = () => {
   const totalHashPerTeam2 = useSelector((state) => state.HashWars.totalHashPerTeam2);
   const dispatch = useDispatch();
 
+  const [myTeam, setMyTeam] = useState(null);
+  const [openTeam, setOpenTeam] = useState(null);
+  const [openRound, setOpenRound] = useState(null);
+
   useEffect(() => {
     dispatch(hashWarsAction.getTeamIdPerUserStatus());
     dispatch(hashWarsAction.getTotalHashPerTeamStatus());
   }, [dispatch, setMyTeam]);
-
-  const [myTeam, setMyTeam] = useState(null);
-  const [openTeam, setOpenTeam] = useState(null);
-  const [openRound, setOpenRound] = useState(null);
 
   const handleOpenTeam = (team, round) => {
     setOpenTeam(team);
