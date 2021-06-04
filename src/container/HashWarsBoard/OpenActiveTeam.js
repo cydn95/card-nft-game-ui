@@ -1,11 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 import styled from "styled-components";
 import cn from "classnames";
 import { ArrowBack } from "@material-ui/icons";
 
+import Loading from "../../component/Loading";
 import SectionTitle from "../../component/SectionTitle";
+import LoadingTextIcon from "../../component/LoadingTextIcon";
 import hashWarsAction from "../../redux/hashWars/actions";
+import nftStakingActions from "../../redux/nftStaking/actions";
+import cardsActions from "../../redux/cards/actions";
+import { CARD_SERIES, RESPONSE } from "../../helper/constant";
+
+import NFTStakingModal from "../NFTStakingModal";
 import "../../vendor/index.scss";
 
 const OpenActiveTeam = ({
@@ -25,6 +33,22 @@ const OpenActiveTeam = ({
   const totalNDRPerTeam2 = useSelector((state) => state.HashWars.totalNDRPerTeam2);
   const totalNDRPerUser = useSelector((state) => state.HashWars.totalNDRPerUser);
   const teamPlayersCount = useSelector((state) => state.HashWars.teamPlayersCount);
+
+  const cards = useSelector((state) => state.Cards.cards);
+  const stakedCardTokens = useSelector(
+    (state) => state.NFTStaking.stakedCardTokens
+  ); // Staked card count
+
+  // Selected Cards for Staking or Unstaking
+  const [selectedUnstakeCardIds, setSelectedUnstakeCardIds] = useState([]);
+  const [approved, setApproved] = useState(false);
+  const [approveLoading, setApproveLoading] = useState(false);
+  const [cardsLoading, setCardsLoading] = useState(false);
+  const [stakeDlgOpen, setStakeDlgOpen] = useState(false);
+
+  const [stakeLoading, setStakeLoading] = useState(false);
+  const [selectedCardIds, setSelectedCardIds] = useState([]);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -36,10 +60,162 @@ const OpenActiveTeam = ({
     dispatch(hashWarsAction.getTotalNDRPerTeamStatus());
     dispatch(hashWarsAction.getTotalNDRPerUserStatus());
     dispatch(hashWarsAction.getTeamPlayersCountStatus(teamId));
+    dispatch(cardsActions.getCards());
   }, [dispatch, teamId]);
+
+  useEffect(() => {
+    dispatch(nftStakingActions.getStakedCards());
+    dispatch(
+      hashWarsAction.getApprovedStatus((status) => {
+        setApproved(status);
+      })
+    );
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (cards.length > 0) {
+      dispatch(nftStakingActions.getMyCardsCount(cards));
+    }
+  }, [dispatch, cards]);
+
+  const handleApproveAll = () => {
+    setApproveLoading(true);
+    dispatch(
+      hashWarsAction.approveAll(true, (status) => {
+        setApproveLoading(false);
+        if (status === RESPONSE.SUCCESS) {
+          toast.success("Approved successfully");
+          dispatch(
+            hashWarsAction.getApprovedStatus((status) => {
+              setApproved(status);
+            })
+          );
+        } else {
+          toast.error("Approved failed");
+        }
+      })
+    );
+  };
+
+  const handleOpenStakeModal = () => {
+    setStakeDlgOpen(true);
+  };
+  const handleCloseStakeModal = () => {
+    setStakeDlgOpen(false);
+  };
+
+  const stakedCards = useMemo(() => {
+    const ret = [];
+    for (let i = 0; i < stakedCardTokens.length; i++) {
+      const cardIndex = cards.findIndex(
+        (e) => Number(e.id) === Number(stakedCardTokens[i])
+      );
+
+      if (cardIndex >= 0) {
+        ret.push({
+          card: { ...cards[cardIndex] },
+          unStaked: false,
+        });
+      }
+    }
+    return ret;
+  }, [cards, stakedCardTokens]);
+
+  const isBadgeCardStaked = useMemo(() => {
+    for (let i = 0; i < stakedCardTokens.length; i++) {
+      const cardIndex = cards.findIndex(
+        (e) => Number(e.id) === Number(stakedCardTokens[i])
+      );
+
+      if (cardIndex >= 0 && cards[cardIndex].series === CARD_SERIES.BADGE) {
+        return true
+      }
+    }
+    return false
+  }, [cards, stakedCardTokens])
+
+  const unStakeCards = useMemo(() => {
+    const ret = [];
+    setCardsLoading(true);
+    for (let i = 0; i < cards.length; i++) {
+      if (Number(cards[i].owned) > 0) {
+        ret.push({ ...cards[i] });
+      }
+    }
+    setCardsLoading(false);
+    return ret;
+  }, [cards]);
+
+  const handleStake = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (selectedCardIds.length === 0) {
+      toast.error("Select cards please");
+      return;
+    }
+
+    let badgeCardCnt = 0;
+    for (let i = 0; i < selectedCardIds.length; i++) {
+      const index = cards.findIndex(
+        (c) => c.id === selectedCardIds[i] && c.series === CARD_SERIES.BADGE
+      );
+      if (index >= 0) {
+        badgeCardCnt++;
+      }
+    }
+
+    if (badgeCardCnt > 1) {
+      toast.error("Only 1 badge can be staked");
+      return;
+    }
+
+    if (stakeLoading) return;
+    setStakeLoading(true);
+    dispatch(
+      hashWarsAction.stakeCard(selectedCardIds, (status) => {
+        setSelectedCardIds([]);
+        setStakeLoading(false);
+        if (status === RESPONSE.SUCCESS) {
+          toast.success("Staked successfully");
+          dispatch(hashWarsAction.getDayHashPerTeamStatus(teamId));
+          dispatch(hashWarsAction.getTotalHashPerUserStatus());
+          dispatch(hashWarsAction.getDayHashPerUserStatus());
+          dispatch(hashWarsAction.getTotalPowerPerTeamStatus());
+          dispatch(hashWarsAction.getTotalPowerPerUserStatus());
+          dispatch(hashWarsAction.getTotalNDRPerTeamStatus());
+          dispatch(hashWarsAction.getTotalNDRPerUserStatus());
+          dispatch(hashWarsAction.getTeamPlayersCountStatus(teamId));
+          dispatch(cardsActions.getCards());
+        } else {
+          toast.error("Staked failed");
+        }
+      })
+    );
+  };
+
+  const handleSelectCard = (e, cardId) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const oldSelectedCard = [...selectedCardIds];
+    const findIndex = oldSelectedCard.findIndex((id) => id === cardId);
+    if (findIndex >= 0) {
+      oldSelectedCard.splice(findIndex, 1);
+    } else {
+      oldSelectedCard.push(cardId);
+    }
+    setSelectedCardIds([...oldSelectedCard]);
+  };
 
   return (
     <OpenActiveTeamContainer>
+      {stakeDlgOpen && (
+        <div className="modal-container">
+          <NFTStakeModalMask />
+          <NFTStakingModal onClose={handleCloseStakeModal} isBadgeCardStaked={isBadgeCardStaked}/>
+        </div>
+      )}
       <div className="my-round">
         <div className="flex-center my-round-header">
           <div className="flex-center" role="button" onClick={() => setMyTeam(null)} style={{ zIndex: 1, width: 0}}>
@@ -111,17 +287,86 @@ const OpenActiveTeam = ({
           </div>
         </div>
         <div className="hash-wars-round-join animation-fadeIn">
-          <div role="button" className="stake-button stake-button--pink p1-text yellow">Stake NFT</div>
+          {approveLoading ? (
+              <div
+                className="stake-button stake-button--pink p1-text yellow"
+                role="button"
+              >
+                <LoadingTextIcon loadingText="Approving..."/>
+              </div>
+            ) : (
+              !approved && (
+                <div
+                  className="stake-button stake-button--pink p1-text yellow"
+                  role="button"
+                  onClick={(e) => handleApproveAll()}
+                >
+                  Approve NFT
+                </div>
+              )
+            )}
+            {approved && (
+              <div
+                role="button"
+                className="stake-button stake-button--pink p1-text yellow"
+                onClick={(e) => handleStake(e)}
+              >
+                {stakeLoading ? (
+                  <LoadingTextIcon loadingText="Staking..." />
+                ) : (
+                  `Stake NFT`
+                )}
+              </div>
+            )}
           <div role="button" className="stake-button stake-button--sky p1-text">Stake NDR</div>
         </div>
         <div>
           <SectionTitle title="Select cards to stake" long />
+            <div
+              className="d-flex flex-wrap justify-content-center animation-fadeInLeft"
+              style={{ paddingBottom: 100 }}
+            >
+              {unStakeCards.length > 0 ? (
+                unStakeCards.map((card) => {
+                  const active = selectedCardIds.includes(card.id) ? "active" : "";
+                  return (
+                    <CardWrapper key={`stake_card_${card.id}`}>
+                      <div className={`card ${active}`}>
+                        <img
+                          src={card.image}
+                          alt={`${card.name}`}
+                          className="card-image"
+                        />
+                        <div
+                          className="card-border"
+                          onClick={(e) => handleSelectCard(e, card.id)}
+                        ></div>
+                      </div>
+                    </CardWrapper>
+                  );
+                })
+              ) : (
+                <Loading type="bubbles" color="#fec100" text="Loading..."/>
+              )}
+            </div>
           <SectionTitle title="Get more power" long />
         </div>
       </div>
     </OpenActiveTeamContainer>
   );
 };
+
+const NFTStakeModalMask = styled.div`
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  max-width: 100%;
+  min-height: 100vh;
+  background: #000;
+  opacity: 0.9;
+  z-index: 100;
+`;
 
 const OpenActiveTeamContainer = styled.div`
   width: 100vw;
@@ -176,6 +421,7 @@ const OpenActiveTeamContainer = styled.div`
       justify-content: center;
       margin: auto;
       margin-top: 40px;
+      margin-bottom: 20px;
       width: calc(100% - 20px);
       .join-red {
         background-image: url("/static/images/bg/red-button.png");
@@ -389,6 +635,43 @@ const OpenActiveTeamContainer = styled.div`
         display: flex;
         align-items: center;
         justify-content: center;
+      }
+    }
+  }
+`;
+
+const CardWrapper = styled.div`
+  margin: 8px;
+
+  .card {
+    width: 232.5px;
+    height: 324px;
+    position: relative;
+    padding: 12.75px 10.5px;
+    background: transparent;
+    z-index: 400;
+
+    .card-image {
+      width: 217.5px;
+      height: 307.5px;
+      position: absolute;
+    }
+
+    .card-border {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 240px;
+      height: 332.25px;
+      background: url("/static/images/bg/components/card/card-border.png");
+      background-size: cover;
+      cursor: pointer;
+    }
+
+    &.active {
+      .card-border {
+        background: url("/static/images/bg/components/card/card-border--active.png");
+        background-size: cover;
       }
     }
   }
