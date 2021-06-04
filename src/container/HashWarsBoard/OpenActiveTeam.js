@@ -40,11 +40,9 @@ const OpenActiveTeam = ({
   ); // Staked card count
 
   // Selected Cards for Staking or Unstaking
-  const [selectedUnstakeCardIds, setSelectedUnstakeCardIds] = useState([]);
   const [approved, setApproved] = useState(false);
   const [approveLoading, setApproveLoading] = useState(false);
   const [cardsLoading, setCardsLoading] = useState(false);
-  const [stakeDlgOpen, setStakeDlgOpen] = useState(false);
 
   const [stakeLoading, setStakeLoading] = useState(false);
   const [selectedCardIds, setSelectedCardIds] = useState([]);
@@ -95,13 +93,6 @@ const OpenActiveTeam = ({
         }
       })
     );
-  };
-
-  const handleOpenStakeModal = () => {
-    setStakeDlgOpen(true);
-  };
-  const handleCloseStakeModal = () => {
-    setStakeDlgOpen(false);
   };
 
   const stakedCards = useMemo(() => {
@@ -173,7 +164,7 @@ const OpenActiveTeam = ({
     if (stakeLoading) return;
     setStakeLoading(true);
     dispatch(
-      hashWarsAction.stakeCard(selectedCardIds, (status) => {
+      hashWarsAction.stakeBattleCard(selectedCardIds, (status) => {
         setSelectedCardIds([]);
         setStakeLoading(false);
         if (status === RESPONSE.SUCCESS) {
@@ -210,12 +201,6 @@ const OpenActiveTeam = ({
 
   return (
     <OpenActiveTeamContainer>
-      {stakeDlgOpen && (
-        <div className="modal-container">
-          <NFTStakeModalMask />
-          <NFTStakingModal onClose={handleCloseStakeModal} isBadgeCardStaked={isBadgeCardStaked}/>
-        </div>
-      )}
       <div className="my-round">
         <div className="flex-center my-round-header">
           <div className="flex-center" role="button" onClick={() => setMyTeam(null)} style={{ zIndex: 1, width: 0}}>

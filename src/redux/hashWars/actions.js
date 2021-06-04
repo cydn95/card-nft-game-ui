@@ -30,7 +30,7 @@ const actions = {
 
   GET_APPROVED_STATUS: "GET_APPROVED_STATUS",
   APPROVE_ALL: "APPROVE_ALL",
-  STAKE_CARD: "STAKE_CARD",
+  STAKE_BATTLE_CARD: "STAKE_BATTLE_CARD",
   getBattleStartDateStatus: (time) => ({
     type: actions.GET_BATTLE_START_DATE_STATUS,
     payload: { time }
@@ -92,8 +92,8 @@ const actions = {
   getStakedCards: () => ({
     type: actions.GET_STAKED_CARDS,
   }),
-  stakeCard: (cardIds, callback) => ({
-    type: actions.STAKE_CARD,
+  stakeBattleCard: (cardIds, callback) => ({
+    type: actions.STAKE_BATTLE_CARD,
     payload: { cardIds, callback },
   }),
 };

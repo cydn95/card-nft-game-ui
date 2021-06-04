@@ -343,8 +343,8 @@ export function* approveAll() {
   });
 }
 
-export function* stakeCard() {
-  yield takeLatest(actions.STAKE_CARD, function* ({ payload }) {
+export function* stakeBattleCard() {
+  yield takeLatest(actions.STAKE_BATTLE_CARD, function* ({ payload }) {
     const { cardIds, callback } = payload;
 
     const amounts = Array(cardIds.length).fill(1);
@@ -387,6 +387,6 @@ export default function* rootSaga() {
     fork(getApprovedStatus),
     fork(approveAll),
     fork(selectTeam),
-    fork(stakeCard),
+    fork(stakeBattleCard),
   ]);
 }
