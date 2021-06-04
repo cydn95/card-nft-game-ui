@@ -315,8 +315,8 @@ export function* getApprovedStatus() {
   });
 }
 
-export function* approveAll() {
-  yield takeLatest(actions.APPROVE_ALL, function* ({ payload }) {
+export function* approveAllBattleCard() {
+  yield takeLatest(actions.APPROVE_ALL_BATTLE_CARD, function* ({ payload }) {
     const { approved, callback } = payload;
 
     const web3 = yield call(getWeb3);
@@ -385,7 +385,7 @@ export default function* rootSaga() {
     fork(getTotalNDRPerUserStatus),
     fork(getTeamPlayersCountStatus),
     fork(getApprovedStatus),
-    fork(approveAll),
+    fork(approveAllBattleCard),
     fork(selectTeam),
     fork(stakeBattleCard),
   ]);

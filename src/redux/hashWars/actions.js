@@ -29,7 +29,7 @@ const actions = {
   GET_STAKED_CARDS_SUCCESS: "GET_STAKED_CARDS_SUCCESS",
 
   GET_APPROVED_STATUS: "GET_APPROVED_STATUS",
-  APPROVE_ALL: "APPROVE_ALL",
+  APPROVE_ALL_BATTLE_CARD: "APPROVE_ALL_BATTLE_CARD",
   STAKE_BATTLE_CARD: "STAKE_BATTLE_CARD",
   getBattleStartDateStatus: (time) => ({
     type: actions.GET_BATTLE_START_DATE_STATUS,
@@ -85,8 +85,8 @@ const actions = {
     type: actions.GET_APPROVED_STATUS,
     payload: { callback },
   }),
-  approveAll: (approved, callback) => ({
-    type: actions.APPROVE_ALL,
+  approveAllBattleCard: (approved, callback) => ({
+    type: actions.APPROVE_ALL_BATTLE_CARD,
     payload: { approved, callback },
   }),
   getStakedCards: () => ({

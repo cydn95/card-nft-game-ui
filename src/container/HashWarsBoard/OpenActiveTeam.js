@@ -79,7 +79,7 @@ const OpenActiveTeam = ({
   const handleApproveAll = () => {
     setApproveLoading(true);
     dispatch(
-      hashWarsAction.approveAll(true, (status) => {
+      hashWarsAction.approveAllBattleCard(true, (status) => {
         setApproveLoading(false);
         if (status === RESPONSE.SUCCESS) {
           toast.success("Approved successfully");
