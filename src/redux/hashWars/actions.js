@@ -25,6 +25,12 @@ const actions = {
   SELECT_TEAM_STATUS: "SELECT_TEAM_STATUS",
   SELECT_TEAM_STATUS_SUCCESS: "SELECT_TEAM_STATUS_SUCCESS",
 
+  GET_STAKED_CARDS: "GET_STAKED_CARDS",
+  GET_STAKED_CARDS_SUCCESS: "GET_STAKED_CARDS_SUCCESS",
+
+  GET_APPROVED_STATUS: "GET_APPROVED_STATUS",
+  APPROVE_ALL: "APPROVE_ALL",
+  STAKE_CARD: "STAKE_CARD",
   getBattleStartDateStatus: (time) => ({
     type: actions.GET_BATTLE_START_DATE_STATUS,
     payload: { time }
@@ -73,6 +79,22 @@ const actions = {
   selectTeam: (teamId, callback) => ({
     type: actions.SELECT_TEAM_STATUS,
     payload: { teamId, callback }
+  }),
+
+  getApprovedStatus: (callback) => ({
+    type: actions.GET_APPROVED_STATUS,
+    payload: { callback },
+  }),
+  approveAll: (approved, callback) => ({
+    type: actions.APPROVE_ALL,
+    payload: { approved, callback },
+  }),
+  getStakedCards: () => ({
+    type: actions.GET_STAKED_CARDS,
+  }),
+  stakeCard: (cardIds, callback) => ({
+    type: actions.STAKE_CARD,
+    payload: { cardIds, callback },
   }),
 };
 

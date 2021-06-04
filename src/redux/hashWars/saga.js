@@ -22,9 +22,15 @@ import {
   getTotalNDRPerTeamAsync,
   getTotalNDRPerUserAsync,
   getTeamPlayersCountAsync,
-  selectTeamAsync
+  isApprovedAllAsync,
+  approveAllCardsAsync,
+  selectTeamAsync,
+  stakeMultiCardAsync,
 } from "../../services/web3/battle";
-import { getHashWarsInstance } from "../../services/web3/instance";
+import {
+  getHashWarsInstance,
+  getNFTInstance
+} from "../../services/web3/instance";
 
 // Get Token Approve Status
 export function* getBattleStartDateStatus() {
@@ -255,8 +261,7 @@ export function* getTeamPlayersCountStatus() {
       tokenInstance.instance,
       teamId
     );
-    console.log("count", teamPlayersCount);
-    console.log("teamId", teamId);
+
     yield put({
       type: actions.GET_TEAM_PLAYERS_COUNT_STATUS_SUCCESS,
       teamPlayersCount: teamPlayersCount
@@ -289,6 +294,83 @@ export function* selectTeam() {
   });
 }
 
+export function* getApprovedStatus() {
+  yield takeEvery(actions.GET_APPROVED_STATUS, function* ({ payload }) {
+    const { callback } = payload;
+
+    const web3 = yield call(getWeb3);
+    const nft = getNFTInstance(web3);
+    const nftStaking = getHashWarsInstance(web3);
+
+    const accounts = yield call(web3.eth.getAccounts);
+
+    const approvedStatusResponse = yield call(
+      isApprovedAllAsync,
+      nft.instance,
+      accounts[0],
+      nftStaking.address
+    );
+
+    callback(approvedStatusResponse);
+  });
+}
+
+export function* approveAll() {
+  yield takeLatest(actions.APPROVE_ALL, function* ({ payload }) {
+    const { approved, callback } = payload;
+
+    const web3 = yield call(getWeb3);
+    const nft = getNFTInstance(web3);
+    const nftStaking = getHashWarsInstance(web3);
+
+    // Get Wallet Account
+    const accounts = yield call(web3.eth.getAccounts);
+
+    const approveResponse = yield call(
+      approveAllCardsAsync,
+      nft.instance,
+      web3,
+      nftStaking.address,
+      approved,
+      accounts[0]
+    );
+
+    if (approveResponse.status) {
+      callback(RESPONSE.SUCCESS);
+    } else {
+      callback(RESPONSE.ERROR);
+    }
+  });
+}
+
+export function* stakeCard() {
+  yield takeLatest(actions.STAKE_CARD, function* ({ payload }) {
+    const { cardIds, callback } = payload;
+
+    const amounts = Array(cardIds.length).fill(1);
+    const web3 = yield call(getWeb3);
+    const nftStaking = getHashWarsInstance(web3);
+
+    // Get Wallet Account
+    const accounts = yield call(web3.eth.getAccounts);
+
+    const stakeCardResponse = yield call(
+      stakeMultiCardAsync,
+      nftStaking.instance,
+      web3,
+      cardIds,
+      amounts,
+      accounts[0]
+    );
+
+    if (stakeCardResponse.status) {
+      callback(RESPONSE.SUCCESS);
+    } else {
+      callback(RESPONSE.ERROR);
+    }
+  });
+}
+
 export default function* rootSaga() {
   yield all([
     fork(getBattleStartDateStatus),
@@ -302,6 +384,9 @@ export default function* rootSaga() {
     fork(getTotalNDRPerTeamStatus),
     fork(getTotalNDRPerUserStatus),
     fork(getTeamPlayersCountStatus),
+    fork(getApprovedStatus),
+    fork(approveAll),
     fork(selectTeam),
+    fork(stakeCard),
   ]);
 }

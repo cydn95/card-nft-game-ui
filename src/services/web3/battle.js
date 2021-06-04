@@ -155,3 +155,69 @@ export const selectTeamAsync = async (instance, web3, teamId, address) => {
       return error;
     });
 };
+
+export const isApprovedAllAsync = async (instance, address, spenderAddress) => {
+  return await instance.methods
+    .isApprovedForAll(address, spenderAddress)
+    .call()
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
+// Approve All Card
+export const approveAllCardsAsync = async (
+  instance,
+  web3,
+  spenderAddress,
+  approved,
+  address
+) => {
+  const prices = await getGasPrice();
+
+  // Get gas limit
+  const gasLimit = await instance.methods
+    .setApprovalForAll(spenderAddress, approved)
+    .estimateGas({ from: address });
+
+  return await instance.methods
+    .setApprovalForAll(spenderAddress, approved)
+    .send({
+      from: address,
+      gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
+      gas: getGasFee(gasLimit),
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
+// Stake Card Multi
+export const stakeMultiCardAsync = async (instance, web3, tokenIds, amounts, address) => {
+  const prices = await getGasPrice();
+
+  // Get gas limit
+  const gasLimit = await instance.methods
+    .stakeNFT(tokenIds, amounts)
+    .estimateGas({ from: address });
+
+  return await instance.methods
+    .stakeNFT(tokenIds, amounts)
+    .send({
+      from: address,
+      gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
+      gas: getGasFee(gasLimit),
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
