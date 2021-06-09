@@ -26,6 +26,7 @@ import {
   approveAllCardsAsync,
   selectTeamAsync,
   stakeMultiCardAsync,
+  getFeeAsync
 } from "../../services/web3/battle";
 import {
   getHashWarsInstance,
@@ -354,9 +355,12 @@ export function* stakeBattleCard() {
     // Get Wallet Account
     const accounts = yield call(web3.eth.getAccounts);
 
+    const stakeFee = yield call(getFeeAsync, nftStaking.instance);
+
     const stakeCardResponse = yield call(
       stakeMultiCardAsync,
       nftStaking.instance,
+      stakeFee,
       web3,
       cardIds,
       amounts,

@@ -33,6 +33,7 @@ const ActiveTeam = ({
   const [selectTeamId, setSelectTeamId] = useState("0");
   const [selectTeamLoading, setSelectTeamLoading] = useState(false);
   const [redTeamHash, setRedTeamHash] = useState(60);
+  const [battleEnded, setBattleEnded] = useState(false);
 
   const init = (teamId) => {
     dispatch(hashWarsAction.getTeamIdPerUserStatus());
@@ -75,8 +76,14 @@ const ActiveTeam = ({
       // Render a completed state
       return <Completionist />;
     } else {
-      // Render a countdown
-      return <span>{days}d - {hours}h - {minutes < 10 ? '0'+minutes : minutes}m - {seconds < 10 ? '0'+seconds : seconds}s</span>;
+      if (days >= 0 || hours >= 0 || minutes >= 0 || seconds >= 0) {
+        // Render a countdown
+        return <span>{days}d - {hours}h - {minutes < 10 ? '0'+minutes : minutes}m - {seconds < 10 ? '0'+seconds : seconds}s</span>;
+      } else {
+        setBattleEnded(true);
+        // Render a completed state
+        return <Completionist />;
+      }
     }
   };
 
