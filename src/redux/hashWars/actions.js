@@ -21,6 +21,8 @@ const actions = {
   GET_TOTAL_NDR_PER_USER_STATUS_SUCCESS: "GET_TOTAL_NDR_PER_USER_STATUS_SUCCESS",
   GET_TEAM_PLAYERS_COUNT_STATUS: "GET_TEAM_PLAYERS_COUNT_STATUS",
   GET_TEAM_PLAYERS_COUNT_STATUS_SUCCESS: "GET_TEAM_PLAYERS_COUNT_STATUS_SUCCESS",
+  GET_NDR_APPROVE_STATUS: "GET_NDR_APPROVE_STATUS",
+  GET_NDR_APPROVE_STATUS_SUCCESS: "GET_NDR_APPROVE_STATUS_SUCCESS",
 
   SELECT_TEAM_STATUS: "SELECT_TEAM_STATUS",
   SELECT_TEAM_STATUS_SUCCESS: "SELECT_TEAM_STATUS_SUCCESS",
@@ -31,6 +33,9 @@ const actions = {
   GET_APPROVED_STATUS: "GET_APPROVED_STATUS",
   APPROVE_ALL_BATTLE_CARD: "APPROVE_ALL_BATTLE_CARD",
   STAKE_BATTLE_CARD: "STAKE_BATTLE_CARD",
+  APPROVE_NDR: "APPROVE_NDR",
+  STAKE_NDR: "STAKE_NDR",
+
   getBattleStartDateStatus: (time) => ({
     type: actions.GET_BATTLE_START_DATE_STATUS,
     payload: { time }
@@ -95,6 +100,18 @@ const actions = {
   stakeBattleCard: (cardIds, callback) => ({
     type: actions.STAKE_BATTLE_CARD,
     payload: { cardIds, callback },
+  }),
+  getNDRApproveStatus: (token) => ({
+    type: actions.GET_NDR_APPROVE_STATUS,
+    payload: { token },
+  }),
+  approveNDR: (token, callback) => ({
+    type: actions.APPROVE_NDR,
+    payload: { token, callback },
+  }),
+  stakeNDR: (token, amount, isMax, callback) => ({
+    type: actions.STAKE_NDR,
+    payload: { token, amount, isMax, callback },
   }),
 };
 

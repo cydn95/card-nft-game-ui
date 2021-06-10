@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Countdown from "react-countdown";
 import { toast } from "react-toastify";
 
-import { timeFormatBlockTime } from "../../helper/utils";
+import { convertFromWei, timeFormatBlockTime } from "../../helper/utils";
 import { activeHashWars } from "../../helper/contractBattle";
 import { RESPONSE } from "../../helper/constant";
 import hashWarsAction from "../../redux/hashWars/actions";
@@ -28,6 +28,7 @@ const ActiveTeam = ({
     dispatch(hashWarsAction.getBattleStartDateStatus("endDate"));
     dispatch(hashWarsAction.getTotalPowerPerTeamStatus());
     dispatch(hashWarsAction.getTotalNDRPerTeamStatus());
+    dispatch(hashWarsAction.getTotalHashPerTeamStatus());
   }, [dispatch]);
 
   const [selectTeamId, setSelectTeamId] = useState("0");
@@ -45,6 +46,7 @@ const ActiveTeam = ({
     dispatch(hashWarsAction.getTotalNDRPerTeamStatus());
     dispatch(hashWarsAction.getTotalNDRPerUserStatus());
     dispatch(hashWarsAction.getTeamPlayersCountStatus(teamId));
+    dispatch(hashWarsAction.getTotalHashPerTeamStatus());
   };
 
   const handleSelectTeam = (teamId) => {
@@ -124,7 +126,7 @@ const ActiveTeam = ({
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
                 <p className="p2-text sky">Hashes</p>
-                <p className="p1-text yellow">{(totalHashPerTeam1 && totalHashPerTeam1.length > 0) ? totalHashPerTeam1 : 0}</p>
+                <p className="p1-text yellow">{(totalHashPerTeam1 && totalHashPerTeam1.length > 0) ? convertFromWei(totalHashPerTeam1 * 1000, 4) : 0}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/strength.png`} alt="power" height="80"/>
@@ -134,14 +136,14 @@ const ActiveTeam = ({
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/ndr.png`} alt="ndr" height="80"/>
                 <p className="p2-text sky">NDR</p>
-                <p className="p1-text yellow">{totalNDRPerTeam1}</p>
+                <p className="p1-text yellow">{convertFromWei(totalNDRPerTeam1, 4)}</p>
               </div>
             </div>
             <div className="team-value">
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
                 <p className="p2-text sky">Hashes</p>
-                <p className="p1-text yellow">{(totalHashPerTeam2 && totalHashPerTeam2.length > 0) ? totalHashPerTeam2 : 0}</p>
+                <p className="p1-text yellow">{(totalHashPerTeam2 && totalHashPerTeam2.length > 0) ? convertFromWei(totalHashPerTeam2 * 1000, 4) : 0}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/strength.png`} alt="power" height="80"/>
@@ -151,7 +153,7 @@ const ActiveTeam = ({
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/ndr.png`} alt="ndr" height="80"/>
                 <p className="p2-text sky">NDR</p>
-                <p className="p1-text yellow">{totalNDRPerTeam2}</p>
+                <p className="p1-text yellow">{convertFromWei(totalNDRPerTeam2, 4)}</p>
               </div>
             </div>
           </div>

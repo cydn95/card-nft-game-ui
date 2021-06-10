@@ -16,6 +16,7 @@ const initState = {
   totalNDRPerUser: '',
   teamPlayersCount: '',
   stakedCardTokens: [],
+  approvedNDR: ''
 };
 
 export default function pageReducer(state = initState, action) {
@@ -85,6 +86,11 @@ export default function pageReducer(state = initState, action) {
       return {
         ...state,
         stakedCardTokens: [...action.stakedCardTokens],
+      };
+    case actions.GET_NDR_APPROVE_STATUS_SUCCESS:
+      return {
+        ...state,
+        approvedNDR: action.approvedNDR
       };
     default:
       return state;

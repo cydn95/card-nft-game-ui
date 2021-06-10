@@ -11,9 +11,13 @@ import LoadingTextIcon from "../../component/LoadingTextIcon";
 import hashWarsAction from "../../redux/hashWars/actions";
 import nftStakingActions from "../../redux/nftStaking/actions";
 import cardsActions from "../../redux/cards/actions";
+import farmsAction from "../../redux/farms/actions";
 import { CARD_SERIES, RESPONSE } from "../../helper/constant";
 
 import NFTStakingModal from "../NFTStakingModal";
+import NDRStakingModal from "../NDRStakingModal";
+
+import { convertFromWei, getValueFromObject } from "../../helper/utils";
 import "../../vendor/index.scss";
 
 const OpenActiveTeam = ({
@@ -33,6 +37,9 @@ const OpenActiveTeam = ({
   const totalNDRPerTeam2 = useSelector((state) => state.HashWars.totalNDRPerTeam2);
   const totalNDRPerUser = useSelector((state) => state.HashWars.totalNDRPerUser);
   const teamPlayersCount = useSelector((state) => state.HashWars.teamPlayersCount);
+  const balance = useSelector((state) => state.Farms.balance);
+
+  const approvedNDR = useSelector((state) => state.HashWars.approvedNDR);
 
   const cards = useSelector((state) => state.Cards.cards);
   const stakedCardTokens = useSelector(
@@ -40,12 +47,17 @@ const OpenActiveTeam = ({
   ); // Staked card count
 
   // Selected Cards for Staking or Unstaking
-  const [approved, setApproved] = useState(false);
-  const [approveLoading, setApproveLoading] = useState(false);
+  const [approvedNFT, setApprovedNFT] = useState(false);
+  const [approveNFTLoading, setApproveNFTLoading] = useState(false);
+  const [approveNDRLoading, setApproveNDRLoading] = useState(false);
+
   const [cardsLoading, setCardsLoading] = useState(false);
 
-  const [stakeLoading, setStakeLoading] = useState(false);
+  const [NFTStakeLoading, setNFTStakeLoading] = useState(false);
+  const [NDRStakeLoading, setNDRStakeLoading] = useState(false);
+
   const [selectedCardIds, setSelectedCardIds] = useState([]);
+  const [stakeDlgOpen, setStakeDlgOpen] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -58,14 +70,16 @@ const OpenActiveTeam = ({
     dispatch(hashWarsAction.getTotalNDRPerTeamStatus());
     dispatch(hashWarsAction.getTotalNDRPerUserStatus());
     dispatch(hashWarsAction.getTeamPlayersCountStatus(teamId));
+    dispatch(hashWarsAction.getTotalHashPerTeamStatus());
     dispatch(cardsActions.getCards());
+    dispatch(hashWarsAction.getNDRApproveStatus("NDR"));
   }, [dispatch, teamId]);
 
   useEffect(() => {
     dispatch(nftStakingActions.getStakedCards());
     dispatch(
       hashWarsAction.getApprovedStatus((status) => {
-        setApproved(status);
+        setApprovedNFT(status);
       })
     );
   }, [dispatch]);
@@ -76,16 +90,18 @@ const OpenActiveTeam = ({
     }
   }, [dispatch, cards]);
 
-  const handleApproveAll = () => {
-    setApproveLoading(true);
+  const handleApproveNFT = () => {
+    if (approveNFTLoading) return;
+    if (approveNDRLoading) return;
+    setApproveNFTLoading(true);
     dispatch(
       hashWarsAction.approveAllBattleCard(true, (status) => {
-        setApproveLoading(false);
+        setApproveNFTLoading(false);
         if (status === RESPONSE.SUCCESS) {
           toast.success("Approved successfully");
           dispatch(
             hashWarsAction.getApprovedStatus((status) => {
-              setApproved(status);
+              setApprovedNFT(status);
             })
           );
         } else {
@@ -93,6 +109,33 @@ const OpenActiveTeam = ({
         }
       })
     );
+  };
+
+  const handleApproveNDR = () => {
+    if (approveNFTLoading) return;
+    if (approveNDRLoading) return;
+    setApproveNDRLoading(true);
+    dispatch(
+      hashWarsAction.approveNDR("NDR", (status) => {
+        setApproveNDRLoading(false);
+        callback(status);
+      })
+    );
+  };
+
+  const callback = (status) => {
+    if (status === RESPONSE.INSUFFICIENT) {
+      toast.error("Insufficient balance");
+    }
+    if (status === RESPONSE.ERROR) {
+      toast.error("Your transaction has been failed");
+    }
+    if (status === RESPONSE.SUCCESS) {
+      toast.success("Your transaction has been successfully");
+    }
+    if (status === RESPONSE.SHOULD_APPROVE) {
+      toast.success("You should approve first");
+    }
   };
 
   const stakedCards = useMemo(() => {
@@ -137,7 +180,7 @@ const OpenActiveTeam = ({
     return ret;
   }, [cards]);
 
-  const handleStake = (e) => {
+  const handleNFTStake = (e) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -161,12 +204,14 @@ const OpenActiveTeam = ({
       return;
     }
 
-    if (stakeLoading) return;
-    setStakeLoading(true);
+    if (NFTStakeLoading) return;
+    if (NDRStakeLoading) return;
+
+    setNFTStakeLoading(true);
     dispatch(
       hashWarsAction.stakeBattleCard(selectedCardIds, (status) => {
         setSelectedCardIds([]);
-        setStakeLoading(false);
+        setNFTStakeLoading(false);
         if (status === RESPONSE.SUCCESS) {
           toast.success("Staked successfully");
           dispatch(hashWarsAction.getDayHashPerTeamStatus(teamId));
@@ -177,6 +222,38 @@ const OpenActiveTeam = ({
           dispatch(hashWarsAction.getTotalNDRPerTeamStatus());
           dispatch(hashWarsAction.getTotalNDRPerUserStatus());
           dispatch(hashWarsAction.getTeamPlayersCountStatus(teamId));
+          dispatch(hashWarsAction.getTotalHashPerTeamStatus());
+          dispatch(cardsActions.getCards());
+        } else {
+          toast.error("Staked failed");
+        }
+      })
+    );
+  };
+
+  const handleNDRStake = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (NFTStakeLoading) return;
+    if (NDRStakeLoading) return;
+
+    setNDRStakeLoading(true);
+    dispatch(
+      hashWarsAction.stakeBattleCard(selectedCardIds, (status) => {
+        setSelectedCardIds([]);
+        setNDRStakeLoading(false);
+        if (status === RESPONSE.SUCCESS) {
+          toast.success("Staked successfully");
+          dispatch(hashWarsAction.getDayHashPerTeamStatus(teamId));
+          dispatch(hashWarsAction.getTotalHashPerUserStatus());
+          dispatch(hashWarsAction.getDayHashPerUserStatus());
+          dispatch(hashWarsAction.getTotalPowerPerTeamStatus());
+          dispatch(hashWarsAction.getTotalPowerPerUserStatus());
+          dispatch(hashWarsAction.getTotalNDRPerTeamStatus());
+          dispatch(hashWarsAction.getTotalNDRPerUserStatus());
+          dispatch(hashWarsAction.getTeamPlayersCountStatus(teamId));
+          dispatch(hashWarsAction.getTotalHashPerTeamStatus());
           dispatch(cardsActions.getCards());
         } else {
           toast.error("Staked failed");
@@ -199,8 +276,26 @@ const OpenActiveTeam = ({
     setSelectedCardIds([...oldSelectedCard]);
   };
 
+  const handleOpenStakeModal = () => {
+    setStakeDlgOpen(true);
+  };
+
+  const handleCloseStakeModal = () => {
+    setStakeDlgOpen(false);
+  };
+
   return (
     <OpenActiveTeamContainer>
+      {stakeDlgOpen && (
+        <div className="modal-container">
+          <NFTStakeModalMask />
+          <NDRStakingModal onClose={handleCloseStakeModal}
+            token="NDR"
+            balance={balance}
+            staked={totalNDRPerUser}
+          />
+        </div>
+      )}
       <div className="my-round">
         <div className="flex-center my-round-header">
           <div className="flex-center" role="button" onClick={() => setMyTeam(null)} style={{ zIndex: 1, width: 0}}>
@@ -219,12 +314,12 @@ const OpenActiveTeam = ({
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/hash-day.png`} alt="hash-day" height="80"/>
                 <p className="p2-text sky">Hashes/Day</p>
-                <p className="p1-text yellow">{(dayHashPerTeam && dayHashPerTeam.length > 0) ? dayHashPerTeam : 0}</p>
+                <p className="p1-text yellow">{(dayHashPerTeam && dayHashPerTeam.length > 0) ? convertFromWei(dayHashPerTeam, 4) : 0}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
                 <p className="p2-text sky">Hashes</p>
-                <p className="p1-text yellow">{teamId === "1" ? totalHashPerTeam1 : totalHashPerTeam2}</p>
+                <p className="p1-text yellow">{teamId === "1" ? convertFromWei(totalHashPerTeam1 * 1000, 4) : convertFromWei(totalHashPerTeam2 * 1000, 4)}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/strength.png`} alt="power" height="80"/>
@@ -234,7 +329,7 @@ const OpenActiveTeam = ({
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/ndr.png`} alt="ndr" height="80"/>
                 <p className="p2-text sky">NDR</p>
-                <p className="p1-text yellow">{teamId === "1" ? totalNDRPerTeam1 : totalNDRPerTeam2}</p>
+                <p className="p1-text yellow">{teamId === "1" ? convertFromWei(totalNDRPerTeam1, 4): convertFromWei(totalNDRPerTeam2, 4)}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/players.png`} alt="players" height="80"/>
@@ -251,12 +346,12 @@ const OpenActiveTeam = ({
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/hash-day.png`} alt="hash-day" height="80"/>
                 <p className="p2-text sky">Hashes/Day</p>
-                <p className="p1-text yellow">{dayHashPerUser.length > 0 ? dayHashPerUser : 0}</p>
+                <p className="p1-text yellow">{dayHashPerUser.length > 0 ? convertFromWei(dayHashPerUser, 4) : 0}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
                 <p className="p2-text sky">Hashes</p>
-                <p className="p1-text yellow">{totalHashPerUser.length > 0 ? totalHashPerUser : 0}</p>
+                <p className="p1-text yellow">{totalHashPerUser.length > 0 ? convertFromWei(totalHashPerUser * 1000, 4) : 0}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/strength.png`} alt="power" height="80"/>
@@ -266,44 +361,75 @@ const OpenActiveTeam = ({
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/ndr.png`} alt="ndr" height="80"/>
                 <p className="p2-text sky">NDR</p>
-                <p className="p1-text yellow">{totalNDRPerUser ? totalNDRPerUser : 0}</p>
+                <p className="p1-text yellow">{totalNDRPerUser ? convertFromWei(totalNDRPerUser, 4) : 0}</p>
               </div>
             </div>
           </div>
         </div>
         <div className="hash-wars-round-join animation-fadeIn">
-          {approveLoading ? (
+          {approveNFTLoading ? (
+            <div
+              className="stake-button stake-button--pink p1-text yellow"
+              role="button"
+            >
+              <LoadingTextIcon loadingText="Approving..."/>
+            </div>
+          ) : (
+            !approvedNFT && (
               <div
                 className="stake-button stake-button--pink p1-text yellow"
                 role="button"
+                onClick={(e) => handleApproveNFT()}
               >
-                <LoadingTextIcon loadingText="Approving..."/>
+                Approve NFT
               </div>
-            ) : (
-              !approved && (
-                <div
-                  className="stake-button stake-button--pink p1-text yellow"
-                  role="button"
-                  onClick={(e) => handleApproveAll()}
-                >
-                  Approve NFT
-                </div>
-              )
-            )}
-            {approved && (
+            )
+          )}
+          {approvedNFT && (
+            <div
+              role="button"
+              className="stake-button stake-button--pink p1-text yellow"
+              onClick={(e) => handleNFTStake(e)}
+            >
+              {NFTStakeLoading ? (
+                <LoadingTextIcon loadingText="Staking..." />
+              ) : (
+                `Stake NFT`
+              )}
+            </div>
+          )}
+          {approveNDRLoading ? (
+            <div
+              className="stake-button stake-button--pink p1-text yellow"
+              role="button"
+            >
+              <LoadingTextIcon loadingText="Approving..."/>
+            </div>
+          ) : (
+            !approvedNDR && (
               <div
-                role="button"
                 className="stake-button stake-button--pink p1-text yellow"
-                onClick={(e) => handleStake(e)}
+                role="button"
+                onClick={(e) => handleApproveNDR()}
               >
-                {stakeLoading ? (
-                  <LoadingTextIcon loadingText="Staking..." />
-                ) : (
-                  `Stake NFT`
-                )}
+                Approve NDR
               </div>
-            )}
-          <div role="button" className="stake-button stake-button--sky p1-text">Stake NDR</div>
+            )
+          )}
+          {approvedNDR && (
+            <div
+              role="button"
+              className="stake-button stake-button--sky p1-text"
+              // onClick={(e) => handleNDRStake(e)}
+              onClick={(e) => handleOpenStakeModal()}
+            >
+              {NDRStakeLoading ? (
+                <LoadingTextIcon loadingText="Staking..." />
+              ) : (
+                `Stake NDR`
+              )}
+            </div>
+          )}
         </div>
         <div>
           <SectionTitle title="Select cards to stake" long />

@@ -10,6 +10,7 @@ import UnlockWalletPage from "./UnlockWalletPage";
 import SectionTitle from "../component/SectionTitle";
 import { ActiveTeam, OpenActiveTeam } from "../container/HashWarsBoard";
 import { finishedWars } from "../helper/dummy";
+import { convertFromWei } from "../helper/utils";
 import hashWarsAction from "../redux/hashWars/actions";
 import "../vendor/index.scss";
 
@@ -74,7 +75,7 @@ const HashWars = () => {
                 myTeam={myTeam}
                 setMyTeam={setMyTeam}
                 totalHashPerTeam1={totalHashPerTeam1}
-                totalHashPerTeam2={totalHashPerTeam2}
+                totalHashPerTeam2={totalHashPerTeam1}
               />
             }
           </Tab.Pane>

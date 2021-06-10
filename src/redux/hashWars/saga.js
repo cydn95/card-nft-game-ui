@@ -6,6 +6,7 @@ import {
   fork,
   takeEvery,
 } from "redux-saga/effects";
+import BigNumber from "bignumber.js";
 
 import actions from "./actions";
 import { RESPONSE } from "../../helper/constant";
@@ -26,11 +27,18 @@ import {
   approveAllCardsAsync,
   selectTeamAsync,
   stakeMultiCardAsync,
-  getFeeAsync
+  getFeeAsync,
+  approveNDRAsync,
+  stakeNDRAsync,
+  getNDRAllowanceAsync
 } from "../../services/web3/battle";
 import {
+  getBalanceAsync,
+} from "../../services/web3/lpStaking";
+import {
   getHashWarsInstance,
-  getNFTInstance
+  getNFTInstance,
+  getFarmInstance
 } from "../../services/web3/instance";
 
 // Get Token Approve Status
@@ -375,6 +383,135 @@ export function* stakeBattleCard() {
   });
 }
 
+export function* getNDRApproveStatus() {
+  yield takeEvery(actions.GET_NDR_APPROVE_STATUS, function* ({ payload }) {
+    const { token } = payload;
+
+    const web3 = yield call(getWeb3);
+    const tokenInstance = getFarmInstance(web3, token);
+    const hashWarsInstance = getHashWarsInstance(web3);
+
+    // Get Wallet Account
+    const accounts = yield call(web3.eth.getAccounts);
+
+    const allowance = yield call(
+      getNDRAllowanceAsync,
+      tokenInstance.token.instance,
+      accounts[0],
+      hashWarsInstance.address
+    );
+
+    yield put({
+      type: actions.GET_NDR_APPROVE_STATUS_SUCCESS,
+      approvedNDR: allowance > 0,
+    });
+  });
+}
+
+export function* approveNDR() {
+  yield takeLatest(actions.APPROVE_NDR, function* ({ payload }) {
+    const { token, callback } = payload;
+
+    const web3 = yield call(getWeb3);
+    const tokenInstance = getFarmInstance(web3, token);
+    const hashWarsInstance = getHashWarsInstance(web3);
+    // Get Wallet Account
+    const accounts = yield call(web3.eth.getAccounts);
+
+    // Check balance
+    const tokenBalance = yield call(
+      getBalanceAsync,
+      tokenInstance.token.instance,
+      accounts[0]
+    );
+
+    if (tokenBalance <= 0) {
+      callback(RESPONSE.INSUFFICIENT);
+      return;
+    }
+
+    // Approve
+    const approveResult = yield call(
+      approveNDRAsync,
+      tokenInstance.token.instance,
+      web3,
+      tokenBalance,
+      accounts[0],
+      hashWarsInstance.address
+    );
+
+    if (approveResult.status) {
+      yield put({
+        type: actions.GET_NDR_APPROVE_STATUS,
+        payload: { token },
+      });
+
+      callback(RESPONSE.SUCCESS);
+    } else {
+      callback(RESPONSE.ERROR);
+    }
+  });
+}
+
+export function* stakeNDR() {
+  yield takeLatest(actions.STAKE_NDR, function* ({ payload }) {
+    const { token, amount, isMax, callback } = payload;
+
+    const web3 = yield call(getWeb3);
+    const tokenInstance = getFarmInstance(web3, token);
+    const hashWarsInstance = getHashWarsInstance(web3);
+
+    // Get Wallet Account
+    const accounts = yield call(web3.eth.getAccounts);
+    const stakeFee = yield call(getFeeAsync, hashWarsInstance.instance);
+
+    // Check balance
+    const tokenBalance = yield call(
+      getBalanceAsync,
+      tokenInstance.token.instance,
+      accounts[0]
+    );
+
+    const stakeAmount = isMax
+      ? new BigNumber(tokenBalance)
+      : new BigNumber(amount).times(new BigNumber(10).pow(18));
+
+    if (new BigNumber(tokenBalance).comparedTo(stakeAmount) === -1) {
+      callback(RESPONSE.INSUFFICIENT);
+      return;
+    }
+
+    // Check Allowance
+    const tokenAllowance = yield call(
+      getNDRAllowanceAsync,
+      tokenInstance.token.instance,
+      accounts[0],
+      hashWarsInstance.address
+    );
+
+    if (new BigNumber(tokenAllowance).comparedTo(stakeAmount) === -1) {
+      callback(RESPONSE.SHOULD_APPROVE);
+      return;
+    }
+
+    const stakeResult = yield call(
+      stakeNDRAsync,
+      hashWarsInstance.instance,
+      stakeFee,
+      web3,
+      stakeAmount,
+      accounts[0]
+    );
+
+    // console.log("deposit Result", depositResult);
+    if (stakeResult.status) {
+      callback(RESPONSE.SUCCESS);
+    } else {
+      callback(RESPONSE.ERROR);
+    }
+  });
+}
+
 export default function* rootSaga() {
   yield all([
     fork(getBattleStartDateStatus),
@@ -392,5 +529,8 @@ export default function* rootSaga() {
     fork(approveAllBattleCard),
     fork(selectTeam),
     fork(stakeBattleCard),
+    fork(getNDRApproveStatus),
+    fork(approveNDR),
+    fork(stakeNDR),
   ]);
 }
