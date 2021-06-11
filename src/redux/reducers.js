@@ -6,6 +6,7 @@ import customNFTStaking from "./customNFTStaking/reducer";
 import Farms from "./farms/reducer";
 import Theme from "./theme/reducer";
 import HashWars from "./hashWars/reducer";
+import FinishedWars from "./finishedWars/reducer";
 
 export default {
   LpStaking,
@@ -15,5 +16,6 @@ export default {
   customNFTStaking,
   Farms,
   Theme,
-  HashWars
+  HashWars,
+  FinishedWars
 };

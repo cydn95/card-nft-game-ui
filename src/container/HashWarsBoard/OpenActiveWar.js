@@ -20,7 +20,7 @@ import NDRStakingModal from "../NDRStakingModal";
 import { convertFromWei, getValueFromObject } from "../../helper/utils";
 import "../../vendor/index.scss";
 
-const OpenActiveTeam = ({
+const OpenActiveWar = ({
   teamId,
   myTeam,
   setMyTeam,
@@ -285,7 +285,7 @@ const OpenActiveTeam = ({
   };
 
   return (
-    <OpenActiveTeamContainer>
+    <OpenActiveWarContainer>
       {stakeDlgOpen && (
         <div className="modal-container">
           <NFTStakeModalMask />
@@ -457,13 +457,14 @@ const OpenActiveTeam = ({
                   );
                 })
               ) : (
-                <Loading type="bubbles" color="#fec100" text="Loading..."/>
+                <></>
+                // <Loading type="bubbles" color="#fec100" text="Loading..."/>
               )}
             </div>
           <SectionTitle title="Get more power" long />
         </div>
       </div>
-    </OpenActiveTeamContainer>
+    </OpenActiveWarContainer>
   );
 };
 
@@ -479,7 +480,7 @@ const NFTStakeModalMask = styled.div`
   z-index: 100;
 `;
 
-const OpenActiveTeamContainer = styled.div`
+const OpenActiveWarContainer = styled.div`
   width: 100vw;
   max-width: 100%;
 
@@ -788,4 +789,4 @@ const CardWrapper = styled.div`
   }
 `;
 
-export default OpenActiveTeam;
+export default OpenActiveWar;

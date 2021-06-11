@@ -36,7 +36,7 @@ import {
   getBalanceAsync,
 } from "../../services/web3/lpStaking";
 import {
-  getHashWarsInstance,
+  getActiveWarInstance,
   getNFTInstance,
   getFarmInstance
 } from "../../services/web3/instance";
@@ -46,7 +46,7 @@ export function* getBattleStartDateStatus() {
   yield takeEvery(actions.GET_BATTLE_START_DATE_STATUS, function* ({ payload }) {
     const { time } = payload;
     const web3 = yield call(getWeb3);
-    const tokenInstance = getHashWarsInstance(web3);
+    const tokenInstance = getActiveWarInstance(web3);
 
     const endDate = yield call(
       getBattleFinishDateAsync,
@@ -65,7 +65,7 @@ export function* getBattleStartDateStatus() {
 export function* getTeamIdPerUserStatus() {
   yield takeEvery(actions.GET_TEAM_ID_PER_USER_STATUS, function* () {
     const web3 = yield call(getWeb3);
-    const tokenInstance = getHashWarsInstance(web3);
+    const tokenInstance = getActiveWarInstance(web3);
 
     // Get Wallet Account
     const accounts = yield call(web3.eth.getAccounts);
@@ -87,7 +87,7 @@ export function* getTeamIdPerUserStatus() {
 export function* getTotalHashPerTeamStatus() {
   yield takeEvery(actions.GET_TOTAL_HASH_PER_TEAM_STATUS, function* () {
     const web3 = yield call(getWeb3);
-    const tokenInstance = getHashWarsInstance(web3);
+    const tokenInstance = getActiveWarInstance(web3);
 
     const totalHashPerTeam1 = yield call(
       getTotalHashPerTeamAsync,
@@ -113,7 +113,7 @@ export function* getDayHashPerTeamStatus() {
   yield takeEvery(actions.GET_DAY_HASH_PER_TEAM_STATUS, function* ({ payload }) {
     const { teamId } = payload;
     const web3 = yield call(getWeb3);
-    const tokenInstance = getHashWarsInstance(web3);
+    const tokenInstance = getActiveWarInstance(web3);
 
     const dayHashPerTeam = yield call(
       getDayHashPerTeamAsync,
@@ -132,7 +132,7 @@ export function* getDayHashPerTeamStatus() {
 export function* getTotalHashPerUserStatus() {
   yield takeEvery(actions.GET_TOTAL_HASH_PER_USER_STATUS, function* () {
     const web3 = yield call(getWeb3);
-    const tokenInstance = getHashWarsInstance(web3);
+    const tokenInstance = getActiveWarInstance(web3);
     const accounts = yield call(web3.eth.getAccounts);
 
     const totalHashPerUser = yield call(
@@ -152,7 +152,7 @@ export function* getTotalHashPerUserStatus() {
 export function* getDayHashPerUserStatus() {
   yield takeEvery(actions.GET_DAY_HASH_PER_USER_STATUS, function* () {
     const web3 = yield call(getWeb3);
-    const tokenInstance = getHashWarsInstance(web3);
+    const tokenInstance = getActiveWarInstance(web3);
     const accounts = yield call(web3.eth.getAccounts);
 
     const dayHashPerUser = yield call(
@@ -172,7 +172,7 @@ export function* getDayHashPerUserStatus() {
 export function* getTotalPowerPerTeamStatus() {
   yield takeEvery(actions.GET_TOTAL_POWER_PER_TEAM_STATUS, function* () {
     const web3 = yield call(getWeb3);
-    const tokenInstance = getHashWarsInstance(web3);
+    const tokenInstance = getActiveWarInstance(web3);
 
     const totalPowerPerTeam1 = yield call(
       getTotalPowerPerTeamAsync,
@@ -197,7 +197,7 @@ export function* getTotalPowerPerTeamStatus() {
 export function* getTotalPowerPerUserStatus() {
   yield takeEvery(actions.GET_TOTAL_POWER_PER_USER_STATUS, function* () {
     const web3 = yield call(getWeb3);
-    const tokenInstance = getHashWarsInstance(web3);
+    const tokenInstance = getActiveWarInstance(web3);
     const accounts = yield call(web3.eth.getAccounts);
 
     const totalPowerPerUser = yield call(
@@ -217,7 +217,7 @@ export function* getTotalPowerPerUserStatus() {
 export function* getTotalNDRPerTeamStatus() {
   yield takeEvery(actions.GET_TOTAL_NDR_PER_TEAM_STATUS, function* () {
     const web3 = yield call(getWeb3);
-    const tokenInstance = getHashWarsInstance(web3);
+    const tokenInstance = getActiveWarInstance(web3);
 
     const totalNDRPerTeam1 = yield call(
       getTotalNDRPerTeamAsync,
@@ -242,7 +242,7 @@ export function* getTotalNDRPerTeamStatus() {
 export function* getTotalNDRPerUserStatus() {
   yield takeEvery(actions.GET_TOTAL_NDR_PER_USER_STATUS, function* () {
     const web3 = yield call(getWeb3);
-    const tokenInstance = getHashWarsInstance(web3);
+    const tokenInstance = getActiveWarInstance(web3);
     const accounts = yield call(web3.eth.getAccounts);
 
     const totalNDRPerUser = yield call(
@@ -263,7 +263,7 @@ export function* getTeamPlayersCountStatus() {
   yield takeEvery(actions.GET_TEAM_PLAYERS_COUNT_STATUS, function* ({ payload }) {
     const { teamId } = payload;
     const web3 = yield call(getWeb3);
-    const tokenInstance = getHashWarsInstance(web3);
+    const tokenInstance = getActiveWarInstance(web3);
 
     const teamPlayersCount = yield call(
       getTeamPlayersCountAsync,
@@ -282,7 +282,7 @@ export function* selectTeam() {
   yield takeLatest(actions.SELECT_TEAM_STATUS, function* ({ payload }) {
     const { teamId, callback } = payload;
     const web3 = yield call(getWeb3);
-    const tokenInstance = getHashWarsInstance(web3);
+    const tokenInstance = getActiveWarInstance(web3);
 
     // Get Wallet Account
     const accounts = yield call(web3.eth.getAccounts);
@@ -309,7 +309,7 @@ export function* getApprovedStatus() {
 
     const web3 = yield call(getWeb3);
     const nft = getNFTInstance(web3);
-    const nftStaking = getHashWarsInstance(web3);
+    const nftStaking = getActiveWarInstance(web3);
 
     const accounts = yield call(web3.eth.getAccounts);
 
@@ -330,7 +330,7 @@ export function* approveAllBattleCard() {
 
     const web3 = yield call(getWeb3);
     const nft = getNFTInstance(web3);
-    const nftStaking = getHashWarsInstance(web3);
+    const nftStaking = getActiveWarInstance(web3);
 
     // Get Wallet Account
     const accounts = yield call(web3.eth.getAccounts);
@@ -358,7 +358,7 @@ export function* stakeBattleCard() {
 
     const amounts = Array(cardIds.length).fill(1);
     const web3 = yield call(getWeb3);
-    const nftStaking = getHashWarsInstance(web3);
+    const nftStaking = getActiveWarInstance(web3);
 
     // Get Wallet Account
     const accounts = yield call(web3.eth.getAccounts);
@@ -389,7 +389,7 @@ export function* getNDRApproveStatus() {
 
     const web3 = yield call(getWeb3);
     const tokenInstance = getFarmInstance(web3, token);
-    const hashWarsInstance = getHashWarsInstance(web3);
+    const hashWarsInstance = getActiveWarInstance(web3);
 
     // Get Wallet Account
     const accounts = yield call(web3.eth.getAccounts);
@@ -414,7 +414,7 @@ export function* approveNDR() {
 
     const web3 = yield call(getWeb3);
     const tokenInstance = getFarmInstance(web3, token);
-    const hashWarsInstance = getHashWarsInstance(web3);
+    const hashWarsInstance = getActiveWarInstance(web3);
     // Get Wallet Account
     const accounts = yield call(web3.eth.getAccounts);
 
@@ -459,7 +459,7 @@ export function* stakeNDR() {
 
     const web3 = yield call(getWeb3);
     const tokenInstance = getFarmInstance(web3, token);
-    const hashWarsInstance = getHashWarsInstance(web3);
+    const hashWarsInstance = getActiveWarInstance(web3);
 
     // Get Wallet Account
     const accounts = yield call(web3.eth.getAccounts);

@@ -266,11 +266,27 @@ export const getPartnerNFTInstance = (web3, token) => {
   };
 };
 
-export const getHashWarsInstance = (web3, round = 0, active = true) => {
+export const getActiveWarInstance = (web3) => {
   const warsData =
     REACT_APP_BUILD_MODE === "production"
-      ? active ? activeHashWars.prod : finishedHashWars[round].prod
-      : active ? activeHashWars.dev : finishedHashWars[round].dev;
+      ? activeHashWars.prod
+      : activeHashWars.dev;
+
+  return {
+    address: warsData.address,
+    abi: warsData.abi,
+    instance: new web3.eth.Contract(
+      warsData.abi,
+      warsData.address
+    )
+  };
+};
+
+export const getFinishedWarsInstance = (web3, index = 0) => {
+  const warsData =
+    REACT_APP_BUILD_MODE === "production"
+      ? finishedHashWars[index].prod
+      : finishedHashWars[index].dev;
 
   return {
     address: warsData.address,

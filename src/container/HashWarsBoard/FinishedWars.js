@@ -1,110 +1,77 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useWallet } from "use-wallet";
-import { Tab, Nav } from "react-bootstrap";
 import styled from "styled-components";
 import cn from "classnames";
-import { ArrowBack } from "@material-ui/icons";
 
-import UnlockWalletPage from "./UnlockWalletPage";
-import SectionTitle from "../component/SectionTitle";
-import {
-  ActiveWar,
-  OpenActiveWar,
-  FinishedWars,
-  OpenFinishedWar
-} from "../container/HashWarsBoard";
-import { finishedWars } from "../helper/dummy";
-import { convertFromWei } from "../helper/utils";
-import hashWarsAction from "../redux/hashWars/actions";
-import "../vendor/index.scss";
+import { finishedHashWars } from "../../helper/contractBattle";
+import finishWarsAction from "../../redux/finishedWars/actions";
+import "../../vendor/index.scss";
 
-const HashWars = () => {
-  const { account } = useWallet();
-  // teamId = "0": not join any team, teamId = "1": RED team, teamId = "2": BLUE team
-  const teamId = useSelector((state) => state.HashWars.teamId);
-  const totalHashPerTeam1 = useSelector((state) => state.HashWars.totalHashPerTeam1);
-  const totalHashPerTeam2 = useSelector((state) => state.HashWars.totalHashPerTeam2);
+const FinishedWars = ({
+  handleOpenTeam
+}) => {
+  const finishTeamId = useSelector((state) => state.FinishedWars.finishTeamId);
+  const finishTotalHashPerTeam1 = useSelector((state) => state.FinishedWars.finishTotalHashPerTeam1);
+  const finishTotalHashPerTeam2 = useSelector((state) => state.FinishedWars.finishTotalHashPerTeam2);
+
   const dispatch = useDispatch();
 
-  const [myTeam, setMyTeam] = useState(null);
-  const [openTeam, setOpenTeam] = useState(null);
-  const [openRound, setOpenRound] = useState(null);
-
   useEffect(() => {
-    dispatch(hashWarsAction.getTeamIdPerUserStatus());
-    dispatch(hashWarsAction.getTotalHashPerTeamStatus());
-  }, [dispatch, setMyTeam]);
+    dispatch(finishWarsAction.getFinishTeamIdPerUserStatus());
+    dispatch(finishWarsAction.getFinishTotalHashPerTeamStatus());
+  }, [dispatch]);
 
-  const handleOpenTeam = (team, round) => {
-    setOpenTeam(team);
-    setOpenRound(round);
-  }
-
-  const handleResetOpenTeam = () => {
-    setOpenTeam(null);
-    setOpenRound(null);
-  }
-
-  if (!account) {
-    return <UnlockWalletPage />;
+  const warResult = (team = 1, index) => {
+    if (finishTotalHashPerTeam1[index] > finishTotalHashPerTeam2[index]) {
+      return team === 1 ? 'Win' : 'Lose';
+    } else if (finishTotalHashPerTeam1[index] < finishTotalHashPerTeam2[index]){
+      return team === 1 ? 'Lose' : 'Win';
+    } else {
+      return 'Draw';
+    }
   }
 
   return (
-    <HashWarsPageContainer>
-      <Tab.Container defaultActiveKey="ACTIVE">
-        <Nav
-          variant="pills"
-          className="justify-content-center animation-fadeIn"
-        >
-          <Nav.Item>
-            <Nav.Link eventKey="ACTIVE" className="nav-active">Active</Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link eventKey="FINISHED" className="nav-finished">Finished</Nav.Link>
-          </Nav.Item>
-        </Nav>
-        <Tab.Content>
-          <Tab.Pane eventKey="ACTIVE">
-            {myTeam === null &&
-              <ActiveWar
-                teamId={teamId}
-                totalHashPerTeam1={totalHashPerTeam1}
-                totalHashPerTeam2={totalHashPerTeam2}
-                setMyTeam={setMyTeam}
-              />
-            }
-            {myTeam !== null &&
-              <OpenActiveWar
-                teamId={teamId}
-                myTeam={myTeam}
-                setMyTeam={setMyTeam}
-                totalHashPerTeam1={totalHashPerTeam1}
-                totalHashPerTeam2={totalHashPerTeam1}
-              />
-            }
-          </Tab.Pane>
-          <Tab.Pane eventKey="FINISHED">
-            {openTeam === null &&
-              <FinishedWars
-                handleOpenTeam={handleOpenTeam}
-              />
-            }
-            {openTeam !== null &&
-              <OpenFinishedWar
-                handleResetOpenTeam={handleResetOpenTeam}
-                openTeam={openTeam}
-                openRound={openRound}
-              />
-            }
-          </Tab.Pane>
-        </Tab.Content>
-      </Tab.Container>
-    </HashWarsPageContainer>
+    <FinishedWarsContainer>
+      <div
+        className="animation-fadeInLeft"
+        style={{ paddingBottom: 100 }}
+      >
+        {finishedHashWars.map((key, index) => (
+          <div className="finished" key={index}>
+            <div className={cn(
+              "finished-hash-wars",
+              warResult(index) ==='Win'
+                ? "finished-hash-wars--red"
+                : warResult(index) ==='Lose'
+                  ? "finished-hash-wars--blue"
+                  : "finished-hash-wars--draw",
+              "d-flex",
+              "flex-wrap"
+            )}>
+              <div className="red-team" style={{ width: '40%' }}>
+                <p className="p2-text sky">{warResult(index)}</p>
+                <p className="p1-text red">RED {finishTotalHashPerTeam1[index]}</p>
+              </div>
+              <p className="p2-text-bold yellow" style={{ width: '20%', maxWidth: '170px' }}>{key.round}</p>
+              <div className="blue-team" style={{ width: '40%' }}>
+                <p className="p2-text sky">{warResult(2, index)}</p>
+                <p className="p1-text blue">BLUE {finishTotalHashPerTeam2[index]}</p>
+              </div>
+            </div>
+            <div className="open-button d-flex flex-wrap">
+              {finishTeamId[index] === "1" && <div role="button" className="open-button-red p2-text-bold yellow" onClick={() => handleOpenTeam('RED', key.round)}>Open Red</div>}
+              <div className="space-temp"></div>
+              {finishTeamId[index] === "2" && <div role="button" className="open-button-blue p2-text-bold yellow" onClick={() => handleOpenTeam('BLUE', key.round)}>Open Blue</div>}
+            </div>
+          </div>
+        ))}
+      </div>
+    </FinishedWarsContainer>
   );
 };
 
-const HashWarsPageContainer = styled.div`
+const FinishedWarsContainer = styled.div`
   width: 100vw;
   max-width: 100%;
 
@@ -340,6 +307,10 @@ const HashWarsPageContainer = styled.div`
         border: 4px solid #0287F0;
         background-color: #003156;
       }
+      &--draw {
+        border: 4px solid #FEC100;
+        // background-color: #FEC100;
+      }
     }
     .open-button {
       justify-content: space-evenly;
@@ -375,4 +346,4 @@ const HashWarsPageContainer = styled.div`
   }
 `;
 
-export default HashWars;
+export default FinishedWars;
