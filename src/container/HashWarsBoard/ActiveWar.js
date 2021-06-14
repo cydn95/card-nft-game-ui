@@ -79,6 +79,7 @@ const ActiveWar = ({
       return <Completionist />;
     } else {
       if (days >= 0 || hours >= 0 || minutes >= 0 || seconds >= 0) {
+        setBattleEnded(false);
         // Render a countdown
         return <span>{days}d - {hours}h - {minutes < 10 ? '0'+minutes : minutes}m - {seconds < 10 ? '0'+seconds : seconds}s</span>;
       } else {
