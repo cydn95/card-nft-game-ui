@@ -3,19 +3,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { useWallet } from "use-wallet";
 import { Tab, Nav } from "react-bootstrap";
 import styled from "styled-components";
-import cn from "classnames";
-import { ArrowBack } from "@material-ui/icons";
 
 import UnlockWalletPage from "./UnlockWalletPage";
-import SectionTitle from "../component/SectionTitle";
 import {
   ActiveWar,
   OpenActiveWar,
   FinishedWars,
   OpenFinishedWar
 } from "../container/HashWarsBoard";
-import { finishedWars } from "../helper/dummy";
-import { convertFromWei } from "../helper/utils";
 import hashWarsAction from "../redux/hashWars/actions";
 import "../vendor/index.scss";
 

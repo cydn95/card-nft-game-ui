@@ -305,3 +305,49 @@ export const stakeMultiCardAsync = async (instance, stakeFee, web3, tokenIds, am
       return error;
     });
 };
+
+export const withdrawNFTAsync = async (instance, web3, address) => {
+  const prices = await getGasPrice();
+
+  // Get gas limit
+  const gasLimit = await instance.methods
+    .withdrawNFT()
+    .estimateGas({ from: address });
+
+  return await instance.methods
+    .withdrawNFT()
+    .send({
+      from: address,
+      gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
+      gas: getGasFee(gasLimit),
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
+export const withdrawNDRAsync = async (instance, web3, address) => {
+  const prices = await getGasPrice();
+
+  // Get gas limit
+  const gasLimit = await instance.methods
+    .withdrawNDR()
+    .estimateGas({ from: address });
+
+  return await instance.methods
+    .withdrawNDR()
+    .send({
+      from: address,
+      gasPrice: web3.utils.toWei(prices.medium.toString(), "gwei"),
+      gas: getGasFee(gasLimit),
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};

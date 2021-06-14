@@ -8,7 +8,7 @@ import { ArrowBack } from "@material-ui/icons";
 import Loading from "../../component/Loading";
 import SectionTitle from "../../component/SectionTitle";
 import LoadingTextIcon from "../../component/LoadingTextIcon";
-import hashWarsAction from "../../redux/hashWars/actions";
+import finishWarsAction from "../../redux/finishedWars/actions";
 import nftStakingActions from "../../redux/nftStaking/actions";
 import cardsActions from "../../redux/cards/actions";
 import farmsAction from "../../redux/farms/actions";
@@ -25,6 +25,42 @@ const OpenFinishedWar = ({
   openTeam,
   openRound
 }) => {
+  const finishTotalHashPerTeam1 = useSelector((state) => state.FinishedWars.finishTotalHashPerTeam1);
+  const finishTotalHashPerTeam2 = useSelector((state) => state.FinishedWars.finishTotalHashPerTeam2);
+  const finishTotalHashPerUser = useSelector((state) => state.FinishedWars.finishTotalHashPerUser);
+  const finishTotalPowerPerTeam = useSelector((state) => state.FinishedWars.finishTotalPowerPerTeam);
+  const finishTotalPowerPerUser = useSelector((state) => state.FinishedWars.finishTotalPowerPerUser);
+  const finishTotalNDRPerTeam = useSelector((state) => state.FinishedWars.finishTotalNDRPerTeam);
+  const finishTotalNDRPerUser = useSelector((state) => state.FinishedWars.finishTotalNDRPerUser);
+  const finishTeamPlayersCount = useSelector((state) => state.FinishedWars.finishTeamPlayersCount);
+
+  const [UnstakeLoading, setUnstakeLoading] = useState(false);
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(finishWarsAction.getFinishTotalHashPerUserStatus(openRound));
+    dispatch(finishWarsAction.getFinishTotalPowerPerTeamStatus(openRound, openTeam));
+    dispatch(finishWarsAction.getFinishTotalPowerPerUserStatus(openRound));
+    dispatch(finishWarsAction.getFinishTotalNDRPerTeamStatus(openRound, openTeam));
+    dispatch(finishWarsAction.getFinishTotalNDRPerUserStatus(openRound));
+    dispatch(finishWarsAction.getFinishTeamPlayersCountStatus(openRound, openTeam));
+  }, [dispatch, openRound, openTeam]);
+
+  const handleUnstake = () => {
+    if (UnstakeLoading) return;
+    setUnstakeLoading(true);
+    dispatch(
+      finishWarsAction.unstakeAll(openRound, (status) => {
+        setUnstakeLoading(false);
+        if (status === RESPONSE.SUCCESS) {
+          toast.success("Unstaked successfully");
+        } else {
+          toast.error("Unstake failed");
+        }
+      })
+    );
+  }
+
   return (
     <OpenFinishedWarContainer>
       <div className="my-round">
@@ -33,39 +69,34 @@ const OpenFinishedWar = ({
             <ArrowBack style={{ color: '#80F1ED', fontSize: '30'}}/>
             <p className="p2-text sky">Back</p>
           </div>
-          <p className={cn("p1-text", openTeam === 'RED' ? "red" : "blue", "my-round-header-title")}>Open {openTeam}</p>
+          <p className={cn("p1-text", openTeam === '1' ? "red" : "blue", "my-round-header-title")}>{openTeam === '1' ? "RED" : "BLUE"} Team</p>
         </div>
         <div className="my-round-detail">
           <div className="my-round-detail-team">
             <div className="flex-center">
-              <p className={cn("team-round", openTeam === 'RED' ? "team-round--red" : "team-round--blue", "p2-text-bold", "yellow" )}>{openRound}</p>
+              <p className={cn("team-round", openTeam === '1' ? "team-round--red" : "team-round--blue", "p2-text-bold", "yellow" )}>Round {openRound}</p>
               <a className="p3-text sky">Join Team chat</a>
             </div>
             <div className="detail-board">
               <div className="team-value-detail">
-                <img className="margin-auto" src={`/static/images/icons/hash-day.png`} alt="hash-day" height="80"/>
-                <p className="p2-text sky">Hashes/Day</p>
-                <p className="p1-text yellow">1200</p>
-              </div>
-              <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
                 <p className="p2-text sky">Hashes</p>
-                <p className="p1-text yellow">1200</p>
+                <p className="p1-text yellow">{openTeam === '1' ? finishTotalHashPerTeam1[openRound - 1] : finishTotalHashPerTeam2[openRound - 1]}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/strength.png`} alt="power" height="80"/>
                 <p className="p2-text sky">Power</p>
-                <p className="p1-text yellow">100</p>
+                <p className="p1-text yellow">{finishTotalPowerPerTeam ? finishTotalPowerPerTeam : '0'}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/ndr.png`} alt="ndr" height="80"/>
                 <p className="p2-text sky">NDR</p>
-                <p className="p1-text yellow">100</p>
+                <p className="p1-text yellow">{finishTotalNDRPerTeam ? finishTotalNDRPerTeam !== '0' ? convertFromWei(finishTotalNDRPerTeam, 4) : '0' : '0'}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/players.png`} alt="players" height="80"/>
                 <p className="p2-text sky">Players</p>
-                <p className="p1-text yellow">120</p>
+                <p className="p1-text yellow">{finishTeamPlayersCount ? finishTeamPlayersCount : '0'}</p>
               </div>
             </div>
           </div>
@@ -75,50 +106,43 @@ const OpenFinishedWar = ({
             </div>
             <div className="detail-board">
               <div className="team-value-detail">
-                <img className="margin-auto" src={`/static/images/icons/hash-day.png`} alt="hash-day" height="80"/>
-                <p className="p2-text sky">Hashes/Day</p>
-                <p className="p1-text yellow">1200</p>
-              </div>
-              <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
                 <p className="p2-text sky">Hashes</p>
-                <p className="p1-text yellow">1200</p>
+                <p className="p1-text yellow">{finishTotalHashPerUser ? finishTotalHashPerUser : '0'}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/strength.png`} alt="power" height="80"/>
                 <p className="p2-text sky">Power</p>
-                <p className="p1-text yellow">100</p>
+                <p className="p1-text yellow">{finishTotalPowerPerUser ? finishTotalPowerPerUser : '0'}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/ndr.png`} alt="ndr" height="80"/>
                 <p className="p2-text sky">NDR</p>
-                <p className="p1-text yellow">100</p>
+                <p className="p1-text yellow">{finishTotalNDRPerUser ? finishTotalNDRPerUser !== '0' ? convertFromWei(finishTotalNDRPerUser, 4) : '0' : '0'}</p>
               </div>
             </div>
           </div>
         </div>
         <div className="hash-wars-round-join animation-fadeIn">
-          <div role="button" className="stake-button stake-button--pink p1-text yellow">Unstake All</div>
+          <div
+              role="button"
+              className="stake-button stake-button--pink p1-text yellow"
+              onClick={(e) => handleUnstake(e)}
+            >
+              {UnstakeLoading ? (
+                <LoadingTextIcon loadingText="Unstaking..." />
+              ) : (
+                `Unstake All`
+              )}
+            </div>
         </div>
         <div className="">
-          <SectionTitle title="Select cards to stake" long />
+          <SectionTitle title="Staked NFT" long />
         </div>
       </div>
     </OpenFinishedWarContainer>
   );
 };
-
-const NFTStakeModalMask = styled.div`
-  position: fixed;
-  top: 0px;
-  left: 0px;
-  width: 100vw;
-  max-width: 100%;
-  min-height: 100vh;
-  background: #000;
-  opacity: 0.9;
-  z-index: 100;
-`;
 
 const OpenFinishedWarContainer = styled.div`
   width: 100vw;

@@ -126,7 +126,7 @@ const ActiveWar = ({
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
                 <p className="p2-text sky">Hashes</p>
-                <p className="p1-text yellow">{(totalHashPerTeam1 && totalHashPerTeam1.length > 0) ? convertFromWei(totalHashPerTeam1 * 1000, 4) : 0}</p>
+                <p className="p1-text yellow">{(totalHashPerTeam1 && totalHashPerTeam1 !== '0') ? convertFromWei(totalHashPerTeam1 * 1000, 4) : 0}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/strength.png`} alt="power" height="80"/>
@@ -136,14 +136,14 @@ const ActiveWar = ({
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/ndr.png`} alt="ndr" height="80"/>
                 <p className="p2-text sky">NDR</p>
-                <p className="p1-text yellow">{convertFromWei(totalNDRPerTeam1, 4)}</p>
+                <p className="p1-text yellow">{totalNDRPerTeam1 !== '0' ? convertFromWei(totalNDRPerTeam1, 4) : '0'}</p>
               </div>
             </div>
             <div className="team-value">
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
                 <p className="p2-text sky">Hashes</p>
-                <p className="p1-text yellow">{(totalHashPerTeam2 && totalHashPerTeam2.length > 0) ? convertFromWei(totalHashPerTeam2 * 1000, 4) : 0}</p>
+                <p className="p1-text yellow">{(totalHashPerTeam2 && totalHashPerTeam2 !== '0') ? convertFromWei(totalHashPerTeam2 * 1000, 4) : 0}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/strength.png`} alt="power" height="80"/>
@@ -153,12 +153,12 @@ const ActiveWar = ({
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/ndr.png`} alt="ndr" height="80"/>
                 <p className="p2-text sky">NDR</p>
-                <p className="p1-text yellow">{convertFromWei(totalNDRPerTeam2, 4)}</p>
+                <p className="p1-text yellow">{totalNDRPerTeam2 !== '0' ? convertFromWei(totalNDRPerTeam2, 4) : '0'}</p>
               </div>
             </div>
           </div>
         </div>
-        {teamId === "0" && <div className="hash-wars-round-join animation-fadeIn">
+        {teamId === "0" && !battleEnded && <div className="hash-wars-round-join animation-fadeIn">
           {selectTeamLoading && selectTeamId === "1" ? (
             <div role="button" className="join-red p1-text yellow">
               <div className="loading-wrapper">

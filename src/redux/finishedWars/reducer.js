@@ -4,6 +4,12 @@ const initState = {
   finishTeamId: {},
   finishTotalHashPerTeam1: {},
   finishTotalHashPerTeam2: {},
+  finishTotalHashPerUser: '',
+  finishTotalPowerPerTeam: '',
+  finishTotalPowerPerUser: '',
+  finishTotalNDRPerTeam: '',
+  finishTotalNDRPerUser: '',
+  finishTeamPlayersCount: '',
 };
 
 export default function pageReducer(state = initState, action) {
@@ -18,6 +24,36 @@ export default function pageReducer(state = initState, action) {
         ...state,
         finishTotalHashPerTeam1: action.finishTotalHashPerTeam1,
         finishTotalHashPerTeam2: action.finishTotalHashPerTeam2
+      };
+    case actions.GET_FINISH_TOTAL_HASH_PER_USER_STATUS_SUCCESS:
+      return {
+        ...state,
+        finishTotalHashPerUser: action.finishTotalHashPerUser,
+      };
+    case actions.GET_FINISH_TOTAL_POWER_PER_TEAM_STATUS_SUCCESS:
+      return {
+        ...state,
+        finishTotalPowerPerTeam: action.finishTotalPowerPerTeam
+      };
+    case actions.GET_FINISH_TOTAL_POWER_PER_USER_STATUS_SUCCESS:
+      return {
+        ...state,
+        finishTotalPowerPerUser: action.finishTotalPowerPerUser
+      };
+    case actions.GET_FINISH_TOTAL_NDR_PER_TEAM_STATUS_SUCCESS:
+      return {
+        ...state,
+        finishTotalNDRPerTeam: action.finishTotalNDRPerTeam
+      };
+    case actions.GET_FINISH_TOTAL_NDR_PER_USER_STATUS_SUCCESS:
+      return {
+        ...state,
+        finishTotalNDRPerUser: action.finishTotalNDRPerUser
+      };
+    case actions.GET_FINISH_TEAM_PLAYERS_COUNT_STATUS_SUCCESS:
+      return {
+        ...state,
+        finishTeamPlayersCount: action.finishTeamPlayersCount
       };
     default:
       return state;

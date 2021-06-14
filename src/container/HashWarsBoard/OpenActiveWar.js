@@ -314,12 +314,12 @@ const OpenActiveWar = ({
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/hash-day.png`} alt="hash-day" height="80"/>
                 <p className="p2-text sky">Hashes/Day</p>
-                <p className="p1-text yellow">{(dayHashPerTeam && dayHashPerTeam.length > 0) ? convertFromWei(dayHashPerTeam, 4) : 0}</p>
+                <p className="p1-text yellow">{(dayHashPerTeam && dayHashPerTeam !== '0') ? convertFromWei(dayHashPerTeam, 4) : 0}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
                 <p className="p2-text sky">Hashes</p>
-                <p className="p1-text yellow">{teamId === "1" ? convertFromWei(totalHashPerTeam1 * 1000, 4) : convertFromWei(totalHashPerTeam2 * 1000, 4)}</p>
+                <p className="p1-text yellow">{teamId === "1" ? totalHashPerTeam1 !== '0' ? convertFromWei(totalHashPerTeam1 * 1000, 4) : 0 : totalHashPerTeam2 !== '0' ? convertFromWei(totalHashPerTeam2 * 1000, 4) : 0}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/strength.png`} alt="power" height="80"/>
@@ -329,7 +329,7 @@ const OpenActiveWar = ({
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/ndr.png`} alt="ndr" height="80"/>
                 <p className="p2-text sky">NDR</p>
-                <p className="p1-text yellow">{teamId === "1" ? convertFromWei(totalNDRPerTeam1, 4): convertFromWei(totalNDRPerTeam2, 4)}</p>
+                <p className="p1-text yellow">{teamId === "1" ? totalNDRPerTeam1 !== '0' ? convertFromWei(totalNDRPerTeam1, 4) : 0 : totalNDRPerTeam2 !== '0' ? convertFromWei(totalNDRPerTeam2, 4) : 0}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/players.png`} alt="players" height="80"/>
@@ -346,12 +346,12 @@ const OpenActiveWar = ({
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/hash-day.png`} alt="hash-day" height="80"/>
                 <p className="p2-text sky">Hashes/Day</p>
-                <p className="p1-text yellow">{dayHashPerUser.length > 0 ? convertFromWei(dayHashPerUser, 4) : 0}</p>
+                <p className="p1-text yellow">{dayHashPerUser !== '0' ? convertFromWei(dayHashPerUser, 4) : 0}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
                 <p className="p2-text sky">Hashes</p>
-                <p className="p1-text yellow">{totalHashPerUser.length > 0 ? convertFromWei(totalHashPerUser * 1000, 4) : 0}</p>
+                <p className="p1-text yellow">{totalHashPerUser !== '0' ? convertFromWei(totalHashPerUser * 1000, 4) : 0}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/strength.png`} alt="power" height="80"/>
@@ -361,7 +361,7 @@ const OpenActiveWar = ({
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/ndr.png`} alt="ndr" height="80"/>
                 <p className="p2-text sky">NDR</p>
-                <p className="p1-text yellow">{totalNDRPerUser ? convertFromWei(totalNDRPerUser, 4) : 0}</p>
+                <p className="p1-text yellow">{(totalNDRPerUser && totalNDRPerUser !== '0') ? convertFromWei(totalNDRPerUser, 4) : 0}</p>
               </div>
             </div>
           </div>

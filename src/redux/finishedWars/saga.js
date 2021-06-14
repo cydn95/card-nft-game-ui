@@ -24,14 +24,8 @@ import {
   getTotalNDRPerTeamAsync,
   getTotalNDRPerUserAsync,
   getTeamPlayersCountAsync,
-  isApprovedAllAsync,
-  approveAllCardsAsync,
-  selectTeamAsync,
-  stakeMultiCardAsync,
-  getFeeAsync,
-  approveNDRAsync,
-  stakeNDRAsync,
-  getNDRAllowanceAsync
+  withdrawNDRAsync,
+  withdrawNFTAsync,
 } from "../../services/web3/battle";
 import {
   getBalanceAsync,
@@ -103,9 +97,175 @@ export function* getFinishTotalHashPerTeamStatus() {
   });
 }
 
+// Get Total Hash Per User
+export function* getFinishTotalHashPerUserStatus() {
+  yield takeEvery(actions.GET_FINISH_TOTAL_HASH_PER_USER_STATUS, function* ({ payload }) {
+    const { openRound } = payload;
+    const index = openRound -1;
+    const web3 = yield call(getWeb3);
+    const tokenInstance = getFinishedWarsInstance(web3, index);
+    const accounts = yield call(web3.eth.getAccounts);
+
+    const finishTotalHashPerUser = yield call(
+      getTotalHashPerUserAsync,
+      tokenInstance.instance,
+      accounts[0],
+    );
+
+    yield put({
+      type: actions.GET_FINISH_TOTAL_HASH_PER_USER_STATUS_SUCCESS,
+      finishTotalHashPerUser
+    });
+  });
+}
+
+// Get Total NFT Power Per Team
+export function* getFinishTotalPowerPerTeamStatus() {
+  yield takeEvery(actions.GET_FINISH_TOTAL_POWER_PER_TEAM_STATUS, function* ({ payload }) {
+    const { openRound,openTeam } = payload;
+    const index = openRound -1;
+    const web3 = yield call(getWeb3);
+    const tokenInstance = getFinishedWarsInstance(web3, index);
+
+    const finishTotalPowerPerTeam = yield call(
+      getTotalPowerPerTeamAsync,
+      tokenInstance.instance,
+      openTeam
+    );
+
+    yield put({
+      type: actions.GET_FINISH_TOTAL_POWER_PER_TEAM_STATUS_SUCCESS,
+      finishTotalPowerPerTeam
+    });
+  });
+}
+
+// Get Total NFT Power Per User
+export function* getFinishTotalPowerPerUserStatus() {
+  yield takeEvery(actions.GET_FINISH_TOTAL_POWER_PER_USER_STATUS, function* ({ payload }) {
+    const { openRound } = payload;
+    const index = openRound -1;
+    const web3 = yield call(getWeb3);
+    const tokenInstance = getFinishedWarsInstance(web3, index);
+    const accounts = yield call(web3.eth.getAccounts);
+
+    const finishTotalPowerPerUser = yield call(
+      getTotalPowerPerUserAsync,
+      tokenInstance.instance,
+      accounts[0]
+    );
+
+    yield put({
+      type: actions.GET_FINISH_TOTAL_POWER_PER_USER_STATUS_SUCCESS,
+      finishTotalPowerPerUser
+    });
+  });
+}
+
+// Get Total NDR Amount Per Team
+export function* getFinishTotalNDRPerTeamStatus() {
+  yield takeEvery(actions.GET_FINISH_TOTAL_NDR_PER_TEAM_STATUS, function* ({ payload }) {
+    const { openRound, openTeam } = payload;
+    const index = openRound -1;
+    const web3 = yield call(getWeb3);
+    const tokenInstance = getFinishedWarsInstance(web3, index);
+
+    const finishTotalNDRPerTeam = yield call(
+      getTotalNDRPerTeamAsync,
+      tokenInstance.instance,
+      openTeam
+    );
+
+    yield put({
+      type: actions.GET_FINISH_TOTAL_NDR_PER_TEAM_STATUS_SUCCESS,
+      finishTotalNDRPerTeam
+    });
+  });
+}
+
+// Get Total NDR Amount Per User
+export function* getFinishTotalNDRPerUserStatus() {
+  yield takeEvery(actions.GET_FINISH_TOTAL_NDR_PER_USER_STATUS, function* ({ payload }) {
+    const { openRound } = payload;
+    const index = openRound -1;
+    const web3 = yield call(getWeb3);
+    const tokenInstance = getFinishedWarsInstance(web3, index);
+    const accounts = yield call(web3.eth.getAccounts);
+
+    const finishTotalNDRPerUser = yield call(
+      getTotalNDRPerUserAsync,
+      tokenInstance.instance,
+      accounts[0]
+    );
+
+    yield put({
+      type: actions.GET_FINISH_TOTAL_NDR_PER_USER_STATUS_SUCCESS,
+      finishTotalNDRPerUser
+    });
+  });
+}
+
+// Get Total Team Players Count
+export function* getFinishTeamPlayersCountStatus() {
+  yield takeEvery(actions.GET_FINISH_TEAM_PLAYERS_COUNT_STATUS, function* ({ payload }) {
+    const { openRound, openTeam } = payload;
+    const index = openRound -1;
+    const web3 = yield call(getWeb3);
+    const tokenInstance = getFinishedWarsInstance(web3, index);
+
+    const finishTeamPlayersCount = yield call(
+      getTeamPlayersCountAsync,
+      tokenInstance.instance,
+      openTeam
+    );
+
+    yield put({
+      type: actions.GET_FINISH_TEAM_PLAYERS_COUNT_STATUS_SUCCESS,
+      finishTeamPlayersCount
+    });
+  });
+}
+
+export function* unstakeAll() {
+  yield takeEvery(actions.UN_STAKE_ALL, function* ({ payload }) {
+    const { openRound, callback } = payload;
+    const index = openRound -1;
+    const web3 = yield call(getWeb3);
+    const tokenInstance = getFinishedWarsInstance(web3, index);
+    const accounts = yield call(web3.eth.getAccounts);
+console.log("index", index);
+    const withdrawNDR = yield call(
+      withdrawNDRAsync,
+      tokenInstance.instance,
+      web3,
+      accounts[0]
+    );
+    console.log("withdrawNDR", withdrawNDR);
+    const withdrawNFT = yield call(
+      withdrawNFTAsync,
+      tokenInstance.instance,
+      web3,
+      accounts[0]
+    );
+    console.log("withdrawNFT", withdrawNFT);
+    if (withdrawNDR.status && withdrawNFT.status) {
+      callback(RESPONSE.SUCCESS);
+    } else {
+      callback(RESPONSE.ERROR);
+    }
+  });
+}
+
 export default function* rootSaga() {
   yield all([
     fork(getFinishTeamIdPerUserStatus),
     fork(getFinishTotalHashPerTeamStatus),
+    fork(getFinishTotalHashPerUserStatus),
+    fork(getFinishTotalPowerPerTeamStatus),
+    fork(getFinishTotalPowerPerUserStatus),
+    fork(getFinishTotalNDRPerTeamStatus),
+    fork(getFinishTotalNDRPerUserStatus),
+    fork(getFinishTeamPlayersCountStatus),
+    fork(unstakeAll),
   ]);
 }

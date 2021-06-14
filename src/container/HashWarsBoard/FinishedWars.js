@@ -53,16 +53,16 @@ const FinishedWars = ({
                 <p className="p2-text sky">{warResult(index)}</p>
                 <p className="p1-text red">RED {finishTotalHashPerTeam1[index]}</p>
               </div>
-              <p className="p2-text-bold yellow" style={{ width: '20%', maxWidth: '170px' }}>{key.round}</p>
+              <p className="p2-text-bold yellow" style={{ width: '20%', maxWidth: '170px' }}>Round {key.round}</p>
               <div className="blue-team" style={{ width: '40%' }}>
                 <p className="p2-text sky">{warResult(2, index)}</p>
                 <p className="p1-text blue">BLUE {finishTotalHashPerTeam2[index]}</p>
               </div>
             </div>
             <div className="open-button d-flex flex-wrap">
-              {finishTeamId[index] === "1" && <div role="button" className="open-button-red p2-text-bold yellow" onClick={() => handleOpenTeam('RED', key.round)}>Open Red</div>}
+              {finishTeamId[index] === "1" && <div role="button" className="open-button-red p2-text-bold yellow" onClick={() => handleOpenTeam('1', key.round)}>Open Red</div>}
               <div className="space-temp"></div>
-              {finishTeamId[index] === "2" && <div role="button" className="open-button-blue p2-text-bold yellow" onClick={() => handleOpenTeam('BLUE', key.round)}>Open Blue</div>}
+              {finishTeamId[index] === "2" && <div role="button" className="open-button-blue p2-text-bold yellow" onClick={() => handleOpenTeam('2', key.round)}>Open Blue</div>}
             </div>
           </div>
         ))}
