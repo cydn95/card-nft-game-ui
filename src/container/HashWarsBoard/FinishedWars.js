@@ -6,6 +6,7 @@ import cn from "classnames";
 import { finishedHashWars } from "../../helper/contractBattle";
 import finishWarsAction from "../../redux/finishedWars/actions";
 import "../../vendor/index.scss";
+import { convertFromWei } from "../../helper/utils";
 
 const FinishedWars = ({
   handleOpenTeam
@@ -51,12 +52,12 @@ const FinishedWars = ({
             )}>
               <div className="red-team" style={{ width: '40%' }}>
                 <p className="p2-text sky">{warResult(index)}</p>
-                <p className="p1-text red">RED {finishTotalHashPerTeam1[index]}</p>
+                <p className="p1-text red">RED {finishTotalHashPerTeam1[index] !== '0' ? convertFromWei(finishTotalHashPerTeam1[index] * 1000, 2) : '0'}</p>
               </div>
               <p className="p2-text-bold yellow" style={{ width: '20%', maxWidth: '170px' }}>Round {key.round}</p>
               <div className="blue-team" style={{ width: '40%' }}>
                 <p className="p2-text sky">{warResult(2, index)}</p>
-                <p className="p1-text blue">BLUE {finishTotalHashPerTeam2[index]}</p>
+                <p className="p1-text blue">BLUE {finishTotalHashPerTeam2[index] !== '0' ? convertFromWei(finishTotalHashPerTeam2[index] * 1000, 2) : '0'}</p>
               </div>
             </div>
             <div className="open-button d-flex flex-wrap">

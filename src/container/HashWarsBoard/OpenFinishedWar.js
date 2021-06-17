@@ -83,17 +83,17 @@ const OpenFinishedWar = ({
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
                 <p className="p2-text sky">Hashes</p>
-                <p className="p1-text yellow">{openTeam === '1' ? finishTotalHashPerTeam1[openRound - 1] : finishTotalHashPerTeam2[openRound - 1]}</p>
+                <p className="p1-text yellow">{openTeam === '1' ? finishTotalHashPerTeam1[openRound - 1] !== '0' ?convertFromWei(finishTotalHashPerTeam1[openRound - 1] * 1000, 2) : '0' : finishTotalHashPerTeam2[openRound - 1] !== '0' ? convertFromWei(finishTotalHashPerTeam2[openRound - 1] * 1000, 2) : '0'}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/strength.png`} alt="power" height="80"/>
                 <p className="p2-text sky">Power</p>
-                <p className="p1-text yellow">{finishTotalPowerPerTeam ? finishTotalPowerPerTeam : '0'}</p>
+                <p className="p1-text yellow">{finishTotalPowerPerTeam ? finishTotalPowerPerTeam/100 : '0'}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/ndr.png`} alt="ndr" height="80"/>
                 <p className="p2-text sky">NDR</p>
-                <p className="p1-text yellow">{finishTotalNDRPerTeam ? finishTotalNDRPerTeam !== '0' ? convertFromWei(finishTotalNDRPerTeam, 4) : '0' : '0'}</p>
+                <p className="p1-text yellow">{finishTotalNDRPerTeam ? finishTotalNDRPerTeam !== '0' ? convertFromWei(finishTotalNDRPerTeam, 2) : '0' : '0'}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/players.png`} alt="players" height="80"/>
@@ -110,17 +110,17 @@ const OpenFinishedWar = ({
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
                 <p className="p2-text sky">Hashes</p>
-                <p className="p1-text yellow">{finishTotalHashPerUser ? finishTotalHashPerUser : '0'}</p>
+                <p className="p1-text yellow">{(finishTotalHashPerUser && finishTotalHashPerUser !== '0') ? convertFromWei((finishTotalHashPerUser * 1000), 2) : '0'}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/strength.png`} alt="power" height="80"/>
                 <p className="p2-text sky">Power</p>
-                <p className="p1-text yellow">{finishTotalPowerPerUser ? finishTotalPowerPerUser : '0'}</p>
+                <p className="p1-text yellow">{finishTotalPowerPerUser ? finishTotalPowerPerUser/100 : '0'}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/ndr.png`} alt="ndr" height="80"/>
                 <p className="p2-text sky">NDR</p>
-                <p className="p1-text yellow">{finishTotalNDRPerUser ? finishTotalNDRPerUser !== '0' ? convertFromWei(finishTotalNDRPerUser, 4) : '0' : '0'}</p>
+                <p className="p1-text yellow">{finishTotalNDRPerUser ? finishTotalNDRPerUser !== '0' ? convertFromWei(finishTotalNDRPerUser, 2) : '0' : '0'}</p>
               </div>
             </div>
           </div>
