@@ -676,57 +676,6 @@ const OpenActiveWarContainer = styled.div`
       }
     }
   }
-
-  .finished {
-    margin-bottom: 35px;
-    .finished-hash-wars {
-      align-items: center;
-      width: calc(100% - 4rem);
-      max-width: 1160px;
-      margin: auto;
-      margin-bottom: 0.5rem;
-      justify-content: space-evenly;
-      &--red {
-        border: 4px solid #FA0046;
-        background-color: #3E0011;
-      }
-      &--blue {
-        border: 4px solid #0287F0;
-        background-color: #003156;
-      }
-    }
-    .open-button {
-      justify-content: space-evenly;
-      width: calc(100% - 4rem);
-      max-width: 1160px;
-      margin: auto;
-      &-red {
-        background-image: url("/static/images/bg/red-button.png");
-        background-size: 100% 100%;
-        width: 40%;
-        max-width: 341px;
-        height: 50px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .space-temp {
-        max-width: 170px;
-        width: 20%;
-      }
-      &-blue {
-        background-image: url("/static/images/bg/blue-button.png");
-        background-size: 100% 100%;
-        padding: 2px 24px;
-        width: 40%;
-        max-width: 341px;
-        height: 50px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-    }
-  }
 `;
 
 const CardWrapper = styled.div`

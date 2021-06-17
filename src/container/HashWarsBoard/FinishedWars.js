@@ -42,16 +42,16 @@ const FinishedWars = ({
           <div className="finished" key={index}>
             <div className={cn(
               "finished-hash-wars",
-              warResult(index) ==='Win'
+              warResult(1, index) ==='Win'
                 ? "finished-hash-wars--red"
-                : warResult(index) ==='Lose'
+                : warResult(1, index) ==='Lose'
                   ? "finished-hash-wars--blue"
                   : "finished-hash-wars--draw",
               "d-flex",
               "flex-wrap"
             )}>
               <div className="red-team" style={{ width: '40%' }}>
-                <p className="p2-text sky">{warResult(index)}</p>
+                <p className="p2-text sky">{warResult(1, index)}</p>
                 <p className="p1-text red">RED {finishTotalHashPerTeam1[index] !== '0' ? convertFromWei(finishTotalHashPerTeam1[index] * 1000, 2) : '0'}</p>
               </div>
               <p className="p2-text-bold yellow" style={{ width: '20%', maxWidth: '170px' }}>Round {key.round}</p>
@@ -61,9 +61,11 @@ const FinishedWars = ({
               </div>
             </div>
             <div className="open-button d-flex flex-wrap">
-              {finishTeamId[index] === "1" && <div role="button" className="open-button-red p2-text-bold yellow" onClick={() => handleOpenTeam('1', key.round)}>Open Red</div>}
+              {finishTeamId[index] === "1" ? <div role="button" className="open-button-red p2-text-bold yellow" onClick={() => handleOpenTeam('1', key.round)}>Open Red</div>
+              : <div style={{width: '40%', maxWidth: '250px'}}></div>}
               <div className="space-temp"></div>
-              {finishTeamId[index] === "2" && <div role="button" className="open-button-blue p2-text-bold yellow" onClick={() => handleOpenTeam('2', key.round)}>Open Blue</div>}
+              {finishTeamId[index] === "2" ? <div role="button" className="open-button-blue p2-text-bold yellow" onClick={() => handleOpenTeam('2', key.round)}>Open Blue</div>
+              : <div style={{width: '40%', maxWidth: '250px'}}></div>}
             </div>
           </div>
         ))}
@@ -297,15 +299,12 @@ const FinishedWarsContainer = styled.div`
       justify-content: space-evenly;
       &--red {
         border: 4px solid #FA0046;
-        background-color: #3E0011;
       }
       &--blue {
         border: 4px solid #0287F0;
-        background-color: #003156;
       }
       &--draw {
         border: 4px solid #FEC100;
-        // background-color: #FEC100;
       }
     }
     .open-button {
@@ -317,7 +316,7 @@ const FinishedWarsContainer = styled.div`
         background-image: url("/static/images/bg/red-button.png");
         background-size: 100% 100%;
         width: 40%;
-        max-width: 341px;
+        max-width: 250px;
         height: 50px;
         display: flex;
         align-items: center;
@@ -332,7 +331,7 @@ const FinishedWarsContainer = styled.div`
         background-size: 100% 100%;
         padding: 2px 24px;
         width: 40%;
-        max-width: 341px;
+        max-width: 250px;
         height: 50px;
         display: flex;
         align-items: center;
