@@ -233,21 +233,21 @@ export function* unstakeAll() {
     const web3 = yield call(getWeb3);
     const tokenInstance = getFinishedWarsInstance(web3, index);
     const accounts = yield call(web3.eth.getAccounts);
-console.log("index", index);
+
     const withdrawNDR = yield call(
       withdrawNDRAsync,
       tokenInstance.instance,
       web3,
       accounts[0]
     );
-    console.log("withdrawNDR", withdrawNDR);
+
     const withdrawNFT = yield call(
       withdrawNFTAsync,
       tokenInstance.instance,
       web3,
       accounts[0]
     );
-    console.log("withdrawNFT", withdrawNFT);
+
     if (withdrawNDR.status && withdrawNFT.status) {
       callback(RESPONSE.SUCCESS);
     } else {

@@ -25,7 +25,8 @@ const OpenActiveWar = ({
   myTeam,
   setMyTeam,
   totalHashPerTeam1,
-  totalHashPerTeam2
+  totalHashPerTeam2,
+  battleEnded
 }) => {
   const totalHashPerUser = useSelector((state) => state.HashWars.totalHashPerUser);
   const dayHashPerUser = useSelector((state) => state.HashWars.dayHashPerUser);
@@ -231,37 +232,6 @@ const OpenActiveWar = ({
     );
   };
 
-  const handleNDRStake = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (NFTStakeLoading) return;
-    if (NDRStakeLoading) return;
-
-    setNDRStakeLoading(true);
-    dispatch(
-      hashWarsAction.stakeBattleCard(selectedCardIds, (status) => {
-        setSelectedCardIds([]);
-        setNDRStakeLoading(false);
-        if (status === RESPONSE.SUCCESS) {
-          toast.success("Staked successfully");
-          dispatch(hashWarsAction.getDayHashPerTeamStatus(teamId));
-          dispatch(hashWarsAction.getTotalHashPerUserStatus());
-          dispatch(hashWarsAction.getDayHashPerUserStatus());
-          dispatch(hashWarsAction.getTotalPowerPerTeamStatus());
-          dispatch(hashWarsAction.getTotalPowerPerUserStatus());
-          dispatch(hashWarsAction.getTotalNDRPerTeamStatus());
-          dispatch(hashWarsAction.getTotalNDRPerUserStatus());
-          dispatch(hashWarsAction.getTeamPlayersCountStatus(teamId));
-          dispatch(hashWarsAction.getTotalHashPerTeamStatus());
-          dispatch(cardsActions.getCards());
-        } else {
-          toast.error("Staked failed");
-        }
-      })
-    );
-  };
-
   const handleSelectCard = (e, cardId) => {
     e.preventDefault();
     e.stopPropagation();
@@ -283,6 +253,19 @@ const OpenActiveWar = ({
   const handleCloseStakeModal = () => {
     setStakeDlgOpen(false);
   };
+
+  // When no available cards to stake
+  const textValue = <Loading type="bubbles" color="#fec100" text="Loading..."/>;
+  const [textValues, setTextValues] = useState(textValue);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setTextValues(<div className="p1-text yellow" style={{opacity: '0.8'}}>
+        No available cards to stake
+      </div>);
+    }, 30000);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <OpenActiveWarContainer>
@@ -307,29 +290,29 @@ const OpenActiveWar = ({
         <div className="my-round-detail">
           <div className="my-round-detail-team">
             <div className="flex-center">
-              <p className={cn("team-round", myTeam === '1' ? "team-round--red" : "team-round--blue", "p2-text-bold", "yellow" )}>Round 1</p>
+              <p className={cn("team-round", myTeam === '1' ? "team-round--red" : "team-round--blue", "p2-text-bold", "yellow" )}>Team Stats</p>
               <a className="p3-text sky" >Join Team chat</a>
             </div>
             <div className="detail-board">
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/hash-day.png`} alt="hash-day" height="80"/>
                 <p className="p2-text sky">Hashes/Day</p>
-                <p className="p1-text yellow">{(dayHashPerTeam && dayHashPerTeam !== '0') ? convertFromWei(dayHashPerTeam, 4) : 0}</p>
+                <p className="p1-text yellow">{(dayHashPerTeam && dayHashPerTeam !== '0') ? convertFromWei(dayHashPerTeam, 2) : 0}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
                 <p className="p2-text sky">Hashes</p>
-                <p className="p1-text yellow">{teamId === "1" ? totalHashPerTeam1 !== '0' ? convertFromWei(totalHashPerTeam1 * 1000, 4) : 0 : totalHashPerTeam2 !== '0' ? convertFromWei(totalHashPerTeam2 * 1000, 4) : 0}</p>
+                <p className="p1-text yellow">{teamId === "1" ? totalHashPerTeam1 !== '0' ? convertFromWei(totalHashPerTeam1 * 1000, 2) : 0 : totalHashPerTeam2 !== '0' ? convertFromWei(totalHashPerTeam2 * 1000, 2) : 0}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/strength.png`} alt="power" height="80"/>
                 <p className="p2-text sky">Power</p>
-                <p className="p1-text yellow">{teamId === "1" ? totalPowerPerTeam1 : totalPowerPerTeam2}</p>
+                <p className="p1-text yellow">{teamId === "1" ? totalPowerPerTeam1/100 : totalPowerPerTeam2/100}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/ndr.png`} alt="ndr" height="80"/>
                 <p className="p2-text sky">NDR</p>
-                <p className="p1-text yellow">{teamId === "1" ? totalNDRPerTeam1 !== '0' ? convertFromWei(totalNDRPerTeam1, 4) : 0 : totalNDRPerTeam2 !== '0' ? convertFromWei(totalNDRPerTeam2, 4) : 0}</p>
+                <p className="p1-text yellow">{teamId === "1" ? totalNDRPerTeam1 !== '0' ? convertFromWei(totalNDRPerTeam1, 2) : 0 : totalNDRPerTeam2 !== '0' ? convertFromWei(totalNDRPerTeam2, 2) : 0}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/players.png`} alt="players" height="80"/>
@@ -340,33 +323,33 @@ const OpenActiveWar = ({
           </div>
           <div className="my-round-detail-my-stats">
             <div>
-              <p className="team-round team-round--sky p2-text-bold yellow">My Stats</p>
+              <p className="team-round team-round--sky p2-text-bold">My Stats</p>
             </div>
             <div className="detail-board">
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/hash-day.png`} alt="hash-day" height="80"/>
                 <p className="p2-text sky">Hashes/Day</p>
-                <p className="p1-text yellow">{dayHashPerUser !== '0' ? convertFromWei(dayHashPerUser, 4) : 0}</p>
+                <p className="p1-text yellow">{dayHashPerUser !== '0' ? convertFromWei(dayHashPerUser, 2) : 0}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/hash.png`} alt="hash" height="80"/>
                 <p className="p2-text sky">Hashes</p>
-                <p className="p1-text yellow">{totalHashPerUser !== '0' ? convertFromWei(totalHashPerUser * 1000, 4) : 0}</p>
+                <p className="p1-text yellow">{totalHashPerUser !== '0' ? convertFromWei(totalHashPerUser * 1000, 2) : 0}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/strength.png`} alt="power" height="80"/>
                 <p className="p2-text sky">Power</p>
-                <p className="p1-text yellow">{totalPowerPerUser ? totalPowerPerUser : 0}</p>
+                <p className="p1-text yellow">{totalPowerPerUser ? totalPowerPerUser/100 : 0}</p>
               </div>
               <div className="team-value-detail">
                 <img className="margin-auto" src={`/static/images/icons/ndr.png`} alt="ndr" height="80"/>
                 <p className="p2-text sky">NDR</p>
-                <p className="p1-text yellow">{(totalNDRPerUser && totalNDRPerUser !== '0') ? convertFromWei(totalNDRPerUser, 4) : 0}</p>
+                <p className="p1-text yellow">{(totalNDRPerUser && totalNDRPerUser !== '0') ? convertFromWei(totalNDRPerUser, 2) : 0}</p>
               </div>
             </div>
           </div>
         </div>
-        <div className="hash-wars-round-join animation-fadeIn">
+        {!battleEnded ? <div className="hash-wars-round-join animation-fadeIn">
           {approveNFTLoading ? (
             <div
               className="stake-button stake-button--pink p1-text yellow"
@@ -420,7 +403,6 @@ const OpenActiveWar = ({
             <div
               role="button"
               className="stake-button stake-button--sky p1-text"
-              // onClick={(e) => handleNDRStake(e)}
               onClick={(e) => handleOpenStakeModal()}
             >
               {NDRStakeLoading ? (
@@ -430,7 +412,9 @@ const OpenActiveWar = ({
               )}
             </div>
           )}
-        </div>
+        </div> : <div className="hash-wars-round-join animation-fadeIn p1-text yellow" style={{opacity: '0.8'}}>
+          The battle has already been ended. You can't stake to battle.
+        </div>}
         <div>
           <SectionTitle title="Select cards to stake" long />
             <div
@@ -456,10 +440,8 @@ const OpenActiveWar = ({
                     </CardWrapper>
                   );
                 })
-              ) : (
-                <></>
-                // <Loading type="bubbles" color="#fec100" text="Loading..."/>
-              )}
+              ) : textValues
+              }
             </div>
           <SectionTitle title="Get more power" long />
         </div>
@@ -603,11 +585,6 @@ const OpenActiveWarContainer = styled.div`
       margin-right: auto;
       margin-left: auto;
     }
-  }
-  progress[value] {
-    width: 100%;
-    height: 50px;
-    color: #00A6F5;
   }
 
   .margin-auto {

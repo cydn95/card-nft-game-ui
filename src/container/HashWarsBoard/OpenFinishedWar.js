@@ -54,6 +54,8 @@ const OpenFinishedWar = ({
         setUnstakeLoading(false);
         if (status === RESPONSE.SUCCESS) {
           toast.success("Unstaked successfully");
+          dispatch(finishWarsAction.getFinishTotalNDRPerUserStatus(openRound));
+          dispatch(finishWarsAction.getFinishTotalPowerPerUserStatus(openRound));
         } else {
           toast.error("Unstake failed");
         }
@@ -267,11 +269,6 @@ const OpenFinishedWarContainer = styled.div`
       margin-right: auto;
       margin-left: auto;
     }
-  }
-  progress[value] {
-    width: 100%;
-    height: 50px;
-    color: #00A6F5;
   }
 
   .margin-auto {

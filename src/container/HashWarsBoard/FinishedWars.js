@@ -194,11 +194,6 @@ const FinishedWarsContainer = styled.div`
       margin-left: auto;
     }
   }
-  progress[value] {
-    width: 100%;
-    height: 50px;
-    color: #00A6F5;
-  }
 
   .margin-auto {
     margin: auto;

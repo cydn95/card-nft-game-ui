@@ -16,7 +16,8 @@ const initState = {
   totalNDRPerUser: '',
   teamPlayersCount: '',
   stakedCardTokens: [],
-  approvedNDR: ''
+  approvedNDR: '',
+  prizePool: '',
 };
 
 export default function pageReducer(state = initState, action) {
@@ -91,6 +92,11 @@ export default function pageReducer(state = initState, action) {
       return {
         ...state,
         approvedNDR: action.approvedNDR
+      };
+    case actions.GET_PRIZE_POOL_STATUS_SUCCESS:
+      return {
+        ...state,
+        prizePool: action.prizePool
       };
     default:
       return state;

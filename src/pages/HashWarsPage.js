@@ -26,6 +26,29 @@ const HashWars = () => {
   const [openTeam, setOpenTeam] = useState(null);
   const [openRound, setOpenRound] = useState(null);
 
+  const [battleEnded, setBattleEnded] = useState(false);
+  // Random component
+  const Completionist = () => <span>The Battle ended!</span>;
+
+  // Renderer callback with condition
+  const renderer = ({ days, hours, minutes, seconds, completed }) => {
+    if (completed) {
+      // Render a completed state
+      setBattleEnded(true);
+      return <Completionist />;
+    } else {
+      if (days >= 0 || hours >= 0 || minutes >= 0 || seconds >= 0) {
+        setBattleEnded(false);
+        // Render a countdown
+        return <span>{days}d - {hours}h - {minutes < 10 ? '0'+minutes : minutes}m - {seconds < 10 ? '0'+seconds : seconds}s</span>;
+      } else {
+        setBattleEnded(true);
+        // Render a completed state
+        return <Completionist />;
+      }
+    }
+  };
+
   useEffect(() => {
     dispatch(hashWarsAction.getTeamIdPerUserStatus());
     dispatch(hashWarsAction.getTotalHashPerTeamStatus());
@@ -67,6 +90,8 @@ const HashWars = () => {
                 totalHashPerTeam1={totalHashPerTeam1}
                 totalHashPerTeam2={totalHashPerTeam2}
                 setMyTeam={setMyTeam}
+                battleEnded={battleEnded}
+                renderer={renderer}
               />
             }
             {myTeam !== null &&
@@ -76,6 +101,7 @@ const HashWars = () => {
                 setMyTeam={setMyTeam}
                 totalHashPerTeam1={totalHashPerTeam1}
                 totalHashPerTeam2={totalHashPerTeam1}
+                battleEnded={battleEnded}
               />
             }
           </Tab.Pane>
@@ -221,11 +247,6 @@ const HashWarsPageContainer = styled.div`
       margin-right: auto;
       margin-left: auto;
     }
-  }
-  progress[value] {
-    width: 100%;
-    height: 50px;
-    color: #00A6F5;
   }
 
   .margin-auto {

@@ -23,6 +23,8 @@ const actions = {
   GET_TEAM_PLAYERS_COUNT_STATUS_SUCCESS: "GET_TEAM_PLAYERS_COUNT_STATUS_SUCCESS",
   GET_NDR_APPROVE_STATUS: "GET_NDR_APPROVE_STATUS",
   GET_NDR_APPROVE_STATUS_SUCCESS: "GET_NDR_APPROVE_STATUS_SUCCESS",
+  GET_PRIZE_POOL_STATUS: "GET_PRIZE_POOL_STATUS",
+  GET_PRIZE_POOL_STATUS_SUCCESS: "GET_PRIZE_POOL_STATUS_SUCCESS",
 
   SELECT_TEAM_STATUS: "SELECT_TEAM_STATUS",
   SELECT_TEAM_STATUS_SUCCESS: "SELECT_TEAM_STATUS_SUCCESS",
@@ -112,6 +114,10 @@ const actions = {
   stakeNDR: (token, amount, isMax, callback) => ({
     type: actions.STAKE_NDR,
     payload: { token, amount, isMax, callback },
+  }),
+  getPrizePoolStatus: () => ({
+    type: actions.GET_PRIZE_POOL_STATUS,
+    payload: {}
   }),
 };
 

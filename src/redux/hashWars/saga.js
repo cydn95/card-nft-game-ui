@@ -40,6 +40,7 @@ import {
   getNFTInstance,
   getFarmInstance
 } from "../../services/web3/instance";
+import { useState } from "react";
 
 // Get Token Approve Status
 export function* getBattleStartDateStatus() {
@@ -425,10 +426,10 @@ export function* approveNDR() {
       accounts[0]
     );
 
-    if (tokenBalance <= 0) {
-      callback(RESPONSE.INSUFFICIENT);
-      return;
-    }
+    // if (tokenBalance <= 0) {
+    //   callback(RESPONSE.INSUFFICIENT);
+    //   return;
+    // }
 
     // Approve
     const approveResult = yield call(
@@ -512,6 +513,24 @@ export function* stakeNDR() {
   });
 }
 
+export function* getPrizePoolStatus() {
+  yield takeEvery(actions.GET_PRIZE_POOL_STATUS, function* () {
+    const web3 = yield call(getWeb3);
+    const hashWarsInstance = getActiveWarInstance(web3);
+
+    const res = async () =>
+      await web3.eth.getBalance(hashWarsInstance.address)
+        .then((result) => result)
+        .catch((error) => error);
+    const prizePool = yield call(res);
+
+    yield put({
+      type: actions.GET_PRIZE_POOL_STATUS_SUCCESS,
+      prizePool,
+    });
+  });
+}
+
 export default function* rootSaga() {
   yield all([
     fork(getBattleStartDateStatus),
@@ -532,5 +551,6 @@ export default function* rootSaga() {
     fork(getNDRApproveStatus),
     fork(approveNDR),
     fork(stakeNDR),
+    fork(getPrizePoolStatus),
   ]);
 }
