@@ -76,7 +76,7 @@ const OpenFinishedWar = ({
         <div className="my-round-detail">
           <div className="my-round-detail-team">
             <div className="flex-center">
-              <p className={cn("team-round", openTeam === '1' ? "team-round--red" : "team-round--blue", "p2-text-bold", "yellow" )}>Round {openRound}</p>
+              <p className={cn("team-round", openTeam === '1' ? "team-round--red" : "team-round--blue", "p2-text-bold", "yellow" )}>Team Stats</p>
               <a className="p3-text sky">Join Team chat</a>
             </div>
             <div className="detail-board">
@@ -104,7 +104,7 @@ const OpenFinishedWar = ({
           </div>
           <div className="my-round-detail-my-stats">
             <div>
-              <p className="team-round team-round--sky p2-text-bold yellow">My Stats</p>
+              <p className="team-round team-round--sky p2-text-bold">My Stats</p>
             </div>
             <div className="detail-board">
               <div className="team-value-detail">
@@ -357,43 +357,6 @@ const OpenFinishedWarContainer = styled.div`
       }
       &--sky {
         background-image: url("/static/images/bg/sky-button.png");
-      }
-    }
-  }
-`;
-
-const CardWrapper = styled.div`
-  margin: 8px;
-
-  .card {
-    width: 232.5px;
-    height: 324px;
-    position: relative;
-    padding: 12.75px 10.5px;
-    background: transparent;
-    z-index: 400;
-
-    .card-image {
-      width: 217.5px;
-      height: 307.5px;
-      position: absolute;
-    }
-
-    .card-border {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 240px;
-      height: 332.25px;
-      background: url("/static/images/bg/components/card/card-border.png");
-      background-size: cover;
-      cursor: pointer;
-    }
-
-    &.active {
-      .card-border {
-        background: url("/static/images/bg/components/card/card-border--active.png");
-        background-size: cover;
       }
     }
   }
