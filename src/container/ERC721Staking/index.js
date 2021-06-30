@@ -16,12 +16,12 @@ import { partnerNFTs } from "../../helper/contractPartner";
 import { RESPONSE } from "../../helper/constant";
 import { getValueFromObject, getERCTokenImage } from "../../helper/utils";
 
-const ERC721Staking = ({ icon, nftToken }) => {
+const ERC721Staking = ({ icon, nftToken, active = true }) => {
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => { 
+  useEffect(() => {
     dispatch(customNFTStakingActions.getApprovedStatus(nftToken));
   }, [dispatch, nftToken]);
 
@@ -80,7 +80,7 @@ const ERC721Staking = ({ icon, nftToken }) => {
           setSelectedUnstakeCardIds([]);
           setUnStakeLoading(false);
           if (status === RESPONSE.SUCCESS) {
-            toast.success("Sucess");
+            toast.success("Success");
             dispatch(customNFTStakingActions.getStakedERC721Cards(nftToken));
             dispatch(customNFTStakingActions.getMyERC721Staked(nftToken));
             dispatch(customNFTStakingActions.getTotalERC721Staked(nftToken));
@@ -136,63 +136,70 @@ const ERC721Staking = ({ icon, nftToken }) => {
         <SectionTitle icon={icon} title={partnerNFTs[nftToken].title} long />
       </MenuWrapper>
       <ERC721StakingBoard nftToken={nftToken} />
-      <MenuWrapper className="animation-fadeInRight" style={{ marginTop: 20 }}>
-        <div className="menu-actions">
-          <div className="menu-item selected-card-count">
-            {approved && stakedCardTokens.length > 0
-              ? `${selectedUnstakeCardIds.length}/${stakedCardTokens.length} Selected`
-              : `${ownedCardTokens.length} Available`}
-          </div>
-          {selectedUnstakeCardIds.length > 0 && (
-            <div
-              role="button"
-              className="menu-item unstake-button"
-              onClick={(e) => handleUnStake()}
-            >
-              {unStakeLoading ? (
-                <LoadingTextIcon loadingText="Unstaking..." />
-              ) : (
-                `Unstake selected`
-              )}
+      {active && (
+        <MenuWrapper
+          className="animation-fadeInRight"
+          style={{ marginTop: 20 }}
+        >
+          <div className="menu-actions">
+            <div className="menu-item selected-card-count">
+              {approved && stakedCardTokens.length > 0
+                ? `${selectedUnstakeCardIds.length}/${stakedCardTokens.length} Selected`
+                : `${ownedCardTokens.length} Available`}
             </div>
-          )}
-          <StakeButtonWrapper>
-            {approveLoading ? (
+            {selectedUnstakeCardIds.length > 0 && (
               <div
-                className="stake-button button-approve-all"
                 role="button"
-                onClick={(e) => handleApproveAll()}
+                className="menu-item unstake-button"
+                onClick={(e) => handleUnStake()}
               >
-                <LoadingTextIcon loadingText="Approving..." />
+                {unStakeLoading ? (
+                  <LoadingTextIcon loadingText="Unstaking..." />
+                ) : (
+                  `Unstake selected`
+                )}
               </div>
-            ) : (
-              !approved && (
+            )}
+            <StakeButtonWrapper>
+              {approveLoading ? (
                 <div
                   className="stake-button button-approve-all"
                   role="button"
                   onClick={(e) => handleApproveAll()}
                 >
-                  Approve NFT
+                  <LoadingTextIcon loadingText="Approving..." />
                 </div>
-              )
-            )}
-            {approved && selectedUnstakeCardIds.length === 0 && (
-              <div
-                role="button"
-                className="stake-button button-stake-all"
-                onClick={(e) => handleOpenStakeModal()}
-              >
-                Stake NFT
-              </div>
-            )}
-          </StakeButtonWrapper>
-        </div>
-      </MenuWrapper>
-      {approved ? (
+              ) : (
+                !approved && (
+                  <div
+                    className="stake-button button-approve-all"
+                    role="button"
+                    onClick={(e) => handleApproveAll()}
+                  >
+                    Approve NFT
+                  </div>
+                )
+              )}
+              {approved && selectedUnstakeCardIds.length === 0 && (
+                <div
+                  role="button"
+                  className="stake-button button-stake-all"
+                  onClick={(e) => handleOpenStakeModal()}
+                >
+                  Stake NFT
+                </div>
+              )}
+            </StakeButtonWrapper>
+          </div>
+        </MenuWrapper>
+      )}
+      {active && approved && (
         <CardContainer>
           {stakedCardTokens.length > 0 &&
             stakedCardTokens.map((token) => {
-              const active = selectedUnstakeCardIds.includes(token) ? "active" : "";
+              const active = selectedUnstakeCardIds.includes(token)
+                ? "active"
+                : "";
               return (
                 <CardWrapper key={`unstake_card_${nftToken}_${token}`}>
                   <div className={`card ${active}`}>
@@ -210,7 +217,8 @@ const ERC721Staking = ({ icon, nftToken }) => {
               );
             })}
         </CardContainer>
-      ) : (
+      )}
+      {active && !approved && (
         <h2 className="approve-notice">Approve your NFTs to stake them</h2>
       )}
     </StakePageContainer>
@@ -220,7 +228,7 @@ const ERC721Staking = ({ icon, nftToken }) => {
 const StakePageContainer = styled.div`
   width: 100vw;
   max-width: 100%;
-  min-height: calc(100vh - 280px);
+  // min-height: calc(100vh - 280px);
 
   .nav-pills {
     margin: 0px;

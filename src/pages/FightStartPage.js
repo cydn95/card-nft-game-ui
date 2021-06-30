@@ -6,10 +6,10 @@ import Card from "../component/Card";
 const FirstStartPageWrapper = styled.div`
 	.vs {
 		width: 176px;
-		height: 186px;	
+		height: 186px;
 		margin: 164px -10px;
 	}
-	
+
 	button {
 		background-size: 100% 100%;
 		background-color: transparent;
@@ -19,26 +19,26 @@ const FirstStartPageWrapper = styled.div`
 		margin-bottom: 5px;
 		margin-top: 53px;
 		outline: none;
-		
+
 		&.attack {
-			background-image: url("/static/images/bg/pages/fight-start/attack-button-bg.png");
+			background-image: url("/static/images/bg/pink-button.png");
 			color: ${props => props.theme.palette.secondary.main};
 			font-family: Orbitron-Black;
 			text-shadow: 0 0 7px ${props => props.theme.darken('#000000', 0.35)};
 			width: 459px;
 			height: 83px;
 		}
-		
+
 		&.retreat {
-			background-image: url("/static/images/bg/pages/fight-start/retreat-button-bg.png");
+			background-image: url("/static/images/bg/sky-button.png");
 			color: #00000;
 			font-family: Orbitron-Medium;
 			text-shadow: 3px 3px 3px ${props => props.theme.darken('#277875', 0.5)};
 			width: 462px;
 			height: 84px;
-		}	
+		}
 	}
-	
+
 	.equipment-wrapper {
 		> div {
 			transform: scale(0.8);

@@ -10,3 +10,18 @@ export const erc721Images = {
   9: "https://images.dontbuymeme.com/genesis/sergey-nazarov-legendary.png",
   10: "https: // images. dontbuymeme.com/genesis/cz-legendary.png"
 };
+
+export const finishedWars = [
+  {
+    id: "Round 1",
+    win: 'RED',
+    redValue: 5400,
+    blueValue: 4900
+  },
+  {
+    id: "Round 2",
+    win: 'BLUE',
+    redValue: 4600,
+    blueValue: 5000
+  }
+]

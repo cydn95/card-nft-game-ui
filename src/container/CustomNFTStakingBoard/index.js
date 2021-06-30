@@ -50,7 +50,7 @@ const CustomNFTStakingBoard = ({ nftToken }) => {
       customNFTStakingActions.unStakeAllCards(nftToken, (status) => {
         setUnStakeAllLoading(false);
         if (status === RESPONSE.SUCCESS) {
-          toast.success("Sucess");
+          toast.success("Success");
           dispatch(customNFTStakingActions.getStakedCards(nftToken));
           dispatch(customNFTStakingActions.getMyStakedStrength(nftToken));
           dispatch(customNFTStakingActions.getTotalStakedStrength(nftToken));
@@ -69,7 +69,7 @@ const CustomNFTStakingBoard = ({ nftToken }) => {
       customNFTStakingActions.claimNDR(nftToken, (status) => {
         setClaimNDRLoading(false);
         if (status === RESPONSE.SUCCESS) {
-          toast.success("Sucess");
+          toast.success("Success");
           dispatch(customNFTStakingActions.getClaimableNDR(nftToken));
           dispatch(lpstakingActions.getNDRBalance());
         } else {

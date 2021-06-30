@@ -64,7 +64,7 @@ const Farm = () => {
                       claimable={getValueFromObject(claimable, key)}
                       stats={getValueFromObject(stats, key)}
                     />
-                  )  
+                  )
               })}
             </div>
           </Tab.Pane>

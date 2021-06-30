@@ -15,7 +15,7 @@ import nftStakingActions from "../../redux/nftStaking/actions";
 
 import { CARD_SERIES, RESPONSE } from "../../helper/constant";
 
-const NFTStaking = () => {
+const NFTStaking = ({ active = true }) => {
   const dispatch = useDispatch();
 
   // Selected Cards for Staking or Unstaking
@@ -54,13 +54,13 @@ const NFTStaking = () => {
       const cardIndex = cards.findIndex(
         (e) => Number(e.id) === Number(stakedCardTokens[i])
       );
-      
+
       if (cardIndex >= 0 && cards[cardIndex].series === CARD_SERIES.BADGE) {
-        return true
+        return true;
       }
     }
-    return false
-  }, [cards, stakedCardTokens])
+    return false;
+  }, [cards, stakedCardTokens]);
 
   const totalStakableCards = useMemo(() => {
     let ret = 0;
@@ -122,7 +122,7 @@ const NFTStaking = () => {
         setSelectedUnstakeCardIds([]);
         setUnStakeLoading(false);
         if (status === RESPONSE.SUCCESS) {
-          toast.success("Sucess");
+          toast.success("Success");
           dispatch(nftStakingActions.getStakedCards());
           dispatch(nftStakingActions.getMyStakedStrength());
           dispatch(nftStakingActions.getTotalStakedStrength());
@@ -166,62 +166,77 @@ const NFTStaking = () => {
       {stakeDlgOpen && (
         <div className="modal-container">
           <NFTStakeModalMask />
-          <NFTStakingModal onClose={handleCloseStakeModal} isBadgeCardStaked={isBadgeCardStaked}/>
+          <NFTStakingModal
+            onClose={handleCloseStakeModal}
+            isBadgeCardStaked={isBadgeCardStaked}
+          />
         </div>
       )}
-      <MenuWrapper className="animation-fadeInRight" style={{marginBottom: 20}}>
+      <MenuWrapper
+        className="animation-fadeInRight"
+        style={{ marginBottom: 20 }}
+      >
         <SectionTitle title="Heroes, Support, Badges" long />
       </MenuWrapper>
       <NFTStakingBoard />
-      <MenuWrapper className="animation-fadeInRight" style={{marginTop: 20}}>
-        <div className="menu-actions">
-          <div className="menu-item selected-card-count">{(approved && stakedCardTokens.length > 0) ? `${selectedUnstakeCardIds.length}/${stakedCardTokens.length} Selected` : `${totalStakableCards} Available`}</div>
-          {selectedUnstakeCardIds.length > 0 && (
-            <div
-              role="button"
-              className="menu-item unstake-button"
-              onClick={(e) => handleUnStake()}
-            >
-              {unStakeLoading ? (
-                <LoadingTextIcon loadingText="Unstaking..." />
-              ) : (
-                `Unstake selected`
-              )}
+      {active && (
+        <MenuWrapper
+          className="animation-fadeInRight"
+          style={{ marginTop: 20 }}
+        >
+          <div className="menu-actions">
+            <div className="menu-item selected-card-count">
+              {approved && stakedCardTokens.length > 0
+                ? `${selectedUnstakeCardIds.length}/${stakedCardTokens.length} Selected`
+                : `${totalStakableCards} Available`}
             </div>
-          )}
-          <StakeButtonWrapper>
-            {approveLoading ? (
+            {selectedUnstakeCardIds.length > 0 && (
               <div
-                className="stake-button button-approve-all"
                 role="button"
-                onClick={(e) => handleApproveAll()}
+                className="menu-item unstake-button"
+                onClick={(e) => handleUnStake()}
               >
-                <LoadingTextIcon loadingText="Approving..." />
+                {unStakeLoading ? (
+                  <LoadingTextIcon loadingText="Unstaking..." />
+                ) : (
+                  `Unstake selected`
+                )}
               </div>
-            ) : (
-              !approved && (
+            )}
+            <StakeButtonWrapper>
+              {approveLoading ? (
                 <div
                   className="stake-button button-approve-all"
                   role="button"
                   onClick={(e) => handleApproveAll()}
                 >
-                  Approve cards
+                  <LoadingTextIcon loadingText="Approving..." />
                 </div>
-              )
-            )}
-            {approved && (
-              <div
-                role="button"
-                className="stake-button button-stake-all"
-                onClick={(e) => handleOpenStakeModal()}
-              >
-                Stake Cards
-              </div>
-            )}
-          </StakeButtonWrapper>
-        </div>
-      </MenuWrapper>
-      {approved ? (
+              ) : (
+                !approved && (
+                  <div
+                    className="stake-button button-approve-all"
+                    role="button"
+                    onClick={(e) => handleApproveAll()}
+                  >
+                    Approve cards
+                  </div>
+                )
+              )}
+              {approved && (
+                <div
+                  role="button"
+                  className="stake-button button-stake-all"
+                  onClick={(e) => handleOpenStakeModal()}
+                >
+                  Stake Cards
+                </div>
+              )}
+            </StakeButtonWrapper>
+          </div>
+        </MenuWrapper>
+      )}
+      {active && approved && (
         <CardContainer>
           {stakedCards.length > 0 &&
             stakedCards.map((c, index) => (
@@ -234,7 +249,8 @@ const NFTStaking = () => {
               />
             ))}
         </CardContainer>
-      ) : (
+      )}
+      {active && !approved && (
         <h2 className="approve-notice">Approve your cards to stake them</h2>
       )}
     </StakePageContainer>

@@ -52,7 +52,7 @@ const NFTStakingBoard = () => {
       nftStakingActions.unStakeAllCards((status) => {
         setUnStakeAllLoading(false);
         if (status === RESPONSE.SUCCESS) {
-          toast.success("Sucess");
+          toast.success("Success");
           dispatch(nftStakingActions.getStakedCards());
           dispatch(nftStakingActions.getMyStakedStrength());
           dispatch(nftStakingActions.getTotalStakedStrength());
@@ -70,7 +70,7 @@ const NFTStakingBoard = () => {
       nftStakingActions.claimNDR((status) => {
         setClaimNDRLoading(false);
         if (status === RESPONSE.SUCCESS) {
-          toast.success("Sucess");
+          toast.success("Success");
           dispatch(nftStakingActions.getClaimableNDR());
           dispatch(lpstakingActions.getNDRBalance());
         } else {

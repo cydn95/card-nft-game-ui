@@ -6,6 +6,8 @@ import oldNFTStakingSagas from "./oldNFTStaking/saga";
 import nftStakingSagas from "./nftStaking/saga";
 import customStakingSagas from "./customNFTStaking/saga";
 import farmsSagas from "./farms/saga";
+import hashWarsSagas from "./hashWars/saga";
+import finishedWarsSagas from "./finishedWars/saga";
 
 export default function* rootSaga(getState) {
   yield all([
@@ -15,5 +17,7 @@ export default function* rootSaga(getState) {
     nftStakingSagas(),
     customStakingSagas(),
     farmsSagas(),
+    hashWarsSagas(),
+    finishedWarsSagas()
   ]);
 }

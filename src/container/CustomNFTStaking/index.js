@@ -18,7 +18,7 @@ import { getValueFromObject } from "../../helper/utils";
 
 const { REACT_APP_BUILD_MODE } = process.env;
 
-const CustomNFTStaking = ({ icon, nftToken }) => {
+const CustomNFTStaking = ({ icon, nftToken, active = true }) => {
   const dispatch = useDispatch();
 
   const cards = useSelector((state) => state.customNFTStaking.cards);
@@ -29,7 +29,7 @@ const CustomNFTStaking = ({ icon, nftToken }) => {
 
   useEffect(() => {
     dispatch(customNFTStakingActions.getStakedCards(nftToken));
-  }, [dispatch, nftToken])
+  }, [dispatch, nftToken]);
 
   // Selected Cards for Staking or Unstaking
   const [selectedUnstakeCardIds, setSelectedUnstakeCardIds] = useState([]);
@@ -38,14 +38,21 @@ const CustomNFTStaking = ({ icon, nftToken }) => {
 
   const [unStakeLoading, setUnStakeLoading] = useState(false);
   const [approveLoading, setApproveLoading] = useState(false);
-  
-  const approved = useSelector((state) => getValueFromObject(state.customNFTStaking.approved, nftToken, false));
-  
-  const stakedCardTokens = useSelector((state) => getValueFromObject(state.customNFTStaking.staked, nftToken, [])); // Staked card count
-  const ownedCardTokens = useSelector((state) => getValueFromObject(state.customNFTStaking.owned, nftToken, []));
+
+  const approved = useSelector((state) =>
+    getValueFromObject(state.customNFTStaking.approved, nftToken, false)
+  );
+
+  const stakedCardTokens = useSelector((state) =>
+    getValueFromObject(state.customNFTStaking.staked, nftToken, [])
+  ); // Staked card count
+  const ownedCardTokens = useSelector((state) =>
+    getValueFromObject(state.customNFTStaking.owned, nftToken, [])
+  );
 
   const totalStakableCards = useMemo(() => {
-    const token = REACT_APP_BUILD_MODE === "development" ? CUSTOM_NFT.NODERUNNER : nftToken;
+    const token =
+      REACT_APP_BUILD_MODE === "development" ? CUSTOM_NFT.NODERUNNER : nftToken;
 
     let ret = 0;
 
@@ -68,8 +75,9 @@ const CustomNFTStaking = ({ icon, nftToken }) => {
   }, [cards, stakedCardTokens, ownedCardTokens, nftToken]);
 
   const stakedCards = useMemo(() => {
-    const token = REACT_APP_BUILD_MODE === "development" ? CUSTOM_NFT.NODERUNNER : nftToken;
-    
+    const token =
+      REACT_APP_BUILD_MODE === "development" ? CUSTOM_NFT.NODERUNNER : nftToken;
+
     const ret = [];
 
     if (token in cards) {
@@ -115,19 +123,23 @@ const CustomNFTStaking = ({ icon, nftToken }) => {
 
     setUnStakeLoading(true);
     dispatch(
-      customNFTStakingActions.unStakeCard(nftToken, selectedUnstakeCardIds, (status) => {
-        setSelectedUnstakeCardIds([]);
-        setUnStakeLoading(false);
-        if (status === RESPONSE.SUCCESS) {
-          toast.success("Sucess");
-          dispatch(customNFTStakingActions.getStakedCards(nftToken));
-          dispatch(customNFTStakingActions.getMyStakedStrength(nftToken));
-          dispatch(customNFTStakingActions.getTotalStakedStrength(nftToken));
-          dispatch(customNFTStakingActions.getClaimableNDR(nftToken));
-        } else {
-          toast.error("Failed...");
+      customNFTStakingActions.unStakeCard(
+        nftToken,
+        selectedUnstakeCardIds,
+        (status) => {
+          setSelectedUnstakeCardIds([]);
+          setUnStakeLoading(false);
+          if (status === RESPONSE.SUCCESS) {
+            toast.success("Success");
+            dispatch(customNFTStakingActions.getStakedCards(nftToken));
+            dispatch(customNFTStakingActions.getMyStakedStrength(nftToken));
+            dispatch(customNFTStakingActions.getTotalStakedStrength(nftToken));
+            dispatch(customNFTStakingActions.getClaimableNDR(nftToken));
+          } else {
+            toast.error("Failed...");
+          }
         }
-      })
+      )
     );
   };
 
@@ -158,42 +170,54 @@ const CustomNFTStaking = ({ icon, nftToken }) => {
       {stakeDlgOpen && (
         <div className="modal-container">
           <NFTStakeModalMask />
-          <CustomNFTStakingModal onClose={handleCloseStakeModal} nftToken={nftToken} />
+          <CustomNFTStakingModal
+            onClose={handleCloseStakeModal}
+            nftToken={nftToken}
+          />
         </div>
       )}
 
-      <MenuWrapper className="animation-fadeInRight" style={{ marginBottom: 20 }}>
+      <MenuWrapper
+        className="animation-fadeInRight"
+        style={{ marginBottom: 20 }}
+      >
         <SectionTitle icon={icon} title={partnerNFTs[nftToken].title} long />
       </MenuWrapper>
       <CustomNFTStakingBoard nftToken={nftToken} />
-      <MenuWrapper className="animation-fadeInRight" style={{ marginTop: 20 }}>
-        <div className="menu-actions">
-          <div className="menu-item selected-card-count">
-            {(approved && stakedCardTokens.length > 0) ? `${selectedUnstakeCardIds.length}/${stakedCardTokens.length} Selected` : `${totalStakableCards} Available`}
-          </div>
-          {selectedUnstakeCardIds.length > 0 && (
-            <div
-              role="button"
-              className="menu-item unstake-button"
-              onClick={(e) => handleUnStake()}
-            >
-              {unStakeLoading ? (
-                <LoadingTextIcon loadingText="Unstaking..." />
-              ) : (
+      {active && (
+        <MenuWrapper
+          className="animation-fadeInRight"
+          style={{ marginTop: 20 }}
+        >
+          <div className="menu-actions">
+            <div className="menu-item selected-card-count">
+              {approved && stakedCardTokens.length > 0
+                ? `${selectedUnstakeCardIds.length}/${stakedCardTokens.length} Selected`
+                : `${totalStakableCards} Available`}
+            </div>
+            {selectedUnstakeCardIds.length > 0 && (
+              <div
+                role="button"
+                className="menu-item unstake-button"
+                onClick={(e) => handleUnStake()}
+              >
+                {unStakeLoading ? (
+                  <LoadingTextIcon loadingText="Unstaking..." />
+                ) : (
                   `Unstake selected`
                 )}
-            </div>
-          )}
-          <StakeButtonWrapper>
-            {approveLoading ? (
-              <div
-                className="stake-button button-approve-all"
-                role="button"
-                onClick={(e) => handleApproveAll()}
-              >
-                <LoadingTextIcon loadingText="Approving..." />
               </div>
-            ) : (
+            )}
+            <StakeButtonWrapper>
+              {approveLoading ? (
+                <div
+                  className="stake-button button-approve-all"
+                  role="button"
+                  onClick={(e) => handleApproveAll()}
+                >
+                  <LoadingTextIcon loadingText="Approving..." />
+                </div>
+              ) : (
                 !approved && (
                   <div
                     className="stake-button button-approve-all"
@@ -204,19 +228,20 @@ const CustomNFTStaking = ({ icon, nftToken }) => {
                   </div>
                 )
               )}
-            {approved && (
-              <div
-                role="button"
-                className="stake-button button-stake-all"
-                onClick={(e) => handleOpenStakeModal()}
-              >
-                Stake Cards
-              </div>
-            )}
-          </StakeButtonWrapper>
-        </div>
-      </MenuWrapper>
-      {approved ? (
+              {approved && (
+                <div
+                  role="button"
+                  className="stake-button button-stake-all"
+                  onClick={(e) => handleOpenStakeModal()}
+                >
+                  Stake Cards
+                </div>
+              )}
+            </StakeButtonWrapper>
+          </div>
+        </MenuWrapper>
+      )}
+      {active && approved && (
         <CardContainer>
           {stakedCards.length > 0 &&
             stakedCards.map((c, index) => (
@@ -230,9 +255,10 @@ const CustomNFTStaking = ({ icon, nftToken }) => {
               />
             ))}
         </CardContainer>
-      ) : (
-          <h2 className="approve-notice">Approve your cards to stake them</h2>
-        )}
+      )}
+      {active && !approved && (
+        <h2 className="approve-notice">Approve your cards to stake them</h2>
+      )}
     </StakePageContainer>
   );
 };
@@ -240,7 +266,7 @@ const CustomNFTStaking = ({ icon, nftToken }) => {
 const StakePageContainer = styled.div`
   width: 100vw;
   max-width: 100%;
-  min-height: calc(100vh - 280px);
+  // min-height: calc(100vh - 280px);
 
   .nav-pills {
     margin: 0px;

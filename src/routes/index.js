@@ -6,6 +6,7 @@ const Farm = async(() => import("../pages/FarmPage"));
 const GetCards = async(() => import("../pages/GetCardsPage"));
 const FightVillains = async(() => import("../pages/FightVillainsPage"));
 const FightStart = async(() => import("../pages/FightStartPage"));
+const HashWars = async(() => import("../pages/HashWarsPage"));
 const UnlockWallet = async(() => import("../pages/UnlockWalletPage"));
 
 const menuRoutes = [
@@ -37,6 +38,11 @@ const menuRoutes = [
 	{
 		path: '/fight-villains/fight',
 		component: FightStart,
+		layout: 'battle'
+	},
+	{
+		path: '/hash-wars',
+		component: HashWars,
 		layout: 'battle'
 	},
 	{

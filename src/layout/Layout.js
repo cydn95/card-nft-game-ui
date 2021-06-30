@@ -8,11 +8,11 @@ const LayoutWrapper = styled.div`
   background-image: url('/static/images/bg/layout/layout-bg.png');
   background-size: 100vw 100vh;
   overflow: auto;
-  
+
   &.battle {
  	  background-image: url('/static/images/bg/layout/battle-bg.png');
   }
-  
+
   .nav-pills {
     margin: -30px 0 19px;
 
