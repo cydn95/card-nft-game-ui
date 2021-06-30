@@ -141,7 +141,7 @@ const Header = () => {
             <span className="menu-text">Fight Villains</span>
           </NavLink>
         </li> */}
-        <li
+        {/* <li
           className={`menu-item ${getMenuItemActive(
             "hash-wars"
           )} hover-effect2`}
@@ -149,7 +149,7 @@ const Header = () => {
           <NavLink className="menu-link" to="/hash-wars">
             <span className="menu-text">Hash Wars</span>
           </NavLink>
-        </li>
+        </li> */}
         <li
           className={`menu-item ${getMenuItemActive(
             "unlock-wallet"
@@ -235,7 +235,7 @@ const Header = () => {
             >
               Forum
             </a> */}
-            <NavLink className={`${getMenuItemActive("hash-wars")}`} to="/hash-wars">Hash Wars</NavLink>
+            {/* <NavLink className={`${getMenuItemActive("hash-wars")}`} to="/hash-wars">Hash Wars</NavLink> */}
           </div>
         )}
       </ul>
@@ -334,7 +334,7 @@ const HeaderWrapper = styled.div`
       //   }
       // }
 
-      &:nth-of-type(7) {
+      &:nth-of-type(6) {
         background-image: url("/static/images/bg/components/header/menu-item-5-bg.png");
         width: 209.05px;
 

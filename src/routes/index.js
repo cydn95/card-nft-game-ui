@@ -40,11 +40,11 @@ const menuRoutes = [
 		component: FightStart,
 		layout: 'battle'
 	},
-	{
-		path: '/hash-wars',
-		component: HashWars,
-		layout: 'battle'
-	},
+	// {
+	// 	path: '/hash-wars',
+	// 	component: HashWars,
+	// 	layout: 'battle'
+	// },
 	{
 		path: '/unlock-wallet',
 		component: UnlockWallet,
